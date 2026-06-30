@@ -6,6 +6,8 @@ namespace Prison
     public class PrisonTimeManager : MonoBehaviour
     {
         private static PrisonTimeManager _instance;
+
+        /// <summary>Singleton accessor. Duplicate instances destroy themselves on <see cref="Awake"/>.</summary>
         public static PrisonTimeManager Instance
         {
             get => _instance;
@@ -42,9 +44,13 @@ namespace Prison
         [SerializeField] private PrisonEventType currentEvent;
         [SerializeField] private float eventTimeRemaining;
 
+        /// <summary>The schedule phase currently in effect (e.g. Breakfast, FreeTime, LightsOut).</summary>
         public PrisonEventType CurrentEvent => currentEvent;
+        /// <summary>Cosmetic wall-clock time in minutes since midnight (0-1440); wraps daily, decoupled from phase progression.</summary>
         public float CurrentTimeMinutes => currentTimeMinutes;
+        /// <summary>Game-minutes remaining in the current schedule phase.</summary>
         public float EventTimeRemaining => eventTimeRemaining;
+        /// <summary>Index of the current entry within <see cref="PrisonSchedule.entries"/>.</summary>
         public int CurrentEntryIndex => currentEntryIndex;
 
         /// <summary>Total game-minutes of all schedule entries (for routine-bar progress).</summary>
@@ -107,6 +113,11 @@ namespace Prison
         public bool IsInLastPortionOfCurrentPhase(float remainingFraction = 0.1f) =>
             CurrentPhaseTimeRemainingFraction <= remainingFraction;
 
+        /// <summary>
+        /// Fired whenever the schedule advances to a new phase, including the very first phase on session start.
+        /// Subscribers (guard/prisoner AI, routine HUD) should use this to learn the initial phase rather than
+        /// assuming a default.
+        /// </summary>
         public event Action<PrisonEventType> OnEventChanged;
 
         private int currentEntryIndex;
@@ -165,6 +176,9 @@ namespace Prison
         /// <summary>Alias for UI — morning roll call waits on per-inmate shakedown.</summary>
         public bool IsMorningRollCallHeadcountActive => IsMorningRollCallShakedownGateActive;
 
+        /// <summary>Looks up the schedule entry that follows the current one without advancing the schedule.</summary>
+        /// <param name="nextEvent">The upcoming phase, or the current phase if no schedule is assigned.</param>
+        /// <param name="timeUntilNext">Game-minutes remaining until that phase begins.</param>
         public void GetNextEventInfo(out PrisonEventType nextEvent, out float timeUntilNext)
         {
             nextEvent = currentEvent;
@@ -274,6 +288,9 @@ namespace Prison
 
         private void AdvanceToNextEvent()
         {
+            if (schedule == null || schedule.entries == null || schedule.entries.Length == 0)
+                return;
+
             currentEntryIndex = (currentEntryIndex + 1) % schedule.entries.Length;
             var entry = schedule.entries[currentEntryIndex];
             if (debugLogScheduleEvents)
@@ -300,16 +317,18 @@ namespace Prison
             {
                 currentEvent = evt;
                 StartComplianceGraceForEvent(evt, isInitialSetup);
-                if (willInvoke)
-                {
-                    OnEventChanged?.Invoke(evt);
-                    if (debugLogScheduleEvents)
-                        Debug.Log($"[PrisonTimeManager] OnEventChanged subscribers notified: {evt}", this);
-                }
+
+                // Always notify on the very first SetCurrentEvent, even if evt matches the
+                // PrisonEventType default (RollCall = 0): otherwise schedules whose first entry
+                // is RollCall never announce the starting phase, and subscribers (guard/prisoner
+                // AI, HUD) that rely on OnEventChanged to learn the initial phase are never told.
+                OnEventChanged?.Invoke(evt);
+                if (debugLogScheduleEvents)
+                    Debug.Log($"[PrisonTimeManager] OnEventChanged subscribers notified: {evt} (initialSetup={isInitialSetup})", this);
             }
             else if (debugLogScheduleEvents)
             {
-                Debug.Log($"[PrisonTimeManager] Event type unchanged ({evt}); OnEventChanged NOT fired. If prisoners never moved at Start, first schedule entry may match default enum — consider reordering or forcing initial sync.", this);
+                Debug.Log($"[PrisonTimeManager] Event type unchanged ({evt}); OnEventChanged NOT fired.", this);
             }
 
             _scheduleInitialized = true;

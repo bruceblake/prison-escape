@@ -66,6 +66,10 @@ public class PlayerInventory : MonoBehaviour
 
     public bool AddItem(ItemData itemToAdd, int amount = 1)
     {
+        // Null-safe like the other public mutators below; without this, an empty
+        // slot (slot.item == null) would match itemToAdd == null below and NRE on itemToAdd.category.
+        if (itemToAdd == null) return false;
+
         // 1. Check if we already have this item to stack it
         EnsureSlotCapacity();
         foreach (InventorySlot slot in inventorySlots)

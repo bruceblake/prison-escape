@@ -259,7 +259,8 @@ public class ItemTooltipUI : MonoBehaviour
             titleText.color = RarityTitleColor(item.rarity);
 
         RebuildTooltipLayout();
-        tooltipRect.SetAsLastSibling();
+        // tooltipRect can stay null if panelRoot has no Image and applyReadableDefaults is off.
+        if (tooltipRect != null) tooltipRect.SetAsLastSibling();
 
         WarnIfTmpDetachedFromPanel();
     }

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceba0ad99de57384fb1f48d8d1e4d1fe, type: 3}
+  m_Name: Grappling Hook Recipe
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingRecipe
+  recipeName: Grappling Hook
+  ingredients:
+  - item: {fileID: 11400000, guid: aa0a9fe57bc3c4948b524c9de996b6b8, type: 2}
+    amount: 3
+  - item: {fileID: 11400000, guid: b102163a2271bf444aca8ba8b688199d, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: 782eedb1dbb9cae4a834bbe7fb5bfedd, type: 2}
+    amount: 1
+  result: {fileID: 11400000, guid: 08510820749ae2f4f88c7c24729bb9f4, type: 2}
+  resultAmount: 1

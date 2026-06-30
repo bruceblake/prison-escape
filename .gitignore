@@ -1,0 +1,92 @@
+# ==============================
+# Unity generated folders
+# ==============================
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Asset meta data should only be ignored when the corresponding asset is also ignored
+!/[Aa]ssets/**/*.meta
+
+# ==============================
+# IDE / editor
+# ==============================
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity crash reports
+sysinfo.txt
+
+# ==============================
+# Build artifacts / packages
+# ==============================
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Crashlytics
+crashlytics-build.properties
+
+# Packed Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Temporary auto-generated Android assets
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# ==============================
+# Graphify knowledge graph output
+# (graph is committed so the team shares the map; local-only bits ignored)
+# ==============================
+graphify-out/cost.json
+graphify-out/cache/
+graphify-out/.graphify_python
+
+# ==============================
+# Node tooling
+# ==============================
+node_modules/
+
+# ==============================
+# Plastic SCM leftovers (migrated to git)
+# ==============================
+.plastic/
+ignore.conf
+
+# ==============================
+# Regenerable codebase export
+# ==============================
+CodebaseExport/
+
+# ==============================
+# OS cruft
+# ==============================
+.DS_Store
+Thumbs.db

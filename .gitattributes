@@ -1,0 +1,134 @@
+# ============================================================
+# Git LFS + Unity attributes for the Prison Escape project
+# ------------------------------------------------------------
+# Macro: Unity YAML text assets — keep textual diffs but avoid
+# line-ending corruption (-text disables CRLF munging).
+[attr]unityyaml -text diff
+
+# Macro: large binary assets tracked with Git LFS.
+[attr]lfs -text filter=lfs diff=lfs merge=lfs
+# ============================================================
+
+# ----------------------------
+# Source / config (plain text)
+# ----------------------------
+*.cs        text diff=csharp
+*.cginc     text
+*.compute   text
+*.shader    text
+*.hlsl      text
+*.uxml      text
+*.uss       text
+*.json      text
+*.md        text
+*.txt       text
+*.xml       text
+*.yml       text
+*.yaml      text
+*.asmdef    text
+*.asmref    text
+
+# ----------------------------
+# Unity YAML assets (textual, no CRLF munging)
+# ----------------------------
+*.meta              unityyaml
+*.unity             unityyaml
+*.asset             unityyaml
+*.prefab            unityyaml
+*.mat               unityyaml
+*.anim              unityyaml
+*.controller        unityyaml
+*.overrideController unityyaml
+*.physicMaterial    unityyaml
+*.physicsMaterial2D unityyaml
+*.playable          unityyaml
+*.mask              unityyaml
+*.brush             unityyaml
+*.flare             unityyaml
+*.fontsettings      unityyaml
+*.giparams          unityyaml
+*.renderTexture     unityyaml
+*.spriteatlas       unityyaml
+*.terrainlayer      unityyaml
+*.mixer             unityyaml
+*.shadervariants    unityyaml
+*.preset            unityyaml
+*.lighting          unityyaml
+*.signal            unityyaml
+
+# ----------------------------
+# 3D models -> LFS
+# ----------------------------
+*.fbx   lfs
+*.FBX   lfs
+*.obj   lfs
+*.blend lfs
+*.dae   lfs
+*.3ds   lfs
+*.dxf   lfs
+*.max   lfs
+*.c4d   lfs
+*.ma    lfs
+*.mb    lfs
+
+# ----------------------------
+# Images / textures -> LFS
+# ----------------------------
+*.png   lfs
+*.PNG   lfs
+*.jpg   lfs
+*.jpeg  lfs
+*.tga   lfs
+*.tif   lfs
+*.tiff  lfs
+*.psd   lfs
+*.bmp   lfs
+*.gif   lfs
+*.exr   lfs
+*.hdr   lfs
+*.webp  lfs
+*.iff   lfs
+*.pict  lfs
+
+# ----------------------------
+# Audio -> LFS
+# ----------------------------
+*.wav   lfs
+*.mp3   lfs
+*.ogg   lfs
+*.aif   lfs
+*.aiff  lfs
+*.flac  lfs
+
+# ----------------------------
+# Video -> LFS
+# ----------------------------
+*.mp4   lfs
+*.mov   lfs
+*.webm  lfs
+*.avi   lfs
+
+# ----------------------------
+# Fonts -> LFS
+# ----------------------------
+*.ttf   lfs
+*.otf   lfs
+
+# ----------------------------
+# Native libraries / binaries -> LFS
+# ----------------------------
+*.dll    lfs
+*.so     lfs
+*.dylib  lfs
+*.a      lfs
+*.lib    lfs
+*.bundle lfs
+
+# ----------------------------
+# Archives / packages -> LFS
+# ----------------------------
+*.unitypackage lfs
+*.zip          lfs
+*.7z           lfs
+*.rar          lfs
+*.gz           lfs

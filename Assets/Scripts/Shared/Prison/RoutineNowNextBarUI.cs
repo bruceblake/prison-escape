@@ -1637,19 +1637,6 @@ namespace Prison
             SyncDetailRowFonts();
         }
 
-        private string BuildDetailLine(PrisonTimeManager tm, string goTo, string nextGoTo, out Color lineColor)
-        {
-            lineColor = compliantStatusColor;
-            string status = GetStatusFragment(tm, goTo, nextGoTo, ref lineColor);
-            string path = GetPathFragment(goTo, nextGoTo);
-
-            if (string.IsNullOrEmpty(path))
-                return status;
-            if (string.IsNullOrEmpty(status))
-                return path;
-            return status + detailSeparator + path;
-        }
-
         private string GetStatusFragment(PrisonTimeManager tm, string goTo, string nextGoTo, ref Color color)
         {
             switch (_state)

@@ -97,6 +97,14 @@ namespace Prison
             string goTo = PrisonRoutineLabels.GetGoToLabel(tm.CurrentEvent, _prisoner.CellIndex);
             if (goToText != null)
             {
+                // Defensive lazy-init: guards against NullReferenceException if goToText is assigned
+                // at runtime after Start() (e.g. via script) instead of in the Inspector.
+                if (_goToCanvasGroup == null)
+                {
+                    _goToCanvasGroup = goToText.GetComponent<CanvasGroup>();
+                    if (_goToCanvasGroup == null) _goToCanvasGroup = goToText.gameObject.AddComponent<CanvasGroup>();
+                }
+
                 bool showGoTo = grace || enforcement;
                 
                 if (showGoTo && !_wasGoToActive)

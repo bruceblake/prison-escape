@@ -33,6 +33,12 @@ namespace Prison
 
         public void SetBalance(float amount)
         {
+            if (float.IsNaN(amount) || float.IsInfinity(amount))
+            {
+                Debug.LogWarning($"[PlayerWallet] Ignoring invalid balance value: {amount}");
+                return;
+            }
+
             float prev = balance;
             balance = Mathf.Max(0f, amount);
             OnBalanceChanged?.Invoke(prev, balance);
@@ -40,7 +46,7 @@ namespace Prison
 
         public void Add(float delta)
         {
-            if (Mathf.Approximately(delta, 0f))
+            if (float.IsNaN(delta) || Mathf.Approximately(delta, 0f))
                 return;
             SetBalance(balance + delta);
         }

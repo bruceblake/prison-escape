@@ -1,0 +1,23 @@
+{
+    "asset": "1486d942e661b5d45acb407df4d2c1b2",
+    "fileName": "019e2d7a-4750-7353-b413-2a9b49720bdd.glb",
+    "prompt": "3D Low-Poly cafeteria table, long rectangular top with attached benches, institutional gray, flat-shaded, game asset. Elevated high for crouching underneath.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "db7cad742b152514897f6c14dcbfcbe7",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

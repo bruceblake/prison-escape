@@ -1,0 +1,23 @@
+{
+    "asset": "b320f26539b5d244394bfc169f5006a1",
+    "fileName": "019e2d88-ee82-7b95-b3e6-15422a1c24c5.glb",
+    "prompt": "A 3D low-poly prison cell door, vertical metal bars, separate mesh, metallic dark gray, sharp edges, flat-shaded, minimal polygon count, modular game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "c241e23b33e238e4ca6b17d9afec8358",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

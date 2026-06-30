@@ -1,0 +1,28 @@
+{
+    "asset": "31f0ff33a768ca74ea3ae2aa90656677",
+    "fileName": "019e2df6-7b53-7449-8ce7-b2274f90f3b6.png",
+    "prompt": "A clean horizontal paper strip with subtle grid lines, light cream color, game ui background card style, rectangular",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

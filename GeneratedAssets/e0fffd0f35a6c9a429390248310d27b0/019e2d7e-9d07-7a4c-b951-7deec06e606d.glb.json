@@ -1,0 +1,23 @@
+{
+    "asset": "e0fffd0f35a6c9a429390248310d27b0",
+    "fileName": "019e2d7e-9d07-7a4c-b951-7deec06e606d.glb",
+    "prompt": "3D Low-Poly industrial storage crate, wood and metal, institutional gray, flat-shaded, game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "d389a7f45d57cb443bc2462cedc8e94e",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

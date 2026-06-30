@@ -1,0 +1,23 @@
+{
+    "asset": "ad6f696e6f3e43d4e9f0c3d4e3df7234",
+    "fileName": "019e2d76-4d58-7c09-a115-d621745b060d.glb",
+    "prompt": "3D Low-Poly prison cell door, bars, sliding mechanism, metallic dark gray, flat-shaded, game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "152fa88532b87f748a7cb867990c4f69",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

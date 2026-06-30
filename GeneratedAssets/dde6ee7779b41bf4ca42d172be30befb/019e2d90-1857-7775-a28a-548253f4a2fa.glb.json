@@ -1,0 +1,23 @@
+{
+    "asset": "dde6ee7779b41bf4ca42d172be30befb",
+    "fileName": "019e2d90-1857-7775-a28a-548253f4a2fa.glb",
+    "prompt": "3D Low-Poly Chain-Link Fence Panel, outdoor fence section, 3x3 units, wireframe mesh with metal posts, metallic gray, sharp edges, flat-shaded. Pivot at absolute Bottom-Center of the mesh. Modular game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "dacec14ef192f3747b099c0bdf49e845",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

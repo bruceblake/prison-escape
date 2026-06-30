@@ -1,0 +1,28 @@
+{
+    "asset": "981f152885bf63541ae455f5e4db65bf",
+    "fileName": "019e2d8c-0bcb-7b1d-a348-38a7e305da69.png",
+    "prompt": "A single 3D Low-Poly perimeter stone wall section, 6 units high x 3 units wide, chunky low-poly stone blocks, dark brick color, flat-shaded, sharp edges, isolated on white background, game asset.",
+    "negativePrompt": "",
+    "model": "gemini-3.1-flash",
+    "modelName": "Gemini 3.1 Nano Banana 2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

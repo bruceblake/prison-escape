@@ -1,0 +1,28 @@
+{
+    "asset": "056fbf87b6bf19f468073f6ed35b1870",
+    "fileName": "019e2d83-76a4-766b-b862-9f4cce739d74.png",
+    "prompt": "A single 3D Low-Poly flat wall panel with a rectangular door opening in the center, square, 3x3 units scale, concrete gray, sharp edges, isolated on white background, game asset. Minimal polygon aesthetic.",
+    "negativePrompt": "",
+    "model": "gemini-3.1-flash",
+    "modelName": "Gemini 3.1 Nano Banana 2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

@@ -1,0 +1,23 @@
+{
+    "asset": "44a00b9ff21288446818ced3afee0cc7",
+    "fileName": "019e2d76-ac77-777c-a9a9-11ad8cfb7296.glb",
+    "prompt": "3D Low-Poly weight bench, institutional gray and blue, flat-shaded, game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "bc8a59e331e3df04e85fd92c95c53435",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

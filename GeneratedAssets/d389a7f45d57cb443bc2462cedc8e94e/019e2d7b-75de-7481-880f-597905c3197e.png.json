@@ -1,0 +1,28 @@
+{
+    "asset": "d389a7f45d57cb443bc2462cedc8e94e",
+    "fileName": "019e2d7b-75de-7481-880f-597905c3197e.png",
+    "prompt": "A single 3D Low-Poly industrial storage crate, wood and metal, institutional gray, flat-shaded, isolated on white background, game asset.",
+    "negativePrompt": "",
+    "model": "gemini-3.1-flash",
+    "modelName": "Gemini 3.1 Nano Banana 2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

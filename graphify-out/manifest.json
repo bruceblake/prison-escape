@@ -1,0 +1,2347 @@
+{
+  "Assets/Scripts/BulletTracer.cs": {
+    "mtime": 1782860509.22381,
+    "ast_hash": "c5c9690601a6016ea08ff481de4564d9",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Editor/SocialBalanceSimulatorWindow.cs": {
+    "mtime": 1782860509.2258132,
+    "ast_hash": "9114eaeb94ef356581558c8066fb7a8e",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/GameLogic.cs": {
+    "mtime": 1782860509.2268128,
+    "ast_hash": "16e65af403852adaba71ccf1e0bf4034",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/ClientLobbyHandlers.cs": {
+    "mtime": 1782860509.228813,
+    "ast_hash": "2a7e2e729480a9f10ac59676847043ae",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/FindGame.cs": {
+    "mtime": 1782860509.2298448,
+    "ast_hash": "c402ac5ae4f77a0144a8dbd5eec5c4e0",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/GameClient.cs": {
+    "mtime": 1782860509.2308447,
+    "ast_hash": "a8332f97fd0c95acdc119444be548eb1",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/Interpolator.cs": {
+    "mtime": 1782860509.2318468,
+    "ast_hash": "9cb06dbcf1cbc18446fbcafdbc73a498",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/LobbyManager.cs": {
+    "mtime": 1782860509.2318468,
+    "ast_hash": "701c43ac0c8261a2e1568a080ea135f8",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/MessageExtensions.cs": {
+    "mtime": 1782860509.2334225,
+    "ast_hash": "d057aab2369d65c55a39be737d6961f9",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/NetworkManager.cs": {
+    "mtime": 1782860509.2344258,
+    "ast_hash": "7cb07ff60d1c24bc2cab35a834bd8aad",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/PingDisplay.cs": {
+    "mtime": 1782860509.2354257,
+    "ast_hash": "0d64a5ab7d575765cefed1269c1c3763",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/Player/CameraController.cs": {
+    "mtime": 1782860509.2364264,
+    "ast_hash": "f1b8cbb6c64ab78127f606dcea2b50b4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/Player/Player.cs": {
+    "mtime": 1782860509.237426,
+    "ast_hash": "c503eada6e0c3b0a929c9db3cb90842f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/Player/PlayerController.cs": {
+    "mtime": 1782860509.2384262,
+    "ast_hash": "e573a1ed9e1db9b2ae2052f0437caaa2",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/Player/PlayerInventory.cs": {
+    "mtime": 1782860509.2395306,
+    "ast_hash": "2ff306a387de4c872c58bcfe25c55573",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/Player/Weapons/Gun.cs": {
+    "mtime": 1782860509.2405305,
+    "ast_hash": "1e751e23a4a278222950f6758b7e2cb6",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/Player/Weapons/WeaponController.cs": {
+    "mtime": 1782860509.2415307,
+    "ast_hash": "9ac395db7204cca85e73e4ab2caa9d56",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/RecoilController.cs": {
+    "mtime": 1782860509.2430599,
+    "ast_hash": "4151b950d3dac3ba81771dc6991f554d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/SceneLoaderCallback.cs": {
+    "mtime": 1782860509.2466352,
+    "ast_hash": "069ae82a82a776ccb113199f8bf681b0",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/TransformUpdate.cs": {
+    "mtime": 1782860509.2471495,
+    "ast_hash": "bd12ad92b38657cbe813ae6823d21b55",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/UI/PlayerListPanel.cs": {
+    "mtime": 1782860509.249259,
+    "ast_hash": "1172bc95014980d470572e19310c29ae",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Multiplayer/WeaponSway.cs": {
+    "mtime": 1782860509.2502916,
+    "ast_hash": "d416d65e09c20240ed7091bae69e8aeb",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Crafting/CraftingRecipe.cs": {
+    "mtime": 1782860509.2518287,
+    "ast_hash": "06db10d762ba54667a228804a903882c",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Crafting/CraftingRecipeDescription.cs": {
+    "mtime": 1782860509.2528622,
+    "ast_hash": "b1add298906e78ef663dff2952aaba73",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Crafting/CraftingSystem.cs": {
+    "mtime": 1782860509.2538965,
+    "ast_hash": "bde0363f1a69410fc8a2aead80d07ab1",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Interaction/IInteractable.cs": {
+    "mtime": 1782860509.2554352,
+    "ast_hash": "057f508692a515b8949aabe7f2f42f79",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Interaction/PillowStash.cs": {
+    "mtime": 1782860509.2554352,
+    "ast_hash": "109f88f450ca03a7453b5fb2a113ae53",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Interaction/VentCover.cs": {
+    "mtime": 1782860509.2569442,
+    "ast_hash": "92a08bfc34ee036d724d4534df1ab976",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Interaction/WorldItemPickup.cs": {
+    "mtime": 1782860509.2579477,
+    "ast_hash": "4f23c95c7736cb6bbd1a8f66e9b47aa4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/CashUIController.cs": {
+    "mtime": 1782860509.258948,
+    "ast_hash": "5289f7d1c13fa711c13b738b3fab9329",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/CellData.cs": {
+    "mtime": 1782860509.2599483,
+    "ast_hash": "478b405010b12f7db647cf79e420da81",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/CellDoorController.cs": {
+    "mtime": 1782860509.2609477,
+    "ast_hash": "04ac624fa5c38c104c9a2845bd396ea4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/ComplianceStatusHUD.cs": {
+    "mtime": 1782860509.2619882,
+    "ast_hash": "59cf012684db8c70bb33369e577e36e8",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/DailyRoutineBarUI.cs": {
+    "mtime": 1782860509.2629917,
+    "ast_hash": "aed599be288e5959ceeb4a9f1d77794b",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/FavorOfferDefinition.cs": {
+    "mtime": 1782860509.2639923,
+    "ast_hash": "cf47d5a0f82c0bb968b280ce708968fd",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/IPrisoner.cs": {
+    "mtime": 1782860509.2639923,
+    "ast_hash": "a950e1de596ed67f0f8e00cbbafa2dec",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/ItemSpawnNode.cs": {
+    "mtime": 1782860509.2649927,
+    "ast_hash": "1746821fd51b073bd677f7ecde565461",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/LootTable.cs": {
+    "mtime": 1782860509.2659917,
+    "ast_hash": "fb42560f7c03403d808f8a20bfc5c62b",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/MinimalSchedulePhaseTextHUD.cs": {
+    "mtime": 1782860509.2669919,
+    "ast_hash": "f52688255ade5e46e4937c18600ec3b4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/MorningRollCallTracker.cs": {
+    "mtime": 1782860509.2680926,
+    "ast_hash": "bb71adf55934d54cdcf787134581d9e0",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/NPCPersonalityData.cs": {
+    "mtime": 1782860509.269092,
+    "ast_hash": "d27cf8346a65fbc43c2d5b7f91c5c70c",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PlayerWallet.cs": {
+    "mtime": 1782860509.269092,
+    "ast_hash": "6c25201ec7b19b3abfaff19b6da0a8c9",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonEventExtensions.cs": {
+    "mtime": 1782860509.2705958,
+    "ast_hash": "356a91b70b36aaa790ead4e7414cfa2e",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonEventRules.cs": {
+    "mtime": 1782860509.2715998,
+    "ast_hash": "0a4ea9b6f262a7829c0924b6d4c66eba",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonEventType.cs": {
+    "mtime": 1782860509.2726214,
+    "ast_hash": "f063f269062bf7401045ec05aeccc55d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonHeatUI.cs": {
+    "mtime": 1782860509.273621,
+    "ast_hash": "56e58be0849afeb751158a04ca42629f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonLocationRegistry.cs": {
+    "mtime": 1782860509.273621,
+    "ast_hash": "f59d4e7032f86906047df15bc5a568a8",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonLocationZone.cs": {
+    "mtime": 1782860509.2746215,
+    "ast_hash": "4849425e64e30098178627e7cbfd884a",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonNavMeshValidator.cs": {
+    "mtime": 1782860509.2761247,
+    "ast_hash": "3bb85507b3d1ec7920c835a67bc75ea2",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonRoutineLabels.cs": {
+    "mtime": 1782860509.2761247,
+    "ast_hash": "20123157d1febc255034a9a03c1325b5",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonSchedule.cs": {
+    "mtime": 1782860509.2771297,
+    "ast_hash": "ff03dda9c6ec93421deceb28e99439dd",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonScheduleUI.cs": {
+    "mtime": 1782860509.2781286,
+    "ast_hash": "a415a4776f0adbd23d26adaf6edfac2d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonTimeManager.cs": {
+    "mtime": 1782860509.2791283,
+    "ast_hash": "39c3eb6a73e9a44a3bd27f6ad3d68f0f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonUITheme.cs": {
+    "mtime": 1782860509.2801306,
+    "ast_hash": "1cb18e988be36a8b800a1e689d06cefd",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonerPresence.cs": {
+    "mtime": 1782860509.281157,
+    "ast_hash": "3a34b9771124182721d34f6ce9e86bd1",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonerSocialPresenter.cs": {
+    "mtime": 1782860509.2821603,
+    "ast_hash": "ca6deb4253ff7e178a137580f2228326",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/ReputationTier.cs": {
+    "mtime": 1782860509.2831602,
+    "ast_hash": "32d6aa996fce4919a0974022eeaab9bf",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/RoutineBarDisplayController.cs": {
+    "mtime": 1782860509.28416,
+    "ast_hash": "e0d2e23dde73d2dac1105b126f0659e4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/RoutineBarTimerReadability.cs": {
+    "mtime": 1782860509.2851603,
+    "ast_hash": "2d933545ba243a863bd7ba864b1f2f6b",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/RoutineNowNextBarUI.cs": {
+    "mtime": 1782860509.2861598,
+    "ast_hash": "b3f2d7c69d4103e6da7497537da456d1",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/SocialActionType.cs": {
+    "mtime": 1782860509.2872212,
+    "ast_hash": "480fcc3572a43245671156c9d85b8781",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/SocialManager.cs": {
+    "mtime": 1782860509.2872212,
+    "ast_hash": "0a957e81ba82cf4cb0bf340235b1bc70",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/SocialMath.cs": {
+    "mtime": 1782860509.2882206,
+    "ast_hash": "414a1a42b498c60a440bb8e83ecf4587",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/TextRoutineComplianceHUD.cs": {
+    "mtime": 1782860509.2897239,
+    "ast_hash": "146be94d1b045d74e8d46393b5e7c7ea",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/WorldContainer.cs": {
+    "mtime": 1782860509.2907279,
+    "ast_hash": "377b311acb915ea9e2c638583ff99ac8",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/AffinityFloatPopup.cs": {
+    "mtime": 1782860509.2918193,
+    "ast_hash": "dbd02e22fc9e026ac6714bd5b474e0d6",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/CameraBillboard.cs": {
+    "mtime": 1782860509.29282,
+    "ast_hash": "b4e483b5b83d6f02ab64bcfe201add0a",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/CanvasGroupFader.cs": {
+    "mtime": 1782860509.29382,
+    "ast_hash": "40efddb1347b4daec35581b98f2f1375",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/HeldItemDisplay.cs": {
+    "mtime": 1782860509.29382,
+    "ast_hash": "699bee3dd17b4eacf5e4288c8a09424d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/HotbarUI.cs": {
+    "mtime": 1782860509.2953224,
+    "ast_hash": "c542f2ed54f3594c877b5b10d437757a",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/InteractionReticleView.cs": {
+    "mtime": 1782860509.2963257,
+    "ast_hash": "58fab7dc2c67086c8b6687531ceae64d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/InventorySlotUI.cs": {
+    "mtime": 1782860509.297326,
+    "ast_hash": "6241b66a5a751508d2c426b836649c01",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/InventoryUI.cs": {
+    "mtime": 1782860509.2983258,
+    "ast_hash": "32833fbffabfde615faef7ca4c8f20f8",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/ItemTooltipUI.cs": {
+    "mtime": 1782860509.2993264,
+    "ast_hash": "08931ca938b19604bb37aff4b3a2f971",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/NotebookRecipeIndexEntry.cs": {
+    "mtime": 1782860509.300352,
+    "ast_hash": "09be23530431f1aecf54ecfae46382c1",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/PauseManager.cs": {
+    "mtime": 1782860509.3013556,
+    "ast_hash": "0abda83706fdcf3ed6e34b6c3cc9a095",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/PillowStashProximityUI.cs": {
+    "mtime": 1782860509.3013556,
+    "ast_hash": "508f45e23f01a96d4e4377b667d84f55",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/PrisonSocialRowUI.cs": {
+    "mtime": 1782860509.302356,
+    "ast_hash": "0facf6f19a2830f58fd6fec9b4189694",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/RecipeRequirementSlotUI.cs": {
+    "mtime": 1782860509.3033557,
+    "ast_hash": "c4ea2cb8a206130689eae48082c4dcb7",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/UI/StolenNotebookUI.cs": {
+    "mtime": 1782860509.3043566,
+    "ast_hash": "a3f5f6f5b94641f2dd8c264ffebb486f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/AI/GuardDetection.cs": {
+    "mtime": 1782860509.3058598,
+    "ast_hash": "4946b9df3715cac7cce25039d8fcc598",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/AI/GuardFSM.cs": {
+    "mtime": 1782860509.3068633,
+    "ast_hash": "3e685a4f8b2686d4bd8b5e790fe187a3",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/AI/GuardShiftController.cs": {
+    "mtime": 1782860509.307863,
+    "ast_hash": "6a77fc58939e3d81e994a84f5718a835",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/AI/MorningShakedownSweeper.cs": {
+    "mtime": 1782860509.3088632,
+    "ast_hash": "3fe985761c8522dd445374bb7d24d32d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/AI/PrisonerAI.cs": {
+    "mtime": 1782860509.3093657,
+    "ast_hash": "8cfe8cb8db80372931ae3da13e537be9",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/GameManager.cs": {
+    "mtime": 1782860509.3093657,
+    "ast_hash": "c2a44e959044f95fed0f3cf646ff03b1",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Interaction/CellBed.cs": {
+    "mtime": 1782860509.3113737,
+    "ast_hash": "702e6122a88ccc9fc3cc1b8f59681782",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/ContrabandSpawner.cs": {
+    "mtime": 1782860509.3133724,
+    "ast_hash": "35ace8dc0cc1c49a846b7545b1e06882",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/FakeBedDummy.cs": {
+    "mtime": 1782860509.3143725,
+    "ast_hash": "7b2cd1c3286735814052f6c70b4db77d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/InteractableScrew.cs": {
+    "mtime": 1782860509.3143725,
+    "ast_hash": "178643569c85e23bdf79cadab8b47606",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/ItemData.cs": {
+    "mtime": 1782860509.3153732,
+    "ast_hash": "ad65d444a11f015465cc4632d745bf02",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/ItemDatabase.cs": {
+    "mtime": 1782860509.3165185,
+    "ast_hash": "c9bf635b4e4ce19829ee7bf8acd263da",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/ItemType.cs": {
+    "mtime": 1782860509.3175187,
+    "ast_hash": "a9923c48ee0c89a8c18debee913ab30b",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/PartData.cs": {
+    "mtime": 1782860509.3185189,
+    "ast_hash": "271e97d196d32dfc47ee3d126657dc61",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/PickupItem.cs": {
+    "mtime": 1782860509.3185189,
+    "ast_hash": "1907ba9f27eed2f10b529e54cfe39374",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/ToolData.cs": {
+    "mtime": 1782860509.3200579,
+    "ast_hash": "94485d0173afbc237f0874419b609dee",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Items/WeaponData.cs": {
+    "mtime": 1782860509.3210623,
+    "ast_hash": "7ec47ee26e4a22a4e7c06cf18413aaf4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Player/PlayerInteractor.cs": {
+    "mtime": 1782860509.3230622,
+    "ast_hash": "b7179485a8f5ae3e1b228e0a725f3797",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Player/PrisonerController.cs": {
+    "mtime": 1782860509.3240616,
+    "ast_hash": "77d619b3993e11ed260d904cf4c8c67c",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/Security/PrisonSecurityAlerts.cs": {
+    "mtime": 1782860509.325062,
+    "ast_hash": "f9e78a6d1a0064277d5b63143d73b870",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Singleplayer/SinglePlayerLauncher.cs": {
+    "mtime": 1782860509.3261235,
+    "ast_hash": "1e69155c8615a503b7eb899d06b99319",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/SteamManager.cs": {
+    "mtime": 1782860509.3261235,
+    "ast_hash": "de3b1122f220e81506ddbdd8ad1033b7",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/GEMINI.md": {
+    "mtime": 1782860509.2268128,
+    "ast_hash": "9e6ef174ac634325d173c1a1f5aedd90",
+    "semantic_hash": ""
+  },
+  "3dgame.slnx": {
+    "mtime": 1782860504.6053922,
+    "ast_hash": "e5d6ebda10ee4662a05fdd96f74d8d13",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonOverhaulRunner.cs": {
+    "mtime": 1782860504.6299565,
+    "ast_hash": "e9000c5154cb2ab54752f4713ce2ab16",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Scripts/GunView.cs": {
+    "mtime": 1782860505.1116638,
+    "ast_hash": "0334a6d9e6a93d5b03134d2b671d1488",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Scripts/GunsMenu.cs": {
+    "mtime": 1782860505.1126914,
+    "ast_hash": "2fe653464610191697f240095387ef5d",
+    "semantic_hash": ""
+  },
+  "Assets/StreamingAssets/Server/3dgameserver_Data/RuntimeInitializeOnLoads.json": {
+    "mtime": 1782860509.6526673,
+    "ast_hash": "ce7a45beb6220bc791a92892a71416f4",
+    "semantic_hash": ""
+  },
+  "Assets/StreamingAssets/Server/3dgameserver_Data/ScriptingAssemblies.json": {
+    "mtime": 1782860509.653671,
+    "ast_hash": "745213c07982acda1c2d87a0cd0a3c24",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/CellDoorControllerTests.cs": {
+    "mtime": 1782860509.7637334,
+    "ast_hash": "aa911657cea232b869f6be399ed0f051",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/CraftingInventoryLootTests.cs": {
+    "mtime": 1782860509.7647336,
+    "ast_hash": "68b597573f8aa2371300d30308ce3d29",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/PrisonRulesAndLabelsTests.cs": {
+    "mtime": 1782860509.7662363,
+    "ast_hash": "5ea7734d7ba11baf02068e471dc2b826",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/SocialMathTests.cs": {
+    "mtime": 1782860509.7667787,
+    "ast_hash": "7c0a7b5690bc5bd69698cbf343811513",
+    "semantic_hash": ""
+  },
+  "Assets/TextMesh Pro/Sprites/EmojiOne.json": {
+    "mtime": 1782860509.8140612,
+    "ast_hash": "53408097aa38738c15b17ca34e13882a",
+    "semantic_hash": ""
+  },
+  "Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs": {
+    "mtime": 1782860509.8205445,
+    "ast_hash": "71f3bcd4517e2924835a9390d868a18f",
+    "semantic_hash": ""
+  },
+  "Assets/TutorialInfo/Scripts/Readme.cs": {
+    "mtime": 1782860509.8215487,
+    "ast_hash": "ac66313634b98b3f40cd66cf20882aba",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Scripts/DecalDestroyer.cs": {
+    "mtime": 1782860509.9666026,
+    "ast_hash": "73f313655cbfb339422bad987eec91d1",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Scripts/ExtinguishableFire.cs": {
+    "mtime": 1782860509.967603,
+    "ast_hash": "45d564d4743ecf812370873aca5edf13",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Scripts/GunAim.cs": {
+    "mtime": 1782860509.9686189,
+    "ast_hash": "65cca82d7b32079a1ad5a2fa9e5253f2",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Scripts/GunShoot.cs": {
+    "mtime": 1782860509.9696188,
+    "ast_hash": "2984b57cfaa4797360bc9aa1d53872d2",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Scripts/ParticleCollision.cs": {
+    "mtime": 1782860509.9706187,
+    "ast_hash": "932e5b76470df41d4bb1ba0298df8f35",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Scripts/ParticleExamples.cs": {
+    "mtime": 1782860509.9706187,
+    "ast_hash": "7d6a07443423f18902b3a06a92f9f0c4",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Scripts/ParticleMenu.cs": {
+    "mtime": 1782860509.972634,
+    "ast_hash": "fd4a0f4407e76bb4dbcd60bb6f031535",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/056fbf87b6bf19f468073f6ed35b1870/019e2d83-76a4-766b-b862-9f4cce739d74.png.json": {
+    "mtime": 1782860510.1859126,
+    "ast_hash": "384e51b3c7109124bdd656d38882b445",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/056fbf87b6bf19f468073f6ed35b1870/019e2d84-01cc-7084-9b97-c87a817d7784.png.json": {
+    "mtime": 1782860510.1874497,
+    "ast_hash": "28f5b79f6174264d010b2bdd764fb665",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/058216f6fda93594da3ac5136c9615a1/019e2d86-c6d5-7ea5-a98d-7e40477ee6cd.glb.json": {
+    "mtime": 1782860510.4139738,
+    "ast_hash": "258f60b0eab504d300730a7f9e2ba9ba",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/1486d942e661b5d45acb407df4d2c1b2/019e2d7a-4750-7353-b413-2a9b49720bdd.glb.json": {
+    "mtime": 1782860510.6273491,
+    "ast_hash": "f3683f1355ba8d1b0ae0f687600109f9",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/14d25067abae8dc49b4b0b220bf648ae/019e2dd1-64a9-78f9-8c53-b5b90a42f918.jpg.json": {
+    "mtime": 1782860510.6289024,
+    "ast_hash": "d05248949bad48216d93de4751b2db6c",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/14d25067abae8dc49b4b0b220bf648ae/019e2e31-07c4-7549-a3c5-f64f4e368ca8.png.json": {
+    "mtime": 1782860510.6304436,
+    "ast_hash": "384735bf78ce573a3850d90701784042",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/152fa88532b87f748a7cb867990c4f69/019e2d73-4b03-79b3-84fd-496e6a891b57.png.json": {
+    "mtime": 1782860510.6332095,
+    "ast_hash": "2d3c354ee19100162f582d4d559f1c9c",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/152fa88532b87f748a7cb867990c4f69/019e2d73-db33-7e1b-a257-2584602cd8cd.png.json": {
+    "mtime": 1782860510.634778,
+    "ast_hash": "c254c590e2438cea76af505562f6fc01",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/17b78a8fd28007c419fd6ebad6985664/019e2dc9-3811-74c2-8a98-cfe19c90b5ed.jpg.json": {
+    "mtime": 1782860510.6362636,
+    "ast_hash": "e0a887d2b9b7e302e25a83b9ad6b4594",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/1c1505c7af870e44ca71f715f68aa8a8/019e2dc9-2a43-7131-ba46-69e7d2fc7f58.jpg.json": {
+    "mtime": 1782860510.637894,
+    "ast_hash": "9b301b3d544c3f35a42daa202dee9ba0",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/1c1505c7af870e44ca71f715f68aa8a8/019e2e30-7d98-7ed0-aeb8-4d73ac3ebcd9.png.json": {
+    "mtime": 1782860510.6394336,
+    "ast_hash": "2ae5d64515b58cf6a4f79a1862cf8a8a",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/21c2e4bf3b156e14ab69fa3a63978449/019e2dde-5df6-70c7-b5d7-0aea8bf8ca82.jpg.json": {
+    "mtime": 1782860510.6401622,
+    "ast_hash": "ab61e040ea56aa28c2474b4d20b9c369",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/21c2e4bf3b156e14ab69fa3a63978449/019e2e30-3779-738d-b2a7-06bfae4b36a8.png.json": {
+    "mtime": 1782860510.641701,
+    "ast_hash": "42146243edcf479e08fd3a764bbf683f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/2ad2e142bd6832c44ac14bf7baea9a9b/019e2d75-fc60-748f-b236-44743652287e.glb.json": {
+    "mtime": 1782860510.8540008,
+    "ast_hash": "d3c91eeb9e1b10a3402936de016e5590",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/2aefd066d2d49594fb01eecb8248d991/019e2dc8-f9bb-7bbc-9075-bc822ba9d69f.jpg.json": {
+    "mtime": 1782860510.8550186,
+    "ast_hash": "9dbd91cd7bdc72f483ca8196a32d5456",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/2aefd066d2d49594fb01eecb8248d991/019e2e30-32b5-7b9f-8e7a-f78e2304213a.png.json": {
+    "mtime": 1782860510.856631,
+    "ast_hash": "a1775b694c190600759baf9830396a3d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/2e4f2c28f7cd8ab49924ff458dd305c4/019e2d92-d598-7b58-aa70-1edfae03cc56.glb.json": {
+    "mtime": 1782860511.0719972,
+    "ast_hash": "c50d9498aba4fc2e74bddfa902a2489f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/31f0ff33a768ca74ea3ae2aa90656677/019e2df6-7b53-7449-8ce7-b2274f90f3b6.png.json": {
+    "mtime": 1782860511.074876,
+    "ast_hash": "8a0437b136e08495ac16763fdb0f9c81",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/3235758dd4d783c47b493dc347ba65bf/019e2d83-9625-749a-9f63-fc04a93cb08a.png.json": {
+    "mtime": 1782860511.0779464,
+    "ast_hash": "f456866b108638c3725e30db3b91a299",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/3235758dd4d783c47b493dc347ba65bf/019e2d84-1147-7aab-bd79-7c573317a5f9.png.json": {
+    "mtime": 1782860511.0794873,
+    "ast_hash": "4d7aaebf835a1f14a1398fa36a584509",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/35dee658cd5f7fa4b8cf65f3464058a2/019e2d86-ded4-70ca-b336-ba8b11eefe70.glb.json": {
+    "mtime": 1782860511.2941556,
+    "ast_hash": "81615011318551220f0adfa38e2bedcc",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/3ba501d047f6f7b408215d158a13f551/019e2d90-65d0-7fc3-8802-1cffb4ffa46a.glb.json": {
+    "mtime": 1782860511.5055735,
+    "ast_hash": "e07d3290afaa3d5df3a9224d47597eaf",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/40bb0097cba2d1448ac01573ebcf1813/019e2dde-39c0-7cab-b68f-1b4cc0cf0c28.jpg.json": {
+    "mtime": 1782860511.5077257,
+    "ast_hash": "d5d6d0a78cd514aebaeb8287073d1422",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/40bb0097cba2d1448ac01573ebcf1813/019e2e30-b4eb-7d57-b63e-330a38cec64d.png.json": {
+    "mtime": 1782860511.5087526,
+    "ast_hash": "9bfc0e8fd9e98a4881ea365ce169c945",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/410017fdb8c2d4c4fb715adde447a9aa/019e2dde-425c-7533-a78e-9a36233a0421.jpg.json": {
+    "mtime": 1782860511.510417,
+    "ast_hash": "d960fcda5d073fd30437b4a6d0cde14d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/410017fdb8c2d4c4fb715adde447a9aa/019e2e30-6a0d-7e0e-97f9-6eff3f71a95c.png.json": {
+    "mtime": 1782860511.5114546,
+    "ast_hash": "0d3f44788183b4aa9f42c6ccb8d632c7",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/44a00b9ff21288446818ced3afee0cc7/019e2d76-ac77-777c-a9a9-11ad8cfb7296.glb.json": {
+    "mtime": 1782860511.7355585,
+    "ast_hash": "21cf074809d1b6f594ccb8606a228241",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/44d8488b11d12ae4cb9d922bf07a2c86/019e2dc9-0ba0-786a-8923-e05fd33c7625.jpg.json": {
+    "mtime": 1782860511.7370067,
+    "ast_hash": "43f3e237f260db86bb4288005a4e44c6",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/44d8488b11d12ae4cb9d922bf07a2c86/019e2e31-06ae-7301-b59c-56082862d00b.png.json": {
+    "mtime": 1782860511.738518,
+    "ast_hash": "1b07fa93ffa535ce91d742d625b8d0fc",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/46588a17e3e7aea44853e7836d545680/019e2d8c-0aaf-7302-bcd1-293db37f2eca.png.json": {
+    "mtime": 1782860511.7407968,
+    "ast_hash": "56755e027365cda7c74ab3f4293c6a05",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/46588a17e3e7aea44853e7836d545680/019e2d8d-906b-78fb-b894-20d2ea8d0c21.png.json": {
+    "mtime": 1782860511.7439682,
+    "ast_hash": "9e779d4eff711c10126ad6414bf80590",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/498f5ac9400bad54e8480a5da0a92603/019e2d90-6958-73ed-a9a0-305c512cce94.glb.json": {
+    "mtime": 1782860511.970928,
+    "ast_hash": "30be1bf79d7d8790c8ae359c14fceb0d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/58e3ca76a9784fc42a2e5c1d8f22aba4/019e2dde-6c6c-775e-af0d-c38d6da11224.jpg.json": {
+    "mtime": 1782860511.9726598,
+    "ast_hash": "5f8e84a681bfbd41539440aa6b0124b3",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/58e3ca76a9784fc42a2e5c1d8f22aba4/019e2e30-3ccc-78dc-8491-416399a69599.png.json": {
+    "mtime": 1782860511.9736826,
+    "ast_hash": "c4224bfcaa86fe9267d0b88bc4b9cf2e",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/615809dc049744a48859dbeae31415f3/019e2d83-993f-76e4-8c22-16b62b107bd4.png.json": {
+    "mtime": 1782860511.9757469,
+    "ast_hash": "79a4681d7b12c1ab75c811a2bce43d7f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/615809dc049744a48859dbeae31415f3/019e2d84-0be6-703a-a2a0-948dacffc273.png.json": {
+    "mtime": 1782860511.9776273,
+    "ast_hash": "14c32985258996cadd5ec8dd92521b89",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6a8423a22d78cc9419c7181ec08e8fb0/019e2dc9-4c42-7853-a5b3-dfeb0b46c309.jpg.json": {
+    "mtime": 1782860511.978655,
+    "ast_hash": "ea31ad7f89f49889410d298106207440",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6a8423a22d78cc9419c7181ec08e8fb0/019e2e31-3ca1-77e8-903d-b6ad2c0cb870.png.json": {
+    "mtime": 1782860511.9801905,
+    "ast_hash": "b4c1eee01bc70a3898ada30732297f64",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6b9b355b56a65204caa991c37c47ec04/019e2dde-5eae-7860-9125-d709a634fabd.jpg.json": {
+    "mtime": 1782860511.9812236,
+    "ast_hash": "73775613827caecb1b673796e702121c",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6b9b355b56a65204caa991c37c47ec04/019e2e31-0708-703a-874f-b54b5a670f7d.png.json": {
+    "mtime": 1782860511.982271,
+    "ast_hash": "e1403ca24688f0ad8fe50d8697033cbe",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6c18cfe85f11086459b68a360ea1d696/019e2d77-9ee2-7ebd-831e-f6f3c591824e.glb.json": {
+    "mtime": 1782860512.2135677,
+    "ast_hash": "f78180c5182cb1142351cc2685184cd2",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6d201a267fb8b544a8bdda8e76e04ff9/019e2dc9-1713-725c-b37c-bef2836f8c62.jpg.json": {
+    "mtime": 1782860512.2157485,
+    "ast_hash": "c26db52d82da94fefdba8ba358cf8774",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6d201a267fb8b544a8bdda8e76e04ff9/019e2e30-bb40-7e06-8a50-614f65ada731.png.json": {
+    "mtime": 1782860512.2174256,
+    "ast_hash": "361e4ef0b120b9d0c8a8dcc473ecc699",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/71be3b7ef382a4944b8e9b68b2a05c5c/019e2d8f-ed0d-7381-9cd0-e2ec6c5f3912.glb.json": {
+    "mtime": 1782860512.4395716,
+    "ast_hash": "81e3d0a6cfeed8d8d08d15680edd0bf9",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/77e5841382db1964da26ab1b3165e819/019e2d7b-6c8c-73f9-bdd2-e44615d3186b.png.json": {
+    "mtime": 1782860512.4420002,
+    "ast_hash": "ac108f2ecf298df259927b79532e32c1",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/77e5841382db1964da26ab1b3165e819/019e2d7b-b237-7f79-ae7c-8742d496ddca.png.json": {
+    "mtime": 1782860512.4437218,
+    "ast_hash": "c9f116738fa553220e19eb4f0454f23d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/851592f2b94bdf44b90cb5ac9156f9cf/019e2dde-7b51-7ab6-9050-cd410902dc76.jpg.json": {
+    "mtime": 1782860512.4452617,
+    "ast_hash": "b8c9217bfc208726fa8eeafdeb2cd490",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/851592f2b94bdf44b90cb5ac9156f9cf/019e2e30-e651-7cd2-bc86-e47d80d290c0.png.json": {
+    "mtime": 1782860512.4462998,
+    "ast_hash": "c80549b9f91593fbcb5891f44c5a2c6d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/85b8807932b714b4d83d1bcb66707717/019e2dc9-5f19-72ee-aa11-46be47899cd9.jpg.json": {
+    "mtime": 1782860512.44783,
+    "ast_hash": "fee4ba2d35cba31ba31d05abc363d5fd",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/85b8807932b714b4d83d1bcb66707717/019e2e30-737f-7c0f-85cb-fb9d6ce3300c.png.json": {
+    "mtime": 1782860512.4488592,
+    "ast_hash": "65f86aab0a5d53e56218a5480e8c3ad7",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/90f5d312f7c5469499f728f51e4033cf/019e2d86-871c-76fa-bef0-83c7ea1f4d73.glb.json": {
+    "mtime": 1782860512.657941,
+    "ast_hash": "7f945844980a2e503f6969da796646ad",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/93fa75ef5dec54b4da5103de87d2874d/019e2dde-849c-7614-af8b-85d94b3c9776.jpg.json": {
+    "mtime": 1782860512.6606996,
+    "ast_hash": "3c5e92b2235e2fad11d0e13f9319e3b6",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/93fa75ef5dec54b4da5103de87d2874d/019e2e30-6507-7857-8ab7-1337cf6edd1b.png.json": {
+    "mtime": 1782860512.662188,
+    "ast_hash": "7debda651d67d121b74ce6be277564ab",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/981f152885bf63541ae455f5e4db65bf/019e2d8c-0bcb-7b1d-a348-38a7e305da69.png.json": {
+    "mtime": 1782860512.6642659,
+    "ast_hash": "883ec8dda8967e828af5bba33bc47d1c",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/981f152885bf63541ae455f5e4db65bf/019e2d8d-880d-78d0-b3aa-217dfe551bbb.png.json": {
+    "mtime": 1782860512.667022,
+    "ast_hash": "9fe68f675ddeb56dde731b0dae2d5f7f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9b847af39407b92498bb72c60e87866b/019e2d8c-0c57-7ec0-846c-d631fe35cc86.png.json": {
+    "mtime": 1782860512.6690826,
+    "ast_hash": "309473a2df140177d335007db6eb4c11",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9b847af39407b92498bb72c60e87866b/019e2d8d-91eb-7485-8cf8-0ca0ce3e0b2b.png.json": {
+    "mtime": 1782860512.6706681,
+    "ast_hash": "35fd23d7ce6d7f58a07c30bf7e6e2f93",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9d387256143bd7f4aae69fc5787b32f1/019e2dc9-02f9-7d1e-8405-9cf7a4a44333.jpg.json": {
+    "mtime": 1782860512.6718674,
+    "ast_hash": "29dc51e0370fb81b8f89588c410e84d3",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9d387256143bd7f4aae69fc5787b32f1/019e2e31-30ac-77c3-98d2-6659b390c33a.png.json": {
+    "mtime": 1782860512.672907,
+    "ast_hash": "40f60140bcf2fc90e95b6cf81dea4b3a",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a4c09a583b9e6664b87cbc36d8c1385e/019e2d8c-115c-783e-86e8-46161070b47f.png.json": {
+    "mtime": 1782860512.6754844,
+    "ast_hash": "69f53aa60deb8db374011ff22c201e3e",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a4c09a583b9e6664b87cbc36d8c1385e/019e2d8d-fec0-7c05-8711-c32e0d69f7c9.png.json": {
+    "mtime": 1782860512.6770642,
+    "ast_hash": "0bfd61f9bb251a14f463979f71131788",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a9287749fbbc4a446ae63007ac517224/019e2ddf-d1ad-7032-830c-d65dd2c8fb7b.jpg.json": {
+    "mtime": 1782860512.6786036,
+    "ast_hash": "866598fce96c4975666738350aea8d82",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a9287749fbbc4a446ae63007ac517224/019e2e30-d6a8-78d2-98e0-e5e804032f00.png.json": {
+    "mtime": 1782860512.6796243,
+    "ast_hash": "404457b204466e3d14e49fe7bb254655",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a998384ce9274c94485513ca79e2e741/019e2dc9-40ef-744f-b8d6-762c4bdc683d.jpg.json": {
+    "mtime": 1782860512.6811683,
+    "ast_hash": "f3bcb4da3bbfc8e5d094df294faf1c45",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a998384ce9274c94485513ca79e2e741/019e2e30-c763-7515-9c91-1f772d6f3b89.png.json": {
+    "mtime": 1782860512.6828263,
+    "ast_hash": "75cb89e083091167f3ed812efeebc0b6",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/ad6f696e6f3e43d4e9f0c3d4e3df7234/019e2d76-4d58-7c09-a115-d621745b060d.glb.json": {
+    "mtime": 1782860512.8970406,
+    "ast_hash": "20404d8716b4e7615a85181689312a81",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/af84f03c8150384469da3ba527ec2a53/019e2dc9-8850-7ff5-b87b-79fa7483e19c.png.json": {
+    "mtime": 1782860512.9010797,
+    "ast_hash": "de3560d82d2d1dd25c4d5cad5902f672",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/b0aec224448e88f40bb4cc88b61252a8/019e2dc9-2015-7a9e-b0be-4c7621b80d3a.jpg.json": {
+    "mtime": 1782860512.9026203,
+    "ast_hash": "f524cca8e47815732b64db3515c4dc17",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/b0aec224448e88f40bb4cc88b61252a8/019e2e31-1cb2-7578-8e09-3ca350455b3f.png.json": {
+    "mtime": 1782860512.903641,
+    "ast_hash": "48b1db5967b5ac5f32051383da61db9d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/b320f26539b5d244394bfc169f5006a1/019e2d88-ee82-7b95-b3e6-15422a1c24c5.glb.json": {
+    "mtime": 1782860513.1280525,
+    "ast_hash": "dc7a69deeec363a49f63a163d76d6c75",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/ba7d07513078ee24c92fa3d925656da9/019e2d83-7f66-7b68-91f6-f1436fa8b1da.png.json": {
+    "mtime": 1782860513.1307652,
+    "ast_hash": "68a1e0688197adb45a803e862b57aeae",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/ba7d07513078ee24c92fa3d925656da9/019e2d84-2fb3-7400-bf44-4d518a25c68d.png.json": {
+    "mtime": 1782860513.1336,
+    "ast_hash": "4344600889681452128970e118a46e35",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bc8a59e331e3df04e85fd92c95c53435/019e2d73-7955-7783-b398-13b9b24660ab.png.json": {
+    "mtime": 1782860513.136159,
+    "ast_hash": "85bf901e75f7d748362ff65444d8d472",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bc8a59e331e3df04e85fd92c95c53435/019e2d73-f796-7dc8-91f0-38158d1dc234.png.json": {
+    "mtime": 1782860513.1371875,
+    "ast_hash": "5c6a69eaf0dac955d0f3dff493d068c0",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bfe4d8b2a5c28394d9cf60745cc82bb8/019e2d73-3b8c-7b91-b25d-cfaeef941b8c.png.json": {
+    "mtime": 1782860513.139315,
+    "ast_hash": "02f87f84fc02bcfce7d9683307a9df49",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bfe4d8b2a5c28394d9cf60745cc82bb8/019e2d73-c5dc-7898-b6b2-d125aa2de24f.png.json": {
+    "mtime": 1782860513.1408503,
+    "ast_hash": "94e88245c891386d98779b303245e36b",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/c11f4fbca34028748aa788813fbb84b1/019e2d86-60e0-769f-a65f-60c110ed8af1.glb.json": {
+    "mtime": 1782860513.3610606,
+    "ast_hash": "7c91ebdc728de259e98fc40cecf3d9f7",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/c241e23b33e238e4ca6b17d9afec8358/019e2d83-c37b-7b1f-bd0a-eff2ac826a16.png.json": {
+    "mtime": 1782860513.3635888,
+    "ast_hash": "8499fd81ba80a9987c0abf6d594dbe03",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/c241e23b33e238e4ca6b17d9afec8358/019e2d84-35ff-7d8e-97fa-db91c8746f0b.png.json": {
+    "mtime": 1782860513.3658273,
+    "ast_hash": "9250307b87c6e9dca4635180e2846348",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/c7ed7b98a85fa8a46b684b78db35bede/019e2d7e-1c34-76a8-b292-7bc1b555f528.glb.json": {
+    "mtime": 1782860513.5773475,
+    "ast_hash": "1194ed62fdd17d0f6d7f9ee4d76faaeb",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cd335903620c8974f9d586ece1885a74/019e2dc9-6aae-78ef-bd80-e8e0aff6fec4.jpg.json": {
+    "mtime": 1782860513.5802572,
+    "ast_hash": "abca3c792c2a6cc3ab0da22a108ac650",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cd335903620c8974f9d586ece1885a74/019e2e30-f56d-7367-a339-0813e7a70bdc.png.json": {
+    "mtime": 1782860513.5812798,
+    "ast_hash": "ab1547dc081c6bf90b0e3940a2b92b3d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cef24d59763d09f42bd4b39648d28201/019e2df2-0508-7235-9557-c2ff4dea281b.jpg.json": {
+    "mtime": 1782860513.582722,
+    "ast_hash": "6b3d6e48b2b4e7bc4e309bd7587a8773",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cef24d59763d09f42bd4b39648d28201/019e2e30-b66c-7d77-903b-d46b1bfd45a3.png.json": {
+    "mtime": 1782860513.5837433,
+    "ast_hash": "24c906d22652ebe1ea2205bdf784bb5f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cff0a81862f832d49b44c17953feac51/019e2dc9-53ce-7d43-98e4-05a7cb8059ec.jpg.json": {
+    "mtime": 1782860513.5847738,
+    "ast_hash": "e3fb0ed693d0f843186008544dcb10ea",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cff0a81862f832d49b44c17953feac51/019e2e30-2969-712a-81fe-96b8080a7113.png.json": {
+    "mtime": 1782860513.5863287,
+    "ast_hash": "14283ec1bf83cb90df24fff8450d7120",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d389a7f45d57cb443bc2462cedc8e94e/019e2d7b-75de-7481-880f-597905c3197e.png.json": {
+    "mtime": 1782860513.5888958,
+    "ast_hash": "6debf7d4fa246911722352c8e415c711",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d389a7f45d57cb443bc2462cedc8e94e/019e2d7b-c167-7d53-8d8b-29ff418326bf.png.json": {
+    "mtime": 1782860513.5911832,
+    "ast_hash": "b4c879638020430c5595be98a203eced",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d9e5242592fc92241a2944e0c43e23d8/019e2dde-74a2-7ca2-9b0a-a2947451a26f.jpg.json": {
+    "mtime": 1782860513.592732,
+    "ast_hash": "82190f6c401e2ba0c3afe49f77795b46",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d9e5242592fc92241a2944e0c43e23d8/019e2e30-51dd-79d3-875a-93e961cde82b.png.json": {
+    "mtime": 1782860513.5937521,
+    "ast_hash": "79b0ef92905a587a5bf7f0b1b9041f05",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/dacec14ef192f3747b099c0bdf49e845/019e2d8c-50e5-7ba7-a7f7-956550817afe.png.json": {
+    "mtime": 1782860513.596902,
+    "ast_hash": "02f3951fb3220d0bbbcbbc3fb1906578",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/dacec14ef192f3747b099c0bdf49e845/019e2d8d-aae7-745d-845c-ee7b9de37fe4.png.json": {
+    "mtime": 1782860513.5994837,
+    "ast_hash": "41ee8b1e21edc5420e105666facc9b3b",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/db7cad742b152514897f6c14dcbfcbe7/019e2d73-5538-7272-a7dd-02fb50d12dd4.png.json": {
+    "mtime": 1782860513.6015942,
+    "ast_hash": "f6904483293d7bda4e9bd03b5fe68d35",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/db7cad742b152514897f6c14dcbfcbe7/019e2d76-4a4b-79a9-9cb8-79dc7ce02711.png.json": {
+    "mtime": 1782860513.6031606,
+    "ast_hash": "c714bbf2dd04c9734ba4fcd0524036b3",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/dde6ee7779b41bf4ca42d172be30befb/019e2d90-1857-7775-a28a-548253f4a2fa.glb.json": {
+    "mtime": 1782860513.8319435,
+    "ast_hash": "48d6cfd2aff217f0fa713ba28fd82c63",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e0fffd0f35a6c9a429390248310d27b0/019e2d7e-9d07-7a4c-b951-7deec06e606d.glb.json": {
+    "mtime": 1782860514.059117,
+    "ast_hash": "752e8dc58f71442a672dd525722320a5",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e891d76b537346e49a9222e0bf92c0c0/019e2dd6-dffc-7b64-aba1-2868a9a8a557.jpg.json": {
+    "mtime": 1782860514.0616095,
+    "ast_hash": "c7becc50e040f1f8e744b37d729daf26",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e980c6d97e19d0e49a5a549f228524b4/019e2dd1-5917-75ca-ad13-24abd884ea04.jpg.json": {
+    "mtime": 1782860514.0632863,
+    "ast_hash": "1f690a50fe69d287cefdc0356817d528",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e980c6d97e19d0e49a5a549f228524b4/019e2e30-5b1b-7790-8418-3427a1a18428.png.json": {
+    "mtime": 1782860514.064311,
+    "ast_hash": "b72cdf8d9ac99fec26e42803e0dfa3bf",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/eea24bc22804da348bb79f4a3d21d40c/019e2dde-577a-7fc8-b448-cd1135a66764.jpg.json": {
+    "mtime": 1782860514.0661232,
+    "ast_hash": "46d0172a0b7ae3bc93632e5175c82199",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/eea24bc22804da348bb79f4a3d21d40c/019e2e30-e2b4-73be-9813-cf9e98f783b8.png.json": {
+    "mtime": 1782860514.066886,
+    "ast_hash": "927497422d3b128067fe45486ed8f0d2",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/f91f5d76243339e4585be6f75201e0fc/019e2d73-5659-7757-92b3-f80c2abdf8af.png.json": {
+    "mtime": 1782860514.0695975,
+    "ast_hash": "88a1222830a547292eed3a628c6eee92",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/f91f5d76243339e4585be6f75201e0fc/019e2d73-ced5-700a-ad9e-3f72f1116e43.png.json": {
+    "mtime": 1782860514.0723069,
+    "ast_hash": "ed8d783e5f186dd6d2d23945f94fa3ed",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/fd93b3526f8cb8b46b069dd456d7f619/019e2df5-a6f8-7035-99fe-4747c7f6581c.jpg.json": {
+    "mtime": 1782860514.073673,
+    "ast_hash": "06733375a555bfe50f3bb8d3bbda95f2",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/fd93b3526f8cb8b46b069dd456d7f619/019e2e31-2cc8-7a87-b6aa-cd9f7979dcf7.png.json": {
+    "mtime": 1782860514.0747714,
+    "ast_hash": "09c669b1617b1d049057d1ad520ddee7",
+    "semantic_hash": ""
+  },
+  "Packages/manifest.json": {
+    "mtime": 1782860514.0758288,
+    "ast_hash": "74cf05eae389860f3364c85c8ebc0cf9",
+    "semantic_hash": ""
+  },
+  "Packages/packages-lock.json": {
+    "mtime": 1782860514.0758288,
+    "ast_hash": "c15a6c38bbe281f886e2d32ace40ac49",
+    "semantic_hash": ""
+  },
+  "ProjectSettings/Packages/com.unity.ai.assistant/Settings.json": {
+    "mtime": 1782860514.0810287,
+    "ast_hash": "ba93e76b491a290b4924faa346d12547",
+    "semantic_hash": ""
+  },
+  "ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json": {
+    "mtime": 1782860514.0816329,
+    "ast_hash": "07316b8ece7def1d0fec4af12a0183ab",
+    "semantic_hash": ""
+  },
+  "ProjectSettings/SceneTemplateSettings.json": {
+    "mtime": 1782860514.0837953,
+    "ast_hash": "3620a2b0a1c79cc4ae4b6b6ad599ff4d",
+    "semantic_hash": ""
+  },
+  "Assets/Docs/Game_Features_And_Test_Coverage.md": {
+    "mtime": 1782860504.6093955,
+    "ast_hash": "b1f940ff6cc90679f186e356b46d9dcc",
+    "semantic_hash": ""
+  },
+  "Assets/Docs/Prison_Social_And_Reputation_System.md": {
+    "mtime": 1782860504.6289532,
+    "ast_hash": "6a54d896cbe04e292ada7cdb0d9d3d26",
+    "semantic_hash": ""
+  },
+  "Assets/StreamingAssets/Server/3dgameserver_Data/Plugins/Steamworks.NET.txt": {
+    "mtime": 1782860509.6296506,
+    "ast_hash": "aeb502077da94742ea7d427e22e331b7",
+    "semantic_hash": ""
+  },
+  "Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt": {
+    "mtime": 1782860509.7687821,
+    "ast_hash": "a0631122fee5a71a264609ff53bf5a23",
+    "semantic_hash": ""
+  },
+  "Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt": {
+    "mtime": 1782860509.7833836,
+    "ast_hash": "345c77ed32179f5f982dcf8e2b1d92af",
+    "semantic_hash": ""
+  },
+  "Assets/TextMesh Pro/Resources/LineBreaking Leading Characters.txt": {
+    "mtime": 1782860509.7843833,
+    "ast_hash": "d52dd40acd32a62df3bc764b1e783ddf",
+    "semantic_hash": ""
+  },
+  "Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt": {
+    "mtime": 1782860509.8130603,
+    "ast_hash": "759264906d349d566518f06e38d06772",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Editor/PackageManagerAssembly/PackageImportList.txt": {
+    "mtime": 1782860509.844117,
+    "ast_hash": "f0e5e121176f17f0c9b55cfbfbdcae1a",
+    "semantic_hash": ""
+  },
+  "ProjectSettings/ProjectVersion.txt": {
+    "mtime": 1782860514.0832763,
+    "ast_hash": "47f3288668e7ffb921dd3f2ecfee00ec",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1782860025.2371347,
+    "ast_hash": "f0de27dd727d0eee05a545e00d9c02d9",
+    "semantic_hash": ""
+  },
+  "docs/PR_PLAN.md": {
+    "mtime": 1782859654.3338757,
+    "ast_hash": "0566f42098758023b6382740e18cafa2",
+    "semantic_hash": ""
+  },
+  "steam_appid.txt": {
+    "mtime": 1782860514.0875087,
+    "ast_hash": "6ea2ef7311b482724a9b7b0bc0dd85c6",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault1/assault1_diffuse.png": {
+    "mtime": 1782860504.9232686,
+    "ast_hash": "5a5620b7bba27ecacbae497eb13f8dc3",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault1/assault1_normal.png": {
+    "mtime": 1782860504.9268599,
+    "ast_hash": "3106bf9ee97574ca264982ad9c856af1",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault2/assault2_diffuse.png": {
+    "mtime": 1782860504.9368806,
+    "ast_hash": "788a3e5c5c04bea0d3cdcb6b11476567",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault2/assault2_normal.png": {
+    "mtime": 1782860504.9410124,
+    "ast_hash": "e8d0e916aa81dc231b51298646c36d38",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault3/assault3_diffuse.png": {
+    "mtime": 1782860504.947931,
+    "ast_hash": "0d28a1db3711500b6a0cf31a0fcbb8bb",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault3/assault3_normal.png": {
+    "mtime": 1782860504.9524844,
+    "ast_hash": "7b1722e8127d966c97e50143d7c63e4a",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault4/assault4_diffuse.png": {
+    "mtime": 1782860504.9584968,
+    "ast_hash": "705cf3d35ea6741812ba61bf729b1251",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/assault4/assault4_normal.png": {
+    "mtime": 1782860504.9640117,
+    "ast_hash": "0c616b0ae0624405760d9972715750dc",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol1/pistol1_diffuse.png": {
+    "mtime": 1782860504.9727552,
+    "ast_hash": "3f4ae434fa28d41d462f042b618e0e05",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol1/pistol1_normal.png": {
+    "mtime": 1782860504.9767954,
+    "ast_hash": "2fb7035f94c62b2f3fbb0e67cff406d5",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol2/pistol2_diffuse.png": {
+    "mtime": 1782860504.9859111,
+    "ast_hash": "fbc73547d8fc625fa7ea40f5c3fc3ce8",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol2/pistol2_normal.png": {
+    "mtime": 1782860504.9909277,
+    "ast_hash": "f5e896a7dade8d4b102c95d851d873fd",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol3/pistol3_diffuse.png": {
+    "mtime": 1782860504.9989705,
+    "ast_hash": "de286184c12df148268575cf58f3ecd4",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol3/pistol3_normal.png": {
+    "mtime": 1782860505.002974,
+    "ast_hash": "b839559db150075596dfdb49b6f22ea1",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol4/pistol4_diffuse.png": {
+    "mtime": 1782860505.0114777,
+    "ast_hash": "f8368db33c414189a4e64c1e8de72947",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/pistol4/pistol4_normal.png": {
+    "mtime": 1782860505.0149846,
+    "ast_hash": "c7fca94c34d527df47eec1c16cef6e48",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/shotgun1/shotgun1_diffuse.png": {
+    "mtime": 1782860505.0260186,
+    "ast_hash": "462f42f7630e9622352dc3781cf3d42b",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/shotgun1/shotgun1_normal.png": {
+    "mtime": 1782860505.030663,
+    "ast_hash": "9b27de7b4e09eeef39ea4b498edc1de7",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/shotgun2/shotgun2_diffuse.png": {
+    "mtime": 1782860505.041705,
+    "ast_hash": "a567db780483bfcdab575a2a1063ead2",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/shotgun2/shotgun2_normal.png": {
+    "mtime": 1782860505.0452106,
+    "ast_hash": "f31ffee2f6c3a423fd52e351b3668a1c",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/smg1/smg1_diffuse.png": {
+    "mtime": 1782860505.0545075,
+    "ast_hash": "6aacab90d66e4a00165e9c700fcfef27",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/smg1/smg1_normal.png": {
+    "mtime": 1782860505.05853,
+    "ast_hash": "cc425dc2247e4ba24068fa875b76504d",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/smg2/smg2_diffuse.png": {
+    "mtime": 1782860505.070885,
+    "ast_hash": "334c9b593a31789fb49f2a72e5519790",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/smg2/smg2_normal.png": {
+    "mtime": 1782860505.075501,
+    "ast_hash": "3ed6d9bb48a68b93d1091c2448b55aed",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/sniper1/sniper1_diffuse.png": {
+    "mtime": 1782860505.0863044,
+    "ast_hash": "276ce5e34995019decbfce9783ba1b15",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/sniper1/sniper1_normal.png": {
+    "mtime": 1782860505.08992,
+    "ast_hash": "35f4b1b43d5f60365fd27f7ccbc223d9",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/sniper2/sniper2_diffuse.png": {
+    "mtime": 1782860505.1039202,
+    "ast_hash": "5ec3d2dc2bb3bbff11ee6af3d5b81071",
+    "semantic_hash": ""
+  },
+  "Assets/Low Poly Guns/Models/Guns/sniper2/sniper2_normal.png": {
+    "mtime": 1782860505.1080225,
+    "ast_hash": "a06a5865bfce7765c4d3ed7aa4bc375a",
+    "semantic_hash": ""
+  },
+  "Assets/Maps/factory.jpg": {
+    "mtime": 1782860505.113694,
+    "ast_hash": "0efb679469dee80bdc8b17eb4506874d",
+    "semantic_hash": ""
+  },
+  "Assets/Maps/warehouse.jpg": {
+    "mtime": 1782860505.1152616,
+    "ast_hash": "f0758a47913afe3f55eccd9865bfdda8",
+    "semantic_hash": ""
+  },
+  "Assets/Prefabs/Untitled-Picsart-BackgroundRemover.png": {
+    "mtime": 1782860508.92113,
+    "ast_hash": "edec95149158c1ade2737f9d79eeb0c5",
+    "semantic_hash": ""
+  },
+  "Assets/Prefabs/Untitled.png": {
+    "mtime": 1782860508.9226599,
+    "ast_hash": "d7861dead650ac92f1584f71ede77fe9",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-0_comp_dir.png": {
+    "mtime": 1782860508.9355302,
+    "ast_hash": "c458f041d725314f15de4a59b0c38950",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-10_comp_dir.png": {
+    "mtime": 1782860508.9469624,
+    "ast_hash": "ae04b3704a43a6b1d74f9cafb10c7659",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-11_comp_dir.png": {
+    "mtime": 1782860508.954646,
+    "ast_hash": "fcd6b69f50f11e670736d1aa1029b3b4",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-12_comp_dir.png": {
+    "mtime": 1782860508.9598055,
+    "ast_hash": "452a5b246a1ed23b870b28330a82c80a",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-13_comp_dir.png": {
+    "mtime": 1782860508.9649684,
+    "ast_hash": "2f79ce685d90d3a7c2d9f4f54d71b432",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-14_comp_dir.png": {
+    "mtime": 1782860508.9689956,
+    "ast_hash": "110e6c36d964ac765a98961aa4a5cf6f",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-15_comp_dir.png": {
+    "mtime": 1782860508.9735036,
+    "ast_hash": "9572e68e07903f21ec80f7662c782836",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-16_comp_dir.png": {
+    "mtime": 1782860508.9810996,
+    "ast_hash": "59c7df8d39847843443a89f5f2f16c78",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-17_comp_dir.png": {
+    "mtime": 1782860508.9861128,
+    "ast_hash": "f9f4fb56720ea62ac860b5855a1842d3",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-18_comp_dir.png": {
+    "mtime": 1782860508.9936366,
+    "ast_hash": "0f4b128fcaf6e3927acea02520f7d758",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-19_comp_dir.png": {
+    "mtime": 1782860508.99873,
+    "ast_hash": "a02bae3c18acbdef5fed0d928cb8fe25",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-1_comp_dir.png": {
+    "mtime": 1782860509.005251,
+    "ast_hash": "4ce219837c678dc5a838310c950cb67b",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-20_comp_dir.png": {
+    "mtime": 1782860509.0163963,
+    "ast_hash": "3df257882711c5a2c2b493a4778ef20e",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-21_comp_dir.png": {
+    "mtime": 1782860509.0214093,
+    "ast_hash": "c0e897223cc75bd57af4d2a0de8de61f",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-22_comp_dir.png": {
+    "mtime": 1782860509.0285952,
+    "ast_hash": "bc3aca4c012eb12d41e2fc80ff4d218a",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-23_comp_dir.png": {
+    "mtime": 1782860509.0345151,
+    "ast_hash": "4928f3bfba99c4abc11df34004113fe1",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-24_comp_dir.png": {
+    "mtime": 1782860509.0381327,
+    "ast_hash": "ed796f7f5c0c2469d09d97c7524130fa",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-25_comp_dir.png": {
+    "mtime": 1782860509.0417502,
+    "ast_hash": "8138b1186cb2b12c9205c95741f5a0f4",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-26_comp_dir.png": {
+    "mtime": 1782860509.046439,
+    "ast_hash": "e152ca0e150789f18e2ad2cd7f6a0ebc",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-27_comp_dir.png": {
+    "mtime": 1782860509.0516746,
+    "ast_hash": "797d0500d479f5508dc363a21a634525",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-28_comp_dir.png": {
+    "mtime": 1782860509.0562954,
+    "ast_hash": "e31f6f62f280d67ca7aee85b1345ea03",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-29_comp_dir.png": {
+    "mtime": 1782860509.0588682,
+    "ast_hash": "48c34095cbb27e16f2df40c08d80213d",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-2_comp_dir.png": {
+    "mtime": 1782860509.0635262,
+    "ast_hash": "a0c8cdd4a4340c3afe6e29e5eb321554",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-30_comp_dir.png": {
+    "mtime": 1782860509.0747516,
+    "ast_hash": "2aac9fd5b0c626cbb555bd33a0ce44ad",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-31_comp_dir.png": {
+    "mtime": 1782860509.0783947,
+    "ast_hash": "3479bad25ec06eafc66fe040eec27ab1",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-32_comp_dir.png": {
+    "mtime": 1782860509.081903,
+    "ast_hash": "be8804ce0292275d395071ef3f314892",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-33_comp_dir.png": {
+    "mtime": 1782860509.0859025,
+    "ast_hash": "35b5e3a9bb11303833a96397e755deab",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-34_comp_dir.png": {
+    "mtime": 1782860509.090498,
+    "ast_hash": "0262e557be839082e21f2220d8fb83c8",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-35_comp_dir.png": {
+    "mtime": 1782860509.0955021,
+    "ast_hash": "c6088e53c8d15022ff36bb77e95f20b1",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-36_comp_dir.png": {
+    "mtime": 1782860509.1021156,
+    "ast_hash": "e43e9f8b6ff630a8525ad6996e1d7722",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-37_comp_dir.png": {
+    "mtime": 1782860509.1076467,
+    "ast_hash": "51896436f0acdfccbb0cb54eefe33b22",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-38_comp_dir.png": {
+    "mtime": 1782860509.1122758,
+    "ast_hash": "8e3c66b8fabf58b624d0ff907c55c563",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-3_comp_dir.png": {
+    "mtime": 1782860509.1189,
+    "ast_hash": "0208e0fce72bbe8d88b369fa12aecae1",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-4_comp_dir.png": {
+    "mtime": 1782860509.126985,
+    "ast_hash": "60ce328a0990b186ca35b15e9c954c69",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-5_comp_dir.png": {
+    "mtime": 1782860509.13714,
+    "ast_hash": "30080cda4b83ab173a34e97998781852",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-6_comp_dir.png": {
+    "mtime": 1782860509.1477664,
+    "ast_hash": "661562afc15f912b764c50dd4559f6e3",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-7_comp_dir.png": {
+    "mtime": 1782860509.1573124,
+    "ast_hash": "038826385db7f0a2172b2ae1743542f2",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-8_comp_dir.png": {
+    "mtime": 1782860509.1683471,
+    "ast_hash": "1aea678de7b633a75c9cdf779852fa53",
+    "semantic_hash": ""
+  },
+  "Assets/Scenes/PrisonLevel1/Lightmap-9_comp_dir.png": {
+    "mtime": 1782860509.176361,
+    "ast_hash": "e6dda30c9bc356bce871debd7a4bccdf",
+    "semantic_hash": ""
+  },
+  "Assets/ScriptableObjects/Item Icons/download (1).jpg": {
+    "mtime": 1782860509.1905782,
+    "ast_hash": "e9e0931ee371bb471ddfd63afe750d0c",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Concepts/CafeteriaTable_Ref.png": {
+    "mtime": 1782860509.3410885,
+    "ast_hash": "d01a651c09d11b2233fdef14d9c6785e",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Concepts/ConcretePillar_Ref.png": {
+    "mtime": 1782860509.3431506,
+    "ast_hash": "0a981acd7b6432ddf2e7b0736320986c",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Concepts/GymBench_Ref.png": {
+    "mtime": 1782860509.3446858,
+    "ast_hash": "600fe8ca2087d7e2e58b2d0c68d748f4",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Concepts/PrisonBed_Ref.png": {
+    "mtime": 1782860509.3462303,
+    "ast_hash": "b8876720432720c4ac23422d01d1c656",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Concepts/PrisonCellDoor_Ref.png": {
+    "mtime": 1782860509.348278,
+    "ast_hash": "cd099c0d3ce40f44fe440ace960e8035",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Concepts/PrisonCell_Ref.png": {
+    "mtime": 1782860509.3508542,
+    "ast_hash": "8317e0df76fd29959164afd34c2f3cf5",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Concepts/StorageCrate_Ref.png": {
+    "mtime": 1782860509.3529482,
+    "ast_hash": "c76d376399f818fcfdb70c034ac48632",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Alcohol.png": {
+    "mtime": 1782860509.354483,
+    "ast_hash": "8f6f9033ed8097dfa80eeb1e5ad52750",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/BedSheet.png": {
+    "mtime": 1782860509.3560224,
+    "ast_hash": "84ca4a8d3e2bfe8ed2a159158331f447",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Charcoal.png": {
+    "mtime": 1782860509.3570416,
+    "ast_hash": "017425c8dd2d491963fa1f95e05c0996",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Coin.png": {
+    "mtime": 1782860509.3585746,
+    "ast_hash": "39c296f701ec09ad040f0704f0f1f8d3",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/DuctTape 1.png": {
+    "mtime": 1782860509.3596258,
+    "ast_hash": "5887de278b4711b1b3d2b9166393a025",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/DuctTape.png": {
+    "mtime": 1782860509.3611815,
+    "ast_hash": "dfae7bcf541fbdb27d0325b7cbde1e28",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/FakeBedDummy.png": {
+    "mtime": 1782860509.3627143,
+    "ast_hash": "f6d46f14d34b3c8f24e00c7dab0455da",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/File.png": {
+    "mtime": 1782860509.3637402,
+    "ast_hash": "de7003c88f2770f2168fa2f7cf9a2823",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/FlatMetal.png": {
+    "mtime": 1782860509.3647432,
+    "ast_hash": "cafff4504525da5bd8e7783fd7ef717f",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/GlassBottle.png": {
+    "mtime": 1782860509.3663535,
+    "ast_hash": "fd26bd8ce0a562aded07b9e25b752703",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/GrapplingHook.png": {
+    "mtime": 1782860509.3673573,
+    "ast_hash": "cd5d095535383c492cbfd59fe043a543",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Ladder.png": {
+    "mtime": 1782860509.3691714,
+    "ast_hash": "7498bc687048c56d40d562e13ef90da0",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/MetalRod.png": {
+    "mtime": 1782860509.3701751,
+    "ast_hash": "bb81d8f338c8d377ffac68678a1beb79",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/MetalScrap.png": {
+    "mtime": 1782860509.3721752,
+    "ast_hash": "ced3eae3e46a4fa25dfe8dd496f312f1",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Mirror.png": {
+    "mtime": 1782860509.373211,
+    "ast_hash": "7bb0e7a57d0efbd03edd0f93bd9f9b06",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Molotov.png": {
+    "mtime": 1782860509.3747149,
+    "ast_hash": "0341a0c046a387ae3215b28c6b58f388",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Paperclip.png": {
+    "mtime": 1782860509.3757188,
+    "ast_hash": "0941a548aae178cb65de6d09c35839d0",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Pillow.png": {
+    "mtime": 1782860509.377221,
+    "ast_hash": "29b658569283506cb5c2af9f3723d8c7",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/PlasticBottle.png": {
+    "mtime": 1782860509.3782241,
+    "ast_hash": "3346df8ad72c74fe64a88cf9711c9b87",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Rag.png": {
+    "mtime": 1782860509.3792238,
+    "ast_hash": "a5c92bea30a13110d3ddfa78ea520d7d",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Screwdriver.png": {
+    "mtime": 1782860509.380224,
+    "ast_hash": "666b0abe2f8349323c50c40d736d0e60",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Shovel.png": {
+    "mtime": 1782860509.3817272,
+    "ast_hash": "dcd33f50a4728c9c87b4d96adc5bb6a9",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Soap.png": {
+    "mtime": 1782860509.3837311,
+    "ast_hash": "7bd864654cb3eb81524b6e205d513fa1",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/Wire.png": {
+    "mtime": 1782860509.384731,
+    "ast_hash": "8f3dce060c416bd427f55642e182bfd7",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/WireCutters.png": {
+    "mtime": 1782860509.3862548,
+    "ast_hash": "b871df401fac82494de995738cfa2f2d",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Icons/WoodScrap.png": {
+    "mtime": 1782860509.3877957,
+    "ast_hash": "0bbb18f4bba9363b6fb3efb1cd89c84d",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/CellDoor_Ref.png": {
+    "mtime": 1782860509.3903704,
+    "ast_hash": "ddb7f7bbd3fb11187a86a3cc0319d53d",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Fence_Panel_Ref.png": {
+    "mtime": 1782860509.392426,
+    "ast_hash": "ee6176658a1694ec9f74f99ee9573938",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Floor_Tile_Ref 1.png": {
+    "mtime": 1782860509.394996,
+    "ast_hash": "5e37bfa3f6d780ff2fa9cdc0b373b20e",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Floor_Tile_Ref.png": {
+    "mtime": 1782860509.3965268,
+    "ast_hash": "d4bed80bd8109bd8b0cbf6aaa93ce790",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Perimeter_Wall_Ref.png": {
+    "mtime": 1782860509.398829,
+    "ast_hash": "20578c5a394eae3bd769bef4c92f1ad8",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/PrisonBed_Ref.png": {
+    "mtime": 1782860509.4003701,
+    "ast_hash": "5e6febb2510faca8c019e8ed184a9ff0",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Wall_Doorway_Ref 1.png": {
+    "mtime": 1782860509.401915,
+    "ast_hash": "a0e4facc1916ee461d4680c545d1bf7e",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Wall_Doorway_Ref.png": {
+    "mtime": 1782860509.403974,
+    "ast_hash": "792ec2c181781dae6844f97822a5c325",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Wall_Standard_Ref 1.png": {
+    "mtime": 1782860509.4056938,
+    "ast_hash": "4a2c36f9592fa1ab697a1d3bd5a1f26f",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Modular/Wall_Standard_Ref.png": {
+    "mtime": 1782860509.408269,
+    "ast_hash": "3cf5d56cc31265a536502638c3c65c7d",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Screenshot 2026-04-24 223350.png": {
+    "mtime": 1782860509.4098022,
+    "ast_hash": "e1a45bc6a123f12ca5cd040ed34a1d63",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Screenshot 2026-04-24 223424.png": {
+    "mtime": 1782860509.410841,
+    "ast_hash": "0a07d8465eee51244ffdf9bdfbbac360",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Screenshot 2026-04-24 223430.png": {
+    "mtime": 1782860509.4118676,
+    "ast_hash": "cf89f6b3271c5297d94396b158a3f841",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Square.png": {
+    "mtime": 1782860509.412902,
+    "ast_hash": "f401b3634515b4b0ad7db05f997d9aee",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/Triangle.png": {
+    "mtime": 1782860509.4139633,
+    "ast_hash": "d61b875da0f4bd9cad1ffacfa27dc023",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/UI/NotebookBackground.png": {
+    "mtime": 1782860509.4176302,
+    "ast_hash": "f536ba2e3e3886d474ddcb4b846f24ba",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/UI/RecipeRowBackground.png": {
+    "mtime": 1782860509.4196818,
+    "ast_hash": "9c84e4138d4b5431260c83bfc04d9478",
+    "semantic_hash": ""
+  },
+  "Assets/Sprites/UI/StampButton.png": {
+    "mtime": 1782860509.4212828,
+    "ast_hash": "a4515118b6f514279f53e901756616e9",
+    "semantic_hash": ""
+  },
+  "Assets/TextMesh Pro/Sprites/EmojiOne.png": {
+    "mtime": 1782860509.815566,
+    "ast_hash": "abd61fb690e3df99b4cbd4f114afbd06",
+    "semantic_hash": ""
+  },
+  "Assets/TutorialInfo/Icons/URP.png": {
+    "mtime": 1782860509.8176324,
+    "ast_hash": "6d2f425093f43ca4866c76d333895ab8",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/FireExplosionEffects/Textures/DebrisParticleSheet.png": {
+    "mtime": 1782860509.8777385,
+    "ast_hash": "ff63ae77bab18d809c66076770a29fa3",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/FireExplosionEffects/Textures/SmokePuffParticleSheet.png": {
+    "mtime": 1782860509.904655,
+    "ast_hash": "5ea9e1b6f990739dd114748ccaba0432",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Misc Effects/Textures/DustMoteParticle.png": {
+    "mtime": 1782860509.9163172,
+    "ast_hash": "fabcf3100d3de6a448a100a25b8e58f4",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/Shared/Textures/DustPuffSmallParticleSheet.png": {
+    "mtime": 1782860509.9813569,
+    "ast_hash": "122932f4cdcacc2853094a08568cc648",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/TutorialInfo/Icons/Help_Icon.png": {
+    "mtime": 1782860510.0898225,
+    "ast_hash": "96c60ca2942bce322c7d2a82022a4264",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/TutorialInfo/Icons/ParticlePack5x_Icon.png": {
+    "mtime": 1782860510.0918262,
+    "ast_hash": "47a71bf3f1798c68844d1788e5d2684a",
+    "semantic_hash": ""
+  },
+  "Assets/UnityTechnologies/EffectExamples/WeaponEffects/Textures/TinyStonesParticleSheet.png": {
+    "mtime": 1782860510.1704917,
+    "ast_hash": "4b2fa2f036c3d2e337ca75ca13edd3f6",
+    "semantic_hash": ""
+  },
+  "Assets/hole.png": {
+    "mtime": 1782860510.1828308,
+    "ast_hash": "5077936a55b0be37ac4fe0539a9847fd",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/056fbf87b6bf19f468073f6ed35b1870/019e2d83-76a4-766b-b862-9f4cce739d74.png": {
+    "mtime": 1782860510.1854038,
+    "ast_hash": "2a106b0f5bbc11882674fad3927b0d90",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/056fbf87b6bf19f468073f6ed35b1870/019e2d84-01cc-7084-9b97-c87a817d7784.png": {
+    "mtime": 1782860510.186933,
+    "ast_hash": "792ec2c181781dae6844f97822a5c325",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/14d25067abae8dc49b4b0b220bf648ae/019e2dd1-64a9-78f9-8c53-b5b90a42f918.jpg": {
+    "mtime": 1782860510.6283495,
+    "ast_hash": "b1607bb5167e35bafc8cba813019837b",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/14d25067abae8dc49b4b0b220bf648ae/019e2e31-07c4-7549-a3c5-f64f4e368ca8.png": {
+    "mtime": 1782860510.6299384,
+    "ast_hash": "dcd33f50a4728c9c87b4d96adc5bb6a9",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/152fa88532b87f748a7cb867990c4f69/019e2d73-4b03-79b3-84fd-496e6a891b57.png": {
+    "mtime": 1782860510.6327026,
+    "ast_hash": "371e7b6b6452feff5d8478bae5ef1b53",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/152fa88532b87f748a7cb867990c4f69/019e2d73-db33-7e1b-a257-2584602cd8cd.png": {
+    "mtime": 1782860510.634778,
+    "ast_hash": "cd099c0d3ce40f44fe440ace960e8035",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/17b78a8fd28007c419fd6ebad6985664/019e2dc9-3811-74c2-8a98-cfe19c90b5ed.jpg": {
+    "mtime": 1782860510.6357603,
+    "ast_hash": "5f4d1ce69ebb2fbc782248dd101603cd",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/1c1505c7af870e44ca71f715f68aa8a8/019e2dc9-2a43-7131-ba46-69e7d2fc7f58.jpg": {
+    "mtime": 1782860510.637385,
+    "ast_hash": "787f71b01ddde6db6daa1938511a2ad3",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/1c1505c7af870e44ca71f715f68aa8a8/019e2e30-7d98-7ed0-aeb8-4d73ac3ebcd9.png": {
+    "mtime": 1782860510.6389227,
+    "ast_hash": "cd5d095535383c492cbfd59fe043a543",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/21c2e4bf3b156e14ab69fa3a63978449/019e2dde-5df6-70c7-b5d7-0aea8bf8ca82.jpg": {
+    "mtime": 1782860510.6394336,
+    "ast_hash": "591b29d2972ed65efb6de2a9d6f69886",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/21c2e4bf3b156e14ab69fa3a63978449/019e2e30-3779-738d-b2a7-06bfae4b36a8.png": {
+    "mtime": 1782860510.6411884,
+    "ast_hash": "84ca4a8d3e2bfe8ed2a159158331f447",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/2aefd066d2d49594fb01eecb8248d991/019e2dc8-f9bb-7bbc-9075-bc822ba9d69f.jpg": {
+    "mtime": 1782860510.8545032,
+    "ast_hash": "4298c24be53dedd38b7dca4b5bb4592d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/2aefd066d2d49594fb01eecb8248d991/019e2e30-32b5-7b9f-8e7a-f78e2304213a.png": {
+    "mtime": 1782860510.8561213,
+    "ast_hash": "cafff4504525da5bd8e7783fd7ef717f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/31f0ff33a768ca74ea3ae2aa90656677/019e2df6-7b53-7449-8ce7-b2274f90f3b6.png": {
+    "mtime": 1782860511.0743637,
+    "ast_hash": "9c84e4138d4b5431260c83bfc04d9478",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/3235758dd4d783c47b493dc347ba65bf/019e2d83-9625-749a-9f63-fc04a93cb08a.png": {
+    "mtime": 1782860511.0769255,
+    "ast_hash": "4af15c478d90f48da9e7fde91a7d8e3f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/3235758dd4d783c47b493dc347ba65bf/019e2d84-1147-7aab-bd79-7c573317a5f9.png": {
+    "mtime": 1782860511.0789752,
+    "ast_hash": "d4bed80bd8109bd8b0cbf6aaa93ce790",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/40bb0097cba2d1448ac01573ebcf1813/019e2dde-39c0-7cab-b68f-1b4cc0cf0c28.jpg": {
+    "mtime": 1782860511.5072124,
+    "ast_hash": "670c205350fc9b07e1bdd9d7457681ac",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/40bb0097cba2d1448ac01573ebcf1813/019e2e30-b4eb-7d57-b63e-330a38cec64d.png": {
+    "mtime": 1782860511.5082402,
+    "ast_hash": "7bb0e7a57d0efbd03edd0f93bd9f9b06",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/410017fdb8c2d4c4fb715adde447a9aa/019e2dde-425c-7533-a78e-9a36233a0421.jpg": {
+    "mtime": 1782860511.5099092,
+    "ast_hash": "4b643e834ee7f55b43968deb413e4931",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/410017fdb8c2d4c4fb715adde447a9aa/019e2e30-6a0d-7e0e-97f9-6eff3f71a95c.png": {
+    "mtime": 1782860511.5109434,
+    "ast_hash": "de7003c88f2770f2168fa2f7cf9a2823",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/44d8488b11d12ae4cb9d922bf07a2c86/019e2dc9-0ba0-786a-8923-e05fd33c7625.jpg": {
+    "mtime": 1782860511.7365034,
+    "ast_hash": "65a3a0ba695b52b73c3d2ae41acce63c",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/44d8488b11d12ae4cb9d922bf07a2c86/019e2e31-06ae-7301-b59c-56082862d00b.png": {
+    "mtime": 1782860511.7375145,
+    "ast_hash": "666b0abe2f8349323c50c40d736d0e60",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/46588a17e3e7aea44853e7836d545680/019e2d8c-0aaf-7302-bcd1-293db37f2eca.png": {
+    "mtime": 1782860511.740286,
+    "ast_hash": "c9b3e5bbb1324a824b056669f35bf5ef",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/46588a17e3e7aea44853e7836d545680/019e2d8d-906b-78fb-b894-20d2ea8d0c21.png": {
+    "mtime": 1782860511.743441,
+    "ast_hash": "5e37bfa3f6d780ff2fa9cdc0b373b20e",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/58e3ca76a9784fc42a2e5c1d8f22aba4/019e2dde-6c6c-775e-af0d-c38d6da11224.jpg": {
+    "mtime": 1782860511.9716399,
+    "ast_hash": "10714f35db7a72461f7ac3ce4202ea28",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/58e3ca76a9784fc42a2e5c1d8f22aba4/019e2e30-3ccc-78dc-8491-416399a69599.png": {
+    "mtime": 1782860511.973173,
+    "ast_hash": "017425c8dd2d491963fa1f95e05c0996",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/615809dc049744a48859dbeae31415f3/019e2d83-993f-76e4-8c22-16b62b107bd4.png": {
+    "mtime": 1782860511.9752326,
+    "ast_hash": "501c2a6ebbacf30d1bb353475be8e342",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/615809dc049744a48859dbeae31415f3/019e2d84-0be6-703a-a2a0-948dacffc273.png": {
+    "mtime": 1782860511.9771128,
+    "ast_hash": "5e6febb2510faca8c019e8ed184a9ff0",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6a8423a22d78cc9419c7181ec08e8fb0/019e2dc9-4c42-7853-a5b3-dfeb0b46c309.jpg": {
+    "mtime": 1782860511.9781387,
+    "ast_hash": "397964e1c06287b4733e41ad18e84fbb",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6a8423a22d78cc9419c7181ec08e8fb0/019e2e31-3ca1-77e8-903d-b6ad2c0cb870.png": {
+    "mtime": 1782860511.9796743,
+    "ast_hash": "0bbb18f4bba9363b6fb3efb1cd89c84d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6b9b355b56a65204caa991c37c47ec04/019e2dde-5eae-7860-9125-d709a634fabd.jpg": {
+    "mtime": 1782860511.9807093,
+    "ast_hash": "d729b482cd78ae6e613b8da1789603f4",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6b9b355b56a65204caa991c37c47ec04/019e2e31-0708-703a-874f-b54b5a670f7d.png": {
+    "mtime": 1782860511.982271,
+    "ast_hash": "7bd864654cb3eb81524b6e205d513fa1",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6d201a267fb8b544a8bdda8e76e04ff9/019e2dc9-1713-725c-b37c-bef2836f8c62.jpg": {
+    "mtime": 1782860512.2152286,
+    "ast_hash": "cdd1d67859cf9a9b8f88f7e76bf15528",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6d201a267fb8b544a8bdda8e76e04ff9/019e2e30-bb40-7e06-8a50-614f65ada731.png": {
+    "mtime": 1782860512.2168617,
+    "ast_hash": "0341a0c046a387ae3215b28c6b58f388",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/77e5841382db1964da26ab1b3165e819/019e2d7b-6c8c-73f9-bdd2-e44615d3186b.png": {
+    "mtime": 1782860512.4414806,
+    "ast_hash": "29b0d435ac2d25c59096da8d5e78c3c5",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/77e5841382db1964da26ab1b3165e819/019e2d7b-b237-7f79-ae7c-8742d496ddca.png": {
+    "mtime": 1782860512.4432058,
+    "ast_hash": "0a981acd7b6432ddf2e7b0736320986c",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/851592f2b94bdf44b90cb5ac9156f9cf/019e2dde-7b51-7ab6-9050-cd410902dc76.jpg": {
+    "mtime": 1782860512.444754,
+    "ast_hash": "6ad70ed09137f116019f39c06469a5be",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/851592f2b94bdf44b90cb5ac9156f9cf/019e2e30-e651-7cd2-bc86-e47d80d290c0.png": {
+    "mtime": 1782860512.4462998,
+    "ast_hash": "29b658569283506cb5c2af9f3723d8c7",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/85b8807932b714b4d83d1bcb66707717/019e2dc9-5f19-72ee-aa11-46be47899cd9.jpg": {
+    "mtime": 1782860512.4473188,
+    "ast_hash": "9940da64348f92b533b6b74d5c41eddb",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/85b8807932b714b4d83d1bcb66707717/019e2e30-737f-7c0f-85cb-fb9d6ce3300c.png": {
+    "mtime": 1782860512.4483478,
+    "ast_hash": "fd26bd8ce0a562aded07b9e25b752703",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/93fa75ef5dec54b4da5103de87d2874d/019e2dde-849c-7614-af8b-85d94b3c9776.jpg": {
+    "mtime": 1782860512.660192,
+    "ast_hash": "51483d71018ee5c067823563b6ca47a1",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/93fa75ef5dec54b4da5103de87d2874d/019e2e30-6507-7857-8ab7-1337cf6edd1b.png": {
+    "mtime": 1782860512.661669,
+    "ast_hash": "f6d46f14d34b3c8f24e00c7dab0455da",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/981f152885bf63541ae455f5e4db65bf/019e2d8c-0bcb-7b1d-a348-38a7e305da69.png": {
+    "mtime": 1782860512.6637542,
+    "ast_hash": "9ee72591c5331464eef1fd9bb6dd6855",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/981f152885bf63541ae455f5e4db65bf/019e2d8d-880d-78d0-b3aa-217dfe551bbb.png": {
+    "mtime": 1782860512.666505,
+    "ast_hash": "20578c5a394eae3bd769bef4c92f1ad8",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9b847af39407b92498bb72c60e87866b/019e2d8c-0c57-7ec0-846c-d631fe35cc86.png": {
+    "mtime": 1782860512.66856,
+    "ast_hash": "e3aa70061c28ed89b1fb8d2be1bf3c92",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9b847af39407b92498bb72c60e87866b/019e2d8d-91eb-7485-8cf8-0ca0ce3e0b2b.png": {
+    "mtime": 1782860512.6701021,
+    "ast_hash": "4a2c36f9592fa1ab697a1d3bd5a1f26f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9d387256143bd7f4aae69fc5787b32f1/019e2dc9-02f9-7d1e-8405-9cf7a4a44333.jpg": {
+    "mtime": 1782860512.671357,
+    "ast_hash": "19372a0f960493797ea931a68d828986",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/9d387256143bd7f4aae69fc5787b32f1/019e2e31-30ac-77c3-98d2-6659b390c33a.png": {
+    "mtime": 1782860512.672907,
+    "ast_hash": "bb81d8f338c8d377ffac68678a1beb79",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a4c09a583b9e6664b87cbc36d8c1385e/019e2d8c-115c-783e-86e8-46161070b47f.png": {
+    "mtime": 1782860512.674969,
+    "ast_hash": "6744055d6ef0b3cf5297548e7bd669c6",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a4c09a583b9e6664b87cbc36d8c1385e/019e2d8d-fec0-7c05-8711-c32e0d69f7c9.png": {
+    "mtime": 1782860512.6765454,
+    "ast_hash": "a0e4facc1916ee461d4680c545d1bf7e",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a9287749fbbc4a446ae63007ac517224/019e2ddf-d1ad-7032-830c-d65dd2c8fb7b.jpg": {
+    "mtime": 1782860512.678092,
+    "ast_hash": "4386e423152207e44cba0bc62031168e",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a9287749fbbc4a446ae63007ac517224/019e2e30-d6a8-78d2-98e0-e5e804032f00.png": {
+    "mtime": 1782860512.6791162,
+    "ast_hash": "0941a548aae178cb65de6d09c35839d0",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a998384ce9274c94485513ca79e2e741/019e2dc9-40ef-744f-b8d6-762c4bdc683d.jpg": {
+    "mtime": 1782860512.6806543,
+    "ast_hash": "1a9a0ae9a8e4708857ca13668dbe3df9",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/a998384ce9274c94485513ca79e2e741/019e2e30-c763-7515-9c91-1f772d6f3b89.png": {
+    "mtime": 1782860512.682318,
+    "ast_hash": "ced3eae3e46a4fa25dfe8dd496f312f1",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/af84f03c8150384469da3ba527ec2a53/019e2dc9-8850-7ff5-b87b-79fa7483e19c.png": {
+    "mtime": 1782860512.900571,
+    "ast_hash": "f536ba2e3e3886d474ddcb4b846f24ba",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/b0aec224448e88f40bb4cc88b61252a8/019e2dc9-2015-7a9e-b0be-4c7621b80d3a.jpg": {
+    "mtime": 1782860512.9021075,
+    "ast_hash": "7ecfc948d29edf92d11a932022db4176",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/b0aec224448e88f40bb4cc88b61252a8/019e2e31-1cb2-7578-8e09-3ca350455b3f.png": {
+    "mtime": 1782860512.903641,
+    "ast_hash": "b871df401fac82494de995738cfa2f2d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/ba7d07513078ee24c92fa3d925656da9/019e2d83-7f66-7b68-91f6-f1436fa8b1da.png": {
+    "mtime": 1782860513.1297252,
+    "ast_hash": "d5a6ac433476303c0e259bac97ece537",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/ba7d07513078ee24c92fa3d925656da9/019e2d84-2fb3-7400-bf44-4d518a25c68d.png": {
+    "mtime": 1782860513.1330857,
+    "ast_hash": "3cf5d56cc31265a536502638c3c65c7d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bc8a59e331e3df04e85fd92c95c53435/019e2d73-7955-7783-b398-13b9b24660ab.png": {
+    "mtime": 1782860513.1351352,
+    "ast_hash": "ac43a0ca6302bf021865199f32c46019",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bc8a59e331e3df04e85fd92c95c53435/019e2d73-f796-7dc8-91f0-38158d1dc234.png": {
+    "mtime": 1782860513.1366725,
+    "ast_hash": "600fe8ca2087d7e2e58b2d0c68d748f4",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bfe4d8b2a5c28394d9cf60745cc82bb8/019e2d73-3b8c-7b91-b25d-cfaeef941b8c.png": {
+    "mtime": 1782860513.1388054,
+    "ast_hash": "20bab719a7c2cf3f8402762d8af2bb87",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/bfe4d8b2a5c28394d9cf60745cc82bb8/019e2d73-c5dc-7898-b6b2-d125aa2de24f.png": {
+    "mtime": 1782860513.140342,
+    "ast_hash": "b8876720432720c4ac23422d01d1c656",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/c241e23b33e238e4ca6b17d9afec8358/019e2d83-c37b-7b1f-bd0a-eff2ac826a16.png": {
+    "mtime": 1782860513.362563,
+    "ast_hash": "42103dd0c1359ef15176609f0ff2fd76",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/c241e23b33e238e4ca6b17d9afec8358/019e2d84-35ff-7d8e-97fa-db91c8746f0b.png": {
+    "mtime": 1782860513.3653197,
+    "ast_hash": "ddb7f7bbd3fb11187a86a3cc0319d53d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cd335903620c8974f9d586ece1885a74/019e2dc9-6aae-78ef-bd80-e8e0aff6fec4.jpg": {
+    "mtime": 1782860513.5797453,
+    "ast_hash": "5bb40615197123edaf984f270479d0e8",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cd335903620c8974f9d586ece1885a74/019e2e30-f56d-7367-a339-0813e7a70bdc.png": {
+    "mtime": 1782860513.5807724,
+    "ast_hash": "a5c92bea30a13110d3ddfa78ea520d7d",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cef24d59763d09f42bd4b39648d28201/019e2df2-0508-7235-9557-c2ff4dea281b.jpg": {
+    "mtime": 1782860513.5821939,
+    "ast_hash": "5692080d4c3652563e5c5950e04f0d67",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cef24d59763d09f42bd4b39648d28201/019e2e30-b66c-7d77-903b-d46b1bfd45a3.png": {
+    "mtime": 1782860513.5832365,
+    "ast_hash": "7498bc687048c56d40d562e13ef90da0",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cff0a81862f832d49b44c17953feac51/019e2dc9-53ce-7d43-98e4-05a7cb8059ec.jpg": {
+    "mtime": 1782860513.584262,
+    "ast_hash": "022e4e252b936f4a6bd06b62d3d3e52a",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/cff0a81862f832d49b44c17953feac51/019e2e30-2969-712a-81fe-96b8080a7113.png": {
+    "mtime": 1782860513.5858092,
+    "ast_hash": "8f6f9033ed8097dfa80eeb1e5ad52750",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d389a7f45d57cb443bc2462cedc8e94e/019e2d7b-75de-7481-880f-597905c3197e.png": {
+    "mtime": 1782860513.5883808,
+    "ast_hash": "d401a104aa7a4f681f6072eeec9ffbde",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d389a7f45d57cb443bc2462cedc8e94e/019e2d7b-c167-7d53-8d8b-29ff418326bf.png": {
+    "mtime": 1782860513.590671,
+    "ast_hash": "c76d376399f818fcfdb70c034ac48632",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d9e5242592fc92241a2944e0c43e23d8/019e2dde-74a2-7ca2-9b0a-a2947451a26f.jpg": {
+    "mtime": 1782860513.5916927,
+    "ast_hash": "0198e2c2b1791f5d87e87725940f2459",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/d9e5242592fc92241a2944e0c43e23d8/019e2e30-51dd-79d3-875a-93e961cde82b.png": {
+    "mtime": 1782860513.5932415,
+    "ast_hash": "39c296f701ec09ad040f0704f0f1f8d3",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/dacec14ef192f3747b099c0bdf49e845/019e2d8c-50e5-7ba7-a7f7-956550817afe.png": {
+    "mtime": 1782860513.5963876,
+    "ast_hash": "bd423b3a06c4cece809379d5a1030b0a",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/dacec14ef192f3747b099c0bdf49e845/019e2d8d-aae7-745d-845c-ee7b9de37fe4.png": {
+    "mtime": 1782860513.5989702,
+    "ast_hash": "ee6176658a1694ec9f74f99ee9573938",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/db7cad742b152514897f6c14dcbfcbe7/019e2d73-5538-7272-a7dd-02fb50d12dd4.png": {
+    "mtime": 1782860513.601083,
+    "ast_hash": "0f9fbc62b226c001f62505aacc05c6a2",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/db7cad742b152514897f6c14dcbfcbe7/019e2d76-4a4b-79a9-9cb8-79dc7ce02711.png": {
+    "mtime": 1782860513.6026213,
+    "ast_hash": "d01a651c09d11b2233fdef14d9c6785e",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e891d76b537346e49a9222e0bf92c0c0/019e2dd6-dffc-7b64-aba1-2868a9a8a557.jpg": {
+    "mtime": 1782860514.0608974,
+    "ast_hash": "0f3e42d67b382607e5645ee35a176855",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e980c6d97e19d0e49a5a549f228524b4/019e2dd1-5917-75ca-ad13-24abd884ea04.jpg": {
+    "mtime": 1782860514.0627692,
+    "ast_hash": "a0f84884686baaa787f4869becce6e33",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e980c6d97e19d0e49a5a549f228524b4/019e2e30-5b1b-7790-8418-3427a1a18428.png": {
+    "mtime": 1782860514.0637977,
+    "ast_hash": "5887de278b4711b1b3d2b9166393a025",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/eea24bc22804da348bb79f4a3d21d40c/019e2dde-577a-7fc8-b448-cd1135a66764.jpg": {
+    "mtime": 1782860514.0648215,
+    "ast_hash": "0c0a18aef2859c62e4a83d337fd8b5dd",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/eea24bc22804da348bb79f4a3d21d40c/019e2e30-e2b4-73be-9813-cf9e98f783b8.png": {
+    "mtime": 1782860514.0661232,
+    "ast_hash": "3346df8ad72c74fe64a88cf9711c9b87",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/f91f5d76243339e4585be6f75201e0fc/019e2d73-5659-7757-92b3-f80c2abdf8af.png": {
+    "mtime": 1782860514.0684326,
+    "ast_hash": "f7f8fb6d67a5e965e913bcd37a671f0f",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/f91f5d76243339e4585be6f75201e0fc/019e2d73-ced5-700a-ad9e-3f72f1116e43.png": {
+    "mtime": 1782860514.071798,
+    "ast_hash": "8317e0df76fd29959164afd34c2f3cf5",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/fd93b3526f8cb8b46b069dd456d7f619/019e2df5-a6f8-7035-99fe-4747c7f6581c.jpg": {
+    "mtime": 1782860514.073148,
+    "ast_hash": "945902b6fc6fe0f3fcc6d1c42a8f39b0",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/fd93b3526f8cb8b46b069dd456d7f619/019e2e31-2cc8-7a87-b6aa-cd9f7979dcf7.png": {
+    "mtime": 1782860514.0747714,
+    "ast_hash": "8f3dce060c416bd427f55642e182bfd7",
+    "semantic_hash": ""
+  },
+  "Assets/Sound Effects/AK-47 Fire.mp3": {
+    "mtime": 1782860509.3354735,
+    "ast_hash": "987cb9e4f898cc583c05631bcc7583cb",
+    "semantic_hash": ""
+  },
+  "Assets/Sound Effects/DryFire.mp3": {
+    "mtime": 1782860509.337004,
+    "ast_hash": "2c2d27b1ae6cd7bd20282622c4a6d522",
+    "semantic_hash": ""
+  },
+  "Assets/Sound Effects/reload-ak-47-made-with-Voicemod.mp3": {
+    "mtime": 1782860509.3385115,
+    "ast_hash": "1963389a061622e88d8cd4588cb074a3",
+    "semantic_hash": ""
+  }
+}

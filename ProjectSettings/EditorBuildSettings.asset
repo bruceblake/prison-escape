@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Game.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 0208b34a2264aba4aa9f95ffb9eaab63
+  - enabled: 1
+    path: Assets/Scenes/Warehouse.unity
+    guid: a153d0f6ca04fb9448cef15dc16f93ee
+  - enabled: 1
+    path: Assets/Scenes/Factory.unity
+    guid: 2fc922b7ec4646740aabace2b26603c0
+  - enabled: 0
+    path: Assets/Scenes/SinglePlayerScene.unity
+    guid: b1ee7681505ff724ba4cef181f505243
+  - enabled: 0
+    path: Assets/_Recovery/SinglePlayerScene.unity
+    guid: 620a9be741e75b642aa51b68673658e7
+  - enabled: 0
+    path: Assets/Scenes/SinglePlayerScene.unity
+    guid: b1ee7681505ff724ba4cef181f505243
+  - enabled: 0
+    path: Assets/Scenes/PrisonLevel01.unity
+    guid: 7fb6b0dd322a53a4e907d1282e9f9403
+  - enabled: 0
+    path: Assets/Scenes/PrisonLevel1.unity
+    guid: 084a819f06a2e764cbde10c656d09cd5
+  - enabled: 1
+    path: Assets/_Recovery/SinglePlayerScene.unity
+    guid: 3cd866e3700ded1418818f62cdedb7a5
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

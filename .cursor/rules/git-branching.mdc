@@ -1,0 +1,37 @@
+---
+description: Git branching — dev for testing, main for production
+alwaysApply: true
+---
+
+# Git Branching Policy
+
+This repo uses a two-branch release model:
+
+| Branch | Purpose |
+|--------|---------|
+| **`dev`** | Integration and testing. All day-to-day development targets this branch. |
+| **`main`** | Production only. Stable, release-ready code. Do not use for experiments or WIP. |
+
+## Workflow
+
+1. **Start work from `dev`**
+   - `git checkout dev && git pull origin dev`
+   - Create feature branches from `dev`: `feat/...`, `fix/...`, `chore/...`
+
+2. **Merge into `dev` first**
+   - Open PRs with **base: `dev`**, not `main`.
+   - Run tests and playtest on `dev` before considering a production release.
+
+3. **Promote to `main` only when releasing**
+   - Open a PR **from `dev` → `main`** when code is tested and ready for production.
+   - Do not push directly to `main` unless explicitly asked for a hotfix.
+
+4. **Hotfixes (rare)**
+   - Branch from `main`, fix, PR back to `main`, then merge/cherry-pick into `dev` so branches stay aligned.
+
+## Agent defaults
+
+- Assume **`dev`** is the active integration branch unless the user says otherwise.
+- When creating PRs, default **base branch to `dev`**.
+- Do not merge untested feature work into `main`.
+- After merging to `main`, remind the user to sync `dev` if needed.

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Prison;
+using Prison.Visuals;
 
 [DefaultExecutionOrder(-1000)]
 public class GameManager : MonoBehaviour
@@ -147,6 +148,10 @@ public class GameManager : MonoBehaviour
         if (prisonerCtrl != null)
             prisonerCtrl.cellIndex = playerCellIndex;
 
+        var playerLabel = player.GetComponent<CharacterNameLabel>();
+        if (playerLabel != null)
+            playerLabel.SetDisplayName("You");
+
         if (locationRegistry != null)
             locationRegistry.TryRegisterCellOccupant(playerCellIndex, player);
 
@@ -225,6 +230,10 @@ public class GameManager : MonoBehaviour
                 : null;
             label.SetRuntimeLabel(title, sub);
         }
+
+        var nameLabel = prisonerInstance.GetComponent<CharacterNameLabel>();
+        if (nameLabel != null)
+            nameLabel.SetDisplayName($"Inmate {scheduleCellId}");
     }
 
     void SpawnGuards()
@@ -246,6 +255,15 @@ public class GameManager : MonoBehaviour
                 var go = Instantiate(guardPrefab, t.position, t.rotation);
                 if (!string.IsNullOrWhiteSpace(entry.displayName))
                     go.name = entry.displayName.Trim();
+
+                var guardLabel = go.GetComponent<CharacterNameLabel>();
+                if (guardLabel != null)
+                {
+                    string label = !string.IsNullOrWhiteSpace(entry.displayName)
+                        ? entry.displayName.Trim()
+                        : go.name;
+                    guardLabel.SetDisplayName(label);
+                }
 
                 var fsm = go.GetComponent<GuardFSM>();
                 if (fsm != null)

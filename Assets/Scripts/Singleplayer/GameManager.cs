@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.AI;
 using Prison;
+using Prison.Visuals;
 
 [DefaultExecutionOrder(-1000)]
 public class GameManager : MonoBehaviour
@@ -84,30 +86,55 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void PopulateWorldSpawns()
     {
-        ItemSpawnNode[] nodes = Object.FindObjectsOfType<ItemSpawnNode>(true);
+        ItemSpawnNode[] nodes = Object.FindObjectsByType<ItemSpawnNode>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        int spawned = 0;
+        int skipped = 0;
+
         for (int i = 0; i < nodes.Length; i++)
         {
             ItemSpawnNode node = nodes[i];
             if (node == null) continue;
-            if (UnityEngine.Random.value > node.spawnChance) continue;
-            if (node.lootTable == null) continue;
-
-            ItemData pick = node.lootTable.GetRandomItem();
-            if (pick == null) continue;
-            if (pick.worldPrefab == null)
+            if (UnityEngine.Random.value > node.spawnChance)
             {
-                Debug.LogWarning($"[GameManager] Item '{pick.itemName}' has no worldPrefab; skip spawn at {node.gameObject.name}.", node);
+                skipped++;
                 continue;
             }
 
-            Transform t = node.transform;
-            GameObject instance = Object.Instantiate(pick.worldPrefab, t.position, t.rotation);
+            if (node.lootTable == null)
+            {
+                skipped++;
+                continue;
+            }
+
+            ItemData pick = null;
+            for (int attempt = 0; attempt < 8; attempt++)
+            {
+                ItemData candidate = node.lootTable.GetRandomItem();
+                if (candidate != null && candidate.worldPrefab != null)
+                {
+                    pick = candidate;
+                    break;
+                }
+            }
+
+            if (pick == null)
+            {
+                skipped++;
+                continue;
+            }
+
+            Vector3 spawnPos = SpawnPlacementUtility.SnapPickupPosition(node.transform.position);
+            GameObject instance = Object.Instantiate(pick.worldPrefab, spawnPos, node.transform.rotation);
+            instance.transform.Rotate(0f, UnityEngine.Random.Range(0f, 360f), 0f, Space.World);
 
             WorldItemPickup pickup = instance.GetComponent<WorldItemPickup>();
             if (pickup == null)
                 pickup = instance.AddComponent<WorldItemPickup>();
             pickup.itemData = pick;
+            spawned++;
         }
+
+        Debug.Log($"[GameManager] World spawns: {spawned} placed, {skipped} skipped ({nodes.Length} nodes).");
     }
 
     void SpawnPlayer()
@@ -142,10 +169,18 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        pos = SpawnPlacementUtility.SnapCharacterPosition(pos);
         var player = Instantiate(playerPrefab, pos, rot);
+        var playerAgent = player.GetComponent<NavMeshAgent>();
+        if (playerAgent != null)
+            SpawnPlacementUtility.WarpNavMeshAgent(playerAgent, pos);
         var prisonerCtrl = player.GetComponent<PrisonerController>();
         if (prisonerCtrl != null)
             prisonerCtrl.cellIndex = playerCellIndex;
+
+        var playerLabel = player.GetComponent<CharacterNameLabel>();
+        if (playerLabel != null)
+            playerLabel.SetDisplayName("You");
 
         if (locationRegistry != null)
             locationRegistry.TryRegisterCellOccupant(playerCellIndex, player);
@@ -171,7 +206,11 @@ public class GameManager : MonoBehaviour
                 var cell = locationRegistry.GetCell(cellIdx);
                 if (cell == null) continue;
 
-                var prisoner = Instantiate(prisonerPrefab, cell.SpawnPosition, cell.SpawnRotation);
+                Vector3 npcPos = SpawnPlacementUtility.SnapCharacterPosition(cell.SpawnPosition);
+                var prisoner = Instantiate(prisonerPrefab, npcPos, cell.SpawnRotation);
+                var npcAgent = prisoner.GetComponent<NavMeshAgent>();
+                if (npcAgent != null)
+                    SpawnPlacementUtility.WarpNavMeshAgent(npcAgent, npcPos);
                 var ai = prisoner.GetComponent<PrisonerAI>();
                 if (ai != null)
                 {
@@ -191,7 +230,11 @@ public class GameManager : MonoBehaviour
                 var cell = locationRegistry.GetCell(cellIdx);
                 if (cell == null) continue;
 
-                var prisoner = Instantiate(prisonerPrefab, cell.SpawnPosition, cell.SpawnRotation);
+                Vector3 npcPos = SpawnPlacementUtility.SnapCharacterPosition(cell.SpawnPosition);
+                var prisoner = Instantiate(prisonerPrefab, npcPos, cell.SpawnRotation);
+                var npcAgent = prisoner.GetComponent<NavMeshAgent>();
+                if (npcAgent != null)
+                    SpawnPlacementUtility.WarpNavMeshAgent(npcAgent, npcPos);
                 var ai = prisoner.GetComponent<PrisonerAI>();
                 if (ai != null)
                 {
@@ -225,6 +268,10 @@ public class GameManager : MonoBehaviour
                 : null;
             label.SetRuntimeLabel(title, sub);
         }
+
+        var nameLabel = prisonerInstance.GetComponent<CharacterNameLabel>();
+        if (nameLabel != null)
+            nameLabel.SetDisplayName($"Inmate {scheduleCellId}");
     }
 
     void SpawnGuards()
@@ -243,9 +290,22 @@ public class GameManager : MonoBehaviour
                 }
 
                 var t = entry.spawnPoint;
-                var go = Instantiate(guardPrefab, t.position, t.rotation);
+                Vector3 guardPos = SpawnPlacementUtility.SnapCharacterPosition(t.position);
+                var go = Instantiate(guardPrefab, guardPos, t.rotation);
+                var guardAgent = go.GetComponent<NavMeshAgent>();
+                if (guardAgent != null)
+                    SpawnPlacementUtility.WarpNavMeshAgent(guardAgent, guardPos);
                 if (!string.IsNullOrWhiteSpace(entry.displayName))
                     go.name = entry.displayName.Trim();
+
+                var guardLabel = go.GetComponent<CharacterNameLabel>();
+                if (guardLabel != null)
+                {
+                    string label = !string.IsNullOrWhiteSpace(entry.displayName)
+                        ? entry.displayName.Trim()
+                        : go.name;
+                    guardLabel.SetDisplayName(label);
+                }
 
                 var fsm = go.GetComponent<GuardFSM>();
                 if (fsm != null)
@@ -283,7 +343,11 @@ public class GameManager : MonoBehaviour
                     : Vector3.zero;
             }
 
+            pos = SpawnPlacementUtility.SnapCharacterPosition(pos);
             var guard = Instantiate(guardPrefab, pos, rot);
+            var guardAgent = guard.GetComponent<NavMeshAgent>();
+            if (guardAgent != null)
+                SpawnPlacementUtility.WarpNavMeshAgent(guardAgent, pos);
             var shift = guard.GetComponent<GuardShiftController>();
             if (shift == null)
                 shift = guard.AddComponent<GuardShiftController>();

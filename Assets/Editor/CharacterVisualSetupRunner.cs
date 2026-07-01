@@ -1,10 +1,10 @@
-using System.IO;
 using Prison.Visuals;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
-/// Generates low-poly humanoid meshes/materials and wires them into player, guard, and NPC prefabs.
+/// Generates low-poly humanoid rigs/materials and wires them into player, guard, and NPC prefabs.
 /// Menu: Prison / Setup Character Visuals
 /// </summary>
 public static class CharacterVisualSetupRunner
@@ -17,6 +17,7 @@ public static class CharacterVisualSetupRunner
         public Color Clothing;
         public Color Accent;
         public Color Boots;
+        public string DefaultName;
     }
 
     [MenuItem("Prison/Setup Character Visuals")]
@@ -25,8 +26,6 @@ public static class CharacterVisualSetupRunner
         EnsureFolders();
 
         Material skin = EnsureMaterial("Char_Skin", new Color(0.82f, 0.62f, 0.48f), 0.05f);
-        Material boots = EnsureMaterial("Char_Boots", new Color(0.12f, 0.12f, 0.14f), 0.15f);
-        Material accent = EnsureMaterial("Char_Accent", new Color(0.92f, 0.92f, 0.88f), 0.1f);
 
         var palettes = new[]
         {
@@ -34,19 +33,22 @@ public static class CharacterVisualSetupRunner
             {
                 Clothing = new Color(0.18f, 0.35f, 0.52f),
                 Accent = new Color(0.28f, 0.78f, 0.72f),
-                Boots = new Color(0.15f, 0.16f, 0.2f)
+                Boots = new Color(0.15f, 0.16f, 0.2f),
+                DefaultName = "You"
             }),
             (CharacterVisualRole.Guard, new RolePalette
             {
                 Clothing = new Color(0.14f, 0.24f, 0.42f),
                 Accent = new Color(0.78f, 0.62f, 0.18f),
-                Boots = new Color(0.08f, 0.08f, 0.1f)
+                Boots = new Color(0.08f, 0.08f, 0.1f),
+                DefaultName = "Guard"
             }),
             (CharacterVisualRole.Prisoner, new RolePalette
             {
                 Clothing = new Color(0.92f, 0.48f, 0.18f),
                 Accent = new Color(0.95f, 0.95f, 0.92f),
-                Boots = new Color(0.55f, 0.55f, 0.58f)
+                Boots = new Color(0.55f, 0.55f, 0.58f),
+                DefaultName = "Inmate"
             })
         };
 
@@ -55,13 +57,12 @@ public static class CharacterVisualSetupRunner
             Material clothing = EnsureMaterial($"Char_Clothing_{role}", palette.Clothing, 0.08f);
             Material roleBoots = EnsureMaterial($"Char_Boots_{role}", palette.Boots, 0.12f);
             Material roleAccent = EnsureMaterial($"Char_Accent_{role}", palette.Accent, 0.1f);
-            Mesh mesh = EnsureMesh(role);
-            ApplyToPrefabs(role, mesh, skin, clothing, roleBoots, roleAccent);
+            ApplyToPrefabs(role, skin, clothing, roleBoots, roleAccent, palette.DefaultName);
         }
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("[CharacterVisualSetup] Low-poly character visuals updated for Player, Guard, and Prisoner.");
+        Debug.Log("[CharacterVisualSetup] Low-poly character rigs updated for Player, Guard, and Prisoner.");
     }
 
     private static void EnsureFolders()
@@ -97,37 +98,13 @@ public static class CharacterVisualSetupRunner
         return mat;
     }
 
-    private static Mesh EnsureMesh(CharacterVisualRole role)
-    {
-        string path = $"{MeshFolder}/LowPolyHumanoid_{role}.asset";
-        Mesh existing = AssetDatabase.LoadAssetAtPath<Mesh>(path);
-        Mesh mesh = LowPolyCharacterMeshBuilder.BuildHumanoidMesh(role);
-
-        if (existing == null)
-        {
-            AssetDatabase.CreateAsset(mesh, path);
-            return mesh;
-        }
-
-        existing.Clear(false);
-        existing.vertices = mesh.vertices;
-        existing.normals = mesh.normals;
-        existing.subMeshCount = mesh.subMeshCount;
-        for (int i = 0; i < mesh.subMeshCount; i++)
-            existing.SetTriangles(mesh.GetTriangles(i), i);
-        existing.RecalculateBounds();
-        EditorUtility.SetDirty(existing);
-        Object.DestroyImmediate(mesh);
-        return existing;
-    }
-
     private static void ApplyToPrefabs(
         CharacterVisualRole role,
-        Mesh mesh,
         Material skin,
         Material clothing,
         Material boots,
-        Material accent)
+        Material accent,
+        string defaultName)
     {
         string[] prefabPaths = role switch
         {
@@ -141,12 +118,9 @@ public static class CharacterVisualSetupRunner
             _ => System.Array.Empty<string>()
         };
 
-        Material[] materials = { skin, clothing, boots };
-
         foreach (string path in prefabPaths)
         {
-            GameObject prefabRoot = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (prefabRoot == null)
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) == null)
             {
                 Debug.LogWarning($"[CharacterVisualSetup] Missing prefab: {path}");
                 continue;
@@ -155,6 +129,9 @@ public static class CharacterVisualSetupRunner
             GameObject instance = PrefabUtility.LoadPrefabContents(path);
             try
             {
+                RemoveLegacyRootVisuals(instance.transform);
+                FixCharacterPhysics(instance.transform);
+
                 string visualName = role == CharacterVisualRole.Player ? "Model" : "BodyVisual";
                 Transform visualRoot = FindOrCreateVisualRoot(instance.transform, visualName);
                 visualRoot.localPosition = new Vector3(0f, 1f, 0f);
@@ -164,14 +141,26 @@ public static class CharacterVisualSetupRunner
                 ClearVisualChildren(visualRoot);
                 RemoveLegacyPrimitiveColliders(visualRoot);
 
-                GameObject body = new GameObject("LowPolyBody");
-                body.transform.SetParent(visualRoot, false);
-                var filter = body.AddComponent<MeshFilter>();
-                var renderer = body.AddComponent<MeshRenderer>();
-                filter.sharedMesh = mesh;
-                renderer.sharedMaterials = materials;
+                LowPolyCharacterRigBuilder.RigResult rig = LowPolyCharacterRigBuilder.Build(
+                    visualRoot, role, skin, clothing, boots, accent);
 
-                AddRoleAccessories(role, visualRoot, accent, clothing, boots);
+                var animator = visualRoot.GetComponent<LowPolyLocomotionAnimator>();
+                if (animator == null)
+                    animator = visualRoot.gameObject.AddComponent<LowPolyLocomotionAnimator>();
+                animator.Configure(
+                    rig.AnimRoot,
+                    rig.Torso,
+                    rig.Head,
+                    rig.LeftLegPivot,
+                    rig.RightLegPivot,
+                    rig.LeftKneePivot,
+                    rig.RightKneePivot,
+                    rig.LeftArmPivot,
+                    rig.RightArmPivot,
+                    rig.LeftElbowPivot,
+                    rig.RightElbowPivot);
+
+                EnsureNameLabel(instance.transform, defaultName);
                 RemoveLegacyRootAccessories(instance.transform, role);
 
                 PrefabUtility.SaveAsPrefabAsset(instance, path);
@@ -181,6 +170,37 @@ public static class CharacterVisualSetupRunner
                 PrefabUtility.UnloadPrefabContents(instance);
             }
         }
+    }
+
+    private static void EnsureNameLabel(Transform root, string defaultName)
+    {
+        var label = root.GetComponent<CharacterNameLabel>();
+        if (label == null)
+            label = root.gameObject.AddComponent<CharacterNameLabel>();
+
+        if (string.IsNullOrWhiteSpace(label.DisplayName) || label.DisplayName == "Character")
+            label.SetDisplayName(defaultName);
+    }
+
+    private static void RemoveLegacyRootVisuals(Transform root)
+    {
+        Object.DestroyImmediate(root.GetComponent<MeshFilter>());
+        Object.DestroyImmediate(root.GetComponent<MeshRenderer>());
+    }
+
+    private static void FixCharacterPhysics(Transform root)
+    {
+        var capsule = root.GetComponent<CapsuleCollider>();
+        if (capsule != null)
+            capsule.center = new Vector3(0f, 1f, 0f);
+
+        var agent = root.GetComponent<NavMeshAgent>();
+        if (agent != null)
+            agent.baseOffset = 0f;
+
+        var controller = root.GetComponent<CharacterController>();
+        if (controller != null)
+            controller.center = new Vector3(0f, 1f, 0f);
     }
 
     private static Transform FindOrCreateVisualRoot(Transform root, string visualName)
@@ -201,72 +221,13 @@ public static class CharacterVisualSetupRunner
 
         Object.DestroyImmediate(visualRoot.GetComponent<MeshFilter>());
         Object.DestroyImmediate(visualRoot.GetComponent<MeshRenderer>());
+        Object.DestroyImmediate(visualRoot.GetComponent<LowPolyLocomotionAnimator>());
     }
 
     private static void RemoveLegacyPrimitiveColliders(Transform visualRoot)
     {
         foreach (var collider in visualRoot.GetComponents<Collider>())
             Object.DestroyImmediate(collider);
-    }
-
-    private static void AddRoleAccessories(
-        CharacterVisualRole role,
-        Transform visualRoot,
-        Material accent,
-        Material clothing,
-        Material boots)
-    {
-        switch (role)
-        {
-            case CharacterVisualRole.Guard:
-                BuildGuardCap(visualRoot, clothing, boots, accent);
-                break;
-            case CharacterVisualRole.Player:
-                BuildPlayerBandana(visualRoot, accent);
-                break;
-            case CharacterVisualRole.Prisoner:
-                BuildPrisonerIdTag(visualRoot, accent);
-                break;
-        }
-    }
-
-    private static void BuildGuardCap(Transform parent, Material clothing, Material boots, Material accent)
-    {
-        var capRoot = new GameObject("Cap");
-        capRoot.transform.SetParent(parent, false);
-        capRoot.transform.localPosition = new Vector3(0f, 0.86f, 0.02f);
-
-        CreateAccessoryBox(capRoot.transform, "CapTop", new Vector3(0f, 0.06f, 0f), new Vector3(0.34f, 0.12f, 0.32f), clothing);
-        CreateAccessoryBox(capRoot.transform, "CapBrim", new Vector3(0f, -0.02f, 0.12f), new Vector3(0.38f, 0.04f, 0.22f), boots);
-        CreateAccessoryBox(capRoot.transform, "Badge", new Vector3(0f, -0.12f, 0.15f), new Vector3(0.08f, 0.1f, 0.02f), accent);
-    }
-
-    private static void BuildPlayerBandana(Transform parent, Material accent)
-    {
-        var bandana = new GameObject("Bandana");
-        bandana.transform.SetParent(parent, false);
-        bandana.transform.localPosition = new Vector3(0f, 0.78f, 0.12f);
-        CreateAccessoryBox(bandana.transform, "BandanaFold", Vector3.zero, new Vector3(0.26f, 0.08f, 0.06f), accent);
-    }
-
-    private static void BuildPrisonerIdTag(Transform parent, Material accent)
-    {
-        var tag = new GameObject("IdTag");
-        tag.transform.SetParent(parent, false);
-        tag.transform.localPosition = new Vector3(0f, 0.42f, 0.16f);
-        CreateAccessoryBox(tag.transform, "Tag", Vector3.zero, new Vector3(0.12f, 0.16f, 0.02f), accent);
-    }
-
-    private static void CreateAccessoryBox(Transform parent, string name, Vector3 localPos, Vector3 size, Material material)
-    {
-        var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        go.name = name;
-        Object.DestroyImmediate(go.GetComponent<Collider>());
-        go.transform.SetParent(parent, false);
-        go.transform.localPosition = localPos;
-        go.transform.localRotation = Quaternion.identity;
-        go.transform.localScale = size;
-        go.GetComponent<MeshRenderer>().sharedMaterial = material;
     }
 
     private static void RemoveLegacyRootAccessories(Transform root, CharacterVisualRole role)

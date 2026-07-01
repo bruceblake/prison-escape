@@ -1,4 +1,5 @@
 using System.Text;
+using Prison.Visuals;
 using TMPro;
 using UnityEngine;
 
@@ -16,12 +17,10 @@ namespace Prison
         [SerializeField] [TextArea(1, 2)] private string personalitySubtitle = "";
 
         [Header("Label layout")]
-        [SerializeField] private Vector3 labelLocalOffset = new Vector3(0f, 2.1f, 0f);
+        [SerializeField] private Vector3 labelLocalOffset = new Vector3(0f, 1.85f, 0f);
         [Tooltip("Scales the whole world label. Smaller = smaller text in world space.")]
-        [SerializeField] private float labelRootUniformScale = 0.04f;
-        [SerializeField] private float lineFontSize = 2.6f;
-        [Tooltip("If true, label Y rotation matches the main camera (readable from any side).")]
-        [SerializeField] private bool matchCameraYRotation = true;
+        [SerializeField] private float labelRootUniformScale = 0.05f;
+        [SerializeField] private float lineFontSize = 3.2f;
 
         [Header("Raycast (F interaction)")]
         [Tooltip("Physics.Raycast does not hit CharacterController. If no other Collider exists, add a character-sized capsule (non-trigger) so the player can target this NPC.")]
@@ -42,6 +41,11 @@ namespace Prison
         {
             if (!string.IsNullOrEmpty(name))
                 displayName = name;
+
+            var nameLabel = GetComponent<CharacterNameLabel>();
+            if (nameLabel != null)
+                nameLabel.SetDisplayName(displayName);
+
             personalitySubtitle = subtitle ?? "";
             RefreshText();
         }
@@ -78,17 +82,11 @@ namespace Prison
                 _mainCamera = Camera.main;
             if (_mainCamera == null) return;
 
-            if (matchCameraYRotation)
-            {
-                var e = _mainCamera.transform.eulerAngles;
-                _labelRoot.eulerAngles = new Vector3(0f, e.y, 0f);
-            }
-            else
-            {
-                var toCam = _mainCamera.transform.position - _labelRoot.position;
-                if (toCam.sqrMagnitude > 0.0001f)
-                    _labelRoot.forward = toCam;
-            }
+            Vector3 toCamera = _labelRoot.position - _mainCamera.transform.position;
+            if (toCamera.sqrMagnitude < 0.0001f)
+                return;
+
+            _labelRoot.rotation = Quaternion.LookRotation(toCamera, Vector3.up);
         }
 
         private void OnAffinityChanged(int cellIndex, float newValue, float delta)
@@ -108,10 +106,13 @@ namespace Prison
             var textGo = new GameObject("Text");
             textGo.transform.SetParent(_labelRoot, false);
             _text = textGo.AddComponent<TextMeshPro>();
-            _text.alignment = TextAlignmentOptions.Midline;
+            _text.alignment = TextAlignmentOptions.Center;
+            _text.horizontalAlignment = HorizontalAlignmentOptions.Center;
             _text.fontSize = lineFontSize;
             _text.textWrappingMode = TextWrappingModes.Normal;
             _text.raycastTarget = false;
+            _text.outlineWidth = 0.2f;
+            _text.outlineColor = new Color(0f, 0f, 0f, 0.85f);
         }
 
         private void RefreshText()
@@ -133,11 +134,18 @@ namespace Prison
 
             string bar = BuildAffinityBar(aff);
             string sign = aff >= 0f ? "+" : "";
-            _text.text =
-                $"<b>{displayName}</b>\n" +
-                secondLine +
-                $"<size=90%>Affinity: {sign}{aff:0}</size>\n" +
-                $"<size=75%><color=#99ccff>{bar}</color></size>";
+
+            bool hasNameLabel = GetComponent<CharacterNameLabel>() != null;
+            var sb = new StringBuilder();
+            if (!hasNameLabel)
+                sb.AppendLine($"<b>{displayName}</b>");
+
+            if (!string.IsNullOrEmpty(secondLine))
+                sb.Append(secondLine);
+
+            sb.Append($"<size=90%>Affinity: {sign}{aff:0}</size>\n");
+            sb.Append($"<size=75%><color=#99ccff>{bar}</color></size>");
+            _text.text = sb.ToString();
         }
 
         private static string BuildAffinityBar(float affinity)

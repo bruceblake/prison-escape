@@ -1,0 +1,28 @@
+{
+    "asset": "615809dc049744a48859dbeae31415f3",
+    "fileName": "019e2d83-993f-76e4-8c22-16b62b107bd4.png",
+    "prompt": "A single 3D Low-Poly prison bed, simple industrial metal frame, thin mattress, four legs with empty space underneath, institutional gray, sharp edges, flat-shaded, isolated on white background, game asset. Minimal polygon aesthetic.",
+    "negativePrompt": "",
+    "model": "gemini-3.1-flash",
+    "modelName": "Gemini 3.1 Nano Banana 2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

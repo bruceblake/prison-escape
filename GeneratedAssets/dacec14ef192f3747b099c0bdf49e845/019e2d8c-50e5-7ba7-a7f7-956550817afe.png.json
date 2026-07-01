@@ -1,0 +1,28 @@
+{
+    "asset": "dacec14ef192f3747b099c0bdf49e845",
+    "fileName": "019e2d8c-50e5-7ba7-a7f7-956550817afe.png",
+    "prompt": "A single 3D Low-Poly chain-link fence panel, 3x3 units, metallic wireframe structure with metal posts on sides, flat-shaded, sharp edges, isolated on white background, game asset.",
+    "negativePrompt": "",
+    "model": "gemini-3.1-flash",
+    "modelName": "Gemini 3.1 Nano Banana 2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

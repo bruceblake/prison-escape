@@ -1,0 +1,23 @@
+{
+    "asset": "2e4f2c28f7cd8ab49924ff458dd305c4",
+    "fileName": "019e2d92-d598-7b58-aa70-1edfae03cc56.glb",
+    "prompt": "3D Low-Poly Wall Panel with Doorway, 3x3x0.2 units, centered rectangular cutout (1x2 units), sharp edges, flat-shaded concrete gray. Pivot at absolute Bottom-Center of the mesh. Modular game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "a4c09a583b9e6664b87cbc36d8c1385e",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

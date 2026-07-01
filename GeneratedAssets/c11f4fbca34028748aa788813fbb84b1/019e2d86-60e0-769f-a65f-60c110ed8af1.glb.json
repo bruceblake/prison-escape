@@ -1,0 +1,23 @@
+{
+    "asset": "c11f4fbca34028748aa788813fbb84b1",
+    "fileName": "019e2d86-60e0-769f-a65f-60c110ed8af1.glb",
+    "prompt": "A 3D low-poly prison bed, simple metal frame, four legs, empty space underneath, institutional gray, sharp edges, flat-shaded, minimal polygon count, modular game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "615809dc049744a48859dbeae31415f3",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

@@ -1,0 +1,23 @@
+{
+    "asset": "c7ed7b98a85fa8a46b684b78db35bede",
+    "fileName": "019e2d7e-1c34-76a8-b292-7bc1b555f528.glb",
+    "prompt": "3D Low-Poly industrial concrete pillar, thick, institutional gray, flat-shaded, game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "77e5841382db1964da26ab1b3165e819",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

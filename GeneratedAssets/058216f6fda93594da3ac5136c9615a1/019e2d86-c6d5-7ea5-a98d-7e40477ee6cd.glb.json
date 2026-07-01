@@ -1,0 +1,23 @@
+{
+    "asset": "058216f6fda93594da3ac5136c9615a1",
+    "fileName": "019e2d86-c6d5-7ea5-a98d-7e40477ee6cd.glb",
+    "prompt": "A 3D low-poly flat floor tile, square, 3x3 units, sharp edges, flat-shaded dark gray concrete, minimal polygon count, modular game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "3235758dd4d783c47b493dc347ba65bf",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

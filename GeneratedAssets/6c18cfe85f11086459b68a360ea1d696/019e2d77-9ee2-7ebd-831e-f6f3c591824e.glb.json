@@ -1,0 +1,23 @@
+{
+    "asset": "6c18cfe85f11086459b68a360ea1d696",
+    "fileName": "019e2d77-9ee2-7ebd-831e-f6f3c591824e.glb",
+    "prompt": "3D Low-Poly prison cell module, concrete walls, institutional gray and blue, flat-shaded, game asset. One side open.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "f91f5d76243339e4585be6f75201e0fc",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

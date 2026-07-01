@@ -1,0 +1,28 @@
+{
+    "asset": "e891d76b537346e49a9222e0bf92c0c0",
+    "fileName": "019e2dd6-dffc-7b64-aba1-2868a9a8a557.jpg",
+    "prompt": "A rectangular rubber stamp mark with the word \"APPROVED\", ink texture, slightly rotated, industrial prison theme, red ink, isolated on white background",
+    "negativePrompt": "",
+    "model": "game-ui-essentials-2",
+    "modelName": "Game UI Essentials 2.0",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 2048,
+        "height": 2048
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

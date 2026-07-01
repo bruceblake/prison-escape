@@ -1,0 +1,23 @@
+{
+    "asset": "71be3b7ef382a4944b8e9b68b2a05c5c",
+    "fileName": "019e2d8f-ed0d-7381-9cd0-e2ec6c5f3912.glb",
+    "prompt": "3D Low-Poly Standard Wall Panel, flat solid wall, 3x3x0.2 units, sharp edges, flat-shaded concrete gray. Pivot at absolute Bottom-Center of the mesh. Modular game asset.",
+    "negativePrompt": "",
+    "model": "model3d-tripo3-1",
+    "modelName": "Tripo 3.1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "9b847af39407b92498bb72c60e87866b",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

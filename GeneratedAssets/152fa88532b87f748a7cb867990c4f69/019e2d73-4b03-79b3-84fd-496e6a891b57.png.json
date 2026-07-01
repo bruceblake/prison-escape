@@ -1,0 +1,28 @@
+{
+    "asset": "152fa88532b87f748a7cb867990c4f69",
+    "fileName": "019e2d73-4b03-79b3-84fd-496e6a891b57.png",
+    "prompt": "A single 3D Low-Poly prison cell door, vertical bars, sliding track, metallic dark gray, flat-shaded, isolated on white background, game asset.",
+    "negativePrompt": "",
+    "model": "gemini-3.1-flash",
+    "modelName": "Gemini 3.1 Nano Banana 2",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

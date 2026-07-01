@@ -181,7 +181,6 @@ public static class CharacterVisualSetupRunner
 
     private static void FixRoleAttachments(Transform root, CharacterVisualRole role)
     {
-        float height = CharacterVisualConstants.ColliderHeight;
         float scale = CharacterVisualConstants.VisualScale;
 
         switch (role)
@@ -190,14 +189,19 @@ public static class CharacterVisualSetupRunner
             {
                 Transform eyes = root.Find("Eyes");
                 if (eyes != null)
-                    eyes.localPosition = new Vector3(0f, height * 0.83f, 0.473f * scale);
+                    eyes.localPosition = new Vector3(0f, CharacterVisualConstants.EyeHeight, 0.473f * scale);
                 break;
             }
             case CharacterVisualRole.Player:
             {
+                Vector3 cameraPos = new Vector3(0f, CharacterVisualConstants.EyeHeight, CharacterVisualConstants.CameraForwardOffset);
                 Transform camProxy = root.Find("CamProxy");
                 if (camProxy != null)
-                    camProxy.localPosition = new Vector3(0f, height * 0.4375f, 0.5f * scale);
+                    camProxy.localPosition = cameraPos;
+
+                Transform camera = root.Find("Camera");
+                if (camera != null)
+                    camera.localPosition = cameraPos;
                 break;
             }
             case CharacterVisualRole.Prisoner:

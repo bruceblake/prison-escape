@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceba0ad99de57384fb1f48d8d1e4d1fe, type: 3}
+  m_Name: Fake Bed Dummy Recipe
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingRecipe
+  recipeName: Fake Bed Dummy
+  ingredients:
+  - item: {fileID: 11400000, guid: c909d03a52836c74a83251b66bb8586b, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 8384a8fb43373524e8ac4829e8f5a8cc, type: 2}
+    amount: 1
+  result: {fileID: 11400000, guid: 564c5188795c7dc41b8502503affd0dc, type: 2}
+  resultAmount: 1

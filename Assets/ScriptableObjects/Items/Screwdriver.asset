@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a388440a598f5294090fccdfa8acf05e, type: 3}
+  m_Name: Screwdriver
+  m_EditorClassIdentifier: Assembly-CSharp::ToolData
+  networkId: 3
+  itemName: Screwdriver
+  description: Opens vents.
+  icon: {fileID: 21300000, guid: 44d8488b11d12ae4cb9d922bf07a2c86, type: 3}
+  category: 1
+  rarity: 1
+  weightMultiplier: 1
+  worldPrefab: {fileID: 0}
+  durability: 100
+  interactionSpeedModifier: 1.5
+  holdModelPrefab: {fileID: 1643704132519193972, guid: 0f673abe4e7df1645b7d1ecd086d9c91, type: 3}
+  holdPositionOffset: {x: 0.29, y: -0.45, z: 0.37}
+  holdRotationOffset: {x: 27.25, y: 0, z: 0}
+  holdScale: {x: 0.2, y: 1, z: 0.2}

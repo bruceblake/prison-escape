@@ -35,12 +35,26 @@ docs/              # Engineering docs (PR plan, etc.)
 2. This repo uses **Git LFS** for large binary assets — install it once: `git lfs install`, then clone normally (LFS objects pull automatically).
 3. Open the project folder in Unity Hub and load a scene from `Assets/Scenes/`.
 
+## Branching & release workflow
+
+| Branch | Purpose |
+|--------|---------|
+| **`feat/*`, `fix/*`** | New work in isolation |
+| **`dev`** | Integration — **playtest here** |
+| **`main`** | Production — merge only when explicitly releasing |
+
+See **`docs/WORKFLOW.md`** for the full policy (feature → `dev` → `main` on request).
+
 ## Documentation
 
-- `Assets/Docs/Game_Features_And_Test_Coverage.md` — features + test coverage.
-- `Assets/Docs/Prison_Social_And_Reputation_System.md` — social system design.
-- `docs/PR_PLAN.md` — how the codebase history is structured into feature PRs.
+- `docs/WORKFLOW.md` — branching policy (dev for testing, main for production)
+- `Assets/Docs/Prison_Rebuild_Master_Plan.md` — full prison ProBuilder rebuild plan
+- `Assets/Docs/Game_Features_And_Test_Coverage.md` — features + test coverage
+- `Assets/Docs/Prison_Social_And_Reputation_System.md` — social system design
+- `docs/PR_PLAN.md` — how the codebase history is structured into feature PRs
 
 ## Tests
 
-EditMode unit tests live in `Assets/Tests/Editor/` (door logic, social math, prison rules/labels, crafting/inventory/loot). Run them via **Window → General → Test Runner → EditMode**.
+EditMode unit tests live in `Assets/Tests/Editor/` (door logic, social math, prison rules/labels, crafting/inventory/loot, **prison layout validation**). Run them via **Window → General → Test Runner → EditMode**.
+
+For prison level work, also use **Prison → Rebuild → 4 — Validate Layout (Report)** in the Unity editor.

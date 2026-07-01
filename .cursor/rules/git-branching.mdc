@@ -1,34 +1,41 @@
 ---
-description: Git branching — dev for testing, main for production
+description: Git branching — feature branches, dev for user testing, main only on explicit release request
 alwaysApply: true
 ---
 
-# Git Branching Policy
+# Git Branching Policy (mandatory)
 
-This repo uses a two-branch release model:
+This repo uses a **three-stage release model**. Agents and contributors must follow it every time.
 
-| Branch | Purpose |
-|--------|---------|
-| **`dev`** | Integration and testing. All day-to-day development targets this branch. |
-| **`main`** | Production only. Stable, release-ready code. Do not use for experiments or WIP. |
+| Branch | Purpose | Who merges |
+|--------|---------|------------|
+| **`feat/*`, `fix/*`, `chore/*`** | New work in isolation | Agent opens PR → **`dev`** |
+| **`dev`** | Integration branch for **Bruce to playtest** | Agent merges feature PRs here; Bruce tests in Unity on `dev` |
+| **`main`** | **Production only** — stable releases | **Only when Bruce explicitly says** to promote/release to production |
 
-## Workflow
+## Standard workflow
 
 1. **Start work from `dev`**
    - Primary checkout: `git checkout dev && git pull origin dev`
    - Create feature branches from `dev`: `feat/...`, `fix/...`, `chore/...`
    - Prefer a **linked worktree** under `C:\Users\bruce\3dgame-worktrees\` (see `git-worktrees.mdc`) instead of doing feature work on the primary folder.
 
-2. **Merge into `dev` first**
-   - Open PRs with **base: `dev`**, not `main`.
-   - Run tests and playtest on `dev` before considering a production release.
+2. **Build and test on the feature branch**
+   - Implement, run EditMode tests, use Unity MCP to verify when available
+   - Open PR with **base: `dev`** (never `main` for feature work)
 
-3. **Promote to `main` only when releasing**
-   - Open a PR **from `dev` → `main`** when code is tested and ready for production.
-   - Do not push directly to `main` unless explicitly asked for a hotfix.
+3. **Merge into `dev` for Bruce to test**
+   - After PR review / agent verification, merge to `dev`
+   - Tell Bruce: "Ready to test on `dev`" with a short test checklist
+   - **Do not merge to `main`** at this stage
 
-4. **Hotfixes (rare)**
-   - Branch from `main`, fix, PR back to `main`, then merge/cherry-pick into `dev` so branches stay aligned.
+4. **Promote to `main` only on explicit request**
+   - Bruce says something like: "merge to main", "ship it", "release to production"
+   - Then open/merge PR **`dev` → `main`**
+   - Never push experimental or untested work directly to `main`
+
+5. **Hotfixes (rare)**
+   - Branch from `main`, fix, PR to `main`, then merge/cherry-pick back into `dev`
 
 ## Agent defaults
 
@@ -37,3 +44,8 @@ This repo uses a two-branch release model:
 - When creating PRs, default **base branch to `dev`**.
 - Do not merge untested feature work into `main`.
 - After merging to `main`, remind the user to sync `dev` if needed.
+
+## Reference docs
+
+- Human-readable: `docs/WORKFLOW.md`
+- Prison rebuild epic: `Assets/Docs/Prison_Rebuild_Master_Plan.md`

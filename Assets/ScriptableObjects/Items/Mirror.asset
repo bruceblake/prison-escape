@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d29e375a288c3542b90791ddef67037, type: 3}
   m_Name: Mirror
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  networkId: 0
+  networkId: 31
   itemName: Mirror
   description: Finch's favored item.
   icon: {fileID: 21300000, guid: 40bb0097cba2d1448ac01573ebcf1813, type: 3}
   category: 0
   rarity: 2
-  weightMultiplier: 0.5
-  worldPrefab: {fileID: 0}
+  weightMultiplier: 0.8
+  worldPrefab: {fileID: 3500289178882831229, guid: 934503c8170e0df4da6067e043010d44, type: 3}

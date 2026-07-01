@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c57c92a8da3e18f4dae94c0279cb15d5, type: 3}
+  m_Name: LootTable_Yard
+  m_EditorClassIdentifier: Assembly-CSharp::Prison.LootTable
+  possibleItems:
+  - {fileID: 11400000, guid: 9feff88b2d637ae4b8f04147819cd237, type: 2}
+  - {fileID: 11400000, guid: b585c7f1fa0d49b4183e8aff0e94da28, type: 2}
+  - {fileID: 11400000, guid: 109a99ebbece25f4d8536195a2c78772, type: 2}
+  - {fileID: 11400000, guid: aa0a9fe57bc3c4948b524c9de996b6b8, type: 2}
+  - {fileID: 11400000, guid: 1f5a3bb9d65f9db468ed9931fee3057c, type: 2}

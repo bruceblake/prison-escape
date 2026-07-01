@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a73f27c1edfdbc4fa1a1e295ca9afe6, type: 3}
   m_Name: Wire
   m_EditorClassIdentifier: Assembly-CSharp::PartData
-  networkId: 0
+  networkId: 22
   itemName: Wire
   description: Flexible wiring for electronics.
   icon: {fileID: 21300000, guid: fd93b3526f8cb8b46b069dd456d7f619, type: 3}
   category: 0
   rarity: 1
-  weightMultiplier: 0.8
-  worldPrefab: {fileID: 0}
+  weightMultiplier: 1
+  worldPrefab: {fileID: 3500289178882831229, guid: 934503c8170e0df4da6067e043010d44, type: 3}
   maxStackSize: 5

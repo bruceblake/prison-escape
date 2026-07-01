@@ -21,15 +21,24 @@ public static class CraftingSystem
         if (!CanCraft(recipe, inventory))
             return false;
 
+        var consumed = new System.Collections.Generic.List<(ItemData item, int amount)>();
         foreach (CraftingIngredient ingredient in recipe.ingredients)
         {
-            inventory.RemoveItem(ingredient.item, ingredient.amount);
+            if (!inventory.RemoveItem(ingredient.item, ingredient.amount))
+            {
+                foreach (var (item, amount) in consumed)
+                    inventory.AddItem(item, amount);
+                return false;
+            }
+
+            consumed.Add((ingredient.item, ingredient.amount));
         }
 
-        bool added = inventory.AddItem(recipe.result, recipe.resultAmount);
-        if (!added)
+        if (!inventory.AddItem(recipe.result, recipe.resultAmount))
         {
-            Debug.LogWarning($"[CraftingSystem] Crafted {recipe.result.itemName} but inventory was full. Parts were consumed.");
+            foreach (var (item, amount) in consumed)
+                inventory.AddItem(item, amount);
+            return false;
         }
 
         Debug.Log($"[CraftingSystem] Crafted {recipe.resultAmount}x {recipe.result.itemName}");

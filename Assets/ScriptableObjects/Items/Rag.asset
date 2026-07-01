@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d29e375a288c3542b90791ddef67037, type: 3}
   m_Name: Rag
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  networkId: 0
+  networkId: 12
   itemName: Rag
   description: Standard scrap cloth.
   icon: {fileID: 21300000, guid: cd335903620c8974f9d586ece1885a74, type: 3}
   category: 0
   rarity: 0
-  weightMultiplier: 1.5
-  worldPrefab: {fileID: 0}
+  weightMultiplier: 1
+  worldPrefab: {fileID: 3500289178882831229, guid: 934503c8170e0df4da6067e043010d44, type: 3}

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c57c92a8da3e18f4dae94c0279cb15d5, type: 3}
+  m_Name: LootTable_RareHidden
+  m_EditorClassIdentifier: Assembly-CSharp::Prison.LootTable
+  possibleItems:
+  - {fileID: 11400000, guid: 5e9a251dd5021354bad7061a19c5acc8, type: 2}
+  - {fileID: 11400000, guid: fd7732de511ad9e4c9ba51e1db9d659b, type: 2}
+  - {fileID: 11400000, guid: 64ade7bebc30efb4084aa2fb29016a26, type: 2}
+  - {fileID: 11400000, guid: 1f5a3bb9d65f9db468ed9931fee3057c, type: 2}

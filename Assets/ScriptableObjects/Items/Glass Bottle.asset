@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d29e375a288c3542b90791ddef67037, type: 3}
   m_Name: Glass Bottle
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  networkId: 0
+  networkId: 32
   itemName: Glass Bottle
   description: Fragile part for Molotovs.
   icon: {fileID: 21300000, guid: 85b8807932b714b4d83d1bcb66707717, type: 3}
   category: 0
   rarity: 2
-  weightMultiplier: 1
-  worldPrefab: {fileID: 0}
+  weightMultiplier: 0.5
+  worldPrefab: {fileID: 3500289178882831229, guid: 934503c8170e0df4da6067e043010d44, type: 3}

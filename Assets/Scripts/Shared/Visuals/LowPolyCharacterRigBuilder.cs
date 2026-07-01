@@ -57,6 +57,8 @@ namespace Prison.Visuals
 
             AddRoleExtras(role, animRoot, torso, clothing, boots, accent);
 
+            rig.AnimRoot.localScale = Vector3.one * CharacterVisualConstants.VisualScale;
+
             return new RigResult
             {
                 AnimRoot = animRoot,

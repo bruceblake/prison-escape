@@ -9,7 +9,6 @@ using UnityEngine.AI;
 /// </summary>
 public static class CharacterVisualSetupRunner
 {
-    private const string MeshFolder = "Assets/Meshes/Characters";
     private const string MaterialFolder = "Assets/Materials/Characters";
 
     private struct RolePalette
@@ -62,15 +61,11 @@ public static class CharacterVisualSetupRunner
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("[CharacterVisualSetup] Low-poly character rigs updated for Player, Guard, and Prisoner.");
+        Debug.Log($"[CharacterVisualSetup] Character rigs updated at {CharacterVisualConstants.VisualScale:P0} scale (~{CharacterVisualConstants.ColliderHeight:0.0#}m tall).");
     }
 
     private static void EnsureFolders()
     {
-        if (!AssetDatabase.IsValidFolder("Assets/Meshes"))
-            AssetDatabase.CreateFolder("Assets", "Meshes");
-        if (!AssetDatabase.IsValidFolder(MeshFolder))
-            AssetDatabase.CreateFolder("Assets/Meshes", "Characters");
         if (!AssetDatabase.IsValidFolder("Assets/Materials/Characters"))
             AssetDatabase.CreateFolder("Assets/Materials", "Characters");
     }
@@ -134,7 +129,7 @@ public static class CharacterVisualSetupRunner
 
                 string visualName = role == CharacterVisualRole.Player ? "Model" : "BodyVisual";
                 Transform visualRoot = FindOrCreateVisualRoot(instance.transform, visualName);
-                visualRoot.localPosition = new Vector3(0f, 1f, 0f);
+                visualRoot.localPosition = new Vector3(0f, CharacterVisualConstants.ColliderCenterY, 0f);
                 visualRoot.localRotation = Quaternion.identity;
                 visualRoot.localScale = Vector3.one;
 
@@ -161,6 +156,7 @@ public static class CharacterVisualSetupRunner
                     rig.RightElbowPivot);
 
                 EnsureNameLabel(instance.transform, defaultName);
+                FixRoleAttachments(instance.transform, role);
                 RemoveLegacyRootAccessories(instance.transform, role);
 
                 PrefabUtility.SaveAsPrefabAsset(instance, path);
@@ -178,8 +174,49 @@ public static class CharacterVisualSetupRunner
         if (label == null)
             label = root.gameObject.AddComponent<CharacterNameLabel>();
 
+        label.ApplyScaledLayout();
         if (string.IsNullOrWhiteSpace(label.DisplayName) || label.DisplayName == "Character")
             label.SetDisplayName(defaultName);
+    }
+
+    private static void FixRoleAttachments(Transform root, CharacterVisualRole role)
+    {
+        float height = CharacterVisualConstants.ColliderHeight;
+        float scale = CharacterVisualConstants.VisualScale;
+
+        switch (role)
+        {
+            case CharacterVisualRole.Guard:
+            {
+                Transform eyes = root.Find("Eyes");
+                if (eyes != null)
+                    eyes.localPosition = new Vector3(0f, height * 0.83f, 0.473f * scale);
+                break;
+            }
+            case CharacterVisualRole.Player:
+            {
+                Transform camProxy = root.Find("CamProxy");
+                if (camProxy != null)
+                    camProxy.localPosition = new Vector3(0f, height * 0.4375f, 0.5f * scale);
+                break;
+            }
+            case CharacterVisualRole.Prisoner:
+            {
+                var social = root.GetComponent<Prison.PrisonerSocialPresenter>();
+                if (social != null)
+                {
+                    var so = new SerializedObject(social);
+                    so.FindProperty("labelLocalOffset").vector3Value =
+                        new Vector3(0f, CharacterVisualConstants.SocialLabelHeight, 0f);
+                    so.FindProperty("capsuleCenter").vector3Value =
+                        new Vector3(0f, CharacterVisualConstants.ColliderCenterY, 0f);
+                    so.FindProperty("capsuleHeight").floatValue = CharacterVisualConstants.ColliderHeight;
+                    so.FindProperty("capsuleRadius").floatValue = CharacterVisualConstants.ColliderRadius;
+                    so.ApplyModifiedPropertiesWithoutUndo();
+                }
+                break;
+            }
+        }
     }
 
     private static void RemoveLegacyRootVisuals(Transform root)
@@ -190,17 +227,33 @@ public static class CharacterVisualSetupRunner
 
     private static void FixCharacterPhysics(Transform root)
     {
+        float height = CharacterVisualConstants.ColliderHeight;
+        float radius = CharacterVisualConstants.ColliderRadius;
+        float centerY = CharacterVisualConstants.ColliderCenterY;
+
         var capsule = root.GetComponent<CapsuleCollider>();
         if (capsule != null)
-            capsule.center = new Vector3(0f, 1f, 0f);
+        {
+            capsule.height = height;
+            capsule.radius = radius;
+            capsule.center = new Vector3(0f, centerY, 0f);
+        }
 
         var agent = root.GetComponent<NavMeshAgent>();
         if (agent != null)
+        {
+            agent.height = height;
+            agent.radius = radius;
             agent.baseOffset = 0f;
+        }
 
         var controller = root.GetComponent<CharacterController>();
         if (controller != null)
-            controller.center = new Vector3(0f, 1f, 0f);
+        {
+            controller.height = height;
+            controller.radius = radius;
+            controller.center = new Vector3(0f, centerY, 0f);
+        }
     }
 
     private static Transform FindOrCreateVisualRoot(Transform root, string visualName)

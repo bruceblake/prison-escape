@@ -17,7 +17,7 @@ namespace Prison
         [SerializeField] [TextArea(1, 2)] private string personalitySubtitle = "";
 
         [Header("Label layout")]
-        [SerializeField] private Vector3 labelLocalOffset = new Vector3(0f, 1.85f, 0f);
+        [SerializeField] private Vector3 labelLocalOffset = new Vector3(0f, CharacterVisualConstants.SocialLabelHeight, 0f);
         [Tooltip("Scales the whole world label. Smaller = smaller text in world space.")]
         [SerializeField] private float labelRootUniformScale = 0.05f;
         [SerializeField] private float lineFontSize = 3.2f;

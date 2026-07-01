@@ -9,7 +9,7 @@ namespace Prison.Visuals
     public class CharacterNameLabel : MonoBehaviour
     {
         [SerializeField] private string displayName = "Character";
-        [SerializeField] private Vector3 localOffset = new Vector3(0f, 2.15f, 0f);
+        [SerializeField] private Vector3 localOffset = new Vector3(0f, CharacterVisualConstants.NameLabelHeight, 0f);
         [SerializeField] private float fontSize = 5f;
         [SerializeField] private float uniformScale = 0.06f;
         [SerializeField] private Color textColor = Color.white;
@@ -26,6 +26,13 @@ namespace Prison.Visuals
 
             displayName = name.Trim();
             RefreshText();
+        }
+
+        public void ApplyScaledLayout()
+        {
+            localOffset = new Vector3(0f, CharacterVisualConstants.NameLabelHeight, 0f);
+            if (_labelRoot != null)
+                _labelRoot.localPosition = localOffset;
         }
 
         private void Awake()

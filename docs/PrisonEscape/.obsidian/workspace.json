@@ -6,7 +6,6 @@
       {
         "id": "da5f3385bff173f4",
         "type": "tabs",
-        "dimension": 33.33333333333333,
         "children": [
           {
             "id": "8b2e86b1f0745f9b",
@@ -26,52 +25,18 @@
             "id": "d0023b4c56fe2e61",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "Pasted image 20260701210606.png"
+                "file": "03 Systems/UI & HUD.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "Pasted image 20260701210606"
+              "icon": "lucide-file",
+              "title": "UI & HUD"
             }
           }
         ],
         "currentTab": 1
-      },
-      {
-        "id": "f3c8534375b26819",
-        "type": "tabs",
-        "dimension": 48.401826484018265,
-        "children": [
-          {
-            "id": "b21643d5307400b4",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "Pasted image 20260701210606.png"
-              },
-              "icon": "lucide-image",
-              "title": "Pasted image 20260701210606"
-            }
-          }
-        ]
-      },
-      {
-        "id": "f56c1cd958dd06dd",
-        "type": "tabs",
-        "dimension": 18.2648401826484,
-        "children": [
-          {
-            "id": "aab5037ad20e3c6a",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
-            }
-          }
-        ]
       }
     ],
     "direction": "vertical"
@@ -233,16 +198,44 @@
       "bases:Create new base": false
     }
   },
-  "active": "316b84170b79182c",
+  "active": "d0023b4c56fe2e61",
   "lastOpenFiles": [
-    "Pasted image 20260701210606.png",
-    "Prison Escape.md",
+    "Home.md",
+    "05 Engineering/Editor Tooling.md",
+    "05 Engineering/Codebase Map.md",
+    "04 Content & Assets/Character Visuals.md",
+    "04 Content & Assets/Item Catalog.md",
+    "03 Systems/Multiplayer & Networking.md",
+    "03 Systems/Loot & Economy.md",
+    "03 Systems/Locations, Zones & Cells.md",
+    "04 Content & Assets/Content Inventory.md",
+    "04 Content & Assets",
+    "03 Systems/Inventory & Items.md",
+    "03 Systems/Guard AI.md",
+    "03 Systems/Escape Routes & Mechanics.md",
+    "03 Systems/Crafting.md",
+    "03 Systems/UI & HUD.md",
+    "03 Systems/Systems Overview.md",
+    "01 Game Design/World Rules.md",
+    "05 Engineering/Testing & QA.md",
+    "06 Process/Git & Branching.md",
+    "06 Process/Feature Spec Template.md",
     "Prison Escape Devlog Dashboard.md",
-    "Pasted image 20260701210049.png",
-    "Minimum Security Prison Layout.png",
-    "Untitled.md",
-    "Untitled.canvas",
+    "06 Process/Development Workflow.md",
+    "03 Systems/Player & Interaction.md",
+    "01 Game Design/Roadmap & Priorities.md",
+    "03 Systems/Security, Heat & Alerts.md",
+    "03 Systems/Social & Reputation.md",
+    "01 Game Design/Prison Layout — Minimum Security.md",
+    "03 Systems",
+    "Pasted image 20260701210606.png",
+    "05 Engineering",
+    "01 Game Design",
+    "06 Process",
     "Untitled.base",
+    "Untitled.canvas",
+    "Minimum Security Prison Layout.png",
+    "Pasted image 20260701210049.png",
     "Untitled"
   ]
 }

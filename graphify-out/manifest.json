@@ -155,7 +155,7 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/CellDoorController.cs": {
-    "mtime": 1782939208.2744026,
+    "mtime": 1784070998.7390468,
     "ast_hash": "04ac624fa5c38c104c9a2845bd396ea4",
     "semantic_hash": ""
   },
@@ -275,7 +275,7 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonerSocialPresenter.cs": {
-    "mtime": 1782943875.077843,
+    "mtime": 1784071516.8100579,
     "ast_hash": "9250ce871e2373c74a53deb3ec3669df",
     "semantic_hash": ""
   },
@@ -425,7 +425,7 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/GameManager.cs": {
-    "mtime": 1782948596.6775568,
+    "mtime": 1784071516.8200417,
     "ast_hash": "302be435447c97774c4304e5add79de4",
     "semantic_hash": ""
   },
@@ -515,7 +515,7 @@
     "semantic_hash": ""
   },
   "3dgame.slnx": {
-    "mtime": 1782948668.471108,
+    "mtime": 1784071529.130637,
     "ast_hash": "4ffc934ebabbe1dcda39b1ebd1f14771",
     "semantic_hash": ""
   },
@@ -545,22 +545,22 @@
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/CellDoorControllerTests.cs": {
-    "mtime": 1782939214.126627,
+    "mtime": 1784070998.7390468,
     "ast_hash": "aa911657cea232b869f6be399ed0f051",
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/CraftingInventoryLootTests.cs": {
-    "mtime": 1782939214.1276312,
+    "mtime": 1784070998.7390468,
     "ast_hash": "68b597573f8aa2371300d30308ce3d29",
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/PrisonRulesAndLabelsTests.cs": {
-    "mtime": 1782939214.1287467,
+    "mtime": 1784070998.7390468,
     "ast_hash": "5ea7734d7ba11baf02068e471dc2b826",
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/SocialMathTests.cs": {
-    "mtime": 1782939214.130752,
+    "mtime": 1784070998.7390468,
     "ast_hash": "7c0a7b5690bc5bd69698cbf343811513",
     "semantic_hash": ""
   },
@@ -1140,13 +1140,13 @@
     "semantic_hash": ""
   },
   "Packages/manifest.json": {
-    "mtime": 1782949098.5064633,
-    "ast_hash": "e430d7ccf4be280118bd0b34b8dfa524",
+    "mtime": 1784071529.167512,
+    "ast_hash": "1b8c83b19dee419dbfce6eb7173dab5c",
     "semantic_hash": ""
   },
   "Packages/packages-lock.json": {
-    "mtime": 1782949098.5099895,
-    "ast_hash": "057bdb6891a2ca2eee44503b07206caf",
+    "mtime": 1784071529.167512,
+    "ast_hash": "998522c65d869e21041649e5dc488069",
     "semantic_hash": ""
   },
   "ProjectSettings/Packages/com.unity.ai.assistant/Settings.json": {
@@ -1165,7 +1165,7 @@
     "semantic_hash": ""
   },
   "Assets/Docs/Game_Features_And_Test_Coverage.md": {
-    "mtime": 1782939199.8550322,
+    "mtime": 1784070998.7390468,
     "ast_hash": "b1f940ff6cc90679f186e356b46d9dcc",
     "semantic_hash": ""
   },
@@ -1212,11 +1212,6 @@
   "README.md": {
     "mtime": 1782948596.6813662,
     "ast_hash": "f0de27dd727d0eee05a545e00d9c02d9",
-    "semantic_hash": ""
-  },
-  "docs/PR_PLAN.md": {
-    "mtime": 1782859654.3338757,
-    "ast_hash": "0566f42098758023b6382740e18cafa2",
     "semantic_hash": ""
   },
   "steam_appid.txt": {
@@ -2345,43 +2340,43 @@
     "semantic_hash": ""
   },
   "Assets/Editor/CharacterVisualSetupRunner.cs": {
-    "mtime": 1782948597.2092588,
+    "mtime": 1784071529.130637,
     "ast_hash": "34ce7c01976b87d3bf888e71516f3ac2",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/CharacterNameLabel.cs": {
-    "mtime": 1782943875.0793447,
+    "mtime": 1784071516.8120563,
     "ast_hash": "cee37533b15a6e657135e60f43a82669",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/CharacterVisualConstants.cs": {
-    "mtime": 1782948597.2137687,
+    "mtime": 1784071529.1649973,
     "ast_hash": "2163666e656c1f83d49fc63f2deeb52c",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/CharacterVisualRole.cs": {
-    "mtime": 1782943875.0803468,
+    "mtime": 1784071516.8140583,
     "ast_hash": "386d411b4a28cae5e9ae0dee0b60dce3",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/LowPolyCharacterMeshBuilder.cs": {
-    "mtime": 1782943875.0818486,
+    "mtime": 1784071516.8158143,
     "ast_hash": "993e66688aa88270e6efd604f40842be",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/LowPolyCharacterRigBuilder.cs": {
-    "mtime": 1782948753.1435716,
+    "mtime": 1784071529.1665082,
     "ast_hash": "14c50576f7ace3bf09aa0275d6615d05",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/LowPolyLocomotionAnimator.cs": {
-    "mtime": 1782943875.083359,
+    "mtime": 1784071516.8190365,
     "ast_hash": "a328fdbea96962d40a9823872721d45f",
     "semantic_hash": ""
   },
   "ProjectSettings/Packages/com.unity.probuilder/Settings.json": {
-    "mtime": 1782949724.5341952,
-    "ast_hash": "9da1e17de93c6499855517d5960ecc2a",
+    "mtime": 1784071529.1685126,
+    "ast_hash": "ac1e87eabcf36d75282409997bcddbbe",
     "semantic_hash": ""
   },
   "ci/test-suite-audit.sh": {
@@ -2389,14 +2384,54 @@
     "ast_hash": "2c363bed68ec20bee5698c8c4142eac8",
     "semantic_hash": ""
   },
-  "docs/ARCHITECTURE_NOTES.md": {
-    "mtime": 1782939224.0500853,
-    "ast_hash": "07e2bee44ea8af3fa16963807a818fab",
+  "Assets/Editor/PrisonLevelLayoutRunner.cs": {
+    "mtime": 1784071529.1321526,
+    "ast_hash": "2a04ba6deaf0f191e7013f58c56833b2",
     "semantic_hash": ""
   },
-  "docs/QA_AUDIT.md": {
-    "mtime": 1782939224.0530856,
-    "ast_hash": "72566e911c3a00653329276574756116",
+  "docs/PrisonEscape/.obsidian/app.json": {
+    "mtime": 1784071529.1705587,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/.obsidian/appearance.json": {
+    "mtime": 1784071529.1710627,
+    "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/.obsidian/core-plugins.json": {
+    "mtime": 1784071529.1720667,
+    "ast_hash": "5281aaad2c47e82830f5d93c3386a615",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/.obsidian/graph.json": {
+    "mtime": 1784071529.1720667,
+    "ast_hash": "f5361698ee095ca10c6a75c03425d12d",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/.obsidian/workspace.json": {
+    "mtime": 1784071529.173067,
+    "ast_hash": "30f449ab03a2720ba4ab440ba877a140",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/Prison Escape Devlog Dashboard.md": {
+    "mtime": 1784071529.4111845,
+    "ast_hash": "3e4fca4f817d03bc41b41ac9212d6e6c",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/Prison Escape.md": {
+    "mtime": 1784071529.411698,
+    "ast_hash": "40d796f0e66678c9b1d0d426c587372d",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/Minimum Security Prison Layout.png": {
+    "mtime": 1784071529.4096437,
+    "ast_hash": "6af0cf2901c2221927d060bb74a05c8c",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/Pasted image 20260701210606.png": {
+    "mtime": 1784071529.4106715,
+    "ast_hash": "1741f9b5b0fa1dce7bf660da3db457b0",
     "semantic_hash": ""
   }
 }

@@ -1,0 +1,32 @@
+---
+description: Obsidian vault in docs/PrisonEscape is the canonical project design source
+alwaysApply: true
+---
+
+# Obsidian Docs — Source of Truth
+
+The Obsidian vault at **`docs/PrisonEscape/`** is the **canonical source of truth** for game design, prison layout, features, escape routes, and project direction.
+
+## Before making design or layout decisions
+
+1. Read relevant notes in `docs/PrisonEscape/` first (especially `Prison Escape.md` and linked notes/canvas).
+2. If Unity code, scenes, or `Assets/Docs/` conflict with Obsidian, **Obsidian wins** unless the user explicitly overrides in chat.
+3. When implementing prison layout, cells, rooms, corridors, or escape paths, match the Obsidian diagram and written specs.
+
+## Hierarchy
+
+| Source | Role |
+|--------|------|
+| `docs/PrisonEscape/` | **Primary** — design, layout, features, devlog |
+| `Assets/Docs/` | Secondary — technical docs; must not contradict Obsidian |
+| Code / scenes | Implementation of Obsidian specs |
+
+## When updating design
+
+- Update Obsidian notes first (or together with code), then align Unity assets.
+- If you change layout or features in Unity, remind the user to update Obsidian or offer to update the vault note.
+
+## Vault location
+
+- Vault root: `docs/PrisonEscape/`
+- Main design note: `docs/PrisonEscape/Prison Escape.md`

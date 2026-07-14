@@ -1,0 +1,959 @@
+using System.Collections.Generic;
+using System.Linq;
+using Prison;
+using TMPro;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
+
+/// <summary>
+/// Block-out prison layout: connected diagram floors, 6 m walls/roofs, scratch-built props, full lighting.
+/// </summary>
+public static class PrisonLevelLayoutRunner
+{
+    const float WallThickness = 0.2f;
+    const float RoofThickness = 0.2f;
+    const float FloorY = 0.6f;
+    const float FloorScaleY = 0.2f;
+    const float EdgeTolerance = 0.35f;
+
+    // Hub — cafeteria center (diagram: cells west/east, yard north, showers south).
+    const float HubX = -26f;
+    const float HubZ = -98f;
+
+    const string WallMatPath = "Assets/Materials/Prison/PrisonWall_Concrete.mat";
+    const string CeilingMatPath = "Assets/Materials/Prison/PrisonCeiling_Concrete.mat";
+    const string LightMatPath = "Assets/Materials/Prison/PrisonLight_Emissive.mat";
+    const string MetalMatPath = "Assets/Materials/Prison/PrisonMetal_Shelf.mat";
+    const string PanelMatPath = "Assets/Materials/Prison/Accents/Accent_PanelWhite.mat";
+    const string SecurityMatPath = "Assets/Materials/Prison/Accents/Accent_SecurityRed.mat";
+    const string TileMatPath = "Assets/Materials/Prison/PrisonFloor_Tile.mat";
+    const string ToiletMatPath = "Assets/Materials/Prison/PrisonToilet_Porcelain.mat";
+    const string SinkMatPath = "Assets/Materials/Prison/PrisonSink_Metal.mat";
+    const string BlanketMatPath = "Assets/Materials/Prison/PrisonBed_Blanket.mat";
+
+    static readonly Dictionary<string, string> RightCellRename = new()
+    {
+        { "JailCell_01", "JailCell_09" },
+        { "JailCell_02", "JailCell_10" },
+        { "JailCell_03", "JailCell_11" },
+        { "JailCell_04", "JailCell_12" },
+        { "JailCell_05", "JailCell_13" },
+        { "JailCell_06", "JailCell_14" },
+        { "JailCell_07", "JailCell_15" },
+        { "JailCell_08", "JailCell_16" },
+    };
+
+    struct CellMetrics
+    {
+        public float FloorSurfaceY;
+        public float WallHeight;
+        public float LightFixtureY;
+
+        public static CellMetrics SampleFromScene()
+        {
+            var cell = GameObject.Find("JailCell_01");
+            if (cell == null) return Default();
+
+            var spawn = cell.transform.Find("SpawnPoint");
+            var wall = cell.transform.Find("LeftWall");
+            if (spawn == null || wall == null) return Default();
+
+            float floorY = spawn.position.y;
+            float wallH = wall.lossyScale.y;
+            return new CellMetrics
+            {
+                FloorSurfaceY = floorY,
+                WallHeight = wallH,
+                LightFixtureY = floorY + wallH - 0.28f,
+            };
+        }
+
+        static CellMetrics Default() => new()
+        {
+            FloorSurfaceY = 0.82f,
+            WallHeight = 6f,
+            LightFixtureY = 6.54f,
+        };
+
+        public float FloorTopFor(Transform floor) => floor.position.y + floor.lossyScale.y * 0.5f;
+        public float CeilingYFor(Transform floor) => FloorTopFor(floor) + WallHeight;
+        public float LightYFor(Transform floor) => CeilingYFor(floor) - 0.28f;
+    }
+
+    [MenuItem("Prison/Layout/0 — Apply Connected Diagram Layout")]
+    public static void ApplyConnectedLayoutMenu() => ApplyConnectedDiagramLayout();
+
+    [MenuItem("Prison/Layout/1 — Rename East Cells (09-16)")]
+    public static void RenameEastCellsMenu() => RenameEastCells();
+
+    [MenuItem("Prison/Layout/2 — Build Walls + Roofs")]
+    public static void BuildStructureMenu()
+    {
+        BuildWallsAroundFloors();
+        BuildRoofs();
+    }
+
+    [MenuItem("Prison/Layout/3 — Build All Lighting")]
+    public static void BuildLightingMenu() => BuildAllLighting();
+
+    [MenuItem("Prison/Layout/4 — Furnish Rooms (Scratch Build)")]
+    public static void FurnishRoomsMenu() => FurnishRooms();
+
+    [MenuItem("Prison/Layout/5 — Wire Registry")]
+    public static void WireRegistryMenu() => WireRegistry();
+
+    [MenuItem("Prison/Layout/Run Full Build")]
+    public static void RunFullBuild()
+    {
+        RenameEastCells();
+        ApplyConnectedDiagramLayout();
+        BuildWallsAroundFloors();
+        BuildRoofs();
+        BuildAllLighting();
+        FurnishRooms();
+        WireRegistry();
+        SaveScene();
+        Debug.Log("[PrisonLayout] Full build complete.");
+    }
+
+    struct FloorPlate
+    {
+        public string Name;
+        public float Cx, Cz, Sx, Sz;
+
+        public float MinX => Cx - Sx * 0.5f;
+        public float MaxX => Cx + Sx * 0.5f;
+        public float MinZ => Cz - Sz * 0.5f;
+        public float MaxZ => Cz + Sz * 0.5f;
+
+        public static FloorPlate Rect(string name, float cx, float cz, float sx, float sz) =>
+            new() { Name = name, Cx = cx, Cz = cz, Sx = sx, Sz = sz };
+
+        public bool OverlapsZ(FloorPlate o, float tol) =>
+            !(MaxZ + tol < o.MinZ || MinZ - tol > o.MaxZ);
+
+        public bool OverlapsX(FloorPlate o, float tol) =>
+            !(MaxX + tol < o.MinX || MinX - tol > o.MaxX);
+
+        public bool TouchesEast(FloorPlate o, float tol) =>
+            Mathf.Abs(MaxX - o.MinX) <= tol && OverlapsZ(o, tol);
+
+        public bool TouchesWest(FloorPlate o, float tol) =>
+            Mathf.Abs(MinX - o.MaxX) <= tol && OverlapsZ(o, tol);
+
+        public bool TouchesNorth(FloorPlate o, float tol) =>
+            Mathf.Abs(MaxZ - o.MinZ) <= tol && OverlapsX(o, tol);
+
+        public bool TouchesSouth(FloorPlate o, float tol) =>
+            Mathf.Abs(MinZ - o.MaxZ) <= tol && OverlapsX(o, tol);
+    }
+
+    static List<FloorPlate> _activePlates = new();
+
+    static FloorPlate[] BuildDiagramPlates()
+    {
+        // Connected diagram — shared edges, 1 unit ≈ 1 m. +Z = north.
+        const float cr = 4f;
+        const float cw = 22f;
+        const float ww = 44f, wd = 56f;
+        const float roomW = 28f;
+        const float yardW = 94f, yardD = 36f;
+
+        float hubX = HubX;
+        float hubZ = HubZ;
+        float cafHalfW = cw * 0.5f;
+        float wingHalfW = ww * 0.5f;
+        float wingHalfD = wd * 0.5f;
+        float roomHalfW = roomW * 0.5f;
+
+        float westCx = hubX - cafHalfW - wingHalfW;
+        float eastCx = hubX + cafHalfW + wingHalfW;
+        float secCx = westCx - wingHalfW - roomHalfW;
+        float wkCx = eastCx + wingHalfW + roomHalfW;
+
+        float wingNorth = hubZ + wingHalfD;
+        float wingSouth = hubZ - wingHalfD;
+        float facilityWest = secCx - roomHalfW;
+        float facilityEast = wkCx + roomHalfW;
+
+        float northCorZ = wingNorth + cr * 0.5f;
+        float southCorZ = wingSouth - cr * 0.5f;
+        float yardCz = northCorZ + cr * 0.5f + yardD * 0.5f;
+        float showerCz = southCorZ - cr * 0.5f - yardD * 0.5f;
+
+        float loopNorthZ = yardCz + yardD * 0.5f + cr * 0.5f;
+        float loopSouthZ = showerCz - yardD * 0.5f - cr * 0.5f;
+        float loopWestX = facilityWest - cr - cr * 0.5f;
+        float loopEastX = facilityEast + cr + cr * 0.5f;
+        float loopSpanX = loopEastX - loopWestX;
+        float loopCx = (loopWestX + loopEastX) * 0.5f;
+        float loopMidZ = (loopNorthZ + loopSouthZ) * 0.5f;
+        float loopSpineH = loopNorthZ - loopSouthZ + cr;
+
+        float innerSpanX = facilityEast - facilityWest;
+        float innerCx = (facilityWest + facilityEast) * 0.5f;
+
+        return new[]
+        {
+            FloorPlate.Rect("MainSecurityFloor", secCx, hubZ, roomW, wd),
+            FloorPlate.Rect("CellWingFloor_West", westCx, hubZ, ww, wd),
+            FloorPlate.Rect("CafeteriaFloor", hubX, hubZ, cw, wd),
+            FloorPlate.Rect("CellWingFloor_East", eastCx, hubZ, ww, wd),
+            FloorPlate.Rect("WorkshopFloor", wkCx, hubZ, roomW, wd),
+            FloorPlate.Rect("Corridor_North", innerCx, northCorZ, innerSpanX, cr),
+            FloorPlate.Rect("Corridor_South", innerCx, southCorZ, innerSpanX, cr),
+            FloorPlate.Rect("CourtyardFloor", hubX, yardCz, yardW, yardD),
+            FloorPlate.Rect("ShowerFloor", hubX, showerCz, yardW, yardD),
+            FloorPlate.Rect("Corridor_LoopNorth", loopCx, loopNorthZ, loopSpanX, cr),
+            FloorPlate.Rect("Corridor_LoopSouth", loopCx, loopSouthZ, loopSpanX, cr),
+            FloorPlate.Rect("Corridor_WestSpine", loopWestX, loopMidZ, cr, loopSpineH),
+            FloorPlate.Rect("Corridor_EastSpine", loopEastX, loopMidZ, cr, loopSpineH),
+            FloorPlate.Rect("Corridor_SecurityLoop", facilityWest - cr * 0.5f, hubZ, cr, cr * 2f),
+            FloorPlate.Rect("Corridor_NW", loopWestX, northCorZ, cr, cr),
+            FloorPlate.Rect("Corridor_NE", loopEastX, northCorZ, cr, cr),
+            FloorPlate.Rect("Corridor_SW", loopWestX, southCorZ, cr, cr),
+            FloorPlate.Rect("Corridor_SE", loopEastX, southCorZ, cr, cr),
+        };
+    }
+
+    static void SaveScene()
+    {
+        var scene = SceneManager.GetActiveScene();
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+    }
+
+    static void ApplyConnectedDiagramLayout()
+    {
+        _activePlates = BuildDiagramPlates().ToList();
+
+        RemoveLegacyRootFloors();
+        ClearChildren(GetOrCreateRoot("LayoutWalls"));
+        ClearChildren(GetOrCreateRoot("LayoutRoofs"));
+        ClearChildren(GetOrCreateRoot("LayoutLighting"));
+        ClearChildren(GetOrCreateRoot("RoomProps"));
+
+        var floorsRoot = GetOrCreateRoot("LayoutFloors");
+        ClearChildren(floorsRoot);
+
+        foreach (var plate in _activePlates)
+            CreateFloorFromPlate(floorsRoot.transform, plate);
+
+        RepositionCellBlocks(_activePlates);
+        LogPlateConnectivity(_activePlates);
+
+        Debug.Log($"[PrisonLayout] Applied connected diagram layout with {_activePlates.Count} tiled floor plates.");
+    }
+
+    static void LogPlateConnectivity(List<FloorPlate> plates)
+    {
+        int gaps = 0;
+        foreach (var a in plates)
+        {
+            foreach (var edge in new[] { "N", "S", "E", "W" })
+            {
+                bool open = edge switch
+                {
+                    "N" => plates.Any(b => b.Name != a.Name && a.TouchesNorth(b, EdgeTolerance)),
+                    "S" => plates.Any(b => b.Name != a.Name && a.TouchesSouth(b, EdgeTolerance)),
+                    "E" => plates.Any(b => b.Name != a.Name && a.TouchesEast(b, EdgeTolerance)),
+                    _ => plates.Any(b => b.Name != a.Name && a.TouchesWest(b, EdgeTolerance)),
+                };
+                if (!open) gaps++;
+            }
+        }
+
+        if (gaps > 0)
+            Debug.LogWarning($"[PrisonLayout] {gaps} exterior plate edges (expected outer perimeter).");
+    }
+
+    static void RemoveLegacyRootFloors()
+    {
+        foreach (var go in SceneManager.GetActiveScene().GetRootGameObjects().ToArray())
+        {
+            if (!go.name.Contains("Floor")) continue;
+            if (go.name is "Ground") continue;
+            if (go.transform.parent != null) continue;
+            Object.DestroyImmediate(go);
+        }
+    }
+
+    static void CreateFloorFromPlate(Transform parent, FloorPlate plate)
+    {
+        var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        go.name = plate.Name;
+        go.transform.SetParent(parent, false);
+        go.transform.position = new Vector3(plate.Cx, FloorY, plate.Cz);
+        go.transform.localScale = new Vector3(plate.Sx, FloorScaleY, plate.Sz);
+        var mat = LoadMat(TileMatPath);
+        if (mat != null)
+            go.GetComponent<Renderer>().sharedMaterial = mat;
+        Object.DestroyImmediate(go.GetComponent<Collider>());
+    }
+
+    static void RepositionCellBlocks(List<FloorPlate> plates)
+    {
+        var westWing = plates.FirstOrDefault(p => p.Name == "CellWingFloor_West");
+        var eastWing = plates.FirstOrDefault(p => p.Name == "CellWingFloor_East");
+        if (westWing.Name == null || eastWing.Name == null) return;
+
+        MoveCellBlock("JailCells", westWing.Cx, westWing.Cz);
+        MoveCellBlock("JailCells_East", eastWing.Cx, eastWing.Cz);
+    }
+
+    static void MoveCellBlock(string blockName, float targetCx, float targetCz)
+    {
+        var block = GameObject.Find(blockName);
+        if (block == null) return;
+
+        var cells = block.transform.Cast<Transform>()
+            .Where(t => t.name.StartsWith("JailCell_"))
+            .ToList();
+        if (cells.Count == 0) return;
+
+        float minX = float.MaxValue, maxX = float.MinValue, minZ = float.MaxValue, maxZ = float.MinValue;
+        foreach (var c in cells)
+        {
+            var p = c.position;
+            minX = Mathf.Min(minX, p.x); maxX = Mathf.Max(maxX, p.x);
+            minZ = Mathf.Min(minZ, p.z); maxZ = Mathf.Max(maxZ, p.z);
+        }
+
+        float curCx = (minX + maxX) * 0.5f;
+        float curCz = (minZ + maxZ) * 0.5f;
+        var delta = new Vector3(targetCx - curCx, 0f, targetCz - curCz);
+
+        foreach (var c in cells)
+            c.position += delta;
+    }
+
+    static void RenameEastCells()
+    {
+        var eastBlock = GameObject.Find("JailCells (1)") ?? GameObject.Find("JailCells_East");
+        if (eastBlock == null) return;
+
+        eastBlock.name = "JailCells_East";
+        var cells = eastBlock.transform.Cast<Transform>().Where(t => t.name.StartsWith("JailCell_")).ToList();
+        if (cells.All(t => int.TryParse(t.name.Replace("JailCell_", ""), out var n) && n >= 9))
+            return;
+
+        foreach (var cell in cells) cell.name = "_TMP_" + cell.name;
+        foreach (var cell in cells)
+        {
+            var oldName = cell.name.Replace("_TMP_", "");
+            if (!RightCellRename.TryGetValue(oldName, out var newName)) continue;
+            cell.name = newName;
+            UpdateCellNumberLabel(cell, newName);
+        }
+    }
+
+    static void UpdateCellNumberLabel(Transform cell, string cellName)
+    {
+        var digits = cellName.Replace("JailCell_", "");
+        foreach (var tmp in cell.GetComponentsInChildren<TextMeshPro>(true))
+        {
+            if (tmp.gameObject.name.StartsWith("CellNumber"))
+                tmp.text = digits;
+        }
+    }
+
+    static void BuildWallsAroundFloors()
+    {
+        if (_activePlates.Count == 0)
+            _activePlates = BuildDiagramPlates().ToList();
+
+        var metrics = CellMetrics.SampleFromScene();
+        var wallMat = LoadMat(WallMatPath);
+        var wallsRoot = GetOrCreateRoot("LayoutWalls");
+        ClearChildren(wallsRoot);
+
+        int wallCount = 0;
+        foreach (var plate in _activePlates)
+        {
+            var group = new GameObject("Walls_" + plate.Name);
+            group.transform.SetParent(wallsRoot.transform, false);
+            wallCount += BuildConnectedWalls(plate, group.transform, wallMat, metrics, _activePlates);
+        }
+
+        Debug.Log($"[PrisonLayout] Built {wallCount} connected wall segments ({metrics.WallHeight:F1} m tall).");
+    }
+
+    static int BuildConnectedWalls(FloorPlate plate, Transform parent, Material wallMat, CellMetrics metrics,
+        List<FloorPlate> all)
+    {
+        float floorTop = FloorY + FloorScaleY * 0.5f;
+        float wallH = metrics.WallHeight;
+        float centerY = floorTop + wallH * 0.5f;
+        float t = WallThickness;
+        int count = 0;
+
+        bool openNorth = all.Any(o => o.Name != plate.Name && plate.TouchesNorth(o, EdgeTolerance));
+        bool openSouth = all.Any(o => o.Name != plate.Name && plate.TouchesSouth(o, EdgeTolerance));
+        bool openEast = all.Any(o => o.Name != plate.Name && plate.TouchesEast(o, EdgeTolerance));
+        bool openWest = all.Any(o => o.Name != plate.Name && plate.TouchesWest(o, EdgeTolerance));
+
+        if (!openNorth)
+        {
+            CreateBlock(parent, "Wall_N",
+                new Vector3(plate.Cx, centerY, plate.MaxZ + t * 0.5f),
+                new Vector3(plate.Sx + t * 2f, wallH, t), wallMat);
+            count++;
+        }
+
+        if (!openSouth)
+        {
+            CreateBlock(parent, "Wall_S",
+                new Vector3(plate.Cx, centerY, plate.MinZ - t * 0.5f),
+                new Vector3(plate.Sx + t * 2f, wallH, t), wallMat);
+            count++;
+        }
+
+        if (!openEast)
+        {
+            CreateBlock(parent, "Wall_E",
+                new Vector3(plate.MaxX + t * 0.5f, centerY, plate.Cz),
+                new Vector3(t, wallH, plate.Sz + t * 2f), wallMat);
+            count++;
+        }
+
+        if (!openWest)
+        {
+            CreateBlock(parent, "Wall_W",
+                new Vector3(plate.MinX - t * 0.5f, centerY, plate.Cz),
+                new Vector3(t, wallH, plate.Sz + t * 2f), wallMat);
+            count++;
+        }
+
+        return count;
+    }
+
+    static void BuildRoofs()
+    {
+        if (_activePlates.Count == 0)
+            _activePlates = BuildDiagramPlates().ToList();
+
+        var metrics = CellMetrics.SampleFromScene();
+        var ceilingMat = LoadMat(CeilingMatPath) ?? LoadMat(WallMatPath);
+        var roofsRoot = GetOrCreateRoot("LayoutRoofs");
+        ClearChildren(roofsRoot);
+
+        int built = 0;
+        foreach (var plate in _activePlates)
+        {
+            if (plate.Name.StartsWith("Courtyard")) continue;
+            var group = new GameObject("Roof_" + plate.Name);
+            group.transform.SetParent(roofsRoot.transform, false);
+            float ceilingY = FloorY + FloorScaleY * 0.5f + metrics.WallHeight;
+            CreateBlock(group.transform, "Ceiling", new Vector3(plate.Cx, ceilingY + RoofThickness * 0.5f, plate.Cz),
+                new Vector3(plate.Sx, RoofThickness, plate.Sz), ceilingMat);
+            built++;
+        }
+
+        Debug.Log($"[PrisonLayout] Built {built} connected roofs (courtyard open).");
+    }
+
+    static void BuildAllLighting()
+    {
+        var metrics = CellMetrics.SampleFromScene();
+        var lightMat = LoadMat(LightMatPath);
+        var root = GetOrCreateRoot("LayoutLighting");
+        ClearChildren(root);
+
+        int count = 0;
+        foreach (var plate in _activePlates.Count > 0 ? _activePlates : BuildDiagramPlates().ToList())
+        {
+            bool outdoor = plate.Name.StartsWith("Courtyard");
+            count += PlaceLightGridForPlate(plate, root.transform, metrics, lightMat, outdoor);
+        }
+
+        count += LightAllCells(root.transform, metrics, lightMat);
+
+        Debug.Log($"[PrisonLayout] Placed {count} lights across all rooms, corridors, and cells.");
+    }
+
+    static int LightAllCells(Transform parent, CellMetrics metrics, Material lightMat)
+    {
+        int count = 0;
+        foreach (var blockName in new[] { "JailCells", "JailCells_East" })
+        {
+            var block = GameObject.Find(blockName);
+            if (block == null) continue;
+
+            foreach (Transform cell in block.transform)
+            {
+                if (!cell.name.StartsWith("JailCell_")) continue;
+                var spawn = cell.Find("SpawnPoint");
+                var pos = spawn != null ? spawn.position : cell.position;
+                var lightPos = new Vector3(pos.x, metrics.LightFixtureY, pos.z);
+                CreateCeilingLight(parent, $"CellLight_{cell.name}", lightPos, lightMat, 5f, 14f, true);
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    static int PlaceLightGridForPlate(FloorPlate plate, Transform parent, CellMetrics metrics, Material lightMat, bool outdoor)
+    {
+        float lightY = FloorY + FloorScaleY * 0.5f + metrics.WallHeight - 0.28f;
+        float margin = outdoor ? 2.5f : 2f;
+        bool narrow = plate.Sx < plate.Sz * 0.35f || plate.Sz < plate.Sx * 0.35f;
+        float spacing = narrow ? 6f : (outdoor ? 8f : 5.5f);
+        float intensity = outdoor ? 3.5f : 6f;
+        float range = outdoor ? 18f : 14f;
+
+        float usableX = Mathf.Max(2f, plate.Sx - margin * 2f);
+        float usableZ = Mathf.Max(2f, plate.Sz - margin * 2f);
+
+        int cols = narrow && plate.Sx < plate.Sz ? 1 : Mathf.Max(1, Mathf.FloorToInt(usableX / spacing) + 1);
+        int rows = narrow && plate.Sz < plate.Sx ? 1 : Mathf.Max(1, Mathf.FloorToInt(usableZ / spacing) + 1);
+        if (narrow)
+        {
+            if (plate.Sx >= plate.Sz) { cols = Mathf.Max(1, Mathf.FloorToInt(usableX / spacing) + 1); rows = 1; }
+            else { rows = Mathf.Max(1, Mathf.FloorToInt(usableZ / spacing) + 1); cols = 1; }
+        }
+
+        float startX = plate.Cx - (cols - 1) * spacing * 0.5f;
+        float startZ = plate.Cz - (rows - 1) * spacing * 0.5f;
+
+        int count = 0;
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < cols; c++)
+            {
+                var worldPos = new Vector3(startX + c * spacing, lightY, startZ + r * spacing);
+                CreateCeilingLight(parent, $"Light_{plate.Name}_{r}_{c}", worldPos, lightMat, intensity, range, !outdoor);
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    static void CreateCeilingLight(Transform parent, string name, Vector3 worldPos, Material lightMat,
+        float intensity, float range, bool shadows)
+    {
+        var fixture = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        fixture.name = name + "_Fixture";
+        fixture.transform.SetParent(parent, true);
+        fixture.transform.position = worldPos;
+        fixture.transform.localScale = new Vector3(1.8f, 0.08f, 0.55f);
+        if (lightMat != null)
+            fixture.GetComponent<Renderer>().sharedMaterial = lightMat;
+        Object.DestroyImmediate(fixture.GetComponent<Collider>());
+
+        var lightGo = new GameObject(name);
+        lightGo.transform.SetParent(parent, true);
+        lightGo.transform.position = worldPos - new Vector3(0f, 0.2f, 0f);
+
+        var light = lightGo.AddComponent<Light>();
+        light.type = LightType.Point;
+        light.intensity = intensity;
+        light.range = range;
+        light.color = new Color(1f, 0.95f, 0.85f);
+        light.shadows = shadows ? LightShadows.Soft : LightShadows.None;
+
+        var urp = lightGo.AddComponent<UniversalAdditionalLightData>();
+        urp.softShadowQuality = SoftShadowQuality.High;
+    }
+
+    static IEnumerable<Transform> FindUniqueLayoutFloors()
+    {
+        var seen = new HashSet<string>();
+        foreach (var go in SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            foreach (var t in go.GetComponentsInChildren<Transform>(true))
+            {
+                if (!IsLayoutFloor(t)) continue;
+                var key = RoundKey(t.position);
+                if (!seen.Add(key)) continue;
+                yield return t;
+            }
+        }
+    }
+
+    static bool IsCourtyardFloor(Transform floor) => floor.name.StartsWith("CourtyardFloor");
+
+    static string RoundKey(Vector3 p) => $"{Mathf.RoundToInt(p.x)}_{Mathf.RoundToInt(p.z)}";
+    static string SanitizeName(string n) => n.Replace(' ', '_').Replace('(', '_').Replace(')', '_');
+
+    static bool IsLayoutFloor(Transform t)
+    {
+        if (!t.name.Contains("Floor") || t.name.StartsWith("FloorStain")) return false;
+        if (t.parent != null && t.parent.name.StartsWith("JailCell_")) return false;
+        if (t.GetComponent<MeshRenderer>() == null && t.GetComponent<MeshFilter>() == null) return false;
+        return t.lossyScale.x > 1f && t.lossyScale.z > 1f;
+    }
+
+    static void BuildPerimeterWalls(Transform floor, Transform parent, Material wallMat, CellMetrics metrics)
+    {
+        var pos = floor.position;
+        var scale = floor.lossyScale;
+        float halfX = scale.x * 0.5f;
+        float halfZ = scale.z * 0.5f;
+        float floorTop = metrics.FloorTopFor(floor);
+        float wallH = metrics.WallHeight;
+        float centerY = floorTop + wallH * 0.5f;
+        float t = WallThickness;
+
+        CreateBlock(parent, "Wall_N", new Vector3(pos.x, centerY, pos.z + halfZ + t * 0.5f),
+            new Vector3(scale.x + t * 2f, wallH, t), wallMat);
+        CreateBlock(parent, "Wall_S", new Vector3(pos.x, centerY, pos.z - halfZ - t * 0.5f),
+            new Vector3(scale.x + t * 2f, wallH, t), wallMat);
+        CreateBlock(parent, "Wall_E", new Vector3(pos.x + halfX + t * 0.5f, centerY, pos.z),
+            new Vector3(t, wallH, scale.z + t * 2f), wallMat);
+        CreateBlock(parent, "Wall_W", new Vector3(pos.x - halfX - t * 0.5f, centerY, pos.z),
+            new Vector3(t, wallH, scale.z + t * 2f), wallMat);
+    }
+
+    static void BuildRoofSlab(Transform floor, Transform parent, Material ceilingMat, CellMetrics metrics)
+    {
+        var pos = floor.position;
+        var scale = floor.lossyScale;
+        float ceilingY = metrics.CeilingYFor(floor);
+        CreateBlock(parent, "Ceiling", new Vector3(pos.x, ceilingY + RoofThickness * 0.5f, pos.z),
+            new Vector3(scale.x, RoofThickness, scale.z), ceilingMat);
+    }
+
+    static void FurnishRooms()
+    {
+        if (_activePlates.Count == 0)
+            _activePlates = BuildDiagramPlates().ToList();
+
+        var propsRoot = GetOrCreateRoot("RoomProps");
+        ClearChildren(propsRoot);
+        var metrics = CellMetrics.SampleFromScene();
+
+        FurnishCafeteria(FindPlateFloor("CafeteriaFloor"), propsRoot.transform, metrics);
+        FurnishShower(FindPlateFloor("ShowerFloor"), propsRoot.transform, metrics);
+        FurnishCourtyard(FindPlateFloor("CourtyardFloor"), propsRoot.transform, metrics);
+        FurnishWorkshop(FindPlateFloor("WorkshopFloor"), propsRoot.transform, metrics);
+        FurnishMainSecurity(FindPlateFloor("MainSecurityFloor"), propsRoot.transform, metrics);
+
+        Debug.Log("[PrisonLayout] Scratch-built room props placed.");
+    }
+
+    static Transform FindPlateFloor(string plateName)
+    {
+        var floorsRoot = GameObject.Find("LayoutFloors");
+        if (floorsRoot == null) return null;
+        return floorsRoot.transform.Cast<Transform>().FirstOrDefault(t => t.name == plateName);
+    }
+
+    static void FurnishCafeteria(Transform floor, Transform root, CellMetrics metrics)
+    {
+        if (floor == null) return;
+        var room = CreateRoomRoot(root, "CafeteriaProps", floor);
+        var panel = LoadMat(PanelMatPath);
+        var metal = LoadMat(MetalMatPath);
+        var tile = LoadMat(TileMatPath);
+        var c = floor.position;
+        float fy = metrics.FloorTopFor(floor);
+        float hx = floor.lossyScale.x * 0.5f;
+        float hz = floor.lossyScale.z * 0.5f;
+
+        CreateBlock(room, "ServingCounter", new Vector3(c.x, fy + 0.55f, c.z + hz - 1.2f),
+            new Vector3(hx * 1.5f, 1.1f, 0.9f), panel);
+        for (int i = 0; i < 3; i++)
+        {
+            float x = c.x - hx * 0.4f + i * (hx * 0.4f);
+            CreateBlock(room, $"FoodWarmer_{i}", new Vector3(x, fy + 0.45f, c.z + hz - 2f),
+                new Vector3(1.2f, 0.9f, 0.7f), metal);
+        }
+
+        int cols = 3, rows = 2;
+        float sx = Mathf.Min(7f, hx * 1.4f / cols);
+        float sz = Mathf.Min(8f, hz * 0.9f / rows);
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                float x = c.x - (cols - 1) * sx * 0.5f + col * sx;
+                float z = c.z - hz * 0.1f + row * sz;
+                BuildCafeteriaTableSet(room, new Vector3(x, fy, z), tile, metal, $"Table_{row}_{col}");
+            }
+        }
+
+        EnsureZone(room.gameObject, ZoneType.Cafeteria, "CAFETERIA", floor, metrics);
+    }
+
+    static void BuildCafeteriaTableSet(Transform parent, Vector3 floorPos, Material top, Material leg, string name)
+    {
+        var table = new GameObject(name);
+        table.transform.SetParent(parent, true);
+        table.transform.position = floorPos;
+
+        CreateBlock(table.transform, "Top", floorPos + new Vector3(0f, 0.42f, 0f), new Vector3(1.8f, 0.06f, 0.9f), top);
+        foreach (var off in new[] { new Vector3(-0.75f, 0.2f, -0.35f), new Vector3(0.75f, 0.2f, -0.35f),
+            new Vector3(-0.75f, 0.2f, 0.35f), new Vector3(0.75f, 0.2f, 0.35f) })
+            CreateBlock(table.transform, "Leg", floorPos + off, new Vector3(0.08f, 0.4f, 0.08f), leg);
+
+        CreateBlock(table.transform, "BenchL", floorPos + new Vector3(0f, 0.22f, -0.75f), new Vector3(1.6f, 0.08f, 0.35f), leg);
+        CreateBlock(table.transform, "BenchR", floorPos + new Vector3(0f, 0.22f, 0.75f), new Vector3(1.6f, 0.08f, 0.35f), leg);
+    }
+
+    static void FurnishShower(Transform floor, Transform root, CellMetrics metrics)
+    {
+        if (floor == null) return;
+        var room = CreateRoomRoot(root, "ShowerProps", floor);
+        var wall = LoadMat(WallMatPath);
+        var c = floor.position;
+        float fy = metrics.FloorTopFor(floor);
+        float hx = floor.lossyScale.x * 0.5f;
+        float hz = floor.lossyScale.z * 0.5f;
+
+        int cols = 3, rows = 2;
+        float sx = hx * 1.2f / cols;
+        float sz = hz * 0.8f / rows;
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                float x = c.x - hx * 0.45f + col * sx + sx * 0.5f;
+                float z = c.z - hz * 0.2f + row * sz;
+                BuildShowerStall(room, new Vector3(x, fy, z), $"Stall_{row}_{col}");
+            }
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            float x = c.x - 4f + i * 8f;
+            BuildSink(room, new Vector3(x, fy, c.z - hz + 1.5f), $"Sink_{i}");
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            float z = c.z - 6f + i * 12f;
+            BuildBench(room, new Vector3(c.x - hx + 1.2f, fy, z), $"ChangingBench_{i}");
+        }
+
+        CreateBlock(room, "WetDryDivider", new Vector3(c.x, fy + metrics.WallHeight * 0.5f, c.z),
+            new Vector3(hx * 1.6f, metrics.WallHeight, 0.12f), wall);
+    }
+
+    static void BuildShowerStall(Transform parent, Vector3 floorPos, string name)
+    {
+        var stall = new GameObject(name);
+        stall.transform.SetParent(parent, true);
+        stall.transform.position = floorPos;
+        var panel = LoadMat(PanelMatPath);
+        var metal = LoadMat(MetalMatPath);
+
+        CreateBlock(stall.transform, "BackWall", floorPos + new Vector3(0f, 1.1f, -0.6f), new Vector3(1.4f, 2.2f, 0.08f), panel);
+        CreateBlock(stall.transform, "SideL", floorPos + new Vector3(-0.65f, 1.1f, 0f), new Vector3(0.08f, 2.2f, 1.2f), panel);
+        CreateBlock(stall.transform, "Head", floorPos + new Vector3(0f, 2.0f, -0.5f), new Vector3(0.2f, 0.2f, 0.2f), metal);
+        CreateBlock(stall.transform, "Drain", floorPos + new Vector3(0f, 0.03f, 0.2f), new Vector3(0.35f, 0.05f, 0.35f), metal);
+    }
+
+    static void BuildToilet(Transform parent, Vector3 floorPos, string name)
+    {
+        var toilet = new GameObject(name);
+        toilet.transform.SetParent(parent, true);
+        toilet.transform.position = floorPos;
+        var porcelain = LoadMat(ToiletMatPath) ?? LoadMat(PanelMatPath);
+
+        CreateBlock(toilet.transform, "Bowl", floorPos + new Vector3(0f, 0.35f, 0f), new Vector3(0.6f, 0.7f, 0.5f), porcelain);
+        CreateBlock(toilet.transform, "Tank", floorPos + new Vector3(0f, 0.6f, -0.3f), new Vector3(0.5f, 0.9f, 0.25f), porcelain);
+        CreateBlock(toilet.transform, "Seat", floorPos + new Vector3(0f, 0.52f, 0.05f), new Vector3(0.45f, 0.03f, 0.35f), porcelain);
+    }
+
+    static void BuildSink(Transform parent, Vector3 floorPos, string name)
+    {
+        var sink = new GameObject(name);
+        sink.transform.SetParent(parent, true);
+        sink.transform.position = floorPos;
+        var metal = LoadMat(SinkMatPath) ?? LoadMat(MetalMatPath);
+
+        CreateBlock(sink.transform, "Basin", floorPos + new Vector3(0f, 0.85f, 0f), new Vector3(0.5f, 0.15f, 0.4f), metal);
+        CreateBlock(sink.transform, "Mount", floorPos + new Vector3(0f, 0.5f, -0.15f), new Vector3(0.08f, 0.6f, 0.08f), metal);
+        CreateBlock(sink.transform, "Faucet", floorPos + new Vector3(0f, 0.95f, -0.12f), new Vector3(0.08f, 0.15f, 0.08f), metal);
+    }
+
+    static void BuildBench(Transform parent, Vector3 floorPos, string name)
+    {
+        var metal = LoadMat(MetalMatPath);
+        CreateBlock(parent, name + "_Seat", floorPos + new Vector3(0f, 0.25f, 0f), new Vector3(1.4f, 0.08f, 0.4f), metal);
+        CreateBlock(parent, name + "_LegL", floorPos + new Vector3(-0.6f, 0.12f, 0f), new Vector3(0.08f, 0.24f, 0.35f), metal);
+        CreateBlock(parent, name + "_LegR", floorPos + new Vector3(0.6f, 0.12f, 0f), new Vector3(0.08f, 0.24f, 0.35f), metal);
+    }
+
+    static void FurnishCourtyard(Transform floor, Transform root, CellMetrics metrics)
+    {
+        if (floor == null) return;
+        var room = CreateRoomRoot(root, "CourtyardProps", floor);
+        var metal = LoadMat(MetalMatPath);
+        var tile = LoadMat(TileMatPath);
+        var c = floor.position;
+        float fy = metrics.FloorTopFor(floor);
+        float hx = floor.lossyScale.x * 0.5f;
+        float hz = floor.lossyScale.z * 0.5f;
+
+        CreateBlock(room, "ExercisePad", new Vector3(c.x, fy + 0.03f, c.z), new Vector3(5f, 0.06f, 5f), tile);
+        CreateBlock(room, "PullUp_L", new Vector3(c.x - 2.5f, fy + 1.2f, c.z - 4f), new Vector3(0.12f, 2.4f, 0.12f), metal);
+        CreateBlock(room, "PullUp_R", new Vector3(c.x + 2.5f, fy + 1.2f, c.z - 4f), new Vector3(0.12f, 2.4f, 0.12f), metal);
+        CreateBlock(room, "PullUp_Top", new Vector3(c.x, fy + 2.35f, c.z - 4f), new Vector3(5.2f, 0.12f, 0.12f), metal);
+
+        for (int i = 0; i < 3; i++)
+        {
+            float x = c.x - hx * 0.5f + i * (hx * 0.5f);
+            BuildBench(room, new Vector3(x, fy, c.z + hz - 2f), $"YardBench_{i}");
+        }
+
+        EnsureZone(room.gameObject, ZoneType.Yard, "COURTYARD", floor, metrics);
+    }
+
+    static void FurnishWorkshop(Transform floor, Transform root, CellMetrics metrics)
+    {
+        if (floor == null) return;
+        var room = CreateRoomRoot(root, "WorkshopProps", floor);
+        var panel = LoadMat(PanelMatPath);
+        var metal = LoadMat(MetalMatPath);
+        var c = floor.position;
+        float fy = metrics.FloorTopFor(floor);
+        float hx = floor.lossyScale.x * 0.5f;
+
+        for (int i = 0; i < 3; i++)
+        {
+            float x = c.x - hx * 0.45f + i * (hx * 0.45f);
+            BuildWorkbench(room, new Vector3(x, fy, c.z - 4f), panel, metal, $"Workbench_{i}");
+            BuildToolShelf(room, new Vector3(x, fy, c.z + 3f), metal, $"Shelf_{i}");
+        }
+    }
+
+    static void BuildWorkbench(Transform parent, Vector3 floorPos, Material top, Material leg, string name)
+    {
+        CreateBlock(parent, name + "_Top", floorPos + new Vector3(0f, 0.9f, 0f), new Vector3(2.2f, 0.1f, 0.9f), top);
+        foreach (var off in new[] { new Vector3(-0.9f, 0.45f, -0.35f), new Vector3(0.9f, 0.45f, -0.35f),
+            new Vector3(-0.9f, 0.45f, 0.35f), new Vector3(0.9f, 0.45f, 0.35f) })
+            CreateBlock(parent, name + "_Leg", floorPos + off, new Vector3(0.1f, 0.9f, 0.1f), leg);
+    }
+
+    static void BuildToolShelf(Transform parent, Vector3 floorPos, Material metal, string name)
+    {
+        CreateBlock(parent, name + "_Frame", floorPos + new Vector3(0f, 1.0f, 0f), new Vector3(1.6f, 2f, 0.4f), metal);
+        for (int i = 0; i < 3; i++)
+            CreateBlock(parent, name + $"_Shelf{i}", floorPos + new Vector3(0f, 0.5f + i * 0.55f, 0.05f),
+                new Vector3(1.4f, 0.05f, 0.35f), metal);
+    }
+
+    static void FurnishMainSecurity(Transform floor, Transform root, CellMetrics metrics)
+    {
+        if (floor == null) return;
+        var room = CreateRoomRoot(root, "MainSecurityProps", floor);
+        var panel = LoadMat(PanelMatPath);
+        var security = LoadMat(SecurityMatPath);
+        var metal = LoadMat(MetalMatPath);
+        var c = floor.position;
+        float fy = metrics.FloorTopFor(floor);
+        float hz = floor.lossyScale.z * 0.5f;
+
+        CreateBlock(room, "DeskBase", new Vector3(c.x, fy + 0.45f, c.z - hz * 0.2f), new Vector3(2.4f, 0.9f, 0.9f), panel);
+        CreateBlock(room, "DeskTop", new Vector3(c.x, fy + 0.92f, c.z - hz * 0.2f), new Vector3(2.6f, 0.06f, 1.0f), panel);
+        CreateBlock(room, "MonitorBank", new Vector3(c.x, fy + 1.8f, c.z - hz * 0.38f), new Vector3(4f, 1.2f, 0.12f), security ?? panel);
+        BuildBench(room, new Vector3(c.x, fy, c.z - hz * 0.05f), "GuardSeat");
+
+        CreateBlock(room, "GatePostL", new Vector3(c.x - 1.2f, fy + 1.0f, c.z + hz - 0.8f), new Vector3(0.15f, 2f, 0.15f), metal);
+        CreateBlock(room, "GatePostR", new Vector3(c.x + 1.2f, fy + 1.0f, c.z + hz - 0.8f), new Vector3(0.15f, 2f, 0.15f), metal);
+        CreateBlock(room, "GateBar", new Vector3(c.x, fy + 1.5f, c.z + hz - 0.8f), new Vector3(2.6f, 0.1f, 0.1f), metal);
+    }
+
+    static Transform CreateRoomRoot(Transform parent, string name, Transform floor)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        go.transform.position = floor.position;
+        return go.transform;
+    }
+
+    static GameObject CreateBlock(Transform parent, string name, Vector3 worldPos, Vector3 scale, Material mat)
+    {
+        var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        go.name = name;
+        go.transform.SetParent(parent, true);
+        go.transform.position = worldPos;
+        go.transform.localScale = scale;
+        if (mat != null)
+            go.GetComponent<Renderer>().sharedMaterial = mat;
+        Object.DestroyImmediate(go.GetComponent<Collider>());
+        return go;
+    }
+
+    static void EnsureZone(GameObject host, ZoneType type, string hudName, Transform floor, CellMetrics metrics)
+    {
+        var zone = host.GetComponent<PrisonLocationZone>() ?? host.AddComponent<PrisonLocationZone>();
+        zone.zoneType = type;
+        zone.hudDisplayName = hudName;
+
+        var col = host.GetComponent<BoxCollider>();
+        if (col == null)
+            col = host.AddComponent<BoxCollider>();
+        col.isTrigger = true;
+        col.center = Vector3.zero;
+        col.size = new Vector3(floor.lossyScale.x * 0.9f, metrics.WallHeight, floor.lossyScale.z * 0.9f);
+    }
+
+    static void WireRegistry()
+    {
+        var registry = Object.FindAnyObjectByType<PrisonLocationRegistry>();
+        if (registry == null) return;
+
+        var cellTransforms = new List<Transform>();
+        foreach (var blockName in new[] { "JailCells", "JailCells_East" })
+        {
+            var block = GameObject.Find(blockName);
+            if (block == null) continue;
+            cellTransforms.AddRange(block.transform.Cast<Transform>()
+                .Where(t => t.name.StartsWith("JailCell_")).OrderBy(t => t.name));
+        }
+
+        var cells = new List<CellData>();
+        for (int i = 0; i < cellTransforms.Count; i++)
+        {
+            var cell = cellTransforms[i];
+            var spawn = cell.Find("SpawnPoint");
+            var rollCall = cell.Find("RollCallPoint");
+            var bed = cell.Find("Bed");
+
+            cells.Add(new CellData
+            {
+                spawnPoint = spawn,
+                rollCallStandPoint = rollCall != null ? rollCall : spawn,
+                bedPresenceCenter = bed != null ? bed : spawn,
+                shakedownSweepCenter = spawn,
+                interiorCheckRadius = 10.32f
+            });
+
+            var zone = cell.GetComponent<PrisonLocationZone>() ?? cell.gameObject.AddComponent<PrisonLocationZone>();
+            zone.zoneType = ZoneType.Cell;
+            zone.cellIndex = i;
+            zone.hudDisplayName = $"CELL {i + 1:D2}";
+        }
+
+        registry.cells = cells.ToArray();
+
+        var cafeteriaZone = GameObject.Find("CafeteriaProps")?.GetComponent<PrisonLocationZone>();
+        if (cafeteriaZone != null) registry.cafeteria = cafeteriaZone;
+
+        var yardZone = GameObject.Find("CourtyardProps")?.GetComponent<PrisonLocationZone>();
+        if (yardZone != null) registry.yard = yardZone;
+
+        EditorUtility.SetDirty(registry);
+    }
+
+    static Material LoadMat(string path) => AssetDatabase.LoadAssetAtPath<Material>(path);
+
+    static GameObject GetOrCreateRoot(string name)
+    {
+        var existing = GameObject.Find(name);
+        return existing != null ? existing : new GameObject(name);
+    }
+
+    static void ClearChildren(GameObject root)
+    {
+        for (int i = root.transform.childCount - 1; i >= 0; i--)
+            Object.DestroyImmediate(root.transform.GetChild(i).gameObject);
+    }
+}

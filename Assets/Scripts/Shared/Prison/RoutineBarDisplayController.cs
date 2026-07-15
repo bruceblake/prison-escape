@@ -79,6 +79,9 @@ namespace Prison
 
         private float GetTargetAlpha(PrisonTimeManager tm)
         {
+            if (UIMenuFocus.IsAnyMenuOpen)
+                return 0f;
+
             if (routineBar == null)
                 return fullAlpha;
 

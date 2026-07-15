@@ -1,55 +1,28 @@
 # UI & HUD
 
-The player-facing surface of the prison sim. Several HUD layers coexist (legacy + current).
+Hub note for the player-facing surface of the prison sim. Each surface has its own design doc in `03 Systems/UI/`:
 
-## Routine / schedule HUD
-
-- **`RoutineNowNextBarUI`** (primary) — now/next phase bar with visual states:
-  - `Chill` (default) · `MandatoryWarning` (free time ending, mandatory next) · `TravelGrace` (grace countdown fill) · `Enforcement` (non-compliant during mandatory — 2 Hz flash)
-  - Status copy: `IN POSITION`, `TRAVEL GRACE ({0}s)`, `SHAKEDOWN {0}/{1}`, `WAITING TO BE CLEARED`, `NON-COMPLIANT`
-- `PrisonScheduleUI` — clock + event + compliance (75 s phase-end warning)
-- `MinimalSchedulePhaseTextHUD` — prev/current/next + countdown (labels FreeTime "Yard Time")
-- `TextRoutineComplianceHUD` — tactical text modes; danger flash 2 Hz
-- `DailyRoutineBarUI` — full-day segment timeline
-- Presence model: HUD dims to "all clear" when compliant with >50% phase time left; goes full "pressure" under 25%, enforcement, grace, or warning
-
-## Status & world UI
-
-| Widget | Purpose |
+| Doc | Covers |
 |---|---|
-| `PrisonHeatUI` | 3-state attention eye ([[Security, Heat & Alerts]]) |
-| `ComplianceStatusHUD` | Center compliance readout |
-| `InteractionReticleView` | 6→20 px reticle |
-| `CharacterNameLabel` | World-space TMP billboards ("You" / "Guard" / "Inmate") |
-| `PillowStashProximityUI` | Stash contents panel |
-| `AffinityFloatPopup` / `PrisonSocialRowUI` | Social feedback ([[Social & Reputation]]) |
-| `CashUIController` | `$0.00` wallet display |
+| [[Routine & Schedule HUD]] | Now/next command strip, visual states, presence model |
+| [[Status & World UI]] | Heat eye, vitals panel, location, waypoint, reticle, name labels |
+| [[Inventory & Hotbar UI]] | 6-slot bag, hotbar, slot prefab, tooltips |
+| [[Notebook & Crafting UI]] | Stolen notebook pages, crafting spread, pause |
+| [[Screens & Menus]] | Escape end screen, solitary overlay, main menu |
+| [[UI Theme & Style Guide]] | Palette, backdrop rules, menu-focus rule, typography |
 
-## Menus & inventory
+Current screenshots live next to the docs: `HUD in-game 2026-07-14.png` · `Notebook crafting 2026-07-14.png`.
 
-- `InventoryUI` (E) — bag, drag-swap, crafting tab with 3 requirement slots
-- `HotbarUI` — 6 slots, keys 1–6
-- `StolenNotebookUI` (Tab) — diegetic notebook: map / social / workbench / schedule
-- `ItemTooltipUI`, `HeldItemDisplay`, `PauseManager` (timescale 0 pause in SP only)
+## Status snapshot (7/14/2026)
 
-## Theme
-
-`PrisonUITheme`: caution `#F4D03F`, hazard `#C0392B`. Warm light fixtures; dark translucent backdrops.
+- Routine strip, hotbar, notebook, heat eye, end/solitary screens: **implemented**.
+- **Player vitals HUD** (cash, MH, PH, STR), **current location** readout, **objective waypoint** marker: **implemented** (runtime-built, auto-spawn from `EscapeManager`).
+- **UIMenuFocus** fades ambient HUD (routine strip, hotbar, heat eye, vitals, location) while bag/notebook/pause are open.
+- Hotbar: bottom margin, 1–6 key hints, stronger selection highlight. Crafting greens use `PrisonUITheme.InkGreen`.
+- Suspicion floor on heat eye (half minimum while `PrisonSuspicion` active).
 
 ## Key files
 
-All under `Assets/Scripts/Shared/UI/` and `Assets/Scripts/Shared/Prison/` (HUD scripts named as above).
+All under `Assets/Scripts/Shared/UI/` and `Assets/Scripts/Shared/Prison/` — per-surface lists in each doc above.
 
-Related: [[Time & Schedule]] · [[Inventory & Items]] · [[Security, Heat & Alerts]]
-
-
-
-This is the Current UI: 
-
-![[Pasted image 20260714200048.png]]
-
-
-This is the current inside of inventory UI: 
-![[Pasted image 20260714200128.png]]
-
-this is the current you escaped screen: ![[Pasted image 20260714201309.png]]
+Related: [[Time & Schedule]] · [[Inventory & Items]] · [[Security, Heat & Alerts]] · [[Systems Overview]]

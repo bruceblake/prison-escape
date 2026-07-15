@@ -27,9 +27,16 @@ namespace Prison.Tests
         }
 
         [Test]
+        public void SolitaryPenalty_ReducesPhysicalHealthBy10()
+        {
+            Assert.AreEqual(90f, PlayerStatsMath.ApplySolitaryToPhysicalHealth(100f));
+        }
+
+        [Test]
         public void SolitaryPenalty_ClampsAtZero()
         {
             Assert.AreEqual(0f, PlayerStatsMath.ApplySolitaryToMentalHealth(10f));
+            Assert.AreEqual(0f, PlayerStatsMath.ApplySolitaryToPhysicalHealth(8f));
             Assert.AreEqual(0f, PlayerStatsMath.ApplySolitaryToStrength(5f));
         }
 

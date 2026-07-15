@@ -3,6 +3,7 @@
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
 ## 7/14/2026
+- **UI vitals + navigation HUD** — `PlayerVitalsHUD` (cash, mental/physical health, strength), `CurrentLocationHUD`, `ObjectiveWaypointUI` with distance during mandatory non-compliance. Physical Health stat added (−10 solitary, +5/day regen). `UIMenuFocus` menu fade, hotbar polish, `InkGreen` crafting theme. See [[UI & HUD]] · [[Status & World UI]].
 - **Vault restructured as full source of truth** — complete design docs for every system, content inventory, engineering docs, and process notes. Entry point: [[Home]].
 - **Connected diagram layout implemented** — `PrisonLevel1` rebuilt with 18 shared-edge floor plates matching the layout diagram (Security | Cells 1–8 | Cafeteria | Cells 9–16 | Workshop, courtyard north, showers south, perimeter loop). Walls only on exterior edges, roofs except courtyard, ~635 lights, scratch-built furniture. See [[Prison Layout — Minimum Security]].
 - `dev` and `main` synced at the same commit; Obsidian-source-of-truth rule added to `.cursor/rules/`.

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using Prison;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -116,9 +117,9 @@ if (hotbarHiddenWhileOpen == null)
             UpdateRecipeIndexCraftabilityVisuals();
             craftingListDirty = false; notebookVisualsDirty = false;
         }
-        }
+    }
 
-        private void UpdateRecipeIndexCraftabilityVisuals()
+    private void UpdateRecipeIndexCraftabilityVisuals()
         {
             if (inventory == null || _recipeIndexEntries == null) return;
             foreach (var entry in _recipeIndexEntries)
@@ -131,10 +132,11 @@ if (hotbarHiddenWhileOpen == null)
                 // Base background color - darker for better icon visibility
                 Color bgColor = new Color(0, 0, 0, 0.5f); 
                 
-                // If it's craftable, give it a vibrant green look
+                // Muted ink green for craftable rows (see PrisonUITheme.InkGreen)
                 if (canCraft)
                 {
-                    bgColor = new Color(0.1f, 0.9f, 0.1f, 0.95f);
+                    Color ink = PrisonUITheme.InkGreen;
+                    bgColor = new Color(ink.r, ink.g, ink.b, 0.85f);
                 }
                 else if (isSelected)
                 {
@@ -198,6 +200,7 @@ if (hotbarHiddenWhileOpen == null)
         if (inventory == null) return;
         BuildSlots();
         IsOpen = true;
+        UIMenuFocus.RegisterOpen();
         
         if (panel != null) panel.SetActive(true);
         if (bagDimOverlay != null) bagDimOverlay.SetActive(true);
@@ -219,6 +222,7 @@ if (hotbarHiddenWhileOpen == null)
     public void Close()
     {
         IsOpen = false;
+        UIMenuFocus.RegisterClosed();
         
         if (bagDimOverlay != null) bagDimOverlay.SetActive(false);
         if (crosshair != null) crosshair.SetActive(true);

@@ -62,6 +62,10 @@ public class EscapeManager : MonoBehaviour
 
         PlayerStats.EnsureInstance();
         PrisonSuspicion.EnsureInstance();
+        HudBootstrap.EnsureHud();
+        PlayerVitalsHUD.EnsureInstance();
+        CurrentLocationHUD.EnsureInstance();
+        ObjectiveWaypointUI.EnsureInstance();
 
         if (solitarySpawnPoints == null || solitarySpawnPoints.Length == 0)
             AutoFindSolitarySpawns();
@@ -161,6 +165,7 @@ public class EscapeManager : MonoBehaviour
 
         var stats = PlayerStats.EnsureInstance();
         float mhBefore = stats.MentalHealth;
+        float phBefore = stats.PhysicalHealth;
         float strBefore = stats.Strength;
         stats.ApplySolitaryPenalty();
 
@@ -175,7 +180,7 @@ public class EscapeManager : MonoBehaviour
 
         PrisonTimeManager.Instance?.SkipToEventType(PrisonEventType.MorningRollCall);
 
-        SolitaryScreenUI.Show(mhBefore, stats.MentalHealth, strBefore, stats.Strength, () =>
+        SolitaryScreenUI.Show(mhBefore, stats.MentalHealth, phBefore, stats.PhysicalHealth, strBefore, stats.Strength, () =>
         {
             if (state == EscapeState.InSolitary)
                 state = EscapeState.Playing;

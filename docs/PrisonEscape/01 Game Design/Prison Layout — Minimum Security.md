@@ -38,7 +38,7 @@ Reference diagram:
 
 ## Implemented dimensions (world units ≈ meters)
 
-Hub (cafeteria center) at world `(-26, -98)`. All floor plates at Y = 0.6, thickness 0.2.
+Hub (cafeteria center) at world `(-26, -98)`. Floor plates sync their surface Y to `JailCell_01` spawn height (sampled each build; typically ~0.82 m), thickness 0.2.
 
 | Plate | Center (X,Z) | Size (W×D) |
 |---|---|---|
@@ -56,9 +56,9 @@ Hub (cafeteria center) at world `(-26, -98)`. All floor plates at Y = 0.6, thick
 
 ## Build rules
 
-- **Walls:** 6 m tall (sampled from `JailCell_01`), 0.2 m thick. Exterior edges are solid; **edges shared between rooms/corridors get a wall with a centered doorway** (3.5 m wide, 3 m tall, lintel above) — matching the diagram's door openings. Rooms are enclosed spaces connected by doors, not open zones.
-- **Roofs:** every plate **except the Courtyard** (open air for the fence escape)
-- **Lighting:** grid of ceiling fixtures per room/corridor + one light per cell (~635 point lights); warm color (1, 0.95, 0.85)
+- **Walls:** 6 m tall (sampled from `JailCell_01`), 0.2 m thick. Exterior edges are solid; **edges shared between rooms/corridors get a wall with a centered doorway** (3.5 m wide, 3 m tall, lintel + side jambs above) — matching the diagram's door openings. Rooms are enclosed spaces connected by doors, not open zones.
+- **Roofs:** every plate **except the Courtyard** (open air for the fence escape). Roof slabs overhang exterior walls by 0.5 m; **soffit lips** on exterior edges hide wall/roof gaps.
+- **Lighting:** grid of ceiling fixtures per room/corridor + one light per cell (~370 point lights after density pass); warm color (1, 0.95, 0.85)
 - **Furniture:** scratch-built from cubes + prison materials (no prefabs) — cafeteria tables/serving line, shower stalls/sinks/benches, workshop benches/shelves, security desk/monitor bank, courtyard exercise equipment
 
 ## Solitary confinement block

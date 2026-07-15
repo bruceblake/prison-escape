@@ -32,7 +32,7 @@ Escape is the game's stated goal but currently has no completion state. This fea
 - Guard spots you in one (normal detection geometry: 10 m / 90° cone / 6 m proximity) → **caught escaping** (not the gentle escort).
 
 ### Getting caught → solitary confinement
-- Immediate: screen pops up showing **Mental Health −20** and **Strength −10** ticking down.
+- Immediate: screen pops up showing **Mental Health −20**, **Physical Health −10**, and **Strength −10** ticking down.
 - **Inventory confiscated** (all slots). **Pillow stash contents survive** — hiding rewards planning.
 - Player teleports to a solitary cell; time **skips to the next Morning Roll Call** (lose the rest of the day).
 - **Suspicion** active for **2 in-game days** (2 Morning Roll Calls): guard detection range 10 → **14 m**; heat eye sits at "half" while suspicious.
@@ -42,8 +42,8 @@ Escape is the game's stated goal but currently has no completion state. This fea
 - Layout note updated: [[Prison Layout — Minimum Security]].
 
 ### Player stats (new, minimal v1)
-- **Mental Health** and **Strength**, both 0–100, start 100.
-- Solitary stay: −20 MH, −10 STR.
+- **Mental Health**, **Physical Health**, and **Strength**, all 0–100, start 100.
+- Solitary stay: −20 MH, −10 PH, −10 STR.
 - Regen: **+5 each per day** (applied at Morning Roll Call).
 - v1 effects: Strength < 50 → sprint multiplier 2.0 → 1.5. Mental health effects reserved for later (stored properly now).
 

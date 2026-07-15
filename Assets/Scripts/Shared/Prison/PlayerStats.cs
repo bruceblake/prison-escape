@@ -4,8 +4,8 @@ using UnityEngine;
 namespace Prison
 {
     /// <summary>
-    /// The player's mental health and strength (0–100). Solitary confinement lowers both;
-    /// both regenerate a little each day (applied at Morning Roll Call).
+    /// The player's mental health, physical health, and strength (0–100). Solitary confinement lowers all three;
+    /// all regenerate a little each day (applied at Morning Roll Call).
     /// Low strength slows sprinting (see <see cref="PlayerStatsMath"/>).
     /// </summary>
     public class PlayerStats : MonoBehaviour
@@ -15,13 +15,15 @@ namespace Prison
 
         [Header("Stats (0-100)")]
         [SerializeField] private float mentalHealth = PlayerStatsMath.MaxStat;
+        [SerializeField] private float physicalHealth = PlayerStatsMath.MaxStat;
         [SerializeField] private float strength = PlayerStatsMath.MaxStat;
 
         public float MentalHealth => mentalHealth;
+        public float PhysicalHealth => physicalHealth;
         public float Strength => strength;
 
-        /// <summary>(mentalHealth, strength) after any change.</summary>
-        public event Action<float, float> StatsChanged;
+        /// <summary>(mentalHealth, physicalHealth, strength) after any change.</summary>
+        public event Action<float, float, float> StatsChanged;
 
         private PrisonEventType _lastRegenEvent = (PrisonEventType)(-1);
 
@@ -73,16 +75,21 @@ namespace Prison
             _lastRegenEvent = evt;
 
             mentalHealth = PlayerStatsMath.ApplyDailyRegen(mentalHealth);
+            physicalHealth = PlayerStatsMath.ApplyDailyRegen(physicalHealth);
             strength = PlayerStatsMath.ApplyDailyRegen(strength);
-            StatsChanged?.Invoke(mentalHealth, strength);
+            RaiseStatsChanged();
         }
 
-        /// <summary>Applies the solitary-confinement penalty (-20 MH, -10 STR).</summary>
+        /// <summary>Applies the solitary-confinement penalty (-20 MH, -10 BODY, -10 STR).</summary>
         public void ApplySolitaryPenalty()
         {
             mentalHealth = PlayerStatsMath.ApplySolitaryToMentalHealth(mentalHealth);
+            physicalHealth = PlayerStatsMath.ApplySolitaryToPhysicalHealth(physicalHealth);
             strength = PlayerStatsMath.ApplySolitaryToStrength(strength);
-            StatsChanged?.Invoke(mentalHealth, strength);
+            RaiseStatsChanged();
         }
+
+        private void RaiseStatsChanged() =>
+            StatsChanged?.Invoke(mentalHealth, physicalHealth, strength);
     }
 }

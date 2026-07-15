@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Fullscreen solitary-confinement overlay: shows Mental Health and Strength ticking down,
+/// Fullscreen solitary-confinement overlay: shows Mental Health, Physical Health, and Strength ticking down,
 /// then fades out and releases the player. Runs on unscaled time.
 /// </summary>
 public class SolitaryScreenUI : MonoBehaviour
@@ -16,22 +16,22 @@ public class SolitaryScreenUI : MonoBehaviour
 
     private CanvasGroup _group;
     private TMP_Text _mentalText;
+    private TMP_Text _physicalText;
     private TMP_Text _strengthText;
     private Action _onComplete;
 
-    public static void Show(float mentalFrom, float mentalTo, float strengthFrom, float strengthTo, Action onComplete)
+    public static void Show(float mentalFrom, float mentalTo, float physicalFrom, float physicalTo,
+        float strengthFrom, float strengthTo, Action onComplete)
     {
         var existing = FindAnyObjectByType<SolitaryScreenUI>();
         if (existing != null)
-        {
             Destroy(existing.gameObject);
-        }
 
         var root = new GameObject("SolitaryScreen");
         var ui = root.AddComponent<SolitaryScreenUI>();
         ui._onComplete = onComplete;
         ui.Build();
-        ui.StartCoroutine(ui.Run(mentalFrom, mentalTo, strengthFrom, strengthTo));
+        ui.StartCoroutine(ui.Run(mentalFrom, mentalTo, physicalFrom, physicalTo, strengthFrom, strengthTo));
     }
 
     private void Build()
@@ -49,29 +49,32 @@ public class SolitaryScreenUI : MonoBehaviour
         EscapeEndScreenUI.Stretch(bg.rectTransform);
 
         EscapeEndScreenUI.CreateText(transform, "Title", "SOLITARY CONFINEMENT", 72f,
-            new Color(0.75f, 0.2f, 0.16f), new Vector2(0.5f, 0.72f), FontStyles.Bold);
+            new Color(0.75f, 0.2f, 0.16f), new Vector2(0.5f, 0.78f), FontStyles.Bold);
 
         EscapeEndScreenUI.CreateText(transform, "Caption", "You were caught trying to escape.\nYour belongings were confiscated.", 30f,
-            new Color(0.8f, 0.78f, 0.75f), new Vector2(0.5f, 0.6f), FontStyles.Normal);
+            new Color(0.8f, 0.78f, 0.75f), new Vector2(0.5f, 0.64f), FontStyles.Normal);
 
-        _mentalText = EscapeEndScreenUI.CreateText(transform, "Mental", "", 40f,
-            new Color(0.55f, 0.7f, 0.95f), new Vector2(0.5f, 0.44f), FontStyles.Bold);
+        _mentalText = EscapeEndScreenUI.CreateText(transform, "Mental", "", 36f,
+            new Color(0.55f, 0.7f, 0.95f), new Vector2(0.5f, 0.5f), FontStyles.Bold);
 
-        _strengthText = EscapeEndScreenUI.CreateText(transform, "Strength", "", 40f,
-            new Color(0.95f, 0.6f, 0.35f), new Vector2(0.5f, 0.36f), FontStyles.Bold);
+        _physicalText = EscapeEndScreenUI.CreateText(transform, "Physical", "", 36f,
+            new Color(0.45f, 0.85f, 0.55f), new Vector2(0.5f, 0.42f), FontStyles.Bold);
+
+        _strengthText = EscapeEndScreenUI.CreateText(transform, "Strength", "", 36f,
+            new Color(0.95f, 0.6f, 0.35f), new Vector2(0.5f, 0.34f), FontStyles.Bold);
     }
 
-    private IEnumerator Run(float mentalFrom, float mentalTo, float strengthFrom, float strengthTo)
+    private IEnumerator Run(float mentalFrom, float mentalTo, float physicalFrom, float physicalTo,
+        float strengthFrom, float strengthTo)
     {
         float t = 0f;
         while (t < CountDownSeconds)
         {
             t += Time.unscaledDeltaTime;
             float k = Mathf.Clamp01(t / CountDownSeconds);
-            float mh = Mathf.Lerp(mentalFrom, mentalTo, k);
-            float st = Mathf.Lerp(strengthFrom, strengthTo, k);
-            _mentalText.text = $"MENTAL HEALTH  {mh:F0} / 100";
-            _strengthText.text = $"STRENGTH  {st:F0} / 100";
+            _mentalText.text = $"MENTAL HEALTH  {Mathf.Lerp(mentalFrom, mentalTo, k):F0} / 100";
+            _physicalText.text = $"PHYSICAL HEALTH  {Mathf.Lerp(physicalFrom, physicalTo, k):F0} / 100";
+            _strengthText.text = $"STRENGTH  {Mathf.Lerp(strengthFrom, strengthTo, k):F0} / 100";
             yield return null;
         }
 

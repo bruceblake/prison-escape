@@ -78,6 +78,7 @@ public class PauseManager : MonoBehaviour
     public void Pause()
     {
         isPaused = true;
+        UIMenuFocus.RegisterOpen();
         
         // ONLY IN SINGLEPLAYER the world needs to be paused
         if (IsSinglePlayer())
@@ -96,6 +97,7 @@ public class PauseManager : MonoBehaviour
     public void Resume()
     {
         isPaused = false;
+        UIMenuFocus.RegisterClosed();
         Time.timeScale = 1f;
         
         if (pauseMenu != null)

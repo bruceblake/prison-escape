@@ -300,7 +300,23 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         Init();
         if (selectionHighlight != null)
+        {
             selectionHighlight.enabled = selected;
+            if (selected)
+            {
+                selectionHighlight.color = new Color(0.95f, 0.85f, 0.35f, 0.95f);
+                var rt = selectionHighlight.rectTransform;
+                rt.anchorMin = Vector2.zero;
+                rt.anchorMax = Vector2.one;
+                rt.offsetMin = new Vector2(-2f, -2f);
+                rt.offsetMax = new Vector2(2f, 2f);
+            }
+        }
+
+        if (backgroundImage != null && selected && !_hasContent)
+            backgroundImage.color = new Color(0.22f, 0.24f, 0.28f, 0.98f);
+        else if (backgroundImage != null && !selected && !_hasContent)
+            backgroundImage.color = emptySlotColor;
     }
 
     private static bool IsIllegalCategory(ItemCategory c)

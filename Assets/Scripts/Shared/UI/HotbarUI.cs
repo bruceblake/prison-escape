@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
+using Prison;
 
 public class HotbarUI : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class HotbarUI : MonoBehaviour
     public bool autoHideWhenHiddenMode = true;
     [Min(0.05f)] public float showSeconds = 0.2f;
     [Min(0.1f)] public float autoHideAfterSeconds = 1.5f;
+    [Tooltip("Lift hotbar off the bottom screen edge (pixels at 1080p reference).")]
+    public float bottomMargin = 24f;
     [Tooltip("Mouse wheel: cycle selection (and shows bar if hidden)")]
     public bool useScrollWheel = true;
 
@@ -60,6 +64,18 @@ public class HotbarUI : MonoBehaviour
             SetBarVisible(false, false);
         else if (fader != null)
             fader.SetImmediate(true, true);
+
+        ApplyBottomMargin();
+    }
+
+    private void ApplyBottomMargin()
+    {
+        if (slotContainer == null) return;
+        var rt = slotContainer as RectTransform;
+        if (rt == null) return;
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0f);
+        rt.pivot = new Vector2(0.5f, 0f);
+        rt.anchoredPosition = new Vector2(0f, bottomMargin);
     }
 
     void Update()
@@ -107,6 +123,16 @@ public class HotbarUI : MonoBehaviour
         }
 
         RefreshSlots();
+
+        if (alwaysVisible && slotContainer != null)
+        {
+            var cg = slotContainer.GetComponent<CanvasGroup>();
+            if (cg != null)
+            {
+                float target = UIMenuFocus.IsAnyMenuOpen ? 0.04f : 1f;
+                cg.alpha = Mathf.MoveTowards(cg.alpha, target, Time.unscaledDeltaTime * 10f);
+            }
+        }
 
         if (!alwaysVisible && startHidden && autoHideWhenHiddenMode && _visible && fader != null && Time.unscaledTime > _hideAfterUnscaled)
             SetBarVisible(false, true);
@@ -175,8 +201,27 @@ public class HotbarUI : MonoBehaviour
             slotUI.Configure(i, inventory, dragSwapEnabled: false);
             slotUI.showName = false;
             slotUI.ClearSlot();
+            AddKeyHint(slotObj.transform, (i + 1).ToString());
             slotUIs.Add(slotUI);
         }
+    }
+
+    private static void AddKeyHint(Transform slotRoot, string key)
+    {
+        var hintGo = new GameObject("KeyHint", typeof(RectTransform));
+        hintGo.transform.SetParent(slotRoot, false);
+        var rt = (RectTransform)hintGo.transform;
+        rt.anchorMin = rt.anchorMax = new Vector2(0f, 0f);
+        rt.pivot = new Vector2(0f, 0f);
+        rt.anchoredPosition = new Vector2(4f, 4f);
+        rt.sizeDelta = new Vector2(18f, 16f);
+        var tmp = hintGo.AddComponent<TextMeshProUGUI>();
+        tmp.text = key;
+        tmp.fontSize = 13f;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color = new Color(0.65f, 0.68f, 0.72f, 0.9f);
+        tmp.alignment = TextAlignmentOptions.BottomLeft;
+        tmp.raycastTarget = false;
     }
 
     private void RefreshSlots()

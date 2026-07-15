@@ -49,6 +49,9 @@ namespace Prison
                     _state = 0;
             }
 
+            if (PrisonSuspicion.IsSuspicionActive && _state < 1)
+                _state = 1; // suspicion floor — half eye minimum
+
             if (useSmoothing)
             {
                 _smoothedState = Mathf.MoveTowards(_smoothedState, _state, Time.deltaTime * smoothSpeed);
@@ -64,9 +67,17 @@ namespace Prison
 
             if (rootGroup != null)
             {
-                bool hidden = _state == 0;
-                if (useSmoothing) hidden = _smoothedState < 0.04f;
-                rootGroup.alpha = hidden ? 0f : 1f;
+                if (UIMenuFocus.IsAnyMenuOpen)
+                {
+                    rootGroup.alpha = Mathf.MoveTowards(rootGroup.alpha, 0f, Time.unscaledDeltaTime * 10f);
+                }
+                else
+                {
+                    bool hidden = _state == 0 && !PrisonSuspicion.IsSuspicionActive;
+                    if (useSmoothing)
+                        hidden = _smoothedState < 0.04f && !PrisonSuspicion.IsSuspicionActive;
+                    rootGroup.alpha = hidden ? 0f : 1f;
+                }
             }
         }
 

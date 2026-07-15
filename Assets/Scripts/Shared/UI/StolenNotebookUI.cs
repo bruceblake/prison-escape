@@ -116,6 +116,7 @@ public class StolenNotebookUI : MonoBehaviour
         if (optionalLegacyInventory != null && optionalLegacyInventory.IsOpen) optionalLegacyInventory.Close();
 
         IsOpen = true;
+        UIMenuFocus.RegisterOpen();
         if (notebookRoot != null) notebookRoot.SetActive(true);
         if (fader != null) fader.FadeTo(true, true, fadeSeconds);
         else if (_rootCg != null) { _rootCg.alpha = 1f; _rootCg.interactable = true; _rootCg.blocksRaycasts = true; }
@@ -129,6 +130,7 @@ public class StolenNotebookUI : MonoBehaviour
     public void Close()
     {
         IsOpen = false;
+        UIMenuFocus.RegisterClosed();
         if (fader != null) fader.FadeTo(false, false, fadeSeconds, () => { if (notebookRoot != null) notebookRoot.SetActive(false); });
         else
         {

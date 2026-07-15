@@ -364,6 +364,11 @@ public static class PrisonLevelLayoutRunner
         }
     }
 
+    enum EdgeSide { North, South, East, West }
+
+    const float DoorwayWidth = 3.5f;
+    const float DoorHeight = 3f;
+
     static void BuildWallsAroundFloors()
     {
         if (_activePlates.Count == 0)
@@ -379,59 +384,131 @@ public static class PrisonLevelLayoutRunner
         {
             var group = new GameObject("Walls_" + plate.Name);
             group.transform.SetParent(wallsRoot.transform, false);
-            wallCount += BuildConnectedWalls(plate, group.transform, wallMat, metrics, _activePlates);
+            foreach (EdgeSide side in new[] { EdgeSide.North, EdgeSide.South, EdgeSide.East, EdgeSide.West })
+                wallCount += BuildPlateEdgeWalls(plate, side, group.transform, wallMat, metrics, _activePlates);
         }
 
-        Debug.Log($"[PrisonLayout] Built {wallCount} connected wall segments ({metrics.WallHeight:F1} m tall).");
+        Debug.Log($"[PrisonLayout] Built {wallCount} wall segments with doorways ({metrics.WallHeight:F1} m tall, {DoorwayWidth} m doors).");
     }
 
-    static int BuildConnectedWalls(FloorPlate plate, Transform parent, Material wallMat, CellMetrics metrics,
-        List<FloorPlate> all)
+    /// <summary>
+    /// Builds one plate edge: exterior stretches get solid walls; edges shared with a
+    /// neighboring plate get a wall with a centered doorway (+ lintel), matching the
+    /// diagram's door openings. Shared walls are built once, by the North/East side owner.
+    /// </summary>
+    static int BuildPlateEdgeWalls(FloorPlate plate, EdgeSide side, Transform parent, Material wallMat,
+        CellMetrics metrics, List<FloorPlate> all)
     {
-        float floorTop = FloorY + FloorScaleY * 0.5f;
-        float wallH = metrics.WallHeight;
-        float centerY = floorTop + wallH * 0.5f;
         float t = WallThickness;
+        float wallH = metrics.WallHeight;
+        float floorTop = FloorY + FloorScaleY * 0.5f;
+        float centerY = floorTop + wallH * 0.5f;
+
+        bool alongX = side is EdgeSide.North or EdgeSide.South;
+        float a0 = alongX ? plate.MinX : plate.MinZ;
+        float a1 = alongX ? plate.MaxX : plate.MaxZ;
+        float edgeCoord = side switch
+        {
+            EdgeSide.North => plate.MaxZ + t * 0.5f,
+            EdgeSide.South => plate.MinZ - t * 0.5f,
+            EdgeSide.East => plate.MaxX + t * 0.5f,
+            _ => plate.MinX - t * 0.5f,
+        };
+
+        // Overlap intervals with every neighbor touching this edge.
+        var overlaps = new List<(float lo, float hi)>();
+        foreach (var o in all)
+        {
+            if (o.Name == plate.Name) continue;
+            bool touches = side switch
+            {
+                EdgeSide.North => plate.TouchesNorth(o, EdgeTolerance),
+                EdgeSide.South => plate.TouchesSouth(o, EdgeTolerance),
+                EdgeSide.East => plate.TouchesEast(o, EdgeTolerance),
+                _ => plate.TouchesWest(o, EdgeTolerance),
+            };
+            if (!touches) continue;
+
+            float lo = Mathf.Max(a0, alongX ? o.MinX : o.MinZ);
+            float hi = Mathf.Min(a1, alongX ? o.MaxX : o.MaxZ);
+            if (hi - lo > 1f)
+                overlaps.Add((lo, hi));
+        }
+
+        // North/East plate owns shared walls; South/West only fills exterior leftovers.
+        bool owner = side is EdgeSide.North or EdgeSide.East;
+
+        List<(float a, float b)> segments;
+        var doors = new List<(float center, float width)>();
+
+        if (overlaps.Count == 0)
+        {
+            segments = new List<(float, float)> { (a0 - t, a1 + t) };
+        }
+        else if (owner)
+        {
+            foreach (var (lo, hi) in overlaps)
+            {
+                float width = Mathf.Min(DoorwayWidth, (hi - lo) * 0.8f);
+                doors.Add(((lo + hi) * 0.5f, width));
+            }
+            segments = SubtractIntervals(a0 - t, a1 + t,
+                doors.Select(d => (d.center - d.width * 0.5f, d.center + d.width * 0.5f)).ToList());
+        }
+        else
+        {
+            segments = SubtractIntervals(a0 - t, a1 + t, overlaps.Select(ov => (ov.lo, ov.hi)).ToList());
+        }
+
+        string sideTag = side.ToString().Substring(0, 1);
         int count = 0;
 
-        bool openNorth = all.Any(o => o.Name != plate.Name && plate.TouchesNorth(o, EdgeTolerance));
-        bool openSouth = all.Any(o => o.Name != plate.Name && plate.TouchesSouth(o, EdgeTolerance));
-        bool openEast = all.Any(o => o.Name != plate.Name && plate.TouchesEast(o, EdgeTolerance));
-        bool openWest = all.Any(o => o.Name != plate.Name && plate.TouchesWest(o, EdgeTolerance));
-
-        if (!openNorth)
+        foreach (var (sa, sb) in segments)
         {
-            CreateBlock(parent, "Wall_N",
-                new Vector3(plate.Cx, centerY, plate.MaxZ + t * 0.5f),
-                new Vector3(plate.Sx + t * 2f, wallH, t), wallMat);
+            if (sb - sa < 0.15f) continue;
+            float mid = (sa + sb) * 0.5f;
+            float len = sb - sa;
+            Vector3 pos = alongX ? new Vector3(mid, centerY, edgeCoord) : new Vector3(edgeCoord, centerY, mid);
+            Vector3 scale = alongX ? new Vector3(len, wallH, t) : new Vector3(t, wallH, len);
+            CreateBlock(parent, $"Wall_{sideTag}_{count}", pos, scale, wallMat);
             count++;
         }
 
-        if (!openSouth)
+        // Lintels close the wall above each doorway.
+        foreach (var (center, width) in doors)
         {
-            CreateBlock(parent, "Wall_S",
-                new Vector3(plate.Cx, centerY, plate.MinZ - t * 0.5f),
-                new Vector3(plate.Sx + t * 2f, wallH, t), wallMat);
-            count++;
-        }
-
-        if (!openEast)
-        {
-            CreateBlock(parent, "Wall_E",
-                new Vector3(plate.MaxX + t * 0.5f, centerY, plate.Cz),
-                new Vector3(t, wallH, plate.Sz + t * 2f), wallMat);
-            count++;
-        }
-
-        if (!openWest)
-        {
-            CreateBlock(parent, "Wall_W",
-                new Vector3(plate.MinX - t * 0.5f, centerY, plate.Cz),
-                new Vector3(t, wallH, plate.Sz + t * 2f), wallMat);
+            float lintelH = wallH - DoorHeight;
+            if (lintelH < 0.1f) continue;
+            float lintelY = floorTop + DoorHeight + lintelH * 0.5f;
+            Vector3 pos = alongX ? new Vector3(center, lintelY, edgeCoord) : new Vector3(edgeCoord, lintelY, center);
+            Vector3 scale = alongX ? new Vector3(width, lintelH, t) : new Vector3(t, lintelH, width);
+            CreateBlock(parent, $"Lintel_{sideTag}_{count}", pos, scale, wallMat);
             count++;
         }
 
         return count;
+    }
+
+    /// <summary>Removes hole intervals from [a0, a1], returning the remaining wall stretches.</summary>
+    static List<(float a, float b)> SubtractIntervals(float a0, float a1, List<(float lo, float hi)> holes)
+    {
+        var result = new List<(float, float)>();
+        var sorted = holes
+            .Select(h => (lo: Mathf.Max(a0, h.lo), hi: Mathf.Min(a1, h.hi)))
+            .Where(h => h.hi > h.lo)
+            .OrderBy(h => h.lo)
+            .ToList();
+
+        float cursor = a0;
+        foreach (var (lo, hi) in sorted)
+        {
+            if (lo > cursor)
+                result.Add((cursor, lo));
+            cursor = Mathf.Max(cursor, hi);
+        }
+        if (cursor < a1)
+            result.Add((cursor, a1));
+        return result;
     }
 
     static void BuildRoofs()

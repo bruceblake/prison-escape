@@ -56,7 +56,7 @@ Hub (cafeteria center) at world `(-26, -98)`. All floor plates at Y = 0.6, thick
 
 ## Build rules
 
-- **Walls:** 6 m tall (sampled from `JailCell_01`), 0.2 m thick, only on **exterior edges** — no walls where plates touch
+- **Walls:** 6 m tall (sampled from `JailCell_01`), 0.2 m thick. Exterior edges are solid; **edges shared between rooms/corridors get a wall with a centered doorway** (3.5 m wide, 3 m tall, lintel above) — matching the diagram's door openings. Rooms are enclosed spaces connected by doors, not open zones.
 - **Roofs:** every plate **except the Courtyard** (open air for the fence escape)
 - **Lighting:** grid of ceiling fixtures per room/corridor + one light per cell (~635 point lights); warm color (1, 0.95, 0.85)
 - **Furniture:** scratch-built from cubes + prison materials (no prefabs) — cafeteria tables/serving line, shower stalls/sinks/benches, workshop benches/shelves, security desk/monitor bank, courtyard exercise equipment

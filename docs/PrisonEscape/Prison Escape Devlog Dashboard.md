@@ -2,6 +2,11 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/15/2026 (feature integration — all branches → `dev`)
+- **Feature branches integrated into `dev`** — audited all open `feat/*` branches. `feat/escape-completion`, `feat/blenderkit-assets`, and `feat/realistic-schedule` were already on `dev`. **Cherry-picked** the ProBuilder rebuild pipeline from `feat/prison-probuilder-rebuild` (`PrisonProBuilderRebuildRunner`, `PrisonLayoutRebuildRunner`, `PrisonLayoutSpec`/`Validator`, layout validation tests, `SpawnPlacementUtility`). Pulled `PrisonLootSetupRunner` from `feat/prison-level-layout-and-loot`. Did **not** wholesale-merge `feat/low-poly-character-visuals` or old layout scene commits — superseded by BlenderKit characters + facility install. See [[Git & Branching]] integration table.
+- **Vault synced** — [[Roadmap & Priorities]] (escape completion → done on `dev`; social v2 is now #1), [[Systems Overview]], [[Escape Routes & Mechanics]], [[Escape Completion System]], [[Home]], [[Editor Tooling]], [[Testing & QA]] (146 tests), [[Content Inventory]].
+- **Scene polish in progress** — cinderblock/concrete textures, character materials, animation controllers, prefabs (local WIP on `dev`).
+
 ## 7/15/2026 (playtest fixes — HUD, NPCs, doors, navmesh, textures)
 - **Routine bar simplified** — the top bar now shows **one** plain-language, colour-coded instruction ("Go to the Cafeteria · 29m", "You're in the right place", "Free time — go anywhere", "Wait in your cell for roll call", "Out of position — … now") instead of a jargon status word plus a "HERE TO DEST" GPS fragment. Phase title lost its brackets. See [[UI & HUD]] · [[Routine & Schedule HUD]].
 - **Waypoint ↔ top-bar consistency** — `PrisonRoutineDestination.ResolveActiveDestination` is now the single source both the floating objective waypoint and the routine bar read, so they can't disagree; travel grace targets the **current** phase venue (was wrongly showing the next phase). New `PrisonRoutineLabels.GetInstruction`.

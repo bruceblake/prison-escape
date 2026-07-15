@@ -4,13 +4,13 @@
 
 ## 01 Game Design
 - [[Game Vision & Core Loop]] — what the game is, pillars, the escape fantasy
-- [[World Rules]] — the 26 laws of the game world (docs-first: schedule redesign approved, code pending)
+- [[World Rules]] — the 26 laws of the game world (13-phase schedule implemented on `dev`)
 - [[Prison Layout — Minimum Security]] — the MVP map (diagram + dimensions)
-- [[Roadmap & Priorities]] — what's next (top: **escape win condition**)
+- [[Roadmap & Priorities]] — what's next (top: **social ecosystem v2**)
 - [[Prison Escape]] — original founding note (multi-prison vision)
 
 ## 02 Features — active feature specs
-- [[Escape Completion System]] — 🚧 in progress (win state, solitary, suspicion, stats)
+- [[Escape Completion System]] — ✅ v1 on `dev` (win state, solitary, suspicion, stats)
 - [[Social Ecosystem & Gangs]] — 📐 specced (v1 social teardown; identities & personalities, memory & gossip, gangs, trading & bribes, two-way favors, snitching)
 
 ## 03 Systems — one note per system
@@ -32,7 +32,7 @@
 ## 05 Engineering
 - [[Codebase Map]] — folder layout, core abstractions, conventions
 - [[Editor Tooling]] — layout runner and friends (regenerate, don't hand-edit)
-- [[Testing & QA]] — 136 EditMode tests, coverage matrix, testing rules
+- [[Testing & QA]] — 146 EditMode tests, coverage matrix, testing rules
 
 ## 06 Process
 - [[Development Workflow]] — Obsidian → Cursor → Unity MCP → Git loop

@@ -39,6 +39,19 @@ Open the **worktree** folder in Cursor and in Unity (each worktree has its own `
 
 Cursor agents follow `.cursor/rules/git-worktrees.mdc` (always on) and switch the chat root with `move_agent_to_root` after creating a worktree.
 
+## Integrated feature branches (7/15/2026)
+
+These branches are **fully represented on `dev`** — do not re-merge wholesale (they predate BlenderKit + schedule work and conflict heavily):
+
+| Branch | Integration |
+|---|---|
+| `feat/escape-completion` | Merged via PR #40 (7/14) |
+| `feat/blenderkit-assets` | Merged (facility install, polish pass) |
+| `feat/realistic-schedule` | Merged (13-phase count-driven day) |
+| `feat/prison-probuilder-rebuild` | Cherry-picked ProBuilder pipeline + layout tests (7/15); BlenderKit remains primary build |
+| `feat/prison-level-layout-and-loot` | `PrisonLootSetupRunner` + `SpawnPlacementUtility` on `dev`; layout v4 superseded by BlenderKit |
+| `feat/low-poly-character-visuals` | Merged via PR #37; superseded by rigged BlenderKit characters on `dev` |
+
 ## Conventions
 
 - Commit messages: focus on *why*; follow existing style (`feat(...)`, `fix(...)`, `docs(...)`, plain sentences also used)

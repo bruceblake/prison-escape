@@ -43,13 +43,13 @@ Map of every implemented system. One note per system in this folder — keep it 
 | [[Inventory & Items]] | 6-slot inventory + item taxonomy | ✅ core |
 | [[Crafting]] | 7 recipes → escape tools | ✅ |
 | [[Loot & Economy]] | Weighted loot + (dormant) wallet | 🟡 weights ✅ |
-| [[Escape Routes & Mechanics]] | Vents, fake bed, stash + boundary win on `feat/escape-completion` | 🟡 routes partial, win v1 ✅ |
+| [[Escape Routes & Mechanics]] | Vents, fake bed, stash + boundary win (v1 on `dev`) | 🟡 routes partial, win v1 ✅ |
 | [[Multiplayer & Networking]] | Riptide FPS layer, lobby, weapons | ⚪ |
-| [[UI & HUD]] | Routine bar, heat eye, vitals, location, waypoint, notebook, inventory | 🟢 core HUD done (7/14) |
+| [[UI & HUD]] | Routine bar, heat eye, vitals, location, waypoint, notebook, inventory | 🟢 core HUD done (7/15) |
 
 ## The three biggest implementation gaps
 
-1. **Escape routes geometry** — win/lose systems live on `feat/escape-completion`; vent corridors and fence cut still needed to reach the boundary ([[Roadmap & Priorities]] #1)
+1. **Escape routes geometry** — win/lose systems are on `dev`; vent corridors and fence cut still needed to reach the boundary ([[Roadmap & Priorities]] #2)
 2. **Guard AI depth** — patrol/detection exist; full FSM polish and consequence wiring still thin
 3. **Social v1 → v2 rebuild** — v1 (affinity, greet, one-way favors) is deprecated wholesale; the [[Social Ecosystem & Gangs]] spec (identities, memory, gangs, trading, snitching) replaces it and is not yet implemented
 

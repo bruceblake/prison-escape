@@ -2,7 +2,7 @@
 
 **Status:** Implemented (v1) — 7/14/2026. Note: the boundary is only *reachable* once escape route geometry (vent corridors, fence cut) exists; the win/lose systems are live.
 **System notes:** [[Escape Routes & Mechanics]] · [[Security, Heat & Alerts]] · [[Guard AI]] · [[Prison Layout — Minimum Security]]
-**Branch:** `feat/escape-completion`
+**Branch:** merged to `dev` (7/14/2026)
 **Brainstormed:** 7/14/2026 (chat) — decisions below are final unless overridden here.
 
 ## What it is

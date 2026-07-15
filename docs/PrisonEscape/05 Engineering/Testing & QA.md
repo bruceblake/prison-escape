@@ -4,7 +4,7 @@ All automated tests are **EditMode NUnit** tests in `Assets/Tests/Editor/`, name
 
 **Run them:** Unity → Window → General → Test Runner → EditMode → Run All. Pure logic, completes in under a second.
 
-**Last known result: 136 passed / 0 failed.**
+**Last known result: 146 passed / 0 failed** (includes `PrisonLayoutValidationTests` from ProBuilder integration).
 
 ## Test suites
 
@@ -14,6 +14,8 @@ All automated tests are **EditMode NUnit** tests in `Assets/Tests/Editor/`, name
 | `SocialMathTests.cs` | Affinity model: base deltas, gift doubling/penalty, soft cap, clamps, tiers, averages |
 | `PrisonRulesAndLabelsTests.cs` | Event rules/extensions, routine labels, zone labels, cell radius, favor validity, enum pinning |
 | `CraftingInventoryLootTests.cs` | Inventory stacking, crafting, recipe descriptions, loot weights, confiscation rules, security alerts |
+| `EscapeSystemTests.cs` | Escape boundary, restricted zones, solitary flow, stats/suspicion math |
+| `PrisonLayoutValidationTests.cs` | Layout anchors, room bounds, spec alignment (`PrisonLayoutSpec` / `PrisonLayoutAnchors`) |
 
 ## Coverage status (summary)
 

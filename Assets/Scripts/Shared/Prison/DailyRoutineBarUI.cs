@@ -268,18 +268,7 @@ namespace Prison
 
         private static string FormatEvent(PrisonEventType evt)
         {
-            switch (evt)
-            {
-                case PrisonEventType.MorningRollCall: return "Morning Roll Call";
-                case PrisonEventType.NightRollCall: return "Night Roll Call";
-                case PrisonEventType.Breakfast: return "Breakfast";
-                case PrisonEventType.Lunch: return "Lunch";
-                case PrisonEventType.Dinner: return "Dinner";
-                case PrisonEventType.FreeTime: return "Yard Time";
-                case PrisonEventType.LightsOut: return "Lights Out";
-                case PrisonEventType.RollCall: return "Roll Call";
-                default: return evt.ToString();
-            }
+            return PrisonRoutineLabels.FormatPhaseTitle(evt, uppercase: false);
         }
     }
 }

@@ -69,7 +69,9 @@ namespace Prison
             return evt is PrisonEventType.MorningRollCall
                 or PrisonEventType.RollCall
                 or PrisonEventType.LightsOut
-                or PrisonEventType.NightRollCall;
+                or PrisonEventType.NightRollCall
+                or PrisonEventType.MiddayCount
+                or PrisonEventType.EveningCount;
         }
 
         static Transform ResolveStandPoint(

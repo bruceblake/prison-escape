@@ -17,6 +17,9 @@ namespace Prison
                 PrisonEventType.Dinner => "Dinner",
                 PrisonEventType.FreeTime => "Free Time",
                 PrisonEventType.LightsOut => "Lights Out",
+                PrisonEventType.WorkProgram => "Work / Programs",
+                PrisonEventType.MiddayCount => "Midday Count",
+                PrisonEventType.EveningCount => "Evening Count",
                 _ => evt.ToString()
             };
             return uppercase ? t.ToUpperInvariant() : t;
@@ -49,6 +52,8 @@ namespace Prison
 
                 case PrisonEventType.NightRollCall:
                 case PrisonEventType.LightsOut:
+                case PrisonEventType.MiddayCount:
+                case PrisonEventType.EveningCount:
                     if (reg != null)
                         return reg.GetCellHudLabel(cellIndex);
                     return $"CELL {cellIndex}";
@@ -57,6 +62,11 @@ namespace Prison
                     if (reg?.GetYard() != null)
                         return reg.GetYard().GetHudLabel();
                     return "YARD";
+
+                case PrisonEventType.WorkProgram:
+                    if (reg?.GetWorkshop() != null)
+                        return reg.GetWorkshop().GetHudLabel();
+                    return "WORKSHOP";
 
                 default:
                     return evt.ToString().ToUpperInvariant();

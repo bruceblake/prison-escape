@@ -14,30 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Prison.PrisonSchedule
   entries:
   - eventType: 6
-    startTimeMinutes: 60
+    startTimeMinutes: 300
     durationMinutes: 60
   - eventType: 1
-    startTimeMinutes: 375
-    durationMinutes: 30
-  - eventType: 4
-    startTimeMinutes: 405
+    startTimeMinutes: 360
     durationMinutes: 60
+  - eventType: 4
+    startTimeMinutes: 420
+    durationMinutes: 60
+  - eventType: 8
+    startTimeMinutes: 480
+    durationMinutes: 210
+  - eventType: 9
+    startTimeMinutes: 690
+    durationMinutes: 30
   - eventType: 2
-    startTimeMinutes: 465
+    startTimeMinutes: 720
     durationMinutes: 30
   - eventType: 4
-    startTimeMinutes: 495
-    durationMinutes: 90
+    startTimeMinutes: 750
+    durationMinutes: 30
+  - eventType: 8
+    startTimeMinutes: 780
+    durationMinutes: 180
+  - eventType: 10
+    startTimeMinutes: 960
+    durationMinutes: 30
   - eventType: 3
-    startTimeMinutes: 585
+    startTimeMinutes: 990
     durationMinutes: 30
   - eventType: 4
-    startTimeMinutes: 615
-    durationMinutes: 120
-  - eventType: 5
-    startTimeMinutes: 735
-    durationMinutes: 360
+    startTimeMinutes: 1020
+    durationMinutes: 240
   - eventType: 7
-    startTimeMinutes: 1095
-    durationMinutes: 15
+    startTimeMinutes: 1260
+    durationMinutes: 60
+  - eventType: 5
+    startTimeMinutes: 1320
+    durationMinutes: 420
   minutesPerRealSecond: 1

@@ -28,6 +28,7 @@ namespace Prison
         public PrisonLocationZone cafeteria;
         public PrisonLocationZone yard;
         public PrisonLocationZone rollCallArea;
+        public PrisonLocationZone workshop;
 
         private List<PrisonLocationZone> _allZones = new List<PrisonLocationZone>();
 
@@ -50,6 +51,7 @@ namespace Prison
             if (cafeteria == null) cafeteria = FindZone(ZoneType.Cafeteria);
             if (yard == null) yard = FindZone(ZoneType.Yard);
             if (rollCallArea == null) rollCallArea = FindZone(ZoneType.RollCallArea);
+            if (workshop == null) workshop = FindZone(ZoneType.Workshop);
         }
 
         private PrisonLocationZone FindZone(ZoneType type)
@@ -125,6 +127,7 @@ namespace Prison
         public PrisonLocationZone GetCafeteria() => cafeteria;
         public PrisonLocationZone GetYard() => yard;
         public PrisonLocationZone GetRollCallArea() => rollCallArea;
+        public PrisonLocationZone GetWorkshop() => workshop;
 
         /// <summary>HUD label for a cell block zone matching <paramref name="cellIndex"/>, or a fallback.</summary>
         public string GetCellHudLabel(int cellIndex)
@@ -144,6 +147,8 @@ namespace Prison
             {
                 case PrisonEventType.RollCall:
                 case PrisonEventType.MorningRollCall:
+                case PrisonEventType.MiddayCount:
+                case PrisonEventType.EveningCount:
                     var cell = GetCell(cellIndex);
                     if (cell != null && (cell.rollCallStandPoint != null || cell.spawnPoint != null))
                         return cell.rollCallStandPoint != null ? cell.rollCallStandPoint : cell.spawnPoint;
@@ -160,6 +165,9 @@ namespace Prison
                     return cafeteria != null ? cafeteria.GetRandomStandPoint() : null;
                 case PrisonEventType.FreeTime:
                     return yard != null ? yard.GetRandomStandPoint() : (cafeteria != null ? cafeteria.GetRandomStandPoint() : null);
+                case PrisonEventType.WorkProgram:
+                    if (workshop != null) return workshop.GetRandomStandPoint();
+                    return cafeteria != null ? cafeteria.GetRandomStandPoint() : (yard != null ? yard.GetRandomStandPoint() : null);
             }
             return null;
         }

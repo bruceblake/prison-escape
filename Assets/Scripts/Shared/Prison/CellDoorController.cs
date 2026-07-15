@@ -56,8 +56,8 @@ namespace Prison
 
         /// <summary>
         /// Returns true when the door should be OPEN for the given schedule phase.
-        /// Open phases: RollCall, Breakfast, Lunch, Dinner, FreeTime, MorningRollCall.
-        /// Closed phases: LightsOut, NightRollCall.
+        /// Open during all day phases (05:00-21:00): counts, meals, work, free time.
+        /// Closed phases: LightsOut, NightRollCall (the 21:00-05:00 lock-in).
         /// </summary>
         public static bool IsOpenPhase(PrisonEventType evt)
         {
@@ -69,6 +69,9 @@ namespace Prison
                 case PrisonEventType.Dinner:
                 case PrisonEventType.FreeTime:
                 case PrisonEventType.MorningRollCall:
+                case PrisonEventType.WorkProgram:
+                case PrisonEventType.MiddayCount:
+                case PrisonEventType.EveningCount:
                     return true;
                 default:
                     return false;

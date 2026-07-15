@@ -69,6 +69,62 @@ namespace Prison.Tests
             }
         }
 
+        // ============ PrisonEventExtensions — formal counts ============
+        [Test]
+        public void IsCellCountPhase_OnlyMiddayAndEveningCount()
+        {
+            foreach (PrisonEventType evt in Enum.GetValues(typeof(PrisonEventType)))
+            {
+                bool expected = evt == PrisonEventType.MiddayCount || evt == PrisonEventType.EveningCount;
+                Assert.AreEqual(expected, PrisonEventExtensions.IsCellCountPhase(evt), $"IsCellCountPhase wrong for {evt}");
+            }
+        }
+
+        [Test]
+        public void IsFormalCount_AllFourDailyCounts()
+        {
+            foreach (PrisonEventType evt in Enum.GetValues(typeof(PrisonEventType)))
+            {
+                bool expected = evt == PrisonEventType.RollCall
+                    || evt == PrisonEventType.MorningRollCall
+                    || evt == PrisonEventType.MiddayCount
+                    || evt == PrisonEventType.EveningCount
+                    || evt == PrisonEventType.NightRollCall;
+                Assert.AreEqual(expected, PrisonEventExtensions.IsFormalCount(evt), $"IsFormalCount wrong for {evt}");
+            }
+        }
+
+        // ============ FormalCountMonitor rules ============
+        [Test]
+        public void FormalCountMonitor_MissingInmateOnCellCount_RaisesLockdown()
+        {
+            Assert.IsTrue(FormalCountMonitor.ShouldRaiseLockdown(PrisonEventType.MiddayCount, 15, 16));
+            Assert.IsTrue(FormalCountMonitor.ShouldRaiseLockdown(PrisonEventType.EveningCount, 0, 16));
+        }
+
+        [Test]
+        public void FormalCountMonitor_AllAccountedFor_NoLockdown()
+        {
+            Assert.IsFalse(FormalCountMonitor.ShouldRaiseLockdown(PrisonEventType.MiddayCount, 16, 16));
+            Assert.IsFalse(FormalCountMonitor.ShouldRaiseLockdown(PrisonEventType.EveningCount, 16, 16));
+        }
+
+        [Test]
+        public void FormalCountMonitor_EmptyFacilityOrNonCountPhase_NoLockdown()
+        {
+            Assert.IsFalse(FormalCountMonitor.ShouldRaiseLockdown(PrisonEventType.MiddayCount, 0, 0));
+            Assert.IsFalse(FormalCountMonitor.ShouldRaiseLockdown(PrisonEventType.FreeTime, 3, 16));
+            Assert.IsFalse(FormalCountMonitor.ShouldRaiseLockdown(PrisonEventType.WorkProgram, 3, 16));
+        }
+
+        [Test]
+        public void FormalCountMonitor_LockdownReason_NamesPhaseAndCount()
+        {
+            string reason = FormalCountMonitor.BuildLockdownReason(PrisonEventType.MiddayCount, 15, 16);
+            StringAssert.Contains("Midday Count", reason);
+            StringAssert.Contains("15/16", reason);
+        }
+
         // ============ PrisonRoutineLabels.FormatPhaseTitle ============
         [TestCase(PrisonEventType.MorningRollCall, "MORNING ROLL CALL")]
         [TestCase(PrisonEventType.NightRollCall, "NIGHT ROLL CALL")]
@@ -78,6 +134,9 @@ namespace Prison.Tests
         [TestCase(PrisonEventType.Dinner, "DINNER")]
         [TestCase(PrisonEventType.FreeTime, "FREE TIME")]
         [TestCase(PrisonEventType.LightsOut, "LIGHTS OUT")]
+        [TestCase(PrisonEventType.WorkProgram, "WORK / PROGRAMS")]
+        [TestCase(PrisonEventType.MiddayCount, "MIDDAY COUNT")]
+        [TestCase(PrisonEventType.EveningCount, "EVENING COUNT")]
         public void FormatPhaseTitle_Uppercase(PrisonEventType evt, string expected)
             => Assert.AreEqual(expected, PrisonRoutineLabels.FormatPhaseTitle(evt));
 
@@ -115,6 +174,9 @@ namespace Prison.Tests
             Assert.AreEqual("ROLL CALL AREA", PrisonRoutineLabels.GetGoToLabel(PrisonEventType.MorningRollCall, 0));
             Assert.AreEqual("ROLL CALL AREA", PrisonRoutineLabels.GetGoToLabel(PrisonEventType.RollCall, 0));
             Assert.AreEqual("CELL 3", PrisonRoutineLabels.GetGoToLabel(PrisonEventType.LightsOut, 3));
+            Assert.AreEqual("CELL 3", PrisonRoutineLabels.GetGoToLabel(PrisonEventType.MiddayCount, 3));
+            Assert.AreEqual("CELL 3", PrisonRoutineLabels.GetGoToLabel(PrisonEventType.EveningCount, 3));
+            Assert.AreEqual("WORKSHOP", PrisonRoutineLabels.GetGoToLabel(PrisonEventType.WorkProgram, 0));
         }
 
         // ============ PrisonLocationZone.GetHudLabel ============
@@ -216,6 +278,24 @@ namespace Prison.Tests
             Assert.AreEqual(1, (int)ReputationTier.Associate);
             Assert.AreEqual(2, (int)ReputationTier.Respected);
             Assert.AreEqual(3, (int)ReputationTier.Kingpin);
+        }
+
+        [Test]
+        public void PrisonEventType_IntValues_Pinned()
+        {
+            // Serialized as ints in PrisonSchedule.asset, guard onDutyDuring arrays,
+            // and RestrictedZone phase lists — reordering silently remaps them all.
+            Assert.AreEqual(0, (int)PrisonEventType.RollCall);
+            Assert.AreEqual(1, (int)PrisonEventType.Breakfast);
+            Assert.AreEqual(2, (int)PrisonEventType.Lunch);
+            Assert.AreEqual(3, (int)PrisonEventType.Dinner);
+            Assert.AreEqual(4, (int)PrisonEventType.FreeTime);
+            Assert.AreEqual(5, (int)PrisonEventType.LightsOut);
+            Assert.AreEqual(6, (int)PrisonEventType.MorningRollCall);
+            Assert.AreEqual(7, (int)PrisonEventType.NightRollCall);
+            Assert.AreEqual(8, (int)PrisonEventType.WorkProgram);
+            Assert.AreEqual(9, (int)PrisonEventType.MiddayCount);
+            Assert.AreEqual(10, (int)PrisonEventType.EveningCount);
         }
     }
 }

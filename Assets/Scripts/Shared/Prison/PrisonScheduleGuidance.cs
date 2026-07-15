@@ -28,6 +28,11 @@ namespace Prison
                 case PrisonEventType.LightsOut:
                 case PrisonEventType.NightRollCall:
                     return "Your cell only";
+                case PrisonEventType.MiddayCount:
+                case PrisonEventType.EveningCount:
+                    return "Return to your cell for count";
+                case PrisonEventType.WorkProgram:
+                    return "Workshop only";
                 default:
                     return PrisonRoutineLabels.FormatPhaseTitle(tm.CurrentEvent, uppercase: false);
             }

@@ -40,6 +40,7 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
             PrisonTimeManager.Instance.OnEventChanged += OnScheduleEventChanged;
 
         MorningRollCallTracker.EnsureInstance();
+        FormalCountMonitor.EnsureInstance();
         if (MorningRollCallTracker.Instance != null)
             MorningRollCallTracker.Instance.OnCellShakedownComplete += OnRollCallCellShakedownComplete;
 
@@ -164,7 +165,7 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
                 return true;
         }
 
-        if (evt == PrisonEventType.MorningRollCall || evt == PrisonEventType.RollCall)
+        if (PrisonEventExtensions.IsMorningLineUp(evt) || PrisonEventExtensions.IsCellCountPhase(evt))
         {
             var cellData = registry.GetCell(cellIndex);
             if (cellData != null && _characterController != null
@@ -187,6 +188,8 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
                 return zone.zoneType == ZoneType.Cell && zone.cellIndex == cellIndex;
             case PrisonEventType.NightRollCall:
             case PrisonEventType.LightsOut:
+            case PrisonEventType.MiddayCount:
+            case PrisonEventType.EveningCount:
                 return zone.zoneType == ZoneType.Cell && zone.cellIndex == cellIndex;
             case PrisonEventType.Breakfast:
             case PrisonEventType.Lunch:
@@ -194,6 +197,8 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
                 return zone.zoneType == ZoneType.Cafeteria;
             case PrisonEventType.FreeTime:
                 return zone.zoneType == ZoneType.Yard || zone.zoneType == ZoneType.Cafeteria;
+            case PrisonEventType.WorkProgram:
+                return zone.zoneType == ZoneType.Workshop;
         }
         return false;
     }

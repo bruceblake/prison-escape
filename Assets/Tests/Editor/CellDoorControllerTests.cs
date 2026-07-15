@@ -43,6 +43,9 @@ namespace Prison.Tests
         [TestCase(PrisonEventType.Dinner)]
         [TestCase(PrisonEventType.FreeTime)]
         [TestCase(PrisonEventType.MorningRollCall)]
+        [TestCase(PrisonEventType.WorkProgram)]
+        [TestCase(PrisonEventType.MiddayCount)]
+        [TestCase(PrisonEventType.EveningCount)]
         public void IsOpenPhase_OpenPhases_ReturnTrue(PrisonEventType evt)
         {
             Assert.IsTrue(CellDoorController.IsOpenPhase(evt), $"{evt} should be an OPEN phase");
@@ -63,13 +66,10 @@ namespace Prison.Tests
         {
             foreach (PrisonEventType evt in Enum.GetValues(typeof(PrisonEventType)))
             {
+                // Doors are open for every day phase; only the night lock-in keeps them closed.
                 bool expectedOpen =
-                    evt == PrisonEventType.RollCall ||
-                    evt == PrisonEventType.Breakfast ||
-                    evt == PrisonEventType.Lunch ||
-                    evt == PrisonEventType.Dinner ||
-                    evt == PrisonEventType.FreeTime ||
-                    evt == PrisonEventType.MorningRollCall;
+                    evt != PrisonEventType.LightsOut &&
+                    evt != PrisonEventType.NightRollCall;
 
                 Assert.AreEqual(expectedOpen, CellDoorController.IsOpenPhase(evt),
                     $"IsOpenPhase mismatch for {evt}");

@@ -494,16 +494,21 @@ public static class PrisonFacilityInstaller
 
         door.rotation = Quaternion.LookRotation(intoCell, Vector3.up);
 
-        Vector3 pos = new Vector3(faceCenter.x, FloorY, faceCenter.z);
+        // Seat by pivot first (this is the fallback for renderer-less test doubles).
+        door.position = new Vector3(faceCenter.x, FloorY, faceCenter.z);
+
         var doorBounds = GetObjectBounds(door);
         if (doorBounds.size.sqrMagnitude > 0.01f)
-            pos.y += FloorY - doorBounds.min.y;
-
-        float halfDepth = doorBounds.extents.magnitude > 0.01f
-            ? Mathf.Max(0.15f, Vector3.Dot(doorBounds.extents, outwardNormal.normalized))
-            : 0.4f;
-        pos += outwardNormal * (halfDepth * 0.5f);
-        door.position = pos;
+        {
+            // Center the door's MESH (not its pivot) on the doorway opening and seat its
+            // bottom on the floor, sitting in the wall plane — no outward nudge.
+            Vector3 centerOffset = doorBounds.center - door.position;
+            float bottomOffset = doorBounds.min.y - door.position.y;
+            door.position = new Vector3(
+                faceCenter.x - centerOffset.x,
+                FloorY - bottomOffset,
+                faceCenter.z - centerOffset.z);
+        }
     }
 
     static bool TryGetCorridorDoorFace(Bounds cellBounds, Vector3 bedPos, out Vector3 faceCenter, out Vector3 outwardNormal)

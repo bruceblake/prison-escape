@@ -96,9 +96,23 @@ public static class PrisonPolishPass
     {
         Directory.CreateDirectory(TextureFolder);
 
-        var concrete = BakeTexture("T_ConcreteNoise", (x, y) =>
+        // Cinderblock wall: mortar courses + grain, so walls read like real block, not flat paint.
+        var wall = BakeTexture("T_CinderBlockWall", (x, y) =>
         {
-            float v = 0.82f + 0.10f * Mathf.PerlinNoise(x * 9f, y * 9f) + 0.06f * Mathf.PerlinNoise(x * 37f, y * 37f);
+            const int rows = 5, cols = 3;
+            float ry = y * rows;
+            int row = (int)ry;
+            float fx = (x * cols + (row % 2) * 0.5f) % 1f;
+            float fy = ry % 1f;
+            bool mortar = fy < 0.05f || fy > 0.95f || fx < 0.03f || fx > 0.97f;
+            float grain = 0.74f + 0.14f * Mathf.PerlinNoise(x * 26f, y * 26f) + 0.06f * Mathf.PerlinNoise(x * 90f, y * 90f);
+            float v = mortar ? 0.46f : grain;
+            return new Color(v, v, v);
+        });
+
+        var concrete = BakeTexture("T_ConcreteGrain", (x, y) =>
+        {
+            float v = 0.78f + 0.13f * Mathf.PerlinNoise(x * 14f, y * 14f) + 0.06f * Mathf.PerlinNoise(x * 55f, y * 55f);
             return new Color(v, v, v);
         });
 
@@ -125,16 +139,21 @@ public static class PrisonPolishPass
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var mat = AssetDatabase.LoadAssetAtPath<Material>(path);
             if (mat == null || !mat.HasProperty("_BaseMap")) continue;
-            if (mat.GetTexture("_BaseMap") != null) continue;
 
             string n = mat.name;
             Texture2D tex = null;
             Vector2 tiling = Vector2.one * 4f;
-            if (n.Contains("Concrete")) { tex = concrete; tiling = new Vector2(4f, 3f); }
+            bool overrideExisting = false;
+
+            if (n.Contains("Wall")) { tex = wall; tiling = new Vector2(3f, 2f); overrideExisting = true; }
+            else if (n.Contains("Ceiling") || n.Contains("Concrete")) { tex = concrete; tiling = new Vector2(4f, 4f); overrideExisting = true; }
             else if (n.Contains("Tile") || n.Contains("Floor")) { tex = tile; tiling = new Vector2(8f, 8f); }
             else if (n.Contains("Metal") || n.Contains("Bars") || n.Contains("Sink") || n.Contains("Shelf")) { tex = metal; tiling = new Vector2(2f, 2f); }
 
             if (tex == null) continue;
+            // Walls/ceilings: replace the flat placeholder map. Floors/metal: only fill gaps.
+            if (mat.GetTexture("_BaseMap") != null && !overrideExisting) continue;
+
             mat.SetTexture("_BaseMap", tex);
             mat.SetTextureScale("_BaseMap", tiling);
             EditorUtility.SetDirty(mat);
@@ -307,9 +326,16 @@ public static class PrisonPolishPass
 
         int standardIndex = 0;
         int assigned = 0;
+        bool hasSweeper = false;
         foreach (var entry in gm.guardSpawnTable)
         {
             if (entry == null) continue;
+
+            // Keep every guard always on duty so the morning line-up sweep isn't gated
+            // out by a shift window (a StandardPatrol guard switches to sweeper during
+            // MorningRollCall; see GuardShiftController.ApplyStandardPatrolShift).
+            entry.onDutyDuring = null;
+
             if (entry.role == GuardSpawnRole.NightCellVerifier)
             {
                 entry.patrolWaypoints = wings;
@@ -317,12 +343,26 @@ public static class PrisonPolishPass
             else if (entry.role == GuardSpawnRole.StandardPatrol)
             {
                 entry.patrolWaypoints = (standardIndex++ % 2 == 0) ? perimeter : inner;
+                hasSweeper = true;
             }
-            else
+            else if (entry.role == GuardSpawnRole.MorningShakedown)
             {
-                continue; // MorningShakedown guards don't patrol.
+                hasSweeper = true;
             }
             assigned++;
+        }
+
+        // Guarantee at least one guard can run the morning sweep.
+        if (!hasSweeper)
+        {
+            foreach (var entry in gm.guardSpawnTable)
+            {
+                if (entry == null) continue;
+                entry.role = GuardSpawnRole.StandardPatrol;
+                entry.patrolWaypoints = perimeter;
+                Debug.Log("[PrisonPolish] No sweeper-capable guard found — promoted one to StandardPatrol for roll call.");
+                break;
+            }
         }
 
         EditorUtility.SetDirty(gm);
@@ -413,13 +453,20 @@ public static class PrisonPolishPass
     }
 
     // ------------------------------------------------------------------
-    // NavMesh rebake so agents respect the new prop colliders.
+    // NavMesh rebake — carve from ALL render geometry (walls included) at a
+    // fine voxel size so 0.2 m walls reliably block agents (fixes NPCs walking
+    // through walls and the shakedown guard failing to reach the cells).
     // ------------------------------------------------------------------
     public static int RebakeNavMesh()
     {
         int count = 0;
         foreach (var surface in Object.FindObjectsByType<NavMeshSurface>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
+            surface.collectObjects = CollectObjects.All;
+            surface.useGeometry = UnityEngine.AI.NavMeshCollectGeometry.RenderMeshes;
+            surface.layerMask = ~0;
+            surface.overrideVoxelSize = true;
+            surface.voxelSize = 0.1f;
             surface.BuildNavMesh();
             EditorUtility.SetDirty(surface);
             count++;

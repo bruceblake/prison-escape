@@ -1506,7 +1506,7 @@ namespace Prison
 
             if (currentPhaseText != null)
             {
-                currentPhaseText.text = $"[ {currentTitle} ]";
+                currentPhaseText.text = currentTitle;
                 currentPhaseText.color = compliantStatusColor;
                 currentPhaseText.fontStyle = FontStyles.Bold;
             }
@@ -1606,35 +1606,58 @@ namespace Prison
             if (goToText != null)
                 goToText.gameObject.SetActive(false);
 
-            Color lineColor = compliantStatusColor;
-            string status = GetStatusFragment(tm, goTo, nextGoTo, ref lineColor);
-            string path = GetPathFragment(goTo, nextGoTo);
-            bool showPath = !string.IsNullOrEmpty(path);
+            // One plain-language instruction, coloured by tone. Matches the objective
+            // waypoint's destination (both come from PrisonRoutineDestination).
+            var instruction = PrisonRoutineLabels.GetInstruction(tm, _prisoner);
+            Color lineColor = ToneColor(instruction.Tone);
+            string text = instruction.Text;
+
+            if ((instruction.Tone == PrisonRoutineLabels.RoutineInstructionTone.MustMove
+                 || instruction.Tone == PrisonRoutineLabels.RoutineInstructionTone.Enforcement)
+                && _prisoner != null)
+            {
+                var obj = PrisonRoutineDestination.ResolveActiveDestination(tm, _prisoner);
+                if (obj.Stand != null)
+                {
+                    Vector3 d = obj.Stand.position - _prisoner.transform.position;
+                    d.y = 0f;
+                    int m = Mathf.RoundToInt(d.magnitude);
+                    if (m > 1) text += $"  ·  {m}m";
+                }
+                if (tm.IsMandatoryTravelGraceActive)
+                {
+                    int g = Mathf.CeilToInt(tm.ComplianceGraceSecondsRemaining);
+                    if (g > 0) text += $"  ·  {g}s to move";
+                }
+            }
 
             statusText.gameObject.SetActive(true);
-            statusText.text = NormalizeStatusLabel(status);
-            lineColor.a = 0.92f;
+            statusText.text = text;
+            lineColor.a = 0.95f;
             statusText.color = lineColor;
 
-            if (detailSeparatorText != null)
-            {
-                detailSeparatorText.gameObject.SetActive(showPath);
-                detailSeparatorText.text = detailSeparatorCharacter;
-                detailSeparatorText.color = lineColor;
-            }
-
-            if (pathText != null)
-            {
-                pathText.gameObject.SetActive(showPath);
-                pathText.text = path;
-                pathText.color = lineColor;
-            }
+            // Legacy GPS "HERE TO DEST" fragment retired — one clear line instead.
+            if (detailSeparatorText != null) detailSeparatorText.gameObject.SetActive(false);
+            if (pathText != null) pathText.gameObject.SetActive(false);
 
             var detailLayout = FindDeepChild(transform, "DetailLayout") as RectTransform;
             if (detailLayout != null)
                 LayoutRebuilder.ForceRebuildLayoutImmediate(detailLayout);
 
             SyncDetailRowFonts();
+        }
+
+        private Color ToneColor(PrisonRoutineLabels.RoutineInstructionTone tone)
+        {
+            switch (tone)
+            {
+                case PrisonRoutineLabels.RoutineInstructionTone.InPosition: return compliantStatusColor;
+                case PrisonRoutineLabels.RoutineInstructionTone.FreeRoam: return new Color(0.55f, 0.78f, 1f);
+                case PrisonRoutineLabels.RoutineInstructionTone.Wait: return travelGraceStatusColor;
+                case PrisonRoutineLabels.RoutineInstructionTone.MustMove: return travelGraceStatusColor;
+                case PrisonRoutineLabels.RoutineInstructionTone.Enforcement: return FlashColor(enforcementStatusColor);
+                default: return compliantStatusColor;
+            }
         }
 
         private string GetStatusFragment(PrisonTimeManager tm, string goTo, string nextGoTo, ref Color color)

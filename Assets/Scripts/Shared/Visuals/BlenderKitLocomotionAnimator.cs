@@ -59,8 +59,8 @@ namespace Prison.Visuals
             _lastPosition = _trackedTransform.position;
 
             bool hasValidAvatar = _animator != null && _animator.avatar != null && _animator.avatar.isValid;
-            if (!hasValidAvatar && _animator != null)
-                _animator.enabled = false;
+            if (_animator != null)
+                _animator.enabled = hasValidAvatar;
 
             if (hasValidAvatar)
             {
@@ -205,21 +205,25 @@ namespace Prison.Visuals
 
         private float MeasureSpeed()
         {
+            // Always measure actual body movement so NPCs animate even when the agent's
+            // reported velocity lags or the agent is momentarily off the NavMesh.
+            float transformSpeed = TransformDeltaSpeed();
+
+            float agentSpeed = 0f;
             if (_agent != null && _agent.enabled && _agent.isOnNavMesh)
-                return _agent.velocity.magnitude;
+                agentSpeed = _agent.velocity.magnitude;
 
-            if (_controller != null && _controller.enabled)
-            {
-                Vector3 delta = _trackedTransform.position - _lastPosition;
-                _lastPosition = _trackedTransform.position;
-                delta.y = 0f;
-                return delta.magnitude / Mathf.Max(Time.deltaTime, 0.0001f);
-            }
+            float speed = Mathf.Max(agentSpeed, transformSpeed);
+            // Clamp so a teleport (spawn / SendToCell) can't spike into a run flash.
+            return Mathf.Min(speed, runSpeed * 2f);
+        }
 
-            Vector3 fallback = _trackedTransform.position - _lastPosition;
+        private float TransformDeltaSpeed()
+        {
+            Vector3 delta = _trackedTransform.position - _lastPosition;
             _lastPosition = _trackedTransform.position;
-            fallback.y = 0f;
-            return fallback.magnitude / Mathf.Max(Time.deltaTime, 0.0001f);
+            delta.y = 0f;
+            return delta.magnitude / Mathf.Max(Time.deltaTime, 0.0001f);
         }
     }
 }

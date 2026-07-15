@@ -56,7 +56,8 @@ Hub (cafeteria center) at world `(-26, -98)`. Floor plates sync their surface Y 
 
 ## Build rules
 
-- **Walls:** 6 m tall (sampled from `JailCell_01`), 0.2 m thick. Exterior edges are solid; **edges shared between rooms/corridors get a wall with a centered doorway** (3.5 m wide, 3 m tall, lintel + side jambs above) — matching the diagram's door openings. Rooms are enclosed spaces connected by doors, not open zones.
+- **Walls:** 6 m tall (sampled from `JailCell_01`), 0.2 m thick. Exterior edges are solid; **edges shared between rooms/corridors get a wall with a centered doorway** (3.5 m wide, 3 m tall, lintel + side jambs). **Structural wall segments keep `BoxCollider`** — players cannot walk through them. Visual-only geometry (props, roofs, lights) has no collider.
+- **Cell wing keep-out:** layout walls on `CellWingFloor_West` / `CellWingFloor_East` **must not intersect** jail cell volumes (`JailCell_*` zone bounds). Cell prefabs supply interior walls; the runner only builds perimeter/doorway geometry on the wing plate edges.
 - **Roofs:** every plate **except the Courtyard** (open air for the fence escape). Roof slabs overhang exterior walls by 0.5 m; **soffit lips** on exterior edges hide wall/roof gaps.
 - **Lighting:** grid of ceiling fixtures per room/corridor + one light per cell (~370 point lights after density pass); warm color (1, 0.95, 0.85)
 - **Furniture:** scratch-built from cubes + prison materials (no prefabs) — cafeteria tables/serving line, shower stalls/sinks/benches, workshop benches/shelves, security desk/monitor bank, courtyard exercise equipment

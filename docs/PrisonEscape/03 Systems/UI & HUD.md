@@ -16,9 +16,11 @@ Current screenshots: `HUD in-game 2026-07-14.png` · `Notebook crafting 2026-07-
 ## Status snapshot (7/14/2026)
 
 - Routine strip, hotbar, notebook, heat eye, end/solitary screens: **implemented**.
-- **Player vitals HUD** (cash, MH, PH, STR), **current location** readout, **objective waypoint** marker: **implemented** (runtime-built, auto-spawn from `EscapeManager`).
+- **Player vitals HUD** (cash, MH, PH, STR), **current location** readout, **objective waypoint** marker: **implemented** (runtime-built via `HudBootstrap`).
 - **UIMenuFocus** fades ambient HUD (routine strip, hotbar, heat eye, vitals, location) while bag/notebook/pause are open.
-- Hotbar: bottom margin, 1–6 key hints, stronger selection highlight. Crafting greens use `PrisonUITheme.InkGreen`.
+- Hotbar: **56×56 px slots** (runtime `HotbarUI.ApplySlotLayout`), bottom margin, 1–6 key hints, stronger selection highlight. Crafting greens use `PrisonUITheme.InkGreen`.
+- Objective waypoint: **smoothed** screen position + distance; hysteresis for on-screen vs edge-arrow (reduces jitter near stand points).
+- Morning roll call: `ComplianceStatusHUD` uses **wait-in-cell** destination label (not next-meal venue).
 - Suspicion floor on heat eye (half minimum while `PrisonSuspicion` active).
 
 ## Key files

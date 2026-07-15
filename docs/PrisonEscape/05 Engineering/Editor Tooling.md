@@ -10,13 +10,21 @@ Menu **Prison → Layout →**:
 |---|---|
 | 0 — Apply Connected Diagram Layout | Tile the 18 floor plates from [[Prison Layout — Minimum Security]] (deletes legacy floors, repositions cell blocks) |
 | 1 — Rename East Cells (09-16) | East block cell renaming + number labels |
-| 2 — Build Walls + Roofs | 6 m walls on exterior edges only; roofs everywhere except courtyard |
-| 3 — Build All Lighting | Light grids per plate + per-cell lights (~635) |
+| 2 — Build Walls + Roofs | 6 m walls with **BoxCollider** on structural segments; doorway lintels + jambs; roof overhang + exterior soffits |
+| 3 — Build All Lighting | Light grids per plate + per-cell lights (~370 after density pass) |
 | 4 — Furnish Rooms (Scratch Build) | Cube-built furniture (cafeteria, showers, workshop, security, courtyard) |
 | 5 — Wire Registry | `PrisonLocationRegistry` cells + zones |
-| **Run Full Build** | All steps + save scene |
+| 6 — Build Escape Systems | Solitary block (4 cells), escape boundary ring, restricted zones, `EscapeManager` wiring |
+| **Run Full Build** | All steps (0→6) + save scene |
 
-Key constants: hub (-26, -98) · corridor width 4 m · wall height sampled 6 m · floor Y 0.6 · edge tolerance 0.35. Layout truth lives in `BuildDiagramPlates()` — keep it in sync with the layout note.
+Key constants: hub (-26, -98) · corridor width 4 m · wall height sampled 6 m · floor surface Y synced to `JailCell_01` spawn (~0.82 m) · edge tolerance 0.35 · doorway 3.5×3 m.
+
+**Wall rules (7/14/2026):**
+- `CreateWallBlock` — structural walls/partitions keep physics colliders (walkable blocking).
+- `CreateBlock` — visual-only props/roofs/lights (collider stripped).
+- **Cell wing keep-out:** on `CellWingFloor_West` / `CellWingFloor_East`, skip wall/lintel/jamb segments that intersect jail cell zone bounds (cells supply their own geometry).
+
+Layout truth lives in `BuildDiagramPlates()` — keep in sync with [[Prison Layout — Minimum Security]].
 
 ## Character visuals (`CharacterVisualSetupRunner.cs`)
 

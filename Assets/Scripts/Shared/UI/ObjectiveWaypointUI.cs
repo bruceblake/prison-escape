@@ -12,6 +12,12 @@ namespace Prison
     {
         private const int SortOrder = 130;
         private const float EdgePadding = 48f;
+        private const float OnScreenEnterPadding = 56f;
+        private const float OnScreenExitPadding = 36f;
+        private const float WorldSmoothTime = 0.14f;
+        private const float ScreenSmoothTime = 0.1f;
+        private const float DistanceSmoothTime = 0.18f;
+        private const float MarkerHeightOffset = 1.6f;
 
         private static ObjectiveWaypointUI _instance;
 
@@ -22,6 +28,15 @@ namespace Prison
         private Image _offScreenArrow;
         private PrisonerController _prisoner;
         private Camera _cam;
+
+        private Vector3 _smoothedWorldTarget;
+        private Vector3 _smoothedScreenPos;
+        private float _smoothedDistance;
+        private Vector3 _worldVelocity;
+        private Vector3 _screenVelocity;
+        private float _distanceVel;
+        private bool _onScreenMode = true;
+        private bool _hasSmoothedState;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AutoSpawnAfterSceneLoad()
@@ -138,37 +153,56 @@ namespace Prison
 
             if (!show)
             {
+                _hasSmoothedState = false;
                 if (_markerRoot != null)
                     _markerRoot.gameObject.SetActive(false);
                 return;
             }
 
-            float distance = Vector3.Distance(_prisoner.transform.position, worldPos);
-            string shortLabel = ShortenLabel(label);
-            _labelText.text = $"{shortLabel} — {distance:F0}m";
+            Vector3 targetWorld = worldPos + Vector3.up * MarkerHeightOffset;
+            if (!_hasSmoothedState)
+            {
+                _smoothedWorldTarget = targetWorld;
+                _smoothedDistance = Vector3.Distance(_prisoner.transform.position, worldPos);
+                _hasSmoothedState = true;
+            }
+            else
+            {
+                _smoothedWorldTarget = Vector3.SmoothDamp(
+                    _smoothedWorldTarget, targetWorld, ref _worldVelocity, WorldSmoothTime);
+            }
 
-            Vector3 screen = _cam.WorldToScreenPoint(worldPos);
+            float rawDistance = Vector3.Distance(_prisoner.transform.position, worldPos);
+            _smoothedDistance = Mathf.SmoothDamp(_smoothedDistance, rawDistance, ref _distanceVel, DistanceSmoothTime);
+
+            string shortLabel = ShortenLabel(label);
+            _labelText.text = $"{shortLabel} — {_smoothedDistance:F0}m";
+
+            Vector3 screen = _cam.WorldToScreenPoint(_smoothedWorldTarget);
             bool behind = screen.z < 0f;
             float w = Screen.width;
             float h = Screen.height;
+            float pad = _onScreenMode ? OnScreenExitPadding : OnScreenEnterPadding;
             bool onScreen = !behind
-                && screen.x >= EdgePadding && screen.x <= w - EdgePadding
-                && screen.y >= EdgePadding && screen.y <= h - EdgePadding;
+                && screen.x >= pad && screen.x <= w - pad
+                && screen.y >= pad && screen.y <= h - pad;
+            _onScreenMode = onScreen;
 
             _markerRoot.gameObject.SetActive(true);
 
+            Vector3 targetScreenPos;
             if (onScreen)
             {
                 _onScreenDot.gameObject.SetActive(true);
                 _offScreenArrow.gameObject.SetActive(false);
-                _markerRoot.position = screen;
+                targetScreenPos = screen;
             }
             else
             {
                 _onScreenDot.gameObject.SetActive(false);
                 _offScreenArrow.gameObject.SetActive(true);
 
-                Vector3 dir = (worldPos - _prisoner.transform.position);
+                Vector3 dir = _smoothedWorldTarget - _prisoner.transform.position;
                 dir.y = 0f;
                 if (dir.sqrMagnitude < 0.01f)
                     dir = _cam.transform.forward;
@@ -187,15 +221,18 @@ namespace Prison
                 if (edgeDir.sqrMagnitude < 0.01f)
                     edgeDir = Vector2.up;
 
-                float padX = EdgePadding;
-                float padY = EdgePadding;
-                float sx = w * 0.5f + edgeDir.x * (w * 0.5f - padX);
-                float sy = h * 0.5f + edgeDir.y * (h * 0.5f - padY);
-                _markerRoot.position = new Vector3(sx, sy, 0f);
+                float sx = w * 0.5f + edgeDir.x * (w * 0.5f - EdgePadding);
+                float sy = h * 0.5f + edgeDir.y * (h * 0.5f - EdgePadding);
+                targetScreenPos = new Vector3(sx, sy, 0f);
 
                 float angle = Mathf.Atan2(edgeDir.x, edgeDir.y) * Mathf.Rad2Deg;
                 _offScreenArrow.rectTransform.localRotation = Quaternion.Euler(0f, 0f, -angle);
             }
+
+            _smoothedScreenPos = Vector3.SmoothDamp(
+                _smoothedScreenPos, targetScreenPos, ref _screenVelocity, ScreenSmoothTime);
+
+            _markerRoot.position = _smoothedScreenPos;
         }
 
         private static string ShortenLabel(string label)

@@ -22,7 +22,7 @@ Assets/Scripts/
 └── Editor/          # SocialBalanceSimulatorWindow
 
 Assets/Editor/       # PrisonLevelLayoutRunner, CharacterVisualSetupRunner, PrisonOverhaulRunner
-Assets/Tests/Editor/ # 4 EditMode suites (136 tests)
+Assets/Tests/Editor/ # EditMode suites (153 tests incl. EscapeSystemTests)
 Assets/ScriptableObjects/  # Items, Recipes, WeaponData, PrisonSchedule
 ```
 
@@ -52,7 +52,7 @@ No `.asmdef` files — everything compiles into `Assembly-CSharp` (deliberate: z
 
 - Pure logic goes in static classes (`SocialMath`, `CraftingSystem`, `PrisonEventRules`) so it stays EditMode-testable
 - ScriptableObjects for designer data (schedule, items, recipes, personalities, favors)
-- Editor runners (menu items) for repeatable scene generation — never hand-edit generated objects
+- Editor runners (menu items) for repeatable scene generation — never hand-edit generated objects; structural layout walls use `CreateWallBlock` (colliders on), props use `CreateBlock` (visual only)
 - Namespace `Prison` / `Prison.Visuals` / `Prison.Tests`
 
 Related: [[Systems Overview]] · [[Editor Tooling]] · [[Testing & QA]]

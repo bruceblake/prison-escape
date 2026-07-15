@@ -25,7 +25,8 @@ Chat (brainstorm) → Obsidian (spec) → Cursor (implement) → Unity MCP (exec
 
 ### 3. Execute & verify with Unity MCP
 - Cursor runs the editor scripts in the live editor, checks console logs, queries object positions, and fixes issues without leaving chat.
-- Gotcha: after editing a script, Unity must recompile before re-running it.
+- Gotcha: after editing a script, Unity must **recompile** before re-running it (stale DLL = old layout/HUD code runs silently).
+- Layout changes: re-run **Prison → Layout → Run Full Build** and confirm `[PrisonLayout]` log lines (wall count, cell keep-outs, light count).
 
 ### 4. Sync back
 - If implementation deviated from the spec, **update the vault note** so docs match reality.

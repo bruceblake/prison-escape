@@ -27,6 +27,11 @@ public class HotbarUI : MonoBehaviour
 
     public int hotbarSlotCount = 6;
 
+    [Header("Layout")]
+    [Tooltip("Hotbar slot size in canvas pixels (applied to GridLayoutGroup when present).")]
+    public Vector2 slotSize = new Vector2(56f, 56f);
+    public Vector2 slotSpacing = new Vector2(4f, 4f);
+
     private List<InventorySlotUI> slotUIs = new List<InventorySlotUI>();
     private bool isBuilt;
     private float _hideAfterUnscaled = float.NegativeInfinity;
@@ -66,6 +71,23 @@ public class HotbarUI : MonoBehaviour
             fader.SetImmediate(true, true);
 
         ApplyBottomMargin();
+        ApplySlotLayout();
+    }
+
+    private void ApplySlotLayout()
+    {
+        if (slotContainer == null) return;
+        var grid = slotContainer.GetComponent<GridLayoutGroup>();
+        if (grid == null) return;
+        grid.cellSize = slotSize;
+        grid.spacing = slotSpacing;
+
+        var rt = slotContainer as RectTransform;
+        if (rt == null) return;
+        float width = slotSize.x * hotbarSlotCount + slotSpacing.x * (hotbarSlotCount - 1)
+            + grid.padding.left + grid.padding.right;
+        float height = slotSize.y + grid.padding.top + grid.padding.bottom;
+        rt.sizeDelta = new Vector2(width, height);
     }
 
     private void ApplyBottomMargin()

@@ -28,8 +28,8 @@ Ambient readouts: stealth pressure, player condition, interaction feedback, and 
 - [x] **Player vitals HUD** — `PlayerVitalsHUD`: cash (`PlayerWallet`), Mental Health, Physical Health, Strength (0–100 each). Always visible; dark translucent backdrop (`PrisonUITheme.CommandStripBackdrop`). Fades with `UIMenuFocus`.
 - [x] **Physical Health stat** — third player stat: solitary −10, +5/day at Morning Roll Call (with MH/STR). Shown on solitary overlay tick-down.
 - [x] **Current location HUD** — `CurrentLocationHUD` bottom-right; uses `PrisonerController.GetCurrentLocationLabel()` → `PrisonRoutineLabels.FormatPlayerLocation`.
-- [x] **Objective waypoint** — `ObjectiveWaypointUI`: screen marker + `LABEL — Nm` during mandatory non-compliance; on-screen dot or off-screen edge arrow. Destination via `PrisonRoutineDestination` + `PrisonLocationRegistry.GetStandPointForEvent`.
-- [x] **Runtime HUD bootstrap** — `HudBootstrap` (from `EscapeManager`) spawns vitals, location, and waypoint canvases at runtime; legacy scene `CashUIController` can be disabled to avoid duplicate cash readout.
+- [x] **Objective waypoint** — `ObjectiveWaypointUI`: screen marker + `LABEL — Nm` during mandatory non-compliance; on-screen dot or off-screen edge arrow. Smoothed world/screen position and distance (7/14 fix for jitter near stand points). Destination via `PrisonRoutineDestination` + `PrisonLocationRegistry.GetStandPointForEvent`.
+- [x] **Runtime HUD bootstrap** — `HudBootstrap` spawns vitals, location, and waypoint canvases at runtime; legacy scene `CashUIController` can be disabled to avoid duplicate cash readout.
 
 ## Key files
 

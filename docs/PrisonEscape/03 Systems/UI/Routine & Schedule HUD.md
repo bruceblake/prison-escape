@@ -17,6 +17,7 @@ Top strip during Morning Roll Call: phase title, progress bar with ghost timer, 
   - `RoutineBarTimerReadability` — keeps the ghost timer legible over the fill
 - Legacy layers (still in repo, off by default): `PrisonScheduleUI` (clock + event + 75 s warning), `MinimalSchedulePhaseTextHUD` (prev/current/next), `TextRoutineComplianceHUD` (tactical text), `DailyRoutineBarUI` (full-day segment timeline)
 - Presence model: HUD dims to "all clear" when compliant with >50% phase time left; full "pressure" under 25%, enforcement, grace, or warning
+- **`ComplianceStatusHUD`** — during Morning Roll Call, `GO TO` shows **wait-in-cell** copy (`GetMorningRollCallLineUpDestinationLabel`), not the next meal venue
 
 ## Polish backlog
 
@@ -30,6 +31,6 @@ Top strip during Morning Roll Call: phase title, progress bar with ghost timer, 
 
 ## Key files
 
-`Assets/Scripts/Shared/Prison/RoutineNowNextBarUI.cs` · `RoutineBarDisplayController.cs` · `RoutineBarTimerReadability.cs` (+ legacy HUD scripts named above)
+`Assets/Scripts/Shared/Prison/RoutineNowNextBarUI.cs` · `RoutineBarDisplayController.cs` · `RoutineBarTimerReadability.cs` · `ComplianceStatusHUD.cs` (+ legacy HUD scripts named above)
 
 Related: [[UI & HUD]] · [[Time & Schedule]] · [[Roll Call & Shakedown]] · [[UI Theme & Style Guide]]

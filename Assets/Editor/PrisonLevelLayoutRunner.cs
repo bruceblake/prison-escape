@@ -166,6 +166,7 @@ public static class PrisonLevelLayoutRunner
     }
 
     static List<FloorPlate> _activePlates = new();
+    static List<Bounds> _jailCellBounds = new();
 
     static FloorPlate[] BuildDiagramPlates()
     {
@@ -396,6 +397,7 @@ public static class PrisonLevelLayoutRunner
         var wallMat = LoadMat(WallMatPath);
         var wallsRoot = GetOrCreateRoot("LayoutWalls");
         ClearChildren(wallsRoot);
+        _jailCellBounds = CollectJailCellBounds();
 
         int wallCount = 0;
         foreach (var plate in _activePlates)
@@ -406,7 +408,54 @@ public static class PrisonLevelLayoutRunner
                 wallCount += BuildPlateEdgeWalls(plate, side, group.transform, wallMat, metrics, _activePlates);
         }
 
-        Debug.Log($"[PrisonLayout] Built {wallCount} wall segments with doorways ({metrics.WallHeight:F1} m tall, {DoorwayWidth} m doors).");
+        Debug.Log($"[PrisonLayout] Built {wallCount} wall segments with doorways ({metrics.WallHeight:F1} m tall, {DoorwayWidth} m doors, {_jailCellBounds.Count} cell keep-outs).");
+    }
+
+    static List<Bounds> CollectJailCellBounds()
+    {
+        var list = new List<Bounds>();
+        foreach (var blockName in new[] { "JailCells", "JailCells_East" })
+        {
+            var block = GameObject.Find(blockName);
+            if (block == null) continue;
+
+            foreach (Transform cell in block.transform)
+            {
+                if (!cell.name.StartsWith("JailCell_")) continue;
+                var col = cell.GetComponent<BoxCollider>();
+                if (col != null)
+                {
+                    list.Add(col.bounds);
+                    continue;
+                }
+
+                var renderers = cell.GetComponentsInChildren<Renderer>();
+                if (renderers.Length == 0) continue;
+                var bounds = renderers[0].bounds;
+                for (int i = 1; i < renderers.Length; i++)
+                    bounds.Encapsulate(renderers[i].bounds);
+                list.Add(bounds);
+            }
+        }
+
+        return list;
+    }
+
+    static bool IsCellWingPlate(FloorPlate plate) => plate.Name.StartsWith("CellWingFloor_");
+
+    static bool IntersectsJailCellInterior(Vector3 center, Vector3 scale)
+    {
+        if (_jailCellBounds == null || _jailCellBounds.Count == 0)
+            return false;
+
+        var segment = new Bounds(center, scale);
+        foreach (var cell in _jailCellBounds)
+        {
+            if (segment.Intersects(cell))
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -488,7 +537,9 @@ public static class PrisonLevelLayoutRunner
             float len = sb - sa;
             Vector3 pos = alongX ? new Vector3(mid, centerY, edgeCoord) : new Vector3(edgeCoord, centerY, mid);
             Vector3 scale = alongX ? new Vector3(len, wallH, t) : new Vector3(t, wallH, len);
-            CreateBlock(parent, $"Wall_{sideTag}_{count}", pos, scale, wallMat);
+            if (IsCellWingPlate(plate) && IntersectsJailCellInterior(pos, scale))
+                continue;
+            CreateWallBlock(parent, $"Wall_{sideTag}_{count}", pos, scale, wallMat);
             count++;
         }
 
@@ -500,8 +551,11 @@ public static class PrisonLevelLayoutRunner
             float lintelY = floorTop + DoorHeight + lintelH * 0.5f;
             Vector3 pos = alongX ? new Vector3(center, lintelY, edgeCoord) : new Vector3(edgeCoord, lintelY, center);
             Vector3 scale = alongX ? new Vector3(width, lintelH, t) : new Vector3(t, lintelH, width);
-            CreateBlock(parent, $"Lintel_{sideTag}_{count}", pos, scale, wallMat);
-            count++;
+            if (!(IsCellWingPlate(plate) && IntersectsJailCellInterior(pos, scale)))
+            {
+                CreateWallBlock(parent, $"Lintel_{sideTag}_{count}", pos, scale, wallMat);
+                count++;
+            }
 
             // Door jambs — vertical posts flanking the opening up to DoorHeight.
             float halfW = width * 0.5f;
@@ -509,17 +563,23 @@ public static class PrisonLevelLayoutRunner
             float jambH = DoorHeight;
             if (alongX)
             {
-                CreateBlock(parent, $"JambL_{sideTag}_{count}",
-                    new Vector3(center - halfW, jambY, edgeCoord), new Vector3(t, jambH, t), wallMat);
-                CreateBlock(parent, $"JambR_{sideTag}_{count}",
-                    new Vector3(center + halfW, jambY, edgeCoord), new Vector3(t, jambH, t), wallMat);
+                var jambLPos = new Vector3(center - halfW, jambY, edgeCoord);
+                var jambRPos = new Vector3(center + halfW, jambY, edgeCoord);
+                var jambScale = new Vector3(t, jambH, t);
+                if (!(IsCellWingPlate(plate) && IntersectsJailCellInterior(jambLPos, jambScale)))
+                    CreateWallBlock(parent, $"JambL_{sideTag}_{count}", jambLPos, jambScale, wallMat);
+                if (!(IsCellWingPlate(plate) && IntersectsJailCellInterior(jambRPos, jambScale)))
+                    CreateWallBlock(parent, $"JambR_{sideTag}_{count}", jambRPos, jambScale, wallMat);
             }
             else
             {
-                CreateBlock(parent, $"JambL_{sideTag}_{count}",
-                    new Vector3(edgeCoord, jambY, center - halfW), new Vector3(t, jambH, t), wallMat);
-                CreateBlock(parent, $"JambR_{sideTag}_{count}",
-                    new Vector3(edgeCoord, jambY, center + halfW), new Vector3(t, jambH, t), wallMat);
+                var jambLPos = new Vector3(edgeCoord, jambY, center - halfW);
+                var jambRPos = new Vector3(edgeCoord, jambY, center + halfW);
+                var jambScale = new Vector3(t, jambH, t);
+                if (!(IsCellWingPlate(plate) && IntersectsJailCellInterior(jambLPos, jambScale)))
+                    CreateWallBlock(parent, $"JambL_{sideTag}_{count}", jambLPos, jambScale, wallMat);
+                if (!(IsCellWingPlate(plate) && IntersectsJailCellInterior(jambRPos, jambScale)))
+                    CreateWallBlock(parent, $"JambR_{sideTag}_{count}", jambRPos, jambScale, wallMat);
             }
             count += 2;
         }
@@ -925,7 +985,7 @@ public static class PrisonLevelLayoutRunner
             BuildBench(room, new Vector3(c.x - hx + 1.2f, fy, z), $"ChangingBench_{i}");
         }
 
-        CreateBlock(room, "WetDryDivider", new Vector3(c.x, fy + metrics.WallHeight * 0.5f, c.z),
+        CreateWallBlock(room, "WetDryDivider", new Vector3(c.x, fy + metrics.WallHeight * 0.5f, c.z),
             new Vector3(hx * 1.6f, metrics.WallHeight, 0.12f), wall);
     }
 
@@ -1063,7 +1123,8 @@ public static class PrisonLevelLayoutRunner
         return go.transform;
     }
 
-    static GameObject CreateBlock(Transform parent, string name, Vector3 worldPos, Vector3 scale, Material mat)
+    /// <summary>Structural wall segment — keeps physics collider so players cannot walk through.</summary>
+    static GameObject CreateWallBlock(Transform parent, string name, Vector3 worldPos, Vector3 scale, Material mat)
     {
         var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
         go.name = name;
@@ -1072,6 +1133,13 @@ public static class PrisonLevelLayoutRunner
         go.transform.localScale = scale;
         if (mat != null)
             go.GetComponent<Renderer>().sharedMaterial = mat;
+        return go;
+    }
+
+    /// <summary>Visual-only geometry (props, roofs, lights) — no collider.</summary>
+    static GameObject CreateBlock(Transform parent, string name, Vector3 worldPos, Vector3 scale, Material mat)
+    {
+        var go = CreateWallBlock(parent, name, worldPos, scale, mat);
         Object.DestroyImmediate(go.GetComponent<Collider>());
         return go;
     }
@@ -1195,13 +1263,13 @@ public static class PrisonLevelLayoutRunner
         for (int i = 0; i <= cellCount; i++)
         {
             float x = blockWest + i * cellWidth;
-            CreateBlock(block.transform, $"SolitaryPartition_{i}",
+            CreateWallBlock(block.transform, $"SolitaryPartition_{i}",
                 new Vector3(x, wallCy, (southZ + northZ) * 0.5f),
                 new Vector3(WallThickness, wallH, cellDepth), wallMat);
         }
 
         // Back wall closing the 2 m gap line.
-        CreateBlock(block.transform, "SolitaryBackWall",
+        CreateWallBlock(block.transform, "SolitaryBackWall",
             new Vector3(security.Cx, wallCy, southZ),
             new Vector3(cellCount * cellWidth + WallThickness, wallH, WallThickness), wallMat);
 
@@ -1213,10 +1281,10 @@ public static class PrisonLevelLayoutRunner
 
             // Barred front with a centered door gap.
             float segW = (cellWidth - doorWidth) * 0.5f;
-            CreateBlock(block.transform, $"SolitaryFront_{i}_L",
+            CreateWallBlock(block.transform, $"SolitaryFront_{i}_L",
                 new Vector3(cellWestX + segW * 0.5f, wallCy, northZ),
                 new Vector3(segW, wallH, WallThickness), barsMat);
-            CreateBlock(block.transform, $"SolitaryFront_{i}_R",
+            CreateWallBlock(block.transform, $"SolitaryFront_{i}_R",
                 new Vector3(cellWestX + cellWidth - segW * 0.5f, wallCy, northZ),
                 new Vector3(segW, wallH, WallThickness), barsMat);
 

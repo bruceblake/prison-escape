@@ -345,8 +345,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/HotbarUI.cs": {
-    "mtime": 1784074962.1305823,
-    "ast_hash": "f71d1a089d2a27da90053556cb8fc444",
+    "mtime": 1784075460.1979878,
+    "ast_hash": "a08cd8d20424ccc55e980a0e641317df",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/InteractionReticleView.cs": {
@@ -2385,8 +2385,8 @@
     "semantic_hash": ""
   },
   "Assets/Editor/PrisonLevelLayoutRunner.cs": {
-    "mtime": 1784074947.6756046,
-    "ast_hash": "07df103f0939eda94842366fbf2e5f88",
+    "mtime": 1784075454.677984,
+    "ast_hash": "c5e264386ecc4bfd6f9b64437184a685",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/.obsidian/app.json": {
@@ -2410,13 +2410,13 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/.obsidian/workspace.json": {
-    "mtime": 1784074565.6296732,
-    "ast_hash": "f7725af7e88eb184dbc7efb47b8a3bcb",
+    "mtime": 1784075542.815985,
+    "ast_hash": "a937ace716b6d1e7c63d092f18602e7a",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape Devlog Dashboard.md": {
-    "mtime": 1784074954.506735,
-    "ast_hash": "bfe437594825f22d453fae37d07003d0",
+    "mtime": 1784075559.7343624,
+    "ast_hash": "fed6588ab5e11ebc484a7bbe48ed44fe",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape.md": {
@@ -2455,8 +2455,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Crafting.md": {
-    "mtime": 1784072836.8587677,
-    "ast_hash": "be2ebaf4c3e718b0d1c1b63e362798de",
+    "mtime": 1784075542.7555163,
+    "ast_hash": "5db568fe371b5ae19666729a8f9340bf",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Escape Routes & Mechanics.md": {
@@ -2515,8 +2515,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Systems Overview.md": {
-    "mtime": 1784072836.8683207,
-    "ast_hash": "17ba665b8df9c18a9df17de538f8ac3d",
+    "mtime": 1784075509.2705748,
+    "ast_hash": "7f8a21ec96b601df077dff6a0e8c026c",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Time & Schedule.md": {
@@ -2525,8 +2525,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI & HUD.md": {
-    "mtime": 1784074953.8520913,
-    "ast_hash": "68ae8452eaf32db9eac34b4b774d5ae2",
+    "mtime": 1784075514.7904918,
+    "ast_hash": "b512a649ae1c61bef2f49421351ae5de",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Character Visuals.md": {
@@ -2545,8 +2545,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Codebase Map.md": {
-    "mtime": 1784072836.873343,
-    "ast_hash": "499a3ba9bba665c535939436c5e103d2",
+    "mtime": 1784075515.0334363,
+    "ast_hash": "295ef1d05f7509aa9fb44982e7f27155",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Editor Tooling.md": {
@@ -2560,8 +2560,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Development Workflow.md": {
-    "mtime": 1784072953.7364936,
-    "ast_hash": "70e2ab328b261c2419a542b59b1c69ef",
+    "mtime": 1784075507.190328,
+    "ast_hash": "728bad89d591ae0dd96d72c6d5eebe2f",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Feature Spec Template.md": {
@@ -2580,8 +2580,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/02 Features/Escape Completion System.md": {
-    "mtime": 1784074952.718644,
-    "ast_hash": "491db6cb81236c7ec0d4d62fc0fef5a2",
+    "mtime": 1784075541.7805762,
+    "ast_hash": "1ca8774b0010a2159ebd84ef6532a7c5",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PlayerStats.cs": {
@@ -2655,33 +2655,33 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Inventory & Hotbar UI.md": {
-    "mtime": 1784074536.1408648,
-    "ast_hash": "ca5ddc14361036f59edcd8d27fd08231",
+    "mtime": 1784075523.278547,
+    "ast_hash": "c6003aede2c187110261c56c3fafe93c",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Notebook & Crafting UI.md": {
-    "mtime": 1784074548.0615625,
-    "ast_hash": "2435eccc12c10327246045d2cda71fd1",
+    "mtime": 1784075524.0086553,
+    "ast_hash": "54fc72d696b747467a743712cbf3aaf4",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Routine & Schedule HUD.md": {
-    "mtime": 1784074508.2975533,
-    "ast_hash": "dc7d655e507b8e7c124070c3488a6c2d",
+    "mtime": 1784075525.7072036,
+    "ast_hash": "df70dd6871408b8099535f2a7e23cf56",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Screens & Menus.md": {
-    "mtime": 1784074554.5804079,
-    "ast_hash": "0426512b9e0f3fc9699d5a3f017782ab",
+    "mtime": 1784075526.1970463,
+    "ast_hash": "61ae527cc9fa50ad7a106859a0c77912",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Status & World UI.md": {
-    "mtime": 1784074952.0258007,
-    "ast_hash": "17b1c3cb128bd5be5a597e42a85ab886",
+    "mtime": 1784075526.929323,
+    "ast_hash": "4b7afa77e12f310d88e37610e6820106",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/UI Theme & Style Guide.md": {
-    "mtime": 1784074564.6130416,
-    "ast_hash": "3cbbc74a9a908065a081d6e921437e00",
+    "mtime": 1784075527.4248042,
+    "ast_hash": "4b97617f4654089fcecbd043164d9a6a",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonRoutineDestination.cs": {
@@ -2700,8 +2700,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/ObjectiveWaypointUI.cs": {
-    "mtime": 1784074960.4765723,
-    "ast_hash": "04f31b105b036a8a5d3d3368b31e7068",
+    "mtime": 1784075463.3359966,
+    "ast_hash": "4c38e0d84fb7dd277a7044dded52036c",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/PlayerVitalsHUD.cs": {

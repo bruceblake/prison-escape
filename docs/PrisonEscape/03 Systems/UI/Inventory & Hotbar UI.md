@@ -4,7 +4,7 @@ The 6-slot bag and its always-on hotbar mirror. Backed by `PlayerInventory` ([[I
 
 ## Current state (7/14/2026)
 
-Hotbar sits above the bottom edge with `1`–`6` key hints, stronger selected-slot border, and fades via `UIMenuFocus` while bag/notebook/pause are open. *(Screenshot `HUD in-game 2026-07-14.png` referenced in sibling docs — re-capture and commit to `03 Systems/UI/` when playtesting.)*
+Hotbar uses **56×56 px** slots with 4 px spacing (`HotbarUI.slotSize` / `ApplySlotLayout` at runtime — overrides scene GridLayoutGroup defaults). Sits above the bottom edge with `1`–`6` key hints, stronger selected-slot border, and fades via `UIMenuFocus` while bag/notebook/pause are open. *(Screenshot `HUD in-game 2026-07-14.png` referenced in sibling docs — re-capture and commit to `03 Systems/UI/` when playtesting.)*
 
 ## Widgets
 
@@ -18,6 +18,7 @@ Hotbar sits above the bottom edge with `1`–`6` key hints, stronger selected-sl
 - [x] **Lift the hotbar off the screen edge** — slots are clipped at the bottom; keep a comfortable margin.
 - [x] **Slot key hints** — small `1`–`6` labels in the slot corner so the bindings are discoverable.
 - [x] **Selected-slot emphasis** — the selection highlight is barely visible on empty slots; give the selected slot a clear border even when empty.
+- [x] **Compact slot size** — default 56×56 px (was 100×100 in scene prefab layout).
 - [ ] Empty slots could read more like a prison uniform's pockets (stitched outline) than flat boxes — art pass, low priority.
 
 ## To add

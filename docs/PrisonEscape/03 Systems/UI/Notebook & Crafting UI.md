@@ -4,9 +4,7 @@ The diegetic "stolen notebook" — the player's menu disguised as contraband pap
 
 ## Current state (7/14/2026)
 
-![[Notebook crafting 2026-07-14.png]]
-
-Crafting spread: recipe card on the left page (title, result, 2 requirement slots, ASSEMBLE), category tabs + recipe grid on the right page. Visible problems: the enforcement HUD strip renders behind/through the notebook, category tab labels are unreadably small, and the ASSEMBLE button reads as a flat strip.
+Crafting spread with readable category tabs, styled ASSEMBLE button, and muted `PrisonUITheme.InkGreen` for satisfied slots. Routine strip and hotbar fade out via `UIMenuFocus` while the notebook is open. *(Screenshot `Notebook crafting 2026-07-14.png` — re-capture and commit to `03 Systems/UI/` when playtesting.)*
 
 ## Widgets
 

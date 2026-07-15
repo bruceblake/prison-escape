@@ -1,0 +1,55 @@
+---
+description: End-to-end development loop from Obsidian vault — design, implement, verify, sync, devlog, git
+alwaysApply: true
+---
+
+# Development Workflow (Obsidian → Cursor → Unity → Git)
+
+Canonical process: `docs/PrisonEscape/06 Process/Development Workflow.md`. Follow it on **every** feature, fix, or doc/code change — no exceptions.
+
+## The loop
+
+```
+Brainstorm → Obsidian spec → Implement → Unity verify → Sync vault → Devlog → Git (with user approval)
+```
+
+1. **Read the vault first** — relevant notes in `docs/PrisonEscape/` before design or code changes ([[obsidian-source-of-truth]]).
+2. **Design before code** — if there is no spec note, propose one (use `Feature Spec Template`) and **ask the user** before implementing.
+3. **One feature per branch** — `feat/...` / `fix/...` off `dev`; PRs target `dev`, not `main` ([[git-branching]]).
+4. **Verify in Unity** — recompile, run editor scripts or Unity MCP checks, confirm 0 compile errors when MCP is available.
+5. **Sync back** — if code deviates from the spec, **update the vault** so docs match reality (do not leave stale "to add" / "partial" status).
+
+## End-of-task checklist (run before saying "done")
+
+Present this checklist to the user with ✅/❌/⚠️ for each item. **Do not declare work complete until the user confirms.**
+
+| Step | Action |
+|------|--------|
+| Spec | Vault notes updated — hub note + per-surface/system notes, key files listed |
+| Status | `Systems Overview`, feature spec status, and hub snapshots reflect reality |
+| Devlog | New entry in `docs/PrisonEscape/Prison Escape Devlog Dashboard.md` (newest first) |
+| Code | Implementation matches vault; `.meta` files staged with new assets |
+| Verify | Unity compile/playtest noted (pass, fail, or blocked) |
+| Graph | `graphify update .` after code edits when CLI exists; otherwise note graph is stale |
+| Git | Branch named correctly; **ask user before `git commit` or `git push`** |
+
+## Ask the user first — always
+
+Stop and ask before:
+
+- Committing or pushing (unless the user explicitly requested it in the same message)
+- Skipping any checklist item above
+- Changing design without a vault update
+- Merging to `main` or opening a PR (unless explicitly requested)
+- Deleting or excluding files the user may expect tracked (screenshots, `.meta`, vault notes)
+
+When gaps exist (missing screenshots, unverified playtest, stale overview), **report them explicitly** and ask how to proceed — never silently skip.
+
+## Where updates go
+
+| Change type | Update |
+|-------------|--------|
+| Game design / UI / layout | `docs/PrisonEscape/` (not `Assets/Docs/` for design) |
+| Technical / test docs | `Assets/Docs/` or `05 Engineering/` |
+| Milestones | `Prison Escape Devlog Dashboard.md` |
+| UI surfaces | Hub `03 Systems/UI & HUD.md` + the matching note under `03 Systems/UI/` |

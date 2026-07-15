@@ -5,7 +5,7 @@ Fullscreen takeover states — the win/lose bookends of [[Escape Completion Syst
 ## Widgets
 
 - `EscapeEndScreenUI` — "YOU ESCAPED" end screen, run stats, "Next stop: MEDIUM SECURITY" ladder framing, return-to-menu. Built entirely at runtime (no scene wiring).
-- `SolitaryScreenUI` — caught-escaping overlay: Mental Health −20 / Strength −10 tick down on unscaled time, then fades and releases the player.
+- `SolitaryScreenUI` — caught-escaping overlay: Mental Health −20 / **Physical Health −10** / Strength −10 tick down on unscaled time, then fades and releases the player.
 - `PauseManager` — timescale-0 pause (singleplayer only).
 
 ## Polish backlog

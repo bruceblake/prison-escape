@@ -10,7 +10,7 @@ Assets/Scripts/
 │   ├── Prison/      # Time, zones, cells, social, heat, wallet, labels
 │   ├── Crafting/    # CraftingSystem, recipes, descriptions
 │   ├── Interaction/ # IInteractable, pickups, vent cover, pillow stash
-│   ├── UI/          # Inventory, hotbar, notebook, HUDs, pause
+│   ├── UI/          # Inventory, hotbar, notebook, HUDs (vitals, location, waypoint), pause, UIMenuFocus
 │   └── Visuals/     # Low-poly character pipeline
 ├── Singleplayer/
 │   ├── AI/          # GuardFSM, GuardDetection, PrisonerAI, shakedown

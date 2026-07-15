@@ -4,9 +4,7 @@ The 6-slot bag and its always-on hotbar mirror. Backed by `PlayerInventory` ([[I
 
 ## Current state (7/14/2026)
 
-![[HUD in-game 2026-07-14.png]]
-
-Bottom-center: six empty hotbar slots. They are flat dark boxes, sit flush against (and slightly below) the bottom screen edge, and give no hint of the 1–6 key bindings.
+Hotbar sits above the bottom edge with `1`–`6` key hints, stronger selected-slot border, and fades via `UIMenuFocus` while bag/notebook/pause are open. *(Screenshot `HUD in-game 2026-07-14.png` referenced in sibling docs — re-capture and commit to `03 Systems/UI/` when playtesting.)*
 
 ## Widgets
 

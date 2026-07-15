@@ -11,7 +11,7 @@ Hub note for the player-facing surface of the prison sim. Each surface has its o
 | [[Screens & Menus]] | Escape end screen, solitary overlay, main menu |
 | [[UI Theme & Style Guide]] | Palette, backdrop rules, menu-focus rule, typography |
 
-Current screenshots live next to the docs: `HUD in-game 2026-07-14.png` · `Notebook crafting 2026-07-14.png`.
+Current screenshots: `HUD in-game 2026-07-14.png` · `Notebook crafting 2026-07-14.png` — **not yet committed**; re-capture during playtest and save under `03 Systems/UI/`.
 
 ## Status snapshot (7/14/2026)
 

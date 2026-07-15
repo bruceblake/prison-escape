@@ -18,7 +18,7 @@ Shared visual language for every UI surface. Code source of truth: `Assets/Scrip
 - **Warm light fixtures** in-world; UI stays cool/desaturated so caution yellow and hazard red pop.
 - State colors always come from `PrisonUITheme` — no hand-typed near-duplicates in widget scripts.
 - Menus are **diegetic where possible** (stolen notebook = paper, ink, sketches). HUD is non-diegetic but institutional: stencil-feeling caps, `[ BRACKETS ]` around phase titles.
-- **Menu focus**: while any fullscreen/paper menu is open, ambient HUD (routine strip, hotbar, heat eye) fades to near-zero via `UIMenuFocus` so surfaces never overlap.
+- **Menu focus**: while any fullscreen/paper menu is open, ambient HUD (routine strip, hotbar, heat eye, **vitals panel, location label**) fades to near-zero via `UIMenuFocus` so surfaces never overlap.
 - Typography: TMP, bold for the "now" layer, normal for preview/next, ~32–40 pt HUD range at 1080p reference.
 
 ## Key files

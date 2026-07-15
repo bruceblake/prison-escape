@@ -37,6 +37,18 @@ Chat (brainstorm) → Obsidian (spec) → Cursor (implement) → Unity MCP (exec
 2. **Don't hand-edit generated scene objects.** Change the editor script and re-run, or manual tweaks get wiped on the next rebuild.
 3. **Update `Assets/Docs/` only for technical/test docs** — design belongs here.
 4. **Log milestones** in [[Prison Escape Devlog Dashboard]].
+5. **Cursor enforces this loop** — `.cursor/rules/development-workflow.mdc` (always on). Agents must run the end-of-task checklist, report gaps, and **ask you before commit/push or declaring done**.
+
+## End-of-task checklist (agents)
+
+Before closing a session, verify and report:
+
+- [ ] Vault spec + hub notes updated (including per-surface UI docs when UI changes)
+- [ ] [[Systems Overview]] / feature spec status current
+- [ ] Devlog entry added (newest first)
+- [ ] Unity verified (compile / MCP / playtest — note result)
+- [ ] Git: correct branch; user approved commit/push
+- [ ] `graphify-out/` refreshed after code changes (hook or manual)
 
 ## Where things go
 

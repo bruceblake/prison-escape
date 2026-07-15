@@ -6,7 +6,7 @@ The top-of-screen command strip that tells the player where they must be and how
 
 ![[HUD in-game 2026-07-14.png]]
 
-Top strip during Morning Roll Call: phase title, progress bar with ghost timer (`26s`), `Next: BREAKFAST`, and the yellow `Awaiting shakedown` status line.
+Top strip during Morning Roll Call: phase title, progress bar with ghost timer, `Next: BREAKFAST`, status line. Vitals panel (bottom-left), location label (bottom-right), and objective waypoint appear during mandatory non-compliance — see [[Status & World UI]]. *(Screenshot file not yet in git — re-capture when playtesting.)*
 
 ## Widgets
 

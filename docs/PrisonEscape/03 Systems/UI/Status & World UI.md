@@ -29,9 +29,10 @@ Ambient readouts: stealth pressure, player condition, interaction feedback, and 
 - [x] **Physical Health stat** — third player stat: solitary −10, +5/day at Morning Roll Call (with MH/STR). Shown on solitary overlay tick-down.
 - [x] **Current location HUD** — `CurrentLocationHUD` bottom-right; uses `PrisonerController.GetCurrentLocationLabel()` → `PrisonRoutineLabels.FormatPlayerLocation`.
 - [x] **Objective waypoint** — `ObjectiveWaypointUI`: screen marker + `LABEL — Nm` during mandatory non-compliance; on-screen dot or off-screen edge arrow. Destination via `PrisonRoutineDestination` + `PrisonLocationRegistry.GetStandPointForEvent`.
+- [x] **Runtime HUD bootstrap** — `HudBootstrap` (from `EscapeManager`) spawns vitals, location, and waypoint canvases at runtime; legacy scene `CashUIController` can be disabled to avoid duplicate cash readout.
 
 ## Key files
 
-`Assets/Scripts/Shared/Prison/PrisonHeatUI.cs` · `PlayerStats.cs` · `PlayerStatsMath.cs` · `PrisonSuspicion.cs` · `PrisonRoutineDestination.cs` · `Assets/Scripts/Shared/UI/PlayerVitalsHUD.cs` · `CurrentLocationHUD.cs` · `ObjectiveWaypointUI.cs` · `InteractionReticleView.cs` · `PillowStashProximityUI.cs` · `Assets/Scripts/Shared/Visuals/CharacterNameLabel.cs`
+`Assets/Scripts/Shared/Prison/PrisonHeatUI.cs` · `PlayerStats.cs` · `PlayerStatsMath.cs` · `PrisonSuspicion.cs` · `PrisonRoutineDestination.cs` · `Assets/Scripts/Shared/UI/HudBootstrap.cs` · `PlayerVitalsHUD.cs` · `CurrentLocationHUD.cs` · `ObjectiveWaypointUI.cs` · `InteractionReticleView.cs` · `PillowStashProximityUI.cs` · `Assets/Scripts/Shared/Visuals/CharacterNameLabel.cs`
 
 Related: [[UI & HUD]] · [[Security, Heat & Alerts]] · [[Social & Reputation]] · [[UI Theme & Style Guide]]

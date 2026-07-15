@@ -552,7 +552,7 @@ public static class PrisonFacilityInstaller
         return bounds;
     }
 
-    static void EnsureDoorCollider(Transform door)
+    public static void EnsureDoorCollider(Transform door)
     {
         var existing = door.GetComponent<Collider>();
         if (existing != null)

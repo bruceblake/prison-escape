@@ -124,9 +124,19 @@ public static class BlenderKitLayout
         if (door == null) return null;
 
         door.name = "CellKit_Door";
+
+        // Canonical alignment path (same as the facility installer): snap to the
+        // corridor-facing shell wall, slide 6 m along the wall, bake the closed pose.
+        var shell = cell.Find("CellKit_Shell");
+        var bed = cell.Find("CellKit_Bed");
+        if (shell != null)
+            PrisonFacilityInstaller.AlignDoorToCellWall(door.transform, shell, bed);
+
         var controller = door.GetComponent<CellDoorController>() ?? door.AddComponent<CellDoorController>();
-        controller.openOffset = new Vector3(0f, 0f, 4f);
+        controller.openOffset = PrisonFacilityInstaller.ComputeDoorOpenOffsetLocal(door.transform, bed);
         controller.slideSpeed = 3f;
+        controller.InitializeClosedPosition();
+        PrisonFacilityInstaller.EnsureDoorCollider(door.transform);
         return door;
     }
 

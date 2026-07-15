@@ -18,6 +18,8 @@ namespace Prison
         public bool validateOnStart = true;
         [Tooltip("If true, also validates all PrisonLocationZone stand points in scene.")]
         public bool includeZoneStandPoints = true;
+        [Tooltip("If true, also validates every guard patrol waypoint in the GameManager spawn table.")]
+        public bool includePatrolWaypoints = true;
         [Tooltip("How far from each point we allow a NavMesh sample.")]
         public float sampleRadius = 1.2f;
         [Tooltip("Log each valid point too (very noisy).")]
@@ -77,6 +79,22 @@ namespace Prison
                     for (int i = 0; i < z.standPoints.Length; i++)
                     {
                         CheckTransform(ref okCount, ref badCount, badLines, $"Zone[{z.zoneType}] '{z.name}'.standPoints[{i}]", z.standPoints[i]);
+                    }
+                }
+            }
+
+            if (includePatrolWaypoints)
+            {
+                var gm = FindAnyObjectByType<GameManager>();
+                if (gm != null && gm.guardSpawnTable != null)
+                {
+                    for (int g = 0; g < gm.guardSpawnTable.Length; g++)
+                    {
+                        var entry = gm.guardSpawnTable[g];
+                        if (entry == null || entry.patrolWaypoints == null) continue;
+                        for (int i = 0; i < entry.patrolWaypoints.Length; i++)
+                            CheckTransform(ref okCount, ref badCount, badLines,
+                                $"GuardSpawn[{g}] '{entry.displayName}'.patrolWaypoints[{i}]", entry.patrolWaypoints[i]);
                     }
                 }
             }

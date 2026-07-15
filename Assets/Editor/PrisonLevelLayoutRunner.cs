@@ -450,8 +450,10 @@ public static class PrisonLevelLayoutRunner
         {
             var rot = cell.rotation;
             BlenderKitLayout.PlaceCellShell(cell, spawn.position, rot);
-            BlenderKitLayout.PlaceCellDoor(cell, spawn.position, rot);
+            // Furnish before the door so the bed exists — door alignment derives the
+            // corridor face from shell bounds + bed position (PrisonFacilityInstaller).
             BlenderKitLayout.FurnishCellInterior(cell, spawn.position, rot);
+            BlenderKitLayout.PlaceCellDoor(cell, spawn.position, rot);
             return true;
         }
 
@@ -1526,6 +1528,10 @@ public static class PrisonLevelLayoutRunner
 
         registry.rollCallArea = PrisonFacilityInstaller.FindZoneOnPlatePublic("ASM_CellWingFloor_West")
             ?? PrisonFacilityInstaller.FindZoneOnPlatePublic("ASM_CellWingFloor_East");
+
+        var workshopZone = PrisonFacilityInstaller.FindZoneOnPlatePublic("ASM_WorkshopFloor")
+            ?? GameObject.Find("WorkshopProps")?.GetComponent<PrisonLocationZone>();
+        if (workshopZone != null) registry.workshop = workshopZone;
 
         EditorUtility.SetDirty(registry);
     }

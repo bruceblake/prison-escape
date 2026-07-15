@@ -94,7 +94,9 @@ namespace Prison
             if (locationText != null)
                 locationText.text = "Loc: " + PrisonRoutineLabels.FormatPlayerLocation(_prisoner.GetCurrentLocationLabel());
 
-            string goTo = PrisonRoutineLabels.GetGoToLabel(tm.CurrentEvent, _prisoner.CellIndex);
+            string goTo = tm.CurrentEvent == PrisonEventType.MorningRollCall
+                ? PrisonRoutineLabels.GetMorningRollCallLineUpDestinationLabel(_prisoner.CellIndex)
+                : PrisonRoutineLabels.GetGoToLabel(tm.CurrentEvent, _prisoner.CellIndex);
             if (goToText != null)
             {
                 // Defensive lazy-init: guards against NullReferenceException if goToText is assigned

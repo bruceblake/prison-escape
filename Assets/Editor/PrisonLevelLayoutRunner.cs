@@ -10,14 +10,20 @@ using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Block-out prison layout: connected diagram floors, 6 m walls/roofs, scratch-built props, full lighting.
+/// Geometry build v2 — floor sync, door jambs, roof overhang, exterior soffits.
 /// </summary>
 public static class PrisonLevelLayoutRunner
 {
     const float WallThickness = 0.2f;
     const float RoofThickness = 0.2f;
-    const float FloorY = 0.6f;
     const float FloorScaleY = 0.2f;
     const float EdgeTolerance = 0.35f;
+    const float RoofOverhang = 0.5f;
+    const float SoffitDrop = 0.35f;
+
+    /// <summary>Floor cube center Y — synced to jail cell spawn height during each build.</summary>
+    static float _floorY = 0.6f;
+    static float FloorSurfaceY => _floorY + FloorScaleY * 0.5f;
 
     // Hub — cafeteria center (diagram: cells west/east, yard north, showers south).
     const float HubX = -26f;
@@ -92,8 +98,10 @@ public static class PrisonLevelLayoutRunner
     [MenuItem("Prison/Layout/2 — Build Walls + Roofs")]
     public static void BuildStructureMenu()
     {
+        SyncFloorHeightToCells();
         BuildWallsAroundFloors();
         BuildRoofs();
+        BuildRoofSoffits();
     }
 
     [MenuItem("Prison/Layout/3 — Build All Lighting")]
@@ -112,9 +120,11 @@ public static class PrisonLevelLayoutRunner
     public static void RunFullBuild()
     {
         RenameEastCells();
+        SyncFloorHeightToCells();
         ApplyConnectedDiagramLayout();
         BuildWallsAroundFloors();
         BuildRoofs();
+        BuildRoofSoffits();
         BuildAllLighting();
         FurnishRooms();
         WireRegistry();
@@ -230,13 +240,21 @@ public static class PrisonLevelLayoutRunner
         EditorSceneManager.SaveScene(scene);
     }
 
+    static void SyncFloorHeightToCells()
+    {
+        var metrics = CellMetrics.SampleFromScene();
+        _floorY = metrics.FloorSurfaceY - FloorScaleY * 0.5f;
+    }
+
     static void ApplyConnectedDiagramLayout()
     {
+        SyncFloorHeightToCells();
         _activePlates = BuildDiagramPlates().ToList();
 
         RemoveLegacyRootFloors();
         ClearChildren(GetOrCreateRoot("LayoutWalls"));
         ClearChildren(GetOrCreateRoot("LayoutRoofs"));
+        ClearChildren(GetOrCreateRoot("LayoutSoffits"));
         ClearChildren(GetOrCreateRoot("LayoutLighting"));
         ClearChildren(GetOrCreateRoot("RoomProps"));
 
@@ -290,7 +308,7 @@ public static class PrisonLevelLayoutRunner
         var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
         go.name = plate.Name;
         go.transform.SetParent(parent, false);
-        go.transform.position = new Vector3(plate.Cx, FloorY, plate.Cz);
+        go.transform.position = new Vector3(plate.Cx, _floorY, plate.Cz);
         go.transform.localScale = new Vector3(plate.Sx, FloorScaleY, plate.Sz);
         var mat = LoadMat(TileMatPath);
         if (mat != null)
@@ -401,7 +419,7 @@ public static class PrisonLevelLayoutRunner
     {
         float t = WallThickness;
         float wallH = metrics.WallHeight;
-        float floorTop = FloorY + FloorScaleY * 0.5f;
+        float floorTop = FloorSurfaceY;
         float centerY = floorTop + wallH * 0.5f;
 
         bool alongX = side is EdgeSide.North or EdgeSide.South;
@@ -484,6 +502,26 @@ public static class PrisonLevelLayoutRunner
             Vector3 scale = alongX ? new Vector3(width, lintelH, t) : new Vector3(t, lintelH, width);
             CreateBlock(parent, $"Lintel_{sideTag}_{count}", pos, scale, wallMat);
             count++;
+
+            // Door jambs — vertical posts flanking the opening up to DoorHeight.
+            float halfW = width * 0.5f;
+            float jambY = floorTop + DoorHeight * 0.5f;
+            float jambH = DoorHeight;
+            if (alongX)
+            {
+                CreateBlock(parent, $"JambL_{sideTag}_{count}",
+                    new Vector3(center - halfW, jambY, edgeCoord), new Vector3(t, jambH, t), wallMat);
+                CreateBlock(parent, $"JambR_{sideTag}_{count}",
+                    new Vector3(center + halfW, jambY, edgeCoord), new Vector3(t, jambH, t), wallMat);
+            }
+            else
+            {
+                CreateBlock(parent, $"JambL_{sideTag}_{count}",
+                    new Vector3(edgeCoord, jambY, center - halfW), new Vector3(t, jambH, t), wallMat);
+                CreateBlock(parent, $"JambR_{sideTag}_{count}",
+                    new Vector3(edgeCoord, jambY, center + halfW), new Vector3(t, jambH, t), wallMat);
+            }
+            count += 2;
         }
 
         return count;
@@ -527,13 +565,84 @@ public static class PrisonLevelLayoutRunner
             if (plate.Name.StartsWith("Courtyard")) continue;
             var group = new GameObject("Roof_" + plate.Name);
             group.transform.SetParent(roofsRoot.transform, false);
-            float ceilingY = FloorY + FloorScaleY * 0.5f + metrics.WallHeight;
+            float ceilingY = FloorSurfaceY + metrics.WallHeight;
             CreateBlock(group.transform, "Ceiling", new Vector3(plate.Cx, ceilingY + RoofThickness * 0.5f, plate.Cz),
-                new Vector3(plate.Sx, RoofThickness, plate.Sz), ceilingMat);
+                new Vector3(plate.Sx + RoofOverhang * 2f, RoofThickness, plate.Sz + RoofOverhang * 2f), ceilingMat);
             built++;
         }
 
-        Debug.Log($"[PrisonLayout] Built {built} connected roofs (courtyard open).");
+        Debug.Log($"[PrisonLayout] Built {built} connected roofs (courtyard open, {RoofOverhang:F1} m overhang).");
+    }
+
+    /// <summary>
+    /// Drops a thin lip below roof edges on exterior plate sides to hide wall/roof gaps (sky leaks).
+    /// </summary>
+    static void BuildRoofSoffits()
+    {
+        if (_activePlates.Count == 0)
+            _activePlates = BuildDiagramPlates().ToList();
+
+        var metrics = CellMetrics.SampleFromScene();
+        var ceilingMat = LoadMat(CeilingMatPath) ?? LoadMat(WallMatPath);
+        var soffitsRoot = GetOrCreateRoot("LayoutSoffits");
+        ClearChildren(soffitsRoot);
+
+        float ceilingY = FloorSurfaceY + metrics.WallHeight;
+        float lipY = ceilingY - SoffitDrop * 0.5f;
+        int built = 0;
+
+        foreach (var plate in _activePlates)
+        {
+            if (plate.Name.StartsWith("Courtyard")) continue;
+
+            var group = new GameObject("Soffit_" + plate.Name);
+            group.transform.SetParent(soffitsRoot.transform, false);
+
+            foreach (EdgeSide side in new[] { EdgeSide.North, EdgeSide.South, EdgeSide.East, EdgeSide.West })
+            {
+                bool exterior = IsExteriorEdge(plate, side, _activePlates);
+                if (!exterior) continue;
+
+                bool alongX = side is EdgeSide.North or EdgeSide.South;
+                float len = alongX ? plate.Sx + RoofOverhang * 2f : plate.Sz + RoofOverhang * 2f;
+                float edgeCoord = side switch
+                {
+                    EdgeSide.North => plate.MaxZ + RoofOverhang,
+                    EdgeSide.South => plate.MinZ - RoofOverhang,
+                    EdgeSide.East => plate.MaxX + RoofOverhang,
+                    _ => plate.MinX - RoofOverhang,
+                };
+
+                Vector3 pos = alongX
+                    ? new Vector3(plate.Cx, lipY, edgeCoord)
+                    : new Vector3(edgeCoord, lipY, plate.Cz);
+                Vector3 scale = alongX
+                    ? new Vector3(len, SoffitDrop, RoofThickness)
+                    : new Vector3(RoofThickness, SoffitDrop, len);
+
+                CreateBlock(group.transform, $"Soffit_{side}", pos, scale, ceilingMat);
+                built++;
+            }
+        }
+
+        Debug.Log($"[PrisonLayout] Built {built} roof soffit lips on exterior edges.");
+    }
+
+    static bool IsExteriorEdge(FloorPlate plate, EdgeSide side, List<FloorPlate> all)
+    {
+        foreach (var o in all)
+        {
+            if (o.Name == plate.Name) continue;
+            bool touches = side switch
+            {
+                EdgeSide.North => plate.TouchesNorth(o, EdgeTolerance),
+                EdgeSide.South => plate.TouchesSouth(o, EdgeTolerance),
+                EdgeSide.East => plate.TouchesEast(o, EdgeTolerance),
+                _ => plate.TouchesWest(o, EdgeTolerance),
+            };
+            if (touches) return false;
+        }
+        return true;
     }
 
     static void BuildAllLighting()
@@ -579,10 +688,15 @@ public static class PrisonLevelLayoutRunner
 
     static int PlaceLightGridForPlate(FloorPlate plate, Transform parent, CellMetrics metrics, Material lightMat, bool outdoor)
     {
-        float lightY = FloorY + FloorScaleY * 0.5f + metrics.WallHeight - 0.28f;
+        float lightY = FloorSurfaceY + metrics.WallHeight - 0.28f;
         float margin = outdoor ? 2.5f : 2f;
         bool narrow = plate.Sx < plate.Sz * 0.35f || plate.Sz < plate.Sx * 0.35f;
-        float spacing = narrow ? 6f : (outdoor ? 8f : 5.5f);
+        float area = plate.Sx * plate.Sz;
+        float spacing = narrow ? 6f
+            : outdoor ? 10f
+            : area > 1200f ? 10f
+            : area > 500f ? 8f
+            : 5.5f;
         float intensity = outdoor ? 3.5f : 6f;
         float range = outdoor ? 18f : 14f;
 
@@ -1064,7 +1178,7 @@ public static class PrisonLevelLayoutRunner
         var wallMat = LoadMat(WallMatPath);
         var barsMat = LoadMat(BarsMatPath) ?? LoadMat(MetalMatPath);
 
-        float floorTop = FloorY + FloorScaleY * 0.5f;
+        float floorTop = FloorSurfaceY;
         float wallH = metrics.WallHeight;
         float wallCy = floorTop + wallH * 0.5f;
 

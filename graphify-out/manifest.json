@@ -2415,8 +2415,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape Devlog Dashboard.md": {
-    "mtime": 1784075559.7343624,
-    "ast_hash": "fed6588ab5e11ebc484a7bbe48ed44fe",
+    "mtime": 1784075619.747232,
+    "ast_hash": "0a80c9a42e8d177ebd3dab680e3be0f9",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape.md": {
@@ -2440,8 +2440,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/Prison Layout \u2014 Minimum Security.md": {
-    "mtime": 1784075030.258898,
-    "ast_hash": "2c509c695e87a537c3200ea83d54014b",
+    "mtime": 1784075611.7737498,
+    "ast_hash": "3be04738846987d56da1bc0427b16413",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/Roadmap & Priorities.md": {
@@ -2525,8 +2525,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI & HUD.md": {
-    "mtime": 1784075514.7904918,
-    "ast_hash": "b512a649ae1c61bef2f49421351ae5de",
+    "mtime": 1784075613.1108432,
+    "ast_hash": "72fbf090c81752d4011b371ce10d7f02",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Character Visuals.md": {
@@ -2545,13 +2545,13 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Codebase Map.md": {
-    "mtime": 1784075515.0334363,
-    "ast_hash": "295ef1d05f7509aa9fb44982e7f27155",
+    "mtime": 1784075616.018153,
+    "ast_hash": "f0bf8bc83645c9acb12114acecd5b039",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Editor Tooling.md": {
-    "mtime": 1784072836.873343,
-    "ast_hash": "265627215008a072da61fb7e55544e76",
+    "mtime": 1784075609.6135037,
+    "ast_hash": "f48c12c87e300ef4e23013bcc2e95e7a",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Testing & QA.md": {
@@ -2560,8 +2560,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Development Workflow.md": {
-    "mtime": 1784075507.190328,
-    "ast_hash": "728bad89d591ae0dd96d72c6d5eebe2f",
+    "mtime": 1784075620.4399514,
+    "ast_hash": "c935066d28bf5e484fd7ee4edc51c266",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Feature Spec Template.md": {
@@ -2655,8 +2655,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Inventory & Hotbar UI.md": {
-    "mtime": 1784075523.278547,
-    "ast_hash": "c6003aede2c187110261c56c3fafe93c",
+    "mtime": 1784075615.7789009,
+    "ast_hash": "658bf1c2a33bddcd30ac72c695dbe227",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Notebook & Crafting UI.md": {
@@ -2665,8 +2665,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Routine & Schedule HUD.md": {
-    "mtime": 1784075525.7072036,
-    "ast_hash": "df70dd6871408b8099535f2a7e23cf56",
+    "mtime": 1784075623.8054357,
+    "ast_hash": "908b283c2004cc564a3b5f955a04a8ae",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Screens & Menus.md": {
@@ -2675,8 +2675,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Status & World UI.md": {
-    "mtime": 1784075526.929323,
-    "ast_hash": "4b7afa77e12f310d88e37610e6820106",
+    "mtime": 1784075613.959592,
+    "ast_hash": "c915b17e7e3da7093b1ae7fc01620341",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/UI Theme & Style Guide.md": {

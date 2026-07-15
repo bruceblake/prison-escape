@@ -3,7 +3,7 @@
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
 ## 7/14/2026 (evening)
-- **Layout geometry pass** — doorway walls with jambs/lintels, roof overhang + soffits, floor Y synced to cell spawns, cell-wing wall keep-out (no layout segments inside `JailCell_*` volumes), **structural walls now have colliders** (`CreateWallBlock`). Rebuilt `PrisonLevel1` via **Run Full Build**. See [[Prison Layout — Minimum Security]] · [[Editor Tooling]].
+- **Layout geometry pass** — doorway walls with jambs/lintels, roof overhang + soffits, floor Y synced to cell spawns, cell-wing wall keep-out, **jail cell shell cleanup** (strip 20 m legacy walls, rebuild 4×5.5 m shells + partitions). Rebuilt `PrisonLevel1` via **Run Full Build**. See [[Prison Layout — Minimum Security]] · [[Editor Tooling]].
 - **HUD fixes** — objective waypoint smoothing (jitter near stand points); hotbar compact 56×56 slots; morning roll call compliance label shows wait-in-cell. See [[UI & HUD]] · [[Status & World UI]] · [[Inventory & Hotbar UI]].
 - **PR #40** — `feat/escape-completion` → `dev` (escape completion v1 + layout + HUD). Vault synced to match implementation per [[Development Workflow]].
 

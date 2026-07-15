@@ -20,6 +20,9 @@ public static class PrisonLevelLayoutRunner
     const float EdgeTolerance = 0.35f;
     const float RoofOverhang = 0.5f;
     const float SoffitDrop = 0.35f;
+    const float CellInteriorWidth = 4f;
+    const float CellInteriorDepth = 5.5f;
+    const float LegacyShellMinScale = 8f;
 
     /// <summary>Floor cube center Y — synced to jail cell spawn height during each build.</summary>
     static float _floorY = 0.6f;
@@ -99,6 +102,7 @@ public static class PrisonLevelLayoutRunner
     public static void BuildStructureMenu()
     {
         SyncFloorHeightToCells();
+        CleanupAndRebuildJailCellWalls();
         BuildWallsAroundFloors();
         BuildRoofs();
         BuildRoofSoffits();
@@ -266,6 +270,7 @@ public static class PrisonLevelLayoutRunner
             CreateFloorFromPlate(floorsRoot.transform, plate);
 
         RepositionCellBlocks(_activePlates);
+        CleanupAndRebuildJailCellWalls();
         LogPlateConnectivity(_activePlates);
 
         Debug.Log($"[PrisonLayout] Applied connected diagram layout with {_activePlates.Count} tiled floor plates.");
@@ -353,6 +358,144 @@ public static class PrisonLevelLayoutRunner
             c.position += delta;
     }
 
+    /// <summary>
+    /// Legacy cell prefabs carry duplicated, wing-sized shell pieces (20 m walls/roofs/floors)
+    /// that slice through playable space. Strip those and rebuild 4×5.5 m shells from each spawn.
+    /// </summary>
+    static void CleanupAndRebuildJailCellWalls()
+    {
+        var metrics = CellMetrics.SampleFromScene();
+        var wallMat = LoadMat(WallMatPath);
+        int stripped = 0, shells = 0, partitions = 0;
+
+        foreach (var blockName in new[] { "JailCells", "JailCells_East" })
+        {
+            var block = GameObject.Find(blockName);
+            if (block == null) continue;
+
+            var cells = block.transform.Cast<Transform>()
+                .Where(t => t.name.StartsWith("JailCell_"))
+                .ToList();
+
+            foreach (var cell in cells)
+            {
+                stripped += StripLegacyCellShellPieces(cell);
+                if (BuildProperCellShell(cell, metrics, wallMat))
+                    shells++;
+            }
+
+            partitions += BuildCellBlockPartitions(cells, metrics, wallMat);
+        }
+
+        Debug.Log($"[PrisonLayout] Jail cells: stripped {stripped} legacy shell pieces, rebuilt {shells} cell shells, {partitions} shared partitions.");
+    }
+
+    static int StripLegacyCellShellPieces(Transform cell)
+    {
+        int count = 0;
+        var remove = new List<GameObject>();
+
+        foreach (Transform child in cell)
+        {
+            var name = child.name;
+            if (name.Contains("("))
+            {
+                remove.Add(child.gameObject);
+                continue;
+            }
+
+            if (name is "LeftWall" or "RightWall" or "BackWall" or "BackWallTop" or "Roof" or "Floor"
+                or "CellShell_Back" or "CellShell_Left" or "CellShell_Right")
+            {
+                remove.Add(child.gameObject);
+                continue;
+            }
+
+            var scale = child.localScale;
+            if ((name.Contains("Wall") || name == "Roof") &&
+                Mathf.Max(scale.x, scale.y, scale.z) >= LegacyShellMinScale)
+                remove.Add(child.gameObject);
+        }
+
+        foreach (var go in remove)
+        {
+            Object.DestroyImmediate(go);
+            count++;
+        }
+
+        return count;
+    }
+
+    static bool BuildProperCellShell(Transform cell, CellMetrics metrics, Material wallMat)
+    {
+        var spawn = cell.Find("SpawnPoint");
+        if (spawn == null) return false;
+
+        float w = CellInteriorWidth;
+        float d = CellInteriorDepth;
+        float h = metrics.WallHeight;
+        float floorTop = FloorSurfaceY;
+        float cy = floorTop + h * 0.5f;
+        Vector3 spawnPos = spawn.position;
+        Vector3 right = cell.right;
+        Vector3 forward = cell.forward;
+
+        // Door faces +right; back wall opposite corridor.
+        CreateWallBlock(cell, "CellShell_Back",
+            spawnPos - right * (w * 0.5f) + Vector3.up * (cy - floorTop),
+            new Vector3(WallThickness, h, d), wallMat);
+
+        return true;
+    }
+
+    static int BuildCellBlockPartitions(List<Transform> cells, CellMetrics metrics, Material wallMat)
+    {
+        var anchors = cells
+            .Select(c => new { Cell = c, Spawn = c.Find("SpawnPoint") })
+            .Where(x => x.Spawn != null)
+            .Select(x => new { x.Cell, Pos = x.Spawn.position })
+            .ToList();
+
+        if (anchors.Count < 2) return 0;
+
+        float h = metrics.WallHeight;
+        float floorTop = FloorSurfaceY;
+        float cy = floorTop + h * 0.5f;
+        int count = 0;
+
+        for (int i = 0; i < anchors.Count; i++)
+        {
+            for (int j = i + 1; j < anchors.Count; j++)
+            {
+                var a = anchors[i];
+                var b = anchors[j];
+                float dx = Mathf.Abs(a.Pos.x - b.Pos.x);
+                float dz = Mathf.Abs(a.Pos.z - b.Pos.z);
+
+                // Row neighbors (same column): partition wall between spawns along Z.
+                if (dx < CellInteriorWidth && dz > CellInteriorDepth * 0.5f && dz < CellInteriorDepth * 4f)
+                {
+                    var mid = (a.Pos + b.Pos) * 0.5f + Vector3.up * (cy - floorTop);
+                    CreateWallBlock(a.Cell.parent, $"CellPartition_{a.Cell.name}_{b.Cell.name}",
+                        mid, new Vector3(CellInteriorWidth, h, WallThickness), wallMat);
+                    count++;
+                    continue;
+                }
+
+                // Column neighbors: partition along X.
+                if (dz < CellInteriorDepth && dx > CellInteriorWidth * 0.5f && dx < CellInteriorWidth * 4f)
+                {
+                    var mid = (a.Pos + b.Pos) * 0.5f + Vector3.up * (cy - floorTop);
+                    CreateWallBlock(a.Cell.parent, $"CellPartition_{a.Cell.name}_{b.Cell.name}",
+                        mid, new Vector3(WallThickness, h, CellInteriorDepth), wallMat);
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     static void RenameEastCells()
     {
         var eastBlock = GameObject.Find("JailCells (1)") ?? GameObject.Find("JailCells_East");
@@ -414,6 +557,7 @@ public static class PrisonLevelLayoutRunner
     static List<Bounds> CollectJailCellBounds()
     {
         var list = new List<Bounds>();
+        var metrics = CellMetrics.SampleFromScene();
         foreach (var blockName in new[] { "JailCells", "JailCells_East" })
         {
             var block = GameObject.Find(blockName);
@@ -422,6 +566,13 @@ public static class PrisonLevelLayoutRunner
             foreach (Transform cell in block.transform)
             {
                 if (!cell.name.StartsWith("JailCell_")) continue;
+                var spawn = cell.Find("SpawnPoint");
+                if (spawn != null)
+                {
+                    list.Add(new Bounds(spawn.position, new Vector3(CellInteriorWidth, metrics.WallHeight, CellInteriorDepth)));
+                    continue;
+                }
+
                 var col = cell.GetComponent<BoxCollider>();
                 if (col != null)
                 {

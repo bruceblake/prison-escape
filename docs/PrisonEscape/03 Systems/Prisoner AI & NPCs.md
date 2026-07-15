@@ -8,13 +8,13 @@ NPC inmates follow the daily routine via NavMesh; the player follows the same co
 2. On each phase change → get stand point from the registry → `SetDestination`
 3. Compliant when within **0.5 m** (`arriveDistance`) of the stand point, or when travel grace / post-shakedown release applies
 4. After morning shakedown clears their cell → path toward the **next** phase destination early
-5. *(Planned:)* during `WorkProgram` phases, NPCs route to their seeded work assignment (kitchen, laundry, workshop, or classroom — [[Locations, Zones & Cells]])
+5. During `WorkProgram` phases the registry routes everyone to the Workshop zone (per-inmate kitchen/laundry/classroom assignments: follow-up — [[Locations, Zones & Cells]])
 6. When arrested: agent disabled; `SendToCell` teleports to cell spawn, releases after **1 s**
 
 ## Player compliance (`PrisonerController`)
 
 - Compliant within **3 m** (`compliantDistance`) of the stand point
-- Zone-based rules: own Cell (counts / night), Cafeteria (meals), Yard **or** Cafeteria (free time). *(Planned for the new schedule:)* assigned work zone during `WorkProgram`, own cell during `MiddayCount`/`EveningCount` ([[Time & Schedule]])
+- Zone-based rules: own Cell (all counts / night), Cafeteria (meals), Yard **or** Cafeteria (free time), Workshop during `WorkProgram` ([[Time & Schedule]])
 - Morning count also accepts standing inside the cell interior sphere
 - Travel grace ([[Time & Schedule]]) → compliant while moving
 - `MovementBlocked` (arrest) disables the movement controller

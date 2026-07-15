@@ -16,12 +16,12 @@ The heartbeat of the single-player game: an in-game clock advances through timed
 | 0 | 05:00–06:00 | Morning Count & Wake-Up | `MorningRollCall` (count + cell shakedown) | Yes |
 | 1 | 06:00–07:00 | Breakfast | `Breakfast` | Yes |
 | 2 | 07:00–08:00 | Morning Movement | `FreeTime` | No |
-| 3 | 08:00–11:30 | Work / Education / Programs | `WorkProgram` *(new)* | Yes |
-| 4 | 11:30–12:00 | Midday Count | `MiddayCount` *(new)* — return to cell/housing | Yes |
+| 3 | 08:00–11:30 | Work / Education / Programs | `WorkProgram` | Yes |
+| 4 | 11:30–12:00 | Midday Count | `MiddayCount` — return to cell | Yes |
 | 5 | 12:00–12:30 | Lunch | `Lunch` | Yes |
 | 6 | 12:30–13:00 | Midday Movement | `FreeTime` | No |
-| 7 | 13:00–16:00 | Afternoon Work Shift | `WorkProgram` *(new)* | Yes |
-| 8 | 16:00–16:30 | Evening Count | `EveningCount` *(new)* — return to cell/housing | Yes |
+| 7 | 13:00–16:00 | Afternoon Work Shift | `WorkProgram` | Yes |
+| 8 | 16:00–16:30 | Evening Count | `EveningCount` — return to cell | Yes |
 | 9 | 16:30–17:00 | Dinner | `Dinner` | Yes |
 | 10 | 17:00–21:00 | Yard Time & Recreation | `FreeTime` (yard, dayroom, commissary, weights) | No |
 | 11 | 21:00–22:00 | Final Lockdown & Night Count | `NightRollCall` (bed check) | Yes |
@@ -61,8 +61,7 @@ The schedule above reflects the current game's **low/medium security** facility.
 
 ## Phase types (`PrisonEventType`)
 
-Implemented: `RollCall` (legacy), `Breakfast`, `Lunch`, `Dinner`, `FreeTime`, `LightsOut`, `MorningRollCall`, `NightRollCall`
-Needed for this design: `WorkProgram`, `MiddayCount`, `EveningCount`, `Visitation` (weekend, later)
+`RollCall` (legacy), `Breakfast`, `Lunch`, `Dinner`, `FreeTime`, `LightsOut`, `MorningRollCall`, `NightRollCall`, `WorkProgram`, `MiddayCount`, `EveningCount` — int values are serialized (asset, guard duty arrays, restricted zones) and pinned by `PrisonRulesAndLabelsTests`; **append only, never reorder**. `Visitation` (weekend) comes later.
 
 ## Rules
 
@@ -74,18 +73,18 @@ Needed for this design: `WorkProgram`, `MiddayCount`, `EveningCount`, `Visitatio
 
 ## Implementation status
 
-This schedule is the approved design; the Unity project still runs the old 9-phase loop. Gaps to close:
+**Implemented (7/15/2026)** — the 13-phase day is live in code and data:
 
-| Gap | What's needed |
+| Piece | Status |
 |---|---|
-| `WorkProgram`, `MiddayCount`, `EveningCount` phases | Extend `PrisonEventType` + `PrisonEventRules`/`PrisonEventExtensions` |
-| Schedule data | Re-author `Assets/ScriptableObjects/PrisonSchedule.asset` with the 13-entry table above |
-| Work zones | Kitchen / Laundry / Workshop / Classroom zones + stand points in `PrisonLocationRegistry` ([[Locations, Zones & Cells]]) |
-| Midday/evening counts | Presence-only count logic (reuse `PrisonerPresence`), guard count duties ([[Guard AI]]) |
-| Count-mismatch lockdown | Generalize night-verifier `RaiseLockdown` to all formal counts |
-| Weekends / Visitation | Day-of-week tracking in `PrisonTimeManager`, alternate weekend schedule asset |
-
-> ⚠️ The code defaults inside `PrisonSchedule.cs` differ from the asset (starts with legacy `RollCall`, `minutesPerRealSecond = 0.1`). The **asset is authoritative** when assigned.
+| `WorkProgram`(8), `MiddayCount`(9), `EveningCount`(10) appended to `PrisonEventType` | ✅ (int values pinned by test) |
+| `PrisonSchedule.asset` re-authored with the 13-entry table above; C# defaults now match the asset | ✅ |
+| `IsCellCountPhase` / `IsFormalCount` predicates in `PrisonEventExtensions` | ✅ |
+| Routing, compliance, cell doors, waypoint objective, HUD labels handle all 13 phases | ✅ |
+| WorkProgram → **Workshop zone** (registry caches it; `GetWorkshop()`) | ✅ v1 — per-inmate Kitchen/Laundry/Classroom assignments are a follow-up |
+| Count-mismatch lockdown — `FormalCountMonitor` raises `PrisonSecurityAlerts.RaiseLockdown` when a midday/evening count ends with an inmate unaccounted for | ✅ (lockdown *consequences* still have no listeners — see [[Security, Heat & Alerts]]) |
+| Weekends / Visitation | 🔜 still planned — needs day-of-week tracking + alternate schedule asset |
+| Security-level schedule variants | 🔜 design direction for later prison tiers |
 
 ## Key files
 

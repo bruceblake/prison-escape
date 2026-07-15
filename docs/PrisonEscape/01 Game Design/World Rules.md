@@ -6,7 +6,7 @@ The laws of the game world — what is always true, as implemented. Change a rul
 
 1. The prison runs a fixed repeating schedule ([[Time & Schedule]]) built around predictability, control, and headcount: Morning Count (05:00) → Breakfast → Movement → Work/Programs → Midday Count → Lunch → Movement → Afternoon Work → Evening Count → Dinner → Yard & Recreation (17:00–21:00) → Final Lockdown & Night Count → Lights Out (22:00–05:00). One full day = **24 real minutes** at the default time scale.
 2. **Every phase is mandatory except Free Time** (movement windows and yard/recreation). Mandatory = you must be at your assigned location.
-3. **Everything stops for a count.** 4 formal counts per day (morning, midday, evening, night bed check). A count mismatch triggers a facility-wide **Lockdown** until the discrepancy clears. *(Midday/evening counts and generalized lockdown: planned.)*
+3. **Everything stops for a count.** 4 formal counts per day (morning, midday, evening, night bed check). A count mismatch raises a facility-wide **Lockdown alert** (`FormalCountMonitor`); consequence wiring for lockdowns is still pending ([[Security, Heat & Alerts]]).
 4. Entering a mandatory phase grants **50 seconds of travel grace** — you count as compliant while walking there. Morning count grants **no grace**.
 5. Free time before a mandatory phase shows a **warning** on the HUD.
 
@@ -16,8 +16,8 @@ The laws of the game world — what is always true, as implemented. Change a rul
 |---|---|
 | Morning Count | Your cell's roll-call stand point (or inside your cell) |
 | Meals | Cafeteria (strict 15–20 min eating window) |
-| Work / Education / Programs *(planned)* | Your assigned work or program zone (kitchen, laundry, workshop, classroom) |
-| Midday / Evening Count *(planned)* | Your cell / housing unit |
+| Work / Education / Programs | The Workshop zone (per-inmate kitchen/laundry/classroom assignments: follow-up) |
+| Midday / Evening Count | Your cell (stand point or interior) |
 | Free Time (movement, yard & recreation) | Yard or Cafeteria |
 | Lights Out / Night Count | Your cell (in bed coverage) |
 

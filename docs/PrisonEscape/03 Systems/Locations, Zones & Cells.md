@@ -6,7 +6,7 @@ Defines *where inmates must be* for each schedule phase, plus cell identity (spa
 
 Zone types: **Cell**, **Cafeteria**, **Yard**, **RollCallArea**. Each zone has stand points, an optional custom HUD name, and a trigger collider that registers the player entering/leaving. Default HUD labels: `CELL {n}`, `CAFETERIA`, `YARD`, `ROLL CALL`.
 
-*(Planned for the new schedule — [[Time & Schedule]]):* work/program zones **Kitchen**, **Laundry**, **Workshop**, **Classroom** for the `WorkProgram` blocks, each with stand points and inmate work assignments.
+The **Workshop** zone is wired into the registry for the `WorkProgram` blocks ([[Time & Schedule]]). Additional work zones (**Kitchen**, **Laundry**, **Classroom**) with per-inmate assignments are a follow-up.
 
 ## Registry (`PrisonLocationRegistry`, singleton)
 
@@ -20,8 +20,8 @@ Zone types: **Cell**, **Cafeteria**, **Yard**, **RollCallArea**. Each zone has s
 | Night Count (`NightRollCall`) / Lights Out | Cell spawn point |
 | Breakfast / Lunch / Dinner | Random cafeteria stand point |
 | Free Time (movement + yard & recreation) | Random yard stand point (fallback: cafeteria) |
-| Work / Education / Programs (`WorkProgram`) *(planned)* | Stand point in the inmate's assigned work zone |
-| Midday / Evening Count *(planned)* | Cell roll-call stand point (presence-only, no sweep) |
+| Work / Education / Programs (`WorkProgram`) | Random Workshop stand point (fallback: cafeteria, then yard) |
+| Midday / Evening Count | Cell roll-call stand point (presence-only, no sweep) |
 
 ## Cell data (`CellData`)
 
@@ -40,8 +40,9 @@ Per-cell serializable transforms + radius:
 
 Barred doors slide with the schedule:
 
-- **Open during** day phases (05:00–21:00): Morning Count, Breakfast, Lunch, Dinner, Free Time, legacy Roll Call — plus the planned `WorkProgram`, `MiddayCount`, `EveningCount`
+- **Open during** all day phases (05:00–21:00): Morning Count, Breakfast, Lunch, Dinner, Free Time, `WorkProgram`, `MiddayCount`, `EveningCount`, legacy Roll Call
 - **Closed during** Final Lockdown & Lights Out (21:00–05:00): `NightRollCall`, `LightsOut`
+- **Alignment** is now a single canonical path (`PrisonFacilityInstaller.AlignDoorToCellWall` + 6 m `ComputeDoorOpenOffsetLocal`) used by both the facility installer and the modular kit; **Prison → Fix Cell Doors & Waypoints** realigns every door, creates missing cell stand-point children, snaps patrol waypoints to the NavMesh, re-wires the registry, and saves the scene
 - Slide: local `openOffset` default **(0, 0, 6)**, `slideSpeed` **3**/s lerp
 - Fully covered by EditMode tests (see [[Testing & QA]])
 

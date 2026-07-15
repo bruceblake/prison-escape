@@ -18,12 +18,12 @@ If a future design wants accumulating/decaying heat, that's a new system — spe
 
 | Event | Raised by |
 |---|---|
-| `OnLockdown` | Night bed check failure (`"Bed check failed — cell {n}"`) |
+| `OnLockdown` | Night bed check failure (`"Bed check failed — cell {n}"`) · midday/evening count mismatch (`FormalCountMonitor`) |
 | `OnSuspicion` | Fake bed dummy discovered at morning line-up |
 
 **No listeners implement consequences yet** — no lockdown mode, chase escalation, or punishment flows. These hooks are where the escape-failure loop should attach ([[Roadmap & Priorities]]).
 
-> 🔜 **Planned (new schedule):** `OnLockdown` generalizes to **any formal count mismatch** — morning, midday, evening, or night ([[Time & Schedule]] § The Count). A missing inmate at any count locks the facility down until the count clears.
+> ✅ **Implemented (7/15/2026):** `OnLockdown` is raised for **any cell-count mismatch** — `FormalCountMonitor` checks presence when a midday/evening count ends (`"Count mismatch — Midday Count: 15/16 accounted for"`), alongside the existing night bed-check lockdown ([[Time & Schedule]] § The Count). Consequence listeners remain the open gap above.
 
 > 🔭 **Planned (specced):** the [[Social Ecosystem & Gangs]] overhaul adds **snitch tips** — an NPC who saw/heard about your crime reports it, queuing a targeted shakedown of your cell next morning and holding the heat eye at half for 1 day. Per-guard trust also modifies detection (±2 m / +10 s tolerance) against you specifically.
 

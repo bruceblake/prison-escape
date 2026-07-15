@@ -54,16 +54,38 @@ public static class BlenderKitCharacterSetup
         importer.bakeAxisConversion = false;
         importer.globalScale = 1f;
 
+        // Without explicit frame ranges Unity imports each clip as frames 0-0 —
+        // a single-frame pose, so characters never play the actual cycles.
+        // Pull the real ranges from the FBX takes.
+        var takeInfos = importer.importedTakeInfos;
         var clips = new List<ModelImporterClipAnimation>();
         foreach (var take in new[] { "Idle", "Walk", "Run", "Jump" })
         {
-            clips.Add(new ModelImporterClipAnimation
+            var clip = new ModelImporterClipAnimation
             {
                 name = take,
                 takeName = take,
                 loopTime = take != "Jump",
                 loopPose = take != "Jump",
-            });
+            };
+
+            if (takeInfos != null)
+            {
+                foreach (var info in takeInfos)
+                {
+                    if (info.name != take && !info.name.EndsWith("|" + take, System.StringComparison.Ordinal))
+                        continue;
+                    float rate = info.sampleRate > 0f ? info.sampleRate : 24f;
+                    clip.firstFrame = info.bakeStartTime * rate;
+                    clip.lastFrame = info.bakeStopTime * rate;
+                    break;
+                }
+            }
+
+            if (clip.lastFrame <= clip.firstFrame)
+                Debug.LogWarning($"[BlenderKitCharacter] Take '{take}' in {fbxPath} has no frame range — clip will be a static pose.");
+
+            clips.Add(clip);
         }
 
         importer.clipAnimations = clips.ToArray();

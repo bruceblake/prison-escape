@@ -276,7 +276,7 @@ namespace Prison.Tests
 
                 float distToSouthWall = Mathf.Abs(door.transform.position.z - (-93.1f));
                 Assert.Less(distToSouthWall, 1.0f, "Door should sit on the corridor-facing south wall, not float in the hallway.");
-                Assert.Less(Mathf.Abs(door.transform.position.x - (-53f)), 1.5f, "Door should be centered on the cell opening in X.");
+                Assert.Less(Mathf.Abs(door.transform.position.x - (-55f)), 1.5f, "Door should be centered on the cell opening in X (shell center).");
             }
             finally
             {

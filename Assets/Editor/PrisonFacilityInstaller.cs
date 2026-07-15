@@ -477,6 +477,12 @@ public static class PrisonFacilityInstaller
         if (bounds.size.sqrMagnitude < 0.01f) return;
 
         Vector3 bedPos = bed != null ? bed.position : bounds.center;
+        // Beds can poke past the measured render bounds; clamp inside so the
+        // furthest-wall pick can't flip to a side wall.
+        bedPos = new Vector3(
+            Mathf.Clamp(bedPos.x, bounds.min.x, bounds.max.x),
+            bedPos.y,
+            Mathf.Clamp(bedPos.z, bounds.min.z, bounds.max.z));
         if (!TryGetCorridorDoorFace(bounds, bedPos, out Vector3 faceCenter, out Vector3 outwardNormal))
             return;
 

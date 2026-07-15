@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -52,8 +53,13 @@ public static class PrisonDoorAndWaypointFixer
     static int FixCellDoors()
     {
         int fixedCount = 0;
-        foreach (var door in Object.FindObjectsByType<CellDoorController>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        var doors = Object.FindObjectsByType<CellDoorController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        DeactivateDuplicateDoors(doors);
+
+        foreach (var door in doors)
         {
+            if (!door.gameObject.activeInHierarchy)
+                continue;
             if (!TryFindShellAndBed(door.transform, out Transform shell, out Transform bed))
             {
                 Debug.LogWarning($"[DoorWaypointFixer] No cell shell found for door '{GetPath(door.transform)}' — skipped.", door);
@@ -70,6 +76,33 @@ public static class PrisonDoorAndWaypointFixer
         }
 
         return fixedCount;
+    }
+
+    /// <summary>
+    /// The scene has accumulated door sets from two build paths (modular kit +
+    /// facility FBX). Two controllers within a couple of meters means duplicate
+    /// doors in the same doorway — keep the first, deactivate the rest.
+    /// </summary>
+    static void DeactivateDuplicateDoors(CellDoorController[] doors)
+    {
+        var kept = new List<CellDoorController>();
+        foreach (var door in doors.OrderBy(d => d.name).ThenBy(d => d.GetInstanceID()))
+        {
+            if (!door.gameObject.activeInHierarchy) continue;
+
+            var duplicateOf = kept.FirstOrDefault(k =>
+                Vector3.Distance(k.transform.position, door.transform.position) < 2.5f);
+            if (duplicateOf != null)
+            {
+                Debug.LogWarning($"[DoorWaypointFixer] '{GetPath(door.transform)}' overlaps '{duplicateOf.name}' — deactivated as duplicate.", door);
+                door.gameObject.SetActive(false);
+                EditorUtility.SetDirty(door.gameObject);
+            }
+            else
+            {
+                kept.Add(door);
+            }
+        }
     }
 
     static bool TryFindShellAndBed(Transform door, out Transform shell, out Transform bed)

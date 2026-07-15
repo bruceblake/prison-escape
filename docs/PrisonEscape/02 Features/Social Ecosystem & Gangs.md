@@ -148,7 +148,7 @@ During meals and Free Time, each NPC with sociability ≥ 50 shares its **highes
 
 ### 8. Trading & bribes — the wallet finally works
 
-- **Stock**: refreshed daily at Morning Roll Call from the archetype's `TradeStockDefinition` (Hustler 4–6 items incl. rare/contraband; Soldiers/others 0–2).
+- **Stock**: refreshed daily at Morning Count from the archetype's `TradeStockDefinition` (Hustler 4–6 items incl. rare/contraband; Soldiers/others 0–2). Trading naturally concentrates in the **17:00–21:00 yard & recreation block** — the commissary window of the new schedule ([[Time & Schedule]]).
 - **Price** = base value × greed factor (0.8–1.5) × trust discount (up to −25% at trust ≥ 75) × gang modifier (member 0.85; **rivals refuse to trade** below standing −25) × **contraband markup ×2**.
 - Pay with **cash** (`PlayerWallet` — first real sink/source, see [[Loot & Economy]]) or barter items of matching value.
 - **Bribes** (Corrupt guards only): **$25** clear one crime tip against you · **$40** skip your cell in the next shakedown · **$60** blind-eye (that guard's detection off for one phase). Bribing in view of witnesses creates a `BribeWitnessed` memory — leverage for snitches.

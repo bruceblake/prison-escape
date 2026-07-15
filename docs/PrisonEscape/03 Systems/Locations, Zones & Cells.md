@@ -6,6 +6,8 @@ Defines *where inmates must be* for each schedule phase, plus cell identity (spa
 
 Zone types: **Cell**, **Cafeteria**, **Yard**, **RollCallArea**. Each zone has stand points, an optional custom HUD name, and a trigger collider that registers the player entering/leaving. Default HUD labels: `CELL {n}`, `CAFETERIA`, `YARD`, `ROLL CALL`.
 
+*(Planned for the new schedule — [[Time & Schedule]]):* work/program zones **Kitchen**, **Laundry**, **Workshop**, **Classroom** for the `WorkProgram` blocks, each with stand points and inmate work assignments.
+
 ## Registry (`PrisonLocationRegistry`, singleton)
 
 - Holds `cells[]` (index **0 = the player's cell**) plus cafeteria/yard/roll-call zone references (auto-found if unassigned)
@@ -14,10 +16,12 @@ Zone types: **Cell**, **Cafeteria**, **Yard**, **RollCallArea**. Each zone has s
 
 | Phase | Stand point |
 |---|---|
-| Morning Roll Call / Roll Call | Cell roll-call stand point (fallback: spawn, then random roll-call area) |
-| Night Roll Call / Lights Out | Cell spawn point |
+| Morning Count (`MorningRollCall` / legacy `RollCall`) | Cell roll-call stand point (fallback: spawn, then random roll-call area) |
+| Night Count (`NightRollCall`) / Lights Out | Cell spawn point |
 | Breakfast / Lunch / Dinner | Random cafeteria stand point |
-| Free Time | Random yard stand point (fallback: cafeteria) |
+| Free Time (movement + yard & recreation) | Random yard stand point (fallback: cafeteria) |
+| Work / Education / Programs (`WorkProgram`) *(planned)* | Stand point in the inmate's assigned work zone |
+| Midday / Evening Count *(planned)* | Cell roll-call stand point (presence-only, no sweep) |
 
 ## Cell data (`CellData`)
 
@@ -36,8 +40,8 @@ Per-cell serializable transforms + radius:
 
 Barred doors slide with the schedule:
 
-- **Open during:** Roll Call, Breakfast, Lunch, Dinner, Free Time, Morning Roll Call
-- **Closed during:** Lights Out, Night Roll Call
+- **Open during** day phases (05:00–21:00): Morning Count, Breakfast, Lunch, Dinner, Free Time, legacy Roll Call — plus the planned `WorkProgram`, `MiddayCount`, `EveningCount`
+- **Closed during** Final Lockdown & Lights Out (21:00–05:00): `NightRollCall`, `LightsOut`
 - Slide: local `openOffset` default **(0, 0, 6)**, `slideSpeed` **3**/s lerp
 - Fully covered by EditMode tests (see [[Testing & QA]])
 

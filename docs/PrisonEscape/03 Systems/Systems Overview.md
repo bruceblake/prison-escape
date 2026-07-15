@@ -32,7 +32,7 @@ Map of every implemented system. One note per system in this folder — keep it 
 
 | Note | One-liner | Test status |
 |---|---|---|
-| [[Time & Schedule]] | The daily phase clock everything reacts to | 🟡 rules tested |
+| [[Time & Schedule]] | The daily phase clock everything reacts to — **realistic count-driven day redesign approved (docs), code pending** | 🟡 rules tested |
 | [[Locations, Zones & Cells]] | Where inmates must be; cells and doors | 🟡 doors ✅ |
 | [[Roll Call & Shakedown]] | Morning sweep, confiscation, early release | 🟡 confiscation ✅ |
 | [[Guard AI]] | Patrol / detection / escort / night checks | ⚪ planned |

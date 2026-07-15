@@ -29,7 +29,7 @@ The main goal of the game. The *ingredients* of escape are implemented; the **wi
 - Proximity UI shows stored item or "Empty — equip an item to hide it"
 
 ### Cell doors
-- Open during day phases, closed during Lights Out / Night Roll Call — the nightly lock-in that makes the vent/dummy combo necessary ([[Locations, Zones & Cells]])
+- Open during day phases (05:00–21:00), closed from Final Lockdown through Lights Out (21:00–05:00) — the nightly lock-in that makes the vent/dummy combo necessary ([[Locations, Zones & Cells]]). The 17:00–21:00 yard & recreation window is the prime time to prep before doors lock.
 
 ## The escape loop (as designed)
 

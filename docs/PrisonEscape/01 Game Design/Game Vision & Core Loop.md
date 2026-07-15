@@ -33,7 +33,7 @@ Defeat night checks / shakedowns / guard detection
 ESCAPE (win) — or get caught and lose progress
 ```
 
-The prison day moves through timed phases (roll call, meals, free time, lights out, night checks — see [[Time & Schedule]]). The player must **be in the right place at the right time** — or fake it — while secretly preparing an escape.
+The prison day is micro-managed to the minute around **headcounts**: morning count, meals, work/education/program blocks, midday and evening counts, yard & recreation, final lockdown, lights out (see [[Time & Schedule]]). The player must **be in the right place at the right time** — or fake it — while secretly preparing an escape. Work assignments and the 17:00–21:00 recreation window are where the plan gets built.
 
 ## Pillars
 

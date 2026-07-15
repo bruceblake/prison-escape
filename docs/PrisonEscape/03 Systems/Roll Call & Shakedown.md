@@ -1,8 +1,21 @@
 # Roll Call & Shakedown
 
-Morning roll call is not just a timer — a guard sweeps every cell, confiscates contraband, and the phase ends when all inmates are accounted for.
+Everything stops for a headcount. The prison day is anchored by **4 formal counts** — if the numbers don't match, the whole facility locks down until the discrepancy is cleared.
 
-## Flow
+## The Count (design)
+
+| Count | When | What happens | Status |
+|---|---|---|---|
+| Morning Count | 05:00–06:00 (`MorningRollCall`) | Stand at cell roll-call point; full **cell shakedown sweep**; no travel grace | ✅ implemented |
+| Midday Count | 11:30–12:00 (`MiddayCount`) | Return to cell/housing; presence-only check (no sweep) | 🔜 planned |
+| Evening Count | 16:00–16:30 (`EveningCount`) | Return to cell/housing; presence-only check | 🔜 planned |
+| Night Count | 21:00–22:00 (`NightRollCall`) | Final lockdown; **bed presence verification** by night-verifier guards | ✅ implemented |
+
+- **Count mismatch → Lockdown.** An unaccounted-for inmate triggers a facility-wide Lockdown alert; everyone is confined where they stand until the count clears. Implemented today for the night bed check; generalizing to all counts is planned ([[Security, Heat & Alerts]]).
+- Random informal checks between counts are a future hook.
+- On weekends *(planned)*, counts remain but the work blocks between them become visitation, religious services, and extended recreation ([[Time & Schedule]]).
+
+## Morning count flow (implemented)
 
 1. Schedule enters morning line-up → `MorningRollCallTracker.BeginPhase()` (clears per-cell completion set)
 2. Inmates stand at their cell's roll-call stand point ([[Locations, Zones & Cells]])
@@ -41,12 +54,12 @@ Morning roll call is not just a timer — a guard sweeps every cell, confiscates
 ## Presence & compliance contract
 
 - `IPrisoner` interface (implemented by `PrisonerController` and `PrisonerAI`): `IsCompliant`, `IsAtRequiredLocation`, `IsRollCallShakedownComplete`, `MovementBlocked`, `CellIndex`, `SendToCell`
-- `PrisonerPresence` aggregates all inmates for headcounts
-- Player compliance during morning roll call: at the stand point (**3 m**) or inside the cell interior sphere
+- `PrisonerPresence` aggregates all inmates for headcounts — the planned midday/evening counts reuse this same contract (presence-only, no sweep)
+- Player compliance during morning count: at the stand point (**3 m**) or inside the cell interior sphere
 
-## Night counterpart
+## Night count (implemented)
 
-Night roll call / lights out uses **bed presence verification** by night-verifier guards instead — see [[Guard AI]] and [[Escape Routes & Mechanics]] (fake bed dummy).
+Night count / lights out uses **bed presence verification** by night-verifier guards instead of a line-up — see [[Guard AI]] and [[Escape Routes & Mechanics]] (fake bed dummy). An empty bed raises Lockdown.
 
 ## Key files
 

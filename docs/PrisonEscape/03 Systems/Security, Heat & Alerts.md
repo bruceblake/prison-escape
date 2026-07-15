@@ -23,6 +23,8 @@ If a future design wants accumulating/decaying heat, that's a new system — spe
 
 **No listeners implement consequences yet** — no lockdown mode, chase escalation, or punishment flows. These hooks are where the escape-failure loop should attach ([[Roadmap & Priorities]]).
 
+> 🔜 **Planned (new schedule):** `OnLockdown` generalizes to **any formal count mismatch** — morning, midday, evening, or night ([[Time & Schedule]] § The Count). A missing inmate at any count locks the facility down until the count clears.
+
 > 🔭 **Planned (specced):** the [[Social Ecosystem & Gangs]] overhaul adds **snitch tips** — an NPC who saw/heard about your crime reports it, queuing a targeted shakedown of your cell next morning and holding the heat eye at half for 1 day. Per-guard trust also modifies detection (±2 m / +10 s tolerance) against you specifically.
 
 ## Enforcement chain

@@ -17,6 +17,7 @@ Top strip during Morning Roll Call: phase title, progress bar with ghost timer, 
   - `RoutineBarTimerReadability` — keeps the ghost timer legible over the fill
 - Legacy layers (still in repo, off by default): `PrisonScheduleUI` (clock + event + 75 s warning), `MinimalSchedulePhaseTextHUD` (prev/current/next), `TextRoutineComplianceHUD` (tactical text), `DailyRoutineBarUI` (full-day segment timeline)
 - Presence model: HUD dims to "all clear" when compliant with >50% phase time left; full "pressure" under 25%, enforcement, grace, or warning
+- **New schedule note:** the redesigned day ([[Time & Schedule]]) is a **13-phase loop** with new phase labels to surface — `WORK / PROGRAMS`, `MIDDAY COUNT`, `EVENING COUNT` — alongside the existing meals/counts. The now/next bar design is unaffected; `DailyRoutineBarUI` (full-day timeline, legacy) would need its segment layout re-fed from the new asset.
 - **`ComplianceStatusHUD`** — during Morning Roll Call, `GO TO` shows **wait-in-cell** copy (`GetMorningRollCallLineUpDestinationLabel`), not the next meal venue
 
 ## Polish backlog

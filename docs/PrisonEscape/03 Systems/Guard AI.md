@@ -13,6 +13,9 @@ Configured via `GameManager.guardSpawnTable` (`GuardSpawnEntry`: name, spawn poi
 | **StandardPatrol** | Waypoint patrol + detection/escort; during morning line-up switches to shakedown mode |
 | **NightCellVerifier** | Same patrol/detection, plus walks every cell during night phases and verifies bed presence |
 | **MorningShakedown** | FSM/detection off; runs the [[Roll Call & Shakedown|shakedown sweep]] when on duty |
+| **CountOfficer** *(planned)* | Runs the presence-only midday (11:30) and evening (16:00) counts under the new schedule ([[Time & Schedule]]); a mismatch raises Lockdown |
+
+With the new schedule, `onDutyDuring[]` gains the `WorkProgram`, `MiddayCount`, and `EveningCount` phases — e.g. work-zone supervision posts during `WorkProgram`, count officers during the two new counts.
 
 `GuardShiftController` subscribes to schedule changes and enables/disables NavMeshAgent, FSM, detection, and sweeper per role and phase.
 

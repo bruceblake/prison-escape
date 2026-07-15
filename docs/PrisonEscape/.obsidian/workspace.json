@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "03 Systems/Inventory & Items.md",
+                "file": "01 Game Design/Prison Layout — Minimum Security.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Inventory & Items"
+              "title": "Prison Layout — Minimum Security"
             }
           }
         ]
@@ -185,6 +185,11 @@
   },
   "active": "8b2e86b1f0745f9b",
   "lastOpenFiles": [
+    "02 Features/Escape Completion System.md.tmp.37816.77b10eaa15aa",
+    "03 Systems/Guard AI.md.tmp.37816.ff45ac9b05e9",
+    "Home.md",
+    "Minimum Security Prison Layout.png",
+    "03 Systems/Inventory & Items.md",
     "03 Systems/Escape Routes & Mechanics.md",
     "03 Systems/Crafting.md",
     "Prison Escape Devlog Dashboard.md",
@@ -208,7 +213,6 @@
     "03 Systems/UI & HUD.md",
     "03 Systems/UI",
     "Pasted image 20260714201309.png",
-    "Home.md",
     "04 Content & Assets/Content Inventory.md",
     "Pasted image 20260714200128.png",
     "Pasted image 20260714200048.png",
@@ -217,9 +221,7 @@
     "Prison Escape.md",
     "06 Process/Git & Branching.md",
     "06 Process/Feature Spec Template.md",
-    "06 Process/Development Workflow.md",
     "06 Process",
-    "05 Engineering/Testing & QA.md",
     "05 Engineering",
     "04 Content & Assets",
     "03 Systems",
@@ -227,8 +229,6 @@
     "Pasted image 20260701210606.png",
     "Untitled.base",
     "Untitled.canvas",
-    "Minimum Security Prison Layout.png",
-    "Pasted image 20260701210049.png",
-    "Untitled"
+    "Pasted image 20260701210049.png"
   ]
 }

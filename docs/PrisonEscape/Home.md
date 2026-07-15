@@ -4,7 +4,7 @@
 
 ## 01 Game Design
 - [[Game Vision & Core Loop]] — what the game is, pillars, the escape fantasy
-- [[World Rules]] — the 21 laws of the game world as implemented
+- [[World Rules]] — the 26 laws of the game world (docs-first: schedule redesign approved, code pending)
 - [[Prison Layout — Minimum Security]] — the MVP map (diagram + dimensions)
 - [[Roadmap & Priorities]] — what's next (top: **escape win condition**)
 - [[Prison Escape]] — original founding note (multi-prison vision)
@@ -45,4 +45,4 @@
 ---
 
 ### The game in one paragraph
-A prison-escape sim: a fixed daily routine (roll call → meals → free time → lights out) creates the puzzle; the player appears compliant while looting parts, crafting tools, building social standing, and defeating guard checks (vision cones, morning shakedowns, night bed verification) to open an escape route. Minimum-security prison first; Medium, High, and Supermax to follow.
+A prison-escape sim: a count-driven daily routine (morning count → meals → work & programs → midday/evening counts → yard time → final lockdown) creates the puzzle; the player appears compliant while looting parts, crafting tools, building social standing, and defeating guard checks (vision cones, morning shakedowns, night bed verification) to open an escape route. Minimum-security prison first; Medium, High, and Supermax to follow.

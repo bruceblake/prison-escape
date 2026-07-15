@@ -27,15 +27,15 @@ Escape is the game's stated goal but currently has no completion state. This fea
 ### Restricted zones
 - New `RestrictedZone` volumes. Two flavors:
   - **Always restricted:** vent/plumbing corridors, beyond the fence line, the outer band between loop corridors and the escape boundary.
-  - **Phase-restricted:** restricted only during listed phases (e.g. cafeteria during Lights Out, workshop outside Free Time).
+  - **Phase-restricted:** restricted only during listed phases (e.g. cafeteria during the 22:00–05:00 Lights Out window, workshop outside its `WorkProgram` block — [[Time & Schedule]]).
 - Being inside an active restricted zone = **escape attempt**. Compliance/grace do not protect you.
 - Guard spots you in one (normal detection geometry: 10 m / 90° cone / 6 m proximity) → **caught escaping** (not the gentle escort).
 
 ### Getting caught → solitary confinement
 - Immediate: screen pops up showing **Mental Health −20**, **Physical Health −10**, and **Strength −10** ticking down.
 - **Inventory confiscated** (all slots). **Pillow stash contents survive** — hiding rewards planning.
-- Player teleports to a solitary cell; time **skips to the next Morning Roll Call** (lose the rest of the day).
-- **Suspicion** active for **2 in-game days** (2 Morning Roll Calls): guard detection range 10 → **14 m**; heat eye sits at "half" while suspicious.
+- Player teleports to a solitary cell; time **skips to the next Morning Count** (lose the rest of the day).
+- **Suspicion** active for **2 in-game days** (2 Morning Counts): guard detection range 10 → **14 m**; heat eye sits at "half" while suspicious.
 
 ### Solitary confinement block (map change)
 - New **section of 4 solitary cells** inside Main Security (south end), scratch-built like other furnishing. Each cell ~3×4 m with a spawn point.
@@ -44,7 +44,7 @@ Escape is the game's stated goal but currently has no completion state. This fea
 ### Player stats (new, minimal v1)
 - **Mental Health**, **Physical Health**, and **Strength**, all 0–100, start 100.
 - Solitary stay: −20 MH, −10 PH, −10 STR.
-- Regen: **+5 each per day** (applied at Morning Roll Call).
+- Regen: **+5 each per day** (applied at Morning Count).
 - v1 effects: Strength < 50 → sprint multiplier 2.0 → 1.5. Mental health effects reserved for later (stored properly now).
 
 ## Systems it touches

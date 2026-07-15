@@ -105,6 +105,9 @@ public static class PrisonLevelLayoutRunner
     [MenuItem("Prison/Layout/5 — Wire Registry")]
     public static void WireRegistryMenu() => WireRegistry();
 
+    [MenuItem("Prison/Layout/6 — Build Escape Systems")]
+    public static void BuildEscapeSystemsMenu() => BuildEscapeSystems();
+
     [MenuItem("Prison/Layout/Run Full Build")]
     public static void RunFullBuild()
     {
@@ -115,6 +118,7 @@ public static class PrisonLevelLayoutRunner
         BuildAllLighting();
         FurnishRooms();
         WireRegistry();
+        BuildEscapeSystems();
         SaveScene();
         Debug.Log("[PrisonLayout] Full build complete.");
     }
@@ -941,6 +945,209 @@ public static class PrisonLevelLayoutRunner
         if (yardZone != null) registry.yard = yardZone;
 
         EditorUtility.SetDirty(registry);
+    }
+
+    // ------------------------------------------------------------------
+    // ESCAPE SYSTEMS (spec: docs/PrisonEscape/02 Features/Escape Completion System.md)
+    // ------------------------------------------------------------------
+
+    const string BarsMatPath = "Assets/Materials/Prison/PrisonBars_Metal.mat";
+    const float BoundaryMargin = 12f;
+
+    static void BuildEscapeSystems()
+    {
+        if (_activePlates.Count == 0)
+            _activePlates = BuildDiagramPlates().ToList();
+
+        var metrics = CellMetrics.SampleFromScene();
+        var root = GetOrCreateRoot("EscapeSystems");
+        ClearChildren(root);
+
+        var spawns = BuildSolitaryBlock(root.transform, metrics);
+        BuildEscapeBoundaryRing(root.transform);
+        BuildRestrictedZones(root.transform);
+        WireEscapeManager(spawns);
+
+        Debug.Log($"[PrisonLayout] Escape systems built: solitary block ({spawns.Length} cells), boundary ring, restricted zones.");
+    }
+
+    /// <summary>4 solitary cells at the south end of Main Security (5 m pitch, cube-built).</summary>
+    static Transform[] BuildSolitaryBlock(Transform parent, CellMetrics metrics)
+    {
+        var security = _activePlates.FirstOrDefault(p => p.Name == "MainSecurityFloor");
+        if (security.Name == null)
+        {
+            Debug.LogWarning("[PrisonLayout] MainSecurityFloor plate missing — solitary block skipped.");
+            return new Transform[0];
+        }
+
+        var block = new GameObject("SolitaryBlock");
+        block.transform.SetParent(parent, false);
+
+        var wallMat = LoadMat(WallMatPath);
+        var barsMat = LoadMat(BarsMatPath) ?? LoadMat(MetalMatPath);
+
+        float floorTop = FloorY + FloorScaleY * 0.5f;
+        float wallH = metrics.WallHeight;
+        float wallCy = floorTop + wallH * 0.5f;
+
+        const int cellCount = 4;
+        const float cellWidth = 5f;
+        const float cellDepth = 6f;
+        const float doorWidth = 1.4f;
+
+        float blockWest = security.Cx - cellCount * cellWidth * 0.5f;
+        float southZ = security.MinZ + 2f;             // 2 m off the exterior south wall
+        float northZ = southZ + cellDepth;              // barred front line
+
+        // Partitions between/flanking cells (5 walls).
+        for (int i = 0; i <= cellCount; i++)
+        {
+            float x = blockWest + i * cellWidth;
+            CreateBlock(block.transform, $"SolitaryPartition_{i}",
+                new Vector3(x, wallCy, (southZ + northZ) * 0.5f),
+                new Vector3(WallThickness, wallH, cellDepth), wallMat);
+        }
+
+        // Back wall closing the 2 m gap line.
+        CreateBlock(block.transform, "SolitaryBackWall",
+            new Vector3(security.Cx, wallCy, southZ),
+            new Vector3(cellCount * cellWidth + WallThickness, wallH, WallThickness), wallMat);
+
+        var spawns = new Transform[cellCount];
+        for (int i = 0; i < cellCount; i++)
+        {
+            float cellWestX = blockWest + i * cellWidth;
+            float cellCenterX = cellWestX + cellWidth * 0.5f;
+
+            // Barred front with a centered door gap.
+            float segW = (cellWidth - doorWidth) * 0.5f;
+            CreateBlock(block.transform, $"SolitaryFront_{i}_L",
+                new Vector3(cellWestX + segW * 0.5f, wallCy, northZ),
+                new Vector3(segW, wallH, WallThickness), barsMat);
+            CreateBlock(block.transform, $"SolitaryFront_{i}_R",
+                new Vector3(cellWestX + cellWidth - segW * 0.5f, wallCy, northZ),
+                new Vector3(segW, wallH, WallThickness), barsMat);
+
+            // Slab bed.
+            CreateBlock(block.transform, $"SolitaryBed_{i}",
+                new Vector3(cellCenterX, floorTop + 0.25f, southZ + 1.1f),
+                new Vector3(2f, 0.5f, 0.9f), LoadMat(MetalMatPath));
+
+            var spawn = new GameObject($"SolitarySpawn_{i}");
+            spawn.transform.SetParent(block.transform, false);
+            spawn.transform.position = new Vector3(cellCenterX, floorTop + 0.1f, (southZ + northZ) * 0.5f);
+            spawns[i] = spawn.transform;
+        }
+
+        return spawns;
+    }
+
+    /// <summary>Ring of 4 trigger boxes ~12 m outside the perimeter walls — crossing any = escaped.</summary>
+    static void BuildEscapeBoundaryRing(Transform parent)
+    {
+        GetFacilityOuterBounds(out float west, out float east, out float south, out float north);
+
+        float bw = west - BoundaryMargin;
+        float be = east + BoundaryMargin;
+        float bs = south - BoundaryMargin;
+        float bn = north + BoundaryMargin;
+        float cx = (bw + be) * 0.5f;
+        float cz = (bs + bn) * 0.5f;
+        float spanX = be - bw + 8f;
+        float spanZ = bn - bs + 8f;
+
+        var ring = new GameObject("EscapeBoundary");
+        ring.transform.SetParent(parent, false);
+
+        CreateBoundarySegment(ring.transform, "Boundary_N", new Vector3(cx, 10f, bn), new Vector3(spanX, 20f, 4f));
+        CreateBoundarySegment(ring.transform, "Boundary_S", new Vector3(cx, 10f, bs), new Vector3(spanX, 20f, 4f));
+        CreateBoundarySegment(ring.transform, "Boundary_W", new Vector3(bw, 10f, cz), new Vector3(4f, 20f, spanZ));
+        CreateBoundarySegment(ring.transform, "Boundary_E", new Vector3(be, 10f, cz), new Vector3(4f, 20f, spanZ));
+    }
+
+    static void CreateBoundarySegment(Transform parent, string name, Vector3 center, Vector3 size)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        go.transform.position = center;
+        var box = go.AddComponent<BoxCollider>();
+        box.size = size;
+        box.isTrigger = true;
+        go.AddComponent<EscapeBoundary>();
+    }
+
+    /// <summary>
+    /// Always-restricted band between the perimeter walls and the escape boundary,
+    /// plus phase-restricted volumes over the cafeteria and workshop at night.
+    /// </summary>
+    static void BuildRestrictedZones(Transform parent)
+    {
+        GetFacilityOuterBounds(out float west, out float east, out float south, out float north);
+
+        var zonesRoot = new GameObject("RestrictedZones");
+        zonesRoot.transform.SetParent(parent, false);
+
+        float band = BoundaryMargin;
+        float cx = (west + east) * 0.5f;
+        float cz = (south + north) * 0.5f;
+        float outerSpanX = east - west + band * 2f;
+        float outerSpanZ = north - south + band * 2f;
+
+        CreateRestrictedBox(zonesRoot.transform, "Restricted_PerimeterN",
+            new Vector3(cx, 6f, north + band * 0.5f), new Vector3(outerSpanX, 12f, band), true, null);
+        CreateRestrictedBox(zonesRoot.transform, "Restricted_PerimeterS",
+            new Vector3(cx, 6f, south - band * 0.5f), new Vector3(outerSpanX, 12f, band), true, null);
+        CreateRestrictedBox(zonesRoot.transform, "Restricted_PerimeterW",
+            new Vector3(west - band * 0.5f, 6f, cz), new Vector3(band, 12f, outerSpanZ), true, null);
+        CreateRestrictedBox(zonesRoot.transform, "Restricted_PerimeterE",
+            new Vector3(east + band * 0.5f, 6f, cz), new Vector3(band, 12f, outerSpanZ), true, null);
+
+        var nightPhases = new[] { PrisonEventType.LightsOut, PrisonEventType.NightRollCall };
+        foreach (var name in new[] { "CafeteriaFloor", "WorkshopFloor" })
+        {
+            var plate = _activePlates.FirstOrDefault(p => p.Name == name);
+            if (plate.Name == null) continue;
+            CreateRestrictedBox(zonesRoot.transform, "Restricted_" + name.Replace("Floor", "") + "_Night",
+                new Vector3(plate.Cx, 3.7f, plate.Cz), new Vector3(plate.Sx, 6f, plate.Sz), false, nightPhases);
+        }
+    }
+
+    static void CreateRestrictedBox(Transform parent, string name, Vector3 center, Vector3 size,
+        bool always, PrisonEventType[] during)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        go.transform.position = center;
+        var box = go.AddComponent<BoxCollider>();
+        box.size = size;
+        box.isTrigger = true;
+        var zone = go.AddComponent<RestrictedZone>();
+        zone.zoneName = name;
+        zone.alwaysRestricted = always;
+        zone.restrictedDuring = during ?? new PrisonEventType[0];
+    }
+
+    static void GetFacilityOuterBounds(out float west, out float east, out float south, out float north)
+    {
+        west = float.MaxValue; east = float.MinValue; south = float.MaxValue; north = float.MinValue;
+        foreach (var p in _activePlates)
+        {
+            west = Mathf.Min(west, p.MinX);
+            east = Mathf.Max(east, p.MaxX);
+            south = Mathf.Min(south, p.MinZ);
+            north = Mathf.Max(north, p.MaxZ);
+        }
+    }
+
+    static void WireEscapeManager(Transform[] solitarySpawns)
+    {
+        var go = GameObject.Find("EscapeManager") ?? new GameObject("EscapeManager");
+        var manager = go.GetComponent<EscapeManager>() ?? go.AddComponent<EscapeManager>();
+        if (go.GetComponent<PlayerStats>() == null) go.AddComponent<PlayerStats>();
+        if (go.GetComponent<PrisonSuspicion>() == null) go.AddComponent<PrisonSuspicion>();
+        manager.solitarySpawnPoints = solitarySpawns;
+        EditorUtility.SetDirty(manager);
     }
 
     static Material LoadMat(string path) => AssetDatabase.LoadAssetAtPath<Material>(path);

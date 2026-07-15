@@ -61,6 +61,15 @@ Hub (cafeteria center) at world `(-26, -98)`. All floor plates at Y = 0.6, thick
 - **Lighting:** grid of ceiling fixtures per room/corridor + one light per cell (~635 point lights); warm color (1, 0.95, 0.85)
 - **Furniture:** scratch-built from cubes + prison materials (no prefabs) — cafeteria tables/serving line, shower stalls/sinks/benches, workshop benches/shelves, security desk/monitor bank, courtyard exercise equipment
 
+## Solitary confinement block
+
+A section of **4 solitary cells** at the **south end of Main Security** (scratch-built interior partitions, each cell ~3×4 m with a spawn point and barred front). Players caught escaping are brought here — see [[Escape Completion System]].
+
+## Escape boundary & restricted zones
+
+- **Escape boundary:** a perimeter volume encircling the whole facility beyond the loop corridors/courtyard fence — crossing it = escaped.
+- **Restricted zones:** vent/plumbing corridors, beyond the fence line, and the outer band between loop corridors and the boundary are always restricted; some interior rooms are restricted per phase ([[Escape Completion System]]).
+
 ## Escape-relevant geography
 
 | Feature | Location | Escape relevance |

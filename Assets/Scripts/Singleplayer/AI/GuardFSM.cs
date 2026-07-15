@@ -169,6 +169,8 @@ public class GuardFSM : MonoBehaviour
         var intruder = detection?.FindNonCompliantPrisoner();
         if (intruder != null)
         {
+            if (TryHandleCaughtEscaping(intruder))
+                return;
             if (debugLogs)
                 Debug.Log($"[GuardFSM][{gameObject.name}] Night verify -> Escort (non-compliant in sight)", this);
             _escortTarget = intruder;
@@ -221,11 +223,30 @@ public class GuardFSM : MonoBehaviour
         _nightVerifyCellIndex++;
     }
 
+    /// <summary>
+    /// Spotted inside an active restricted zone = escape attempt: straight to solitary
+    /// (via <see cref="EscapeManager"/>) instead of the normal walk-back escort.
+    /// </summary>
+    private bool TryHandleCaughtEscaping(Prison.IPrisoner target)
+    {
+        if (target is not PrisonerController player)
+            return false;
+        if (!Prison.RestrictedZone.IsPrisonerInActiveRestrictedZone(player))
+            return false;
+
+        if (debugLogs)
+            Debug.Log($"[GuardFSM][{gameObject.name}] Caught {player.name} ESCAPING (restricted zone) -> solitary", this);
+        EscapeManager.EnsureInstance().OnCaughtEscaping(player, gameObject.name);
+        return true;
+    }
+
     private void UpdatePatrol()
     {
         var target = detection?.FindNonCompliantPrisoner();
         if (target != null)
         {
+            if (TryHandleCaughtEscaping(target))
+                return;
             var mb = target as MonoBehaviour;
             if (debugLogs)
                 Debug.Log($"[GuardFSM][{gameObject.name}] Patrol -> Escort: target={(mb != null ? mb.name : "null")} cell={target.CellIndex} compliant={target.IsCompliant}", this);

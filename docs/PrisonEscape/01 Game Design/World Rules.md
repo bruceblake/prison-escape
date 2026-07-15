@@ -48,10 +48,14 @@ The laws of the game world — what is always true, as implemented. Change a rul
 18. One greeting per inmate per phase counts; favors pay affinity for delivered items.
 19. Prison-wide reputation = the average of all inmate affinities: Outsider < 25 ≤ Associate < 50 ≤ Respected < 75 ≤ Kingpin.
 
-## Escape (intended, partially implemented)
+## Escape, capture & consequences
 
 20. Escape is the goal; the game does not force it. Routes require tools, timing, and defeated checks ([[Escape Routes & Mechanics]]).
-21. **Not yet true in code:** winning by escaping, and consequences from Lockdown/Suspicion alerts. These are the top roadmap items.
+21. **Crossing the outer boundary = escaped** — win screen with run stats, any route, any time ([[Escape Completion System]]).
+22. **Restricted zones** (perimeter band; cafeteria/workshop at night) count as escape attempts — compliance and grace don't protect you there.
+23. Spotted in a restricted zone → **solitary confinement**: inventory confiscated (pillow stash survives), **Mental Health −20 / Strength −10**, day skips to the next Morning Roll Call.
+24. After a caught escape, **suspicion lasts 2 days**: guard detection reaches 40% farther (10 → 14 m).
+25. **Stats regenerate +5/day** at Morning Roll Call. Strength below 50 slows sprinting (×2.0 → ×1.5).
 
 ---
 

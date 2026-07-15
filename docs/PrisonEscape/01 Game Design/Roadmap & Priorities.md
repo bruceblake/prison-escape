@@ -4,11 +4,7 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 
 ## Now (highest priority)
 
-1. **Escape completion system** — the missing keystone. The ingredients of escape all exist (vent route, fake bed, stash, crafting, guard evasion) but there is **no win state**:
-   - `EscapeZone` / exit trigger the player reaches to win
-   - `EscapeManager` objective state machine (prerequisites met → route opened → reached exit → escaped)
-   - Failure path: botched attempt → lockdown / recapture via `PrisonSecurityAlerts` + heat
-   - Highly testable (state machine = EditMode; trigger flow = PlayMode)
+1. **Escape completion system** — 🚧 **in progress** on `feat/escape-completion`. Fully specced: [[Escape Completion System]] (escape boundary win, end screen + stats, restricted zones, solitary confinement block, mental health/strength stats, suspicion window).
 
 ## Next
 

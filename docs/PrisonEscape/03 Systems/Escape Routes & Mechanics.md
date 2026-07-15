@@ -40,9 +40,14 @@ Craft Screwdriver → stash it through shakedowns
 → traverse vent corridor → reach exit → WIN (not yet implemented)
 ```
 
-## Missing keystone: escape completion
+## Escape completion (implemented v1)
 
-No `EscapeZone`, `EscapeManager`, win state, or objective tracking exists. Failure hooks (`OnLockdown`, `OnSuspicion`) also have no consequences yet. Both are specced as the top item in [[Roadmap & Priorities]].
+The win/lose keystone exists — see [[Escape Completion System]]:
+
+- **`EscapeBoundary`** ring outside the walls → crossing it = win (end screen + stats + ladder framing)
+- **`RestrictedZone`** volumes (perimeter band always; cafeteria/workshop at night) — spotted inside → **caught escaping**
+- **`EscapeManager`** runs the caught flow: confiscation (stash survives), solitary block in Main Security, −20 MH / −10 STR, day skip, 2-day suspicion
+- Route geometry (vent corridors, fence cut) is what makes the boundary *reachable* — next on [[Roadmap & Priorities]]
 
 ## Key files
 

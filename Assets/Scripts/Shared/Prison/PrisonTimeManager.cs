@@ -251,6 +251,28 @@ namespace Prison
                 AdvanceToNextEvent();
         }
 
+        /// <summary>
+        /// Advances the schedule until the current phase matches <paramref name="target"/>
+        /// (solitary confinement skips the rest of the day to the next Morning Roll Call).
+        /// Fires OnEventChanged for each intermediate phase so subscribers stay consistent.
+        /// </summary>
+        public void SkipToEventType(PrisonEventType target)
+        {
+            if (schedule == null || schedule.entries == null || schedule.entries.Length == 0)
+                return;
+            if (currentEvent == target)
+                return;
+
+            for (int i = 0; i < schedule.entries.Length; i++)
+            {
+                AdvanceToNextEvent();
+                if (currentEvent == target)
+                    return;
+            }
+
+            Debug.LogWarning($"[PrisonTimeManager] SkipToEventType: {target} not found in schedule.", this);
+        }
+
         /// <summary>Called when the last inmate's cell has been shakedown — ends roll call immediately.</summary>
         public void AdvanceMorningRollCallWhenComplete()
         {

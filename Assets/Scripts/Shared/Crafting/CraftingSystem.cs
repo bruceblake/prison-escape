@@ -2,6 +2,9 @@ using UnityEngine;
 
 public static class CraftingSystem
 {
+    /// <summary>Raised after every successful craft (escape-run stats, achievements).</summary>
+    public static event System.Action<CraftingRecipe> OnItemCrafted;
+
     public static bool CanCraft(CraftingRecipe recipe, PlayerInventory inventory)
     {
         if (recipe == null || inventory == null)
@@ -33,6 +36,7 @@ public static class CraftingSystem
         }
 
         Debug.Log($"[CraftingSystem] Crafted {recipe.resultAmount}x {recipe.result.itemName}");
+        OnItemCrafted?.Invoke(recipe);
         return true;
     }
 }

@@ -44,6 +44,9 @@ public class GuardDetection : MonoBehaviour
         if (logScan)
             Debug.Log($"[GuardDetection][{gameObject.name}] Scan: eye={eyePos} fwd={forward} range={detectionRange} cone={coneAngle}° | players={playerPrisoners.Length} npcs={npcPrisoners.Length}", this);
 
+        // Suspicion after a caught escape widens detection against the player for a few days.
+        float suspicionMult = PrisonSuspicion.GlobalDetectionRangeMultiplier;
+
         foreach (var p in playerPrisoners)
         {
             if (p.MovementBlocked)
@@ -53,8 +56,8 @@ public class GuardDetection : MonoBehaviour
             }
 
             float dist = Vector3.Distance(eyePos, p.transform.position);
-            bool inCone = IsInSight(p.transform.position, eyePos, forward);
-            bool inProximity = proximitySpotDistance > 0.01f && dist <= proximitySpotDistance;
+            bool inCone = IsInSight(p.transform.position, eyePos, forward, suspicionMult);
+            bool inProximity = proximitySpotDistance > 0.01f && dist <= proximitySpotDistance * suspicionMult;
             bool spotted = inCone || inProximity;
 
             if (logScan)
@@ -160,11 +163,11 @@ public class GuardDetection : MonoBehaviour
         Debug.Log($"[GuardDetection][{gameObject.name}] Near miss: {tag} {name} NON-COMPLIANT not spotted — dist={dist:F2} angle={ang:F0}° (cone half={coneAngle * 0.5f:F0}°) proxSpot≤{proximitySpotDistance} maxRange={detectionRange}. eyeFwd={eyeTransform.forward}", this);
     }
 
-    private bool IsInSight(Vector3 targetPos, Vector3 eyePos, Vector3 forward)
+    private bool IsInSight(Vector3 targetPos, Vector3 eyePos, Vector3 forward, float rangeMultiplier = 1f)
     {
         Vector3 toTarget = targetPos - eyePos;
         float dist = toTarget.magnitude;
-        if (dist > detectionRange) return false;
+        if (dist > detectionRange * rangeMultiplier) return false;
 
         float angle = Vector3.Angle(forward, toTarget.normalized);
         return angle <= coneAngle * 0.5f;

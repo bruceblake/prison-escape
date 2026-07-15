@@ -20,6 +20,8 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
 
     public bool IsCompliant { get; private set; }
     public bool IsAtRequiredLocation { get; private set; }
+    /// <summary>Inside a currently-active <see cref="RestrictedZone"/> — counts as an escape attempt.</summary>
+    public bool IsInActiveRestrictedZone { get; private set; }
     public bool IsRollCallShakedownComplete =>
         MorningRollCallTracker.Instance != null && MorningRollCallTracker.Instance.IsInmateShakedownComplete(this);
     public bool MovementBlocked => _movementBlocked;
@@ -104,6 +106,16 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
 
     private void UpdateCompliance()
     {
+        // Restricted zones override everything (grace, release, flexible phases):
+        // being inside one is an escape attempt, not schedule non-compliance.
+        IsInActiveRestrictedZone = RestrictedZone.IsPrisonerInActiveRestrictedZone(this);
+        if (IsInActiveRestrictedZone)
+        {
+            IsAtRequiredLocation = false;
+            IsCompliant = false;
+            return;
+        }
+
         if (PrisonTimeManager.Instance == null || PrisonLocationRegistry.Instance == null)
         {
             IsAtRequiredLocation = true;

@@ -2,14 +2,19 @@
 
 How features get built in this project. **This vault is the source of truth** — design lives here first, code implements it.
 
-## The loop: Design → Implement → Verify → Sync
+## The loop: Brainstorm → Design → Implement → Verify → Sync
 
 ```
-Obsidian (design) → Cursor (implement) → Unity MCP (execute & verify) → Git (record)
+Chat (brainstorm) → Obsidian (spec) → Cursor (implement) → Unity MCP (execute & verify) → Git (record)
 ```
 
-### 1. Design in Obsidian first
-- Every feature starts as a note in this vault (use [[Feature Spec Template]]).
+### 0. Brainstorm in chat first
+- Before writing any spec, talk the feature through: what's the fantasy, how does it use existing systems, what are the edge cases, what's out of scope.
+- The agent should push back, surface constraints from the codebase, and propose options with trade-offs — not just agree.
+- Nothing is decided during brainstorming. The conversation ends by distilling decisions into a spec note.
+
+### 1. Design in Obsidian
+- Every feature starts as a note in this vault (use [[Feature Spec Template]]) — the distilled output of the brainstorm.
 - Spatial features get a diagram or canvas. Numbers beat adjectives ("cells are 4×5.5 m", not "cells are small").
 - If it's not written in the vault, it's not decided yet.
 

@@ -122,6 +122,18 @@ public class PlayerInventory : MonoBehaviour
         return sum;
     }
 
+    /// <summary>Empties every slot (guard confiscation on a caught escape). Pillow stashes are untouched.</summary>
+    public void ClearAllSlots()
+    {
+        EnsureSlotCapacity();
+        for (int i = 0; i < inventorySlots.Count; i++)
+        {
+            inventorySlots[i].item = null;
+            inventorySlots[i].quantity = 0;
+        }
+        RaiseSlotsChanged();
+    }
+
     public bool RemoveItem(ItemData itemToRemove, int amountToRemove = 1)
     {
         if (itemToRemove == null) return false;

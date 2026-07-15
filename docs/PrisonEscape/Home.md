@@ -9,6 +9,9 @@
 - [[Roadmap & Priorities]] — what's next (top: **escape win condition**)
 - [[Prison Escape]] — original founding note (multi-prison vision)
 
+## 02 Features — active feature specs
+- [[Escape Completion System]] — 🚧 in progress (win state, solitary, suspicion, stats)
+
 ## 03 Systems — one note per system
 - [[Systems Overview]] — connection map + status of everything
 - Core sim: [[Time & Schedule]] · [[Locations, Zones & Cells]] · [[Roll Call & Shakedown]]

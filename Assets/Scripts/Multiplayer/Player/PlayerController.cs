@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
         moveDirection *= moveSpeed;
 
         if (sprint)
-            moveDirection *= 2f;
+            moveDirection *= Prison.PlayerStats.SprintMultiplierSafe;
 
         if (controller.isGrounded)
         {

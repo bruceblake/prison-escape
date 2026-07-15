@@ -41,3 +41,15 @@ The player-facing surface of the prison sim. Several HUD layers coexist (legacy 
 All under `Assets/Scripts/Shared/UI/` and `Assets/Scripts/Shared/Prison/` (HUD scripts named as above).
 
 Related: [[Time & Schedule]] · [[Inventory & Items]] · [[Security, Heat & Alerts]]
+
+
+
+This is the Current UI: 
+
+![[Pasted image 20260714200048.png]]
+
+
+This is the current inside of inventory UI: 
+![[Pasted image 20260714200128.png]]
+
+this is the current you escaped screen: ![[Pasted image 20260714201309.png]]

@@ -157,7 +157,7 @@ public static class CharacterVisualSetupRunner
                 Object.DestroyImmediate(visualRoot.GetComponent<LowPolyLocomotionAnimator>());
                 Object.DestroyImmediate(visualRoot.GetComponent<BlenderKitLocomotionAnimator>());
 
-                EnsureKitRig(kitInstance);
+                EnsureKitRig(kitInstance, role);
 
                 EnsureNameLabel(instance.transform, defaultName);
                 FixRoleAttachments(instance.transform, role);
@@ -172,25 +172,39 @@ public static class CharacterVisualSetupRunner
         }
     }
 
-    static void EnsureKitRig(GameObject kitRoot)
+    static void EnsureKitRig(GameObject kitRoot, CharacterVisualRole role)
     {
+        bool isGuard = role == CharacterVisualRole.Guard;
+
         var animator = kitRoot.GetComponent<Animator>();
         if (animator == null)
             animator = kitRoot.GetComponentInChildren<Animator>();
         if (animator == null)
             animator = kitRoot.AddComponent<Animator>();
 
+        // Exactly one Animator per character — strip importer leftovers on children.
+        foreach (var extra in kitRoot.GetComponentsInChildren<Animator>(true))
+            if (extra != animator)
+                Object.DestroyImmediate(extra);
+
         if (animator.avatar == null)
         {
-            string avatarPath = kitRoot.name.Contains("Guard", System.StringComparison.OrdinalIgnoreCase)
+            string avatarPath = isGuard
                 ? BlenderKitCharacterSetup.GuardPrefab.Replace(".prefab", "_Avatar.asset")
                 : BlenderKitCharacterSetup.PrisonerPrefab.Replace(".prefab", "_Avatar.asset");
-            animator.avatar = AssetDatabase.LoadAssetAtPath<Avatar>(avatarPath);
+            animator.avatar = AssetDatabase.LoadAssetAtPath<Avatar>(avatarPath)
+                ?? BlenderKitCharacterSetup.LoadAvatarPublic(isGuard
+                    ? BlenderKitCharacterSetup.GuardFbx
+                    : BlenderKitCharacterSetup.PrisonerFbx);
         }
 
-        if (animator.runtimeAnimatorController == null)
-            animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(
-                BlenderKitCharacterSetup.ControllerPath);
+        string controllerPath = isGuard
+            ? BlenderKitCharacterSetup.GuardControllerPath
+            : BlenderKitCharacterSetup.PrisonerControllerPath;
+        var controller = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(controllerPath)
+            ?? AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(BlenderKitCharacterSetup.ControllerPath);
+        if (controller != null)
+            animator.runtimeAnimatorController = controller;
         animator.applyRootMotion = false;
         if (animator.avatar == null)
             animator.enabled = false;

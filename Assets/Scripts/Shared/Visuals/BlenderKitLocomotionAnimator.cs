@@ -9,6 +9,7 @@ namespace Prison.Visuals
     public class BlenderKitLocomotionAnimator : MonoBehaviour
     {
         static readonly int SpeedHash = Animator.StringToHash("Speed");
+        static readonly int JumpHash = Animator.StringToHash("Jump");
 
         [SerializeField] private float walkSpeed = 1.6f;
         [SerializeField] private float runSpeed = 4.2f;
@@ -28,6 +29,8 @@ namespace Prison.Visuals
         private float _smoothedAnimSpeed;
         private float _phase;
         private bool _useProcedural;
+        private bool _hasJumpParam;
+        private bool _wasGrounded = true;
         private Vector3 _legSwingAxis = Vector3.forward;
 
         private Transform _hips;
@@ -58,6 +61,13 @@ namespace Prison.Visuals
             bool hasValidAvatar = _animator != null && _animator.avatar != null && _animator.avatar.isValid;
             if (!hasValidAvatar && _animator != null)
                 _animator.enabled = false;
+
+            if (hasValidAvatar)
+            {
+                foreach (var p in _animator.parameters)
+                    if (p.nameHash == JumpHash && p.type == AnimatorControllerParameterType.Trigger)
+                        _hasJumpParam = true;
+            }
 
             _useProcedural = !hasValidAvatar;
             if (_useProcedural && !BindBones())
@@ -112,10 +122,25 @@ namespace Prison.Visuals
             if (_animator == null || !_animator.isActiveAndEnabled)
                 return;
 
-            float speed = MeasureSpeed();
-            float target = speed <= 0.12f ? 0f : speed >= runSpeed * 0.85f ? runSpeed : walkSpeed;
-            _smoothedAnimSpeed = Mathf.Lerp(_smoothedAnimSpeed, target, dampTime > 0f ? Time.deltaTime / dampTime : 1f);
+            // Feed the continuous measured speed so the blend tree eases through
+            // idle <-> walk <-> run instead of snapping between fixed thresholds.
+            float speed = Mathf.Min(MeasureSpeed(), runSpeed * 1.25f);
+            if (speed <= 0.12f) speed = 0f;
+            _smoothedAnimSpeed = Mathf.Lerp(_smoothedAnimSpeed, speed, dampTime > 0f ? Time.deltaTime / dampTime : 1f);
             _animator.SetFloat(SpeedHash, _smoothedAnimSpeed);
+
+            UpdateJumpTrigger();
+        }
+
+        private void UpdateJumpTrigger()
+        {
+            if (!_hasJumpParam || _controller == null || !_controller.enabled)
+                return;
+
+            bool grounded = _controller.isGrounded;
+            if (_wasGrounded && !grounded && _controller.velocity.y > 0.5f)
+                _animator.SetTrigger(JumpHash);
+            _wasGrounded = grounded;
         }
 
         private void LateUpdate()

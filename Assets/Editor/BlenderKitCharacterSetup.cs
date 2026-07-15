@@ -14,7 +14,10 @@ public static class BlenderKitCharacterSetup
     public const string GuardFbx = "Assets/Models/BlenderKit/Characters/SM_Char_Guard.fbx";
     public const string PrisonerPrefab = "Assets/Prefabs/BlenderKit/Char_Prisoner.prefab";
     public const string GuardPrefab = "Assets/Prefabs/BlenderKit/Char_Guard.prefab";
+    /// <summary>Legacy shared controller path (pre per-role split); kept as a load fallback.</summary>
     public const string ControllerPath = "Assets/Animations/Characters/Char_Locomotion.controller";
+    public const string PrisonerControllerPath = "Assets/Animations/Characters/Char_Locomotion_Prisoner.controller";
+    public const string GuardControllerPath = "Assets/Animations/Characters/Char_Locomotion_Guard.controller";
 
     public static int GenerateCharacterPrefabs()
     {
@@ -22,10 +25,12 @@ public static class BlenderKitCharacterSetup
         ConfigureCharacterImporter(PrisonerFbx);
         ConfigureCharacterImporter(GuardFbx);
 
-        var controller = EnsureLocomotionController();
+        // Per-role controllers built from each rig's own clips — no cross-rig retargeting.
+        var prisonerController = EnsureLocomotionController(PrisonerFbx, PrisonerControllerPath);
+        var guardController = EnsureLocomotionController(GuardFbx, GuardControllerPath);
         int count = 0;
-        if (CreateCharacterPrefab(PrisonerFbx, PrisonerPrefab, controller)) count++;
-        if (CreateCharacterPrefab(GuardFbx, GuardPrefab, controller)) count++;
+        if (CreateCharacterPrefab(PrisonerFbx, PrisonerPrefab, prisonerController)) count++;
+        if (CreateCharacterPrefab(GuardFbx, GuardPrefab, guardController)) count++;
         return count;
     }
 
@@ -65,16 +70,17 @@ public static class BlenderKitCharacterSetup
         importer.SaveAndReimport();
     }
 
-    static AnimatorController EnsureLocomotionController()
+    static AnimatorController EnsureLocomotionController(string fbxPath, string controllerPath)
     {
-        var idle = LoadClip(PrisonerFbx, "Idle");
-        var walk = LoadClip(PrisonerFbx, "Walk");
-        var run = LoadClip(PrisonerFbx, "Run");
+        var idle = LoadClip(fbxPath, "Idle");
+        var walk = LoadClip(fbxPath, "Walk");
+        var run = LoadClip(fbxPath, "Run");
+        var jump = LoadClip(fbxPath, "Jump");
 
-        if (AssetDatabase.LoadAssetAtPath<AnimatorController>(ControllerPath) != null)
-            AssetDatabase.DeleteAsset(ControllerPath);
+        if (AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath) != null)
+            AssetDatabase.DeleteAsset(controllerPath);
 
-        var controller = AnimatorController.CreateAnimatorControllerAtPath(ControllerPath);
+        var controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
         controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
 
         var rootStateMachine = controller.layers[0].stateMachine;
@@ -93,6 +99,25 @@ public static class BlenderKitCharacterSetup
         var locomotion = rootStateMachine.AddState("Locomotion", new Vector3(300f, 0f, 0f));
         locomotion.motion = blendTree;
         rootStateMachine.defaultState = locomotion;
+
+        if (jump != null)
+        {
+            controller.AddParameter("Jump", AnimatorControllerParameterType.Trigger);
+
+            var jumpState = rootStateMachine.AddState("Jump", new Vector3(300f, 130f, 0f));
+            jumpState.motion = jump;
+
+            var toJump = rootStateMachine.AddAnyStateTransition(jumpState);
+            toJump.AddCondition(UnityEditor.Animations.AnimatorConditionMode.If, 0f, "Jump");
+            toJump.hasExitTime = false;
+            toJump.duration = 0.05f;
+            toJump.canTransitionToSelf = false;
+
+            var backToLocomotion = jumpState.AddTransition(locomotion);
+            backToLocomotion.hasExitTime = true;
+            backToLocomotion.exitTime = 0.95f;
+            backToLocomotion.duration = 0.1f;
+        }
 
         EditorUtility.SetDirty(controller);
         AssetDatabase.SaveAssets();
@@ -140,6 +165,11 @@ public static class BlenderKitCharacterSetup
         model.name = "Mesh";
         model.transform.SetParent(root.transform, false);
         BlenderKitAssetSetup.RemapMaterialsPublic(model);
+
+        // The FBX import adds its own Animator to the model — remove it so the
+        // prefab has exactly one Animator (on the root, wired below).
+        foreach (var redundant in model.GetComponentsInChildren<Animator>(true))
+            Object.DestroyImmediate(redundant);
 
         float height = MeasureHeight(model);
         float targetHeight = CharacterVisualConstants.ColliderHeight;

@@ -520,7 +520,7 @@
     "semantic_hash": ""
   },
   "Assets/Editor/PrisonOverhaulRunner.cs": {
-    "mtime": 1782939199.8575447,
+    "mtime": 1784080407.6209788,
     "ast_hash": "e9000c5154cb2ab54752f4713ce2ab16",
     "semantic_hash": ""
   },
@@ -629,11 +629,6 @@
     "ast_hash": "258f60b0eab504d300730a7f9e2ba9ba",
     "semantic_hash": ""
   },
-  "GeneratedAssets/1486d942e661b5d45acb407df4d2c1b2/019e2d7a-4750-7353-b413-2a9b49720bdd.glb.json": {
-    "mtime": 1782939216.0856624,
-    "ast_hash": "f3683f1355ba8d1b0ae0f687600109f9",
-    "semantic_hash": ""
-  },
   "GeneratedAssets/14d25067abae8dc49b4b0b220bf648ae/019e2dd1-64a9-78f9-8c53-b5b90a42f918.jpg.json": {
     "mtime": 1782939216.092018,
     "ast_hash": "d05248949bad48216d93de4751b2db6c",
@@ -677,11 +672,6 @@
   "GeneratedAssets/21c2e4bf3b156e14ab69fa3a63978449/019e2e30-3779-738d-b2a7-06bfae4b36a8.png.json": {
     "mtime": 1782939216.1999574,
     "ast_hash": "42146243edcf479e08fd3a764bbf683f",
-    "semantic_hash": ""
-  },
-  "GeneratedAssets/2ad2e142bd6832c44ac14bf7baea9a9b/019e2d75-fc60-748f-b236-44743652287e.glb.json": {
-    "mtime": 1782939216.4192858,
-    "ast_hash": "d3c91eeb9e1b10a3402936de016e5590",
     "semantic_hash": ""
   },
   "GeneratedAssets/2aefd066d2d49594fb01eecb8248d991/019e2dc8-f9bb-7bbc-9075-bc822ba9d69f.jpg.json": {
@@ -742,11 +732,6 @@
   "GeneratedAssets/410017fdb8c2d4c4fb715adde447a9aa/019e2e30-6a0d-7e0e-97f9-6eff3f71a95c.png.json": {
     "mtime": 1782939217.095119,
     "ast_hash": "0d3f44788183b4aa9f42c6ccb8d632c7",
-    "semantic_hash": ""
-  },
-  "GeneratedAssets/44a00b9ff21288446818ced3afee0cc7/019e2d76-ac77-777c-a9a9-11ad8cfb7296.glb.json": {
-    "mtime": 1782939217.3166203,
-    "ast_hash": "21cf074809d1b6f594ccb8606a228241",
     "semantic_hash": ""
   },
   "GeneratedAssets/44d8488b11d12ae4cb9d922bf07a2c86/019e2dc9-0ba0-786a-8923-e05fd33c7625.jpg.json": {
@@ -812,11 +797,6 @@
   "GeneratedAssets/6b9b355b56a65204caa991c37c47ec04/019e2e31-0708-703a-874f-b54b5a670f7d.png.json": {
     "mtime": 1782939217.6643858,
     "ast_hash": "e1403ca24688f0ad8fe50d8697033cbe",
-    "semantic_hash": ""
-  },
-  "GeneratedAssets/6c18cfe85f11086459b68a360ea1d696/019e2d77-9ee2-7ebd-831e-f6f3c591824e.glb.json": {
-    "mtime": 1782939217.8914905,
-    "ast_hash": "f78180c5182cb1142351cc2685184cd2",
     "semantic_hash": ""
   },
   "GeneratedAssets/6d201a267fb8b544a8bdda8e76e04ff9/019e2dc9-1713-725c-b37c-bef2836f8c62.jpg.json": {
@@ -939,11 +919,6 @@
     "ast_hash": "75cb89e083091167f3ed812efeebc0b6",
     "semantic_hash": ""
   },
-  "GeneratedAssets/ad6f696e6f3e43d4e9f0c3d4e3df7234/019e2d76-4d58-7c09-a115-d621745b060d.glb.json": {
-    "mtime": 1782939218.7103019,
-    "ast_hash": "20404d8716b4e7615a85181689312a81",
-    "semantic_hash": ""
-  },
   "GeneratedAssets/af84f03c8150384469da3ba527ec2a53/019e2dc9-8850-7ff5-b87b-79fa7483e19c.png.json": {
     "mtime": 1782939218.718041,
     "ast_hash": "de3560d82d2d1dd25c4d5cad5902f672",
@@ -1007,11 +982,6 @@
   "GeneratedAssets/c241e23b33e238e4ca6b17d9afec8358/019e2d84-35ff-7d8e-97fa-db91c8746f0b.png.json": {
     "mtime": 1782939219.3792243,
     "ast_hash": "9250307b87c6e9dca4635180e2846348",
-    "semantic_hash": ""
-  },
-  "GeneratedAssets/c7ed7b98a85fa8a46b684b78db35bede/019e2d7e-1c34-76a8-b292-7bc1b555f528.glb.json": {
-    "mtime": 1782939219.7240224,
-    "ast_hash": "1194ed62fdd17d0f6d7f9ee4d76faaeb",
     "semantic_hash": ""
   },
   "GeneratedAssets/cd335903620c8974f9d586ece1885a74/019e2dc9-6aae-78ef-bd80-e8e0aff6fec4.jpg.json": {
@@ -1087,11 +1057,6 @@
   "GeneratedAssets/dde6ee7779b41bf4ca42d172be30befb/019e2d90-1857-7775-a28a-548253f4a2fa.glb.json": {
     "mtime": 1782939223.7194543,
     "ast_hash": "48d6cfd2aff217f0fa713ba28fd82c63",
-    "semantic_hash": ""
-  },
-  "GeneratedAssets/e0fffd0f35a6c9a429390248310d27b0/019e2d7e-9d07-7a4c-b951-7deec06e606d.glb.json": {
-    "mtime": 1782939223.9683993,
-    "ast_hash": "752e8dc58f71442a672dd525722320a5",
     "semantic_hash": ""
   },
   "GeneratedAssets/e891d76b537346e49a9222e0bf92c0c0/019e2dd6-dffc-7b64-aba1-2868a9a8a557.jpg.json": {
@@ -2385,7 +2350,7 @@
     "semantic_hash": ""
   },
   "Assets/Editor/PrisonLevelLayoutRunner.cs": {
-    "mtime": 1784075769.7024558,
+    "mtime": 1784080407.6199746,
     "ast_hash": "bd654a35aaa5d53146617d43ee98863f",
     "semantic_hash": ""
   },
@@ -2415,8 +2380,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape Devlog Dashboard.md": {
-    "mtime": 1784075771.4157054,
-    "ast_hash": "04f57ffa9cb25245fe5bc729440cd59d",
+    "mtime": 1784085176.659554,
+    "ast_hash": "4e44d69cc151cfe0a3d83f30b1e045c7",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape.md": {
@@ -2440,8 +2405,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/Prison Layout \u2014 Minimum Security.md": {
-    "mtime": 1784075770.4226604,
-    "ast_hash": "89968b19ddb76bdf1a8379473fab9875",
+    "mtime": 1784085154.0117016,
+    "ast_hash": "7fc404d6d66130ff36dc360106e06e86",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/Roadmap & Priorities.md": {
@@ -2535,13 +2500,13 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Content Inventory.md": {
-    "mtime": 1784073647.3893354,
-    "ast_hash": "f7e0e546f07dd52c67c8b45d1fdcefc5",
+    "mtime": 1784085146.785019,
+    "ast_hash": "7dabf6e06541575d7fac00388fa82626",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Item Catalog.md": {
-    "mtime": 1784073568.2031012,
-    "ast_hash": "7fa3dcb35a842444015d9ea3de7a3aff",
+    "mtime": 1784085186.47071,
+    "ast_hash": "b6867a4d418caa11541e759c6ce9c7e8",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Codebase Map.md": {
@@ -2560,8 +2525,8 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Development Workflow.md": {
-    "mtime": 1784075620.4399514,
-    "ast_hash": "c935066d28bf5e484fd7ee4edc51c266",
+    "mtime": 1784076478.8623571,
+    "ast_hash": "2c6d8528e4de96ab8ed71c0c12ed2ae4",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Feature Spec Template.md": {
@@ -2570,13 +2535,13 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Git & Branching.md": {
-    "mtime": 1784072836.8768516,
-    "ast_hash": "283ba0ef67fe20a7eb4110d41881f764",
+    "mtime": 1784076478.2599804,
+    "ast_hash": "3c53d0faf8198473c443c10222b18a26",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Home.md": {
-    "mtime": 1784073881.4092135,
-    "ast_hash": "1038bedf0ed1e98cea66bdacd059a864",
+    "mtime": 1784085135.9165463,
+    "ast_hash": "2b81753f914a595613e12ed7ca762ed6",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/02 Features/Escape Completion System.md": {
@@ -2712,6 +2677,156 @@
   "Assets/Scripts/Shared/UI/UIMenuFocus.cs": {
     "mtime": 1784074928.5828547,
     "ast_hash": "c66bc5ef8b70fcf312fe63e4733c78fb",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/1486d942e661b5d45acb407df4d2c1b2_deleted/019e2d7a-4750-7353-b413-2a9b49720bdd.glb.json": {
+    "mtime": 1782939216.0856624,
+    "ast_hash": "f3683f1355ba8d1b0ae0f687600109f9",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/2ad2e142bd6832c44ac14bf7baea9a9b_deleted/019e2d75-fc60-748f-b236-44743652287e.glb.json": {
+    "mtime": 1782939216.4192858,
+    "ast_hash": "d3c91eeb9e1b10a3402936de016e5590",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/44a00b9ff21288446818ced3afee0cc7_deleted/019e2d76-ac77-777c-a9a9-11ad8cfb7296.glb.json": {
+    "mtime": 1782939217.3166203,
+    "ast_hash": "21cf074809d1b6f594ccb8606a228241",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/6c18cfe85f11086459b68a360ea1d696_deleted/019e2d77-9ee2-7ebd-831e-f6f3c591824e.glb.json": {
+    "mtime": 1782939217.8914905,
+    "ast_hash": "f78180c5182cb1142351cc2685184cd2",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/ad6f696e6f3e43d4e9f0c3d4e3df7234_deleted/019e2d76-4d58-7c09-a115-d621745b060d.glb.json": {
+    "mtime": 1782939218.7103019,
+    "ast_hash": "20404d8716b4e7615a85181689312a81",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/c7ed7b98a85fa8a46b684b78db35bede_deleted/019e2d7e-1c34-76a8-b292-7bc1b555f528.glb.json": {
+    "mtime": 1782939219.7240224,
+    "ast_hash": "1194ed62fdd17d0f6d7f9ee4d76faaeb",
+    "semantic_hash": ""
+  },
+  "GeneratedAssets/e0fffd0f35a6c9a429390248310d27b0_deleted/019e2d7e-9d07-7a4c-b951-7deec06e606d.glb.json": {
+    "mtime": 1782939223.9683993,
+    "ast_hash": "752e8dc58f71442a672dd525722320a5",
+    "semantic_hash": ""
+  },
+  "docs/.claude/settings.local.json": {
+    "mtime": 1784080752.595738,
+    "ast_hash": "9b59f93e01cc1a0eecc75604ce438216",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/04 Content & Assets/Blender Asset Kit.md": {
+    "mtime": 1784085125.842762,
+    "ast_hash": "25e959c63ad0a33ad059287679f836d3",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/final_courtyard.png": {
+    "mtime": 1784083033.322703,
+    "ast_hash": "607ba92883fd7296ac9a1195a10f0422",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/final_courtyard2.png": {
+    "mtime": 1784083050.7799501,
+    "ast_hash": "1b4f1b99639af8c9931ef7f96c794466",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_cafeteria.png": {
+    "mtime": 1784082454.8857102,
+    "ast_hash": "198ed15c414823c3f0176a140876fcf8",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_cafeteria2.png": {
+    "mtime": 1784082690.5845828,
+    "ast_hash": "484be35cc06ac2262b8ff50d33621955",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_corridorN.png": {
+    "mtime": 1784082455.971206,
+    "ast_hash": "73fa7d77016612be8e18cc5ca39c4d7d",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_exterior.png": {
+    "mtime": 1784082456.4909267,
+    "ast_hash": "5dc98ba10080e3595aa62a148c0ef1fb",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_security.png": {
+    "mtime": 1784082455.4350123,
+    "ast_hash": "5f251fc1c41b76919ca9e55370b52614",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_showers.png": {
+    "mtime": 1784082455.7044992,
+    "ast_hash": "1c4f8689524838e55b628c94e3a3b91d",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_showers2.png": {
+    "mtime": 1784082690.9117262,
+    "ast_hash": "8e764f6abf8b57e07962036c27b94ff2",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_textured_caf.png": {
+    "mtime": 1784082927.523761,
+    "ast_hash": "5104d4d8ba0474846e0370013b2e8ac4",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_textured_cell.png": {
+    "mtime": 1784082927.1616108,
+    "ast_hash": "954d4d76c7de354b349420cdc0646194",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_workshop.png": {
+    "mtime": 1784082455.1629944,
+    "ast_hash": "e60b004e408c85064ec7452519adc552",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_yard_wide.png": {
+    "mtime": 1784082456.246037,
+    "ast_hash": "24e1af0cf57ea4ed74ccf4bfbe3270d7",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_CafeteriaTile.png": {
+    "mtime": 1784082956.468289,
+    "ast_hash": "3b41c0068f283031d6e7e1c21fdf6be0",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_ConcreteCeiling.png": {
+    "mtime": 1784082882.6141448,
+    "ast_hash": "cd31ed10481c7fc431ad35afb8e1c9c6",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_ConcreteWall.png": {
+    "mtime": 1784082882.6043632,
+    "ast_hash": "72996ac9c4cd2752458d7d6c05b5b120",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_FloorTile.png": {
+    "mtime": 1784082882.625308,
+    "ast_hash": "029d4c819e373c7feeb5627d2c027b71",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_MetalBars.png": {
+    "mtime": 1784082882.7058144,
+    "ast_hash": "4f2677f2de0de9421e464ef7a943bd3b",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_MetalShelf.png": {
+    "mtime": 1784082882.692173,
+    "ast_hash": "9da3f1a1bb8ad02e50b89c190cdb3be5",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_Porcelain.png": {
+    "mtime": 1784082882.7567606,
+    "ast_hash": "f71e7ad37f741533c2f06cb60a7d8912",
+    "semantic_hash": ""
+  },
+  "Assets/Models/BlenderKit/Textures/T_Wood.png": {
+    "mtime": 1784082882.7481482,
+    "ast_hash": "0203a3a0dd911244e8c5796a96799b16",
     "semantic_hash": ""
   }
 }

@@ -2,6 +2,23 @@
 
 Repeatable scene generation and balance tools. **Rule: change the tool and re-run — never hand-edit generated objects** (they're wiped on rebuild).
 
+## BlenderKit pipeline (`BlenderKitAssetSetup.cs`, `BlenderKitCatalog.cs`)
+
+Menu **Prison → Assets →**:
+
+| Item | Action |
+|---|---|
+| Setup BlenderKit | Textured URP mats + item prefabs + `PrisonFacility` prefab + `Char_Prisoner`/`Char_Guard` + `ItemData.worldPrefab` |
+| Wire Item World Prefabs | Re-assign item pickup prefabs only |
+
+## Prison facility (`PrisonFacilityInstaller.cs`)
+
+Menu **Prison → Layout → Install Prison Facility** — replaces all procedural geometry with `PrisonFacility.fbx`, wires cell anchors (spawn at bed, roll-call inside cell, night-check at door), doors (local-axis slide), beds, vents, zones, escape systems.
+
+**Run Full Build** = Setup BlenderKit (if facility prefab missing) + Install Prison Facility + wire registry + escape systems.
+
+Legacy modular tiling (`BlenderKitLayout`, `LayoutFloors`, `LayoutWalls`, …) is **no longer used** by Run Full Build.
+
 ## Prison level layout (`Assets/Editor/PrisonLevelLayoutRunner.cs`)
 
 Menu **Prison → Layout →**:
@@ -12,7 +29,9 @@ Menu **Prison → Layout →**:
 | 1 — Rename East Cells (09-16) | East block cell renaming + number labels |
 | 2 — Build Walls + Roofs | 6 m walls with **BoxCollider** on structural segments; doorway lintels + jambs; roof overhang + exterior soffits |
 | 3 — Build All Lighting | Light grids per plate + per-cell lights (~370 after density pass) |
-| 4 — Furnish Rooms (Scratch Build) | Cube-built furniture (cafeteria, showers, workshop, security, courtyard) |
+| 4 — Furnish Rooms (BlenderKit) | *(legacy — use Install Prison Facility)* |
+| **Install Prison Facility** | `PrisonFacility.fbx` monolith + gameplay wiring |
+| **Run Full Build** | Setup BlenderKit + Install Prison Facility + registry + escape |
 | 5 — Wire Registry | `PrisonLocationRegistry` cells + zones |
 | 6 — Build Escape Systems | Solitary block (4 cells), escape boundary ring, restricted zones, `EscapeManager` wiring |
 | **Run Full Build** | All steps (0→6) + save scene |
@@ -28,7 +47,7 @@ Layout truth lives in `BuildDiagramPlates()` — keep in sync with [[Prison Layo
 
 ## Character visuals (`CharacterVisualSetupRunner.cs`)
 
-**Prison → Setup Character Visuals** — builds all role materials, rigs, colliders, labels ([[Character Visuals]]).
+**Prison → Setup Character Visuals** — parents `Char_Prisoner` / `Char_Guard` kit prefabs into role prefabs, remaps materials, sizes colliders ([[Character Visuals]]). Run **Setup BlenderKit** first.
 
 ## Other tools
 

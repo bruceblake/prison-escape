@@ -1,0 +1,56 @@
+---
+description: Git worktrees for feature work — one branch per folder beside the main checkout
+alwaysApply: true
+---
+
+# Git Worktrees
+
+Feature work runs in **linked worktrees**, not on the main checkout. Keeps `C:\Users\bruce\3dgame` free for `dev` / quick fixes while features live in parallel folders.
+
+## Layout
+
+| Path | Role |
+|------|------|
+| `C:\Users\bruce\3dgame` | **Primary checkout** — stay on `dev` (or briefly `main` for release/hotfix). |
+| `C:\Users\bruce\3dgame-worktrees\<slug>` | **Feature worktrees** — one folder per branch. |
+
+**Slug:** branch name with `/` → `-` (e.g. `feat/escape-completion` → `feat-escape-completion`).
+
+## Create (new feature)
+
+```powershell
+cd C:\Users\bruce\3dgame
+git fetch origin
+git checkout dev
+git pull origin dev
+git worktree add -b feat/<name> C:\Users\bruce\3dgame-worktrees\feat-<name> dev
+```
+
+Existing branch (must **not** be checked out elsewhere):
+
+```powershell
+git worktree add C:\Users\bruce\3dgame-worktrees\feat-<name> feat/<name>
+```
+
+Then switch this Cursor agent to the worktree with MCP `move_agent_to_root` (`rootPath` = the worktree path). Open **that** folder in Unity (separate `Library/` — first open reimports).
+
+## Agent defaults
+
+- New `feat/` / `fix/` / `chore/` work → **create or reuse a worktree**; do not pile feature commits onto the primary checkout while it should stay on `dev`.
+- After `git worktree add`, call **`move_agent_to_root`** so the chat workspace matches the worktree.
+- Same branch cannot be checked out in two worktrees — if add fails, `git worktree list` and free the branch (usually switch primary back to `dev`).
+- Branching / PR base rules unchanged: off `dev`, PRs target `dev` (see `git-branching.mdc`).
+- Commit/push/playtest gates unchanged (`development-workflow.mdc`).
+
+## Remove (after merge)
+
+```powershell
+git worktree remove C:\Users\bruce\3dgame-worktrees\feat-<name>
+# or: git worktree remove --force <path>  only if the folder is gone/broken
+git branch -d feat/<name>   # after merge; user must ask before delete
+```
+
+## Unity notes
+
+- Each worktree is its own project path → own `Library/` / `Temp/` (gitignored). Expect a long first import.
+- Playtest the **worktree** project in Unity, not the primary `3dgame` folder, when the branch lives in a worktree.

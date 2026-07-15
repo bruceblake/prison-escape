@@ -40,8 +40,10 @@ Shared skin (0.82, 0.62, 0.48); per-role palettes:
 
 ## Models & props
 
-`Models/`: CafeteriaTable, ConcretePillar, GymBench, PrisonBed, PrisonCellDoor, PrisonCellModule, StorageCrate + `Modular/` kit (walls, floors, cell door, bed, fence). 
-Note: the current level build **scratch-builds furniture from cubes** via the layout runner instead of using these prefabs (user preference).
+`Models/BlenderKit/` — **the canonical asset kit** (see [[Blender Asset Kit]]): 61 modular pieces (walls, doorways, cells, furniture, props, fence), 25 item pickups in `Items/`, `PrisonFacility.fbx` (whole assembled prison), tileable textures in `Textures/`. Master file: `ArtSource/PrisonKit.blend`.
+
+Legacy `Models/`: CafeteriaTable, ConcretePillar, GymBench, PrisonBed, PrisonCellDoor, PrisonCellModule, StorageCrate + `Modular/` kit — superseded by BlenderKit; candidates for removal once the level uses BlenderKit meshes.
+Note: the current level build still **scratch-builds furniture from cubes** via the layout runner; migrating it to BlenderKit FBX is an open task.
 
 ## Third-party / support
 

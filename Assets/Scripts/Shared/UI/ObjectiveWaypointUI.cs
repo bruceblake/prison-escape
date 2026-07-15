@@ -5,37 +5,25 @@ using UnityEngine.UI;
 namespace Prison
 {
     /// <summary>
-    /// Screen-space objective marker during mandatory non-compliance: label + distance,
-    /// on-screen dot or off-screen edge arrow toward the required stand point.
+    /// Objective guidance via a fixed bottom HUD panel (readable at all times).
     /// </summary>
     public class ObjectiveWaypointUI : MonoBehaviour
     {
         private const int SortOrder = 130;
-        private const float EdgePadding = 48f;
-        private const float OnScreenEnterPadding = 56f;
-        private const float OnScreenExitPadding = 36f;
-        private const float WorldSmoothTime = 0.14f;
-        private const float ScreenSmoothTime = 0.1f;
         private const float DistanceSmoothTime = 0.18f;
-        private const float MarkerHeightOffset = 1.6f;
 
         private static ObjectiveWaypointUI _instance;
 
         private CanvasGroup _group;
-        private RectTransform _markerRoot;
-        private TMP_Text _labelText;
-        private Image _onScreenDot;
-        private Image _offScreenArrow;
+        private RectTransform _bottomHud;
+        private TMP_Text _hudTitle;
+        private TMP_Text _hudDetail;
+        private Image _compassArrow;
         private PrisonerController _prisoner;
         private Camera _cam;
 
-        private Vector3 _smoothedWorldTarget;
-        private Vector3 _smoothedScreenPos;
         private float _smoothedDistance;
-        private Vector3 _worldVelocity;
-        private Vector3 _screenVelocity;
         private float _distanceVel;
-        private bool _onScreenMode = true;
         private bool _hasSmoothedState;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -91,45 +79,59 @@ namespace Prison
             _group.interactable = false;
             _group.blocksRaycasts = false;
 
-            var rootGo = new GameObject("Marker", typeof(RectTransform));
-            rootGo.transform.SetParent(transform, false);
-            _markerRoot = (RectTransform)rootGo.transform;
-            _markerRoot.sizeDelta = new Vector2(200f, 48f);
+            _bottomHud = CreateRect("BottomHud", transform);
+            _bottomHud.anchorMin = new Vector2(0.5f, 0f);
+            _bottomHud.anchorMax = new Vector2(0.5f, 0f);
+            _bottomHud.pivot = new Vector2(0.5f, 0f);
+            _bottomHud.anchoredPosition = new Vector2(0f, 118f);
+            _bottomHud.sizeDelta = new Vector2(560f, 80f);
 
-            _onScreenDot = CreateImage(rootGo.transform, "Dot", 14f, PrisonUITheme.CautionYellow);
-            var dotRt = _onScreenDot.rectTransform;
-            dotRt.anchorMin = dotRt.anchorMax = new Vector2(0.5f, 0.5f);
-            dotRt.anchoredPosition = new Vector2(0f, 18f);
+            CreateImage(_bottomHud, "Bg", Vector2.zero, new Vector2(560f, 80f),
+                new Color(0.04f, 0.06f, 0.08f, 0.92f));
 
-            _offScreenArrow = CreateImage(rootGo.transform, "Arrow", 28f, PrisonUITheme.CautionYellow);
-            var arrowRt = _offScreenArrow.rectTransform;
-            arrowRt.anchorMin = arrowRt.anchorMax = new Vector2(0.5f, 0.5f);
-            _offScreenArrow.gameObject.SetActive(false);
+            _compassArrow = CreateImage(_bottomHud, "Arrow", new Vector2(-220f, 0f), new Vector2(28f, 28f),
+                PrisonUITheme.CautionYellow);
+            _compassArrow.rectTransform.pivot = new Vector2(0.5f, 0.5f);
 
-            var labelGo = new GameObject("Label", typeof(RectTransform));
-            labelGo.transform.SetParent(rootGo.transform, false);
-            var labelRt = (RectTransform)labelGo.transform;
-            labelRt.anchorMin = labelRt.anchorMax = new Vector2(0.5f, 0f);
-            labelRt.sizeDelta = new Vector2(320f, 28f);
-            labelRt.anchoredPosition = new Vector2(0f, -8f);
-            _labelText = labelGo.AddComponent<TextMeshProUGUI>();
-            _labelText.fontSize = 20f;
-            _labelText.fontStyle = FontStyles.Bold;
-            _labelText.alignment = TextAlignmentOptions.Center;
-            _labelText.color = PrisonUITheme.CautionYellow;
+            _hudTitle = CreateText(_bottomHud, "Title", new Vector2(0f, 16f), 22f, FontStyles.Bold);
+            _hudDetail = CreateText(_bottomHud, "Detail", new Vector2(0f, -14f), 18f, FontStyles.Normal);
 
-            _markerRoot.gameObject.SetActive(false);
+            _bottomHud.gameObject.SetActive(false);
         }
 
-        private static Image CreateImage(Transform parent, string name, float size, Color color)
+        private static RectTransform CreateRect(string name, Transform parent)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            return (RectTransform)go.transform;
+        }
+
+        private static Image CreateImage(Transform parent, string name, Vector2 pos, Vector2 size, Color color)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(Image));
             go.transform.SetParent(parent, false);
             var rt = (RectTransform)go.transform;
-            rt.sizeDelta = new Vector2(size, size);
+            rt.anchoredPosition = pos;
+            rt.sizeDelta = size;
             var img = go.GetComponent<Image>();
             img.color = color;
             return img;
+        }
+
+        private static TMP_Text CreateText(Transform parent, string name, Vector2 pos, float fontSize, FontStyles style)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            var rt = (RectTransform)go.transform;
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = pos;
+            rt.sizeDelta = new Vector2(520f, 32f);
+            var tmp = go.AddComponent<TextMeshProUGUI>();
+            tmp.fontSize = fontSize;
+            tmp.fontStyle = style;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.color = PrisonUITheme.CautionYellow;
+            return tmp;
         }
 
         private void LateUpdate()
@@ -139,7 +141,7 @@ namespace Prison
 
             var tm = PrisonTimeManager.Instance;
             if (_prisoner == null)
-                _prisoner = FindFirstObjectByType<PrisonerController>(FindObjectsInactive.Exclude);
+                _prisoner = FindAnyObjectByType<PrisonerController>(FindObjectsInactive.Exclude);
 
             bool showBase = !UIMenuFocus.IsAnyMenuOpen
                 && tm != null
@@ -154,97 +156,97 @@ namespace Prison
             if (!show)
             {
                 _hasSmoothedState = false;
-                if (_markerRoot != null)
-                    _markerRoot.gameObject.SetActive(false);
+                SetVisible(false);
                 return;
             }
 
-            Vector3 targetWorld = worldPos + Vector3.up * MarkerHeightOffset;
             if (!_hasSmoothedState)
             {
-                _smoothedWorldTarget = targetWorld;
                 _smoothedDistance = Vector3.Distance(_prisoner.transform.position, worldPos);
                 _hasSmoothedState = true;
             }
             else
             {
-                _smoothedWorldTarget = Vector3.SmoothDamp(
-                    _smoothedWorldTarget, targetWorld, ref _worldVelocity, WorldSmoothTime);
+                float rawDistance = Vector3.Distance(_prisoner.transform.position, worldPos);
+                _smoothedDistance = Mathf.SmoothDamp(_smoothedDistance, rawDistance, ref _distanceVel, DistanceSmoothTime);
             }
 
-            float rawDistance = Vector3.Distance(_prisoner.transform.position, worldPos);
-            _smoothedDistance = Mathf.SmoothDamp(_smoothedDistance, rawDistance, ref _distanceVel, DistanceSmoothTime);
+            string destName = FormatDestinationName(label);
+            string bearing = GetCompassBearing(worldPos);
+            _hudTitle.text = $"GO TO {destName}";
+            _hudDetail.text = string.IsNullOrEmpty(bearing)
+                ? $"{_smoothedDistance:F0} meters away"
+                : $"{_smoothedDistance:F0}m — head {bearing}";
 
-            string shortLabel = ShortenLabel(label);
-            _labelText.text = $"{shortLabel} — {_smoothedDistance:F0}m";
-
-            Vector3 screen = _cam.WorldToScreenPoint(_smoothedWorldTarget);
-            bool behind = screen.z < 0f;
-            float w = Screen.width;
-            float h = Screen.height;
-            float pad = _onScreenMode ? OnScreenExitPadding : OnScreenEnterPadding;
-            bool onScreen = !behind
-                && screen.x >= pad && screen.x <= w - pad
-                && screen.y >= pad && screen.y <= h - pad;
-            _onScreenMode = onScreen;
-
-            _markerRoot.gameObject.SetActive(true);
-
-            Vector3 targetScreenPos;
-            if (onScreen)
-            {
-                _onScreenDot.gameObject.SetActive(true);
-                _offScreenArrow.gameObject.SetActive(false);
-                targetScreenPos = screen;
-            }
-            else
-            {
-                _onScreenDot.gameObject.SetActive(false);
-                _offScreenArrow.gameObject.SetActive(true);
-
-                Vector3 dir = _smoothedWorldTarget - _prisoner.transform.position;
-                dir.y = 0f;
-                if (dir.sqrMagnitude < 0.01f)
-                    dir = _cam.transform.forward;
-                dir.Normalize();
-
-                Vector3 camFwd = _cam.transform.forward;
-                Vector3 camRight = _cam.transform.right;
-                camFwd.y = 0f;
-                camRight.y = 0f;
-                camFwd.Normalize();
-                camRight.Normalize();
-
-                float dx = Vector3.Dot(dir, camRight);
-                float dy = Vector3.Dot(dir, camFwd);
-                Vector2 edgeDir = new Vector2(dx, dy).normalized;
-                if (edgeDir.sqrMagnitude < 0.01f)
-                    edgeDir = Vector2.up;
-
-                float sx = w * 0.5f + edgeDir.x * (w * 0.5f - EdgePadding);
-                float sy = h * 0.5f + edgeDir.y * (h * 0.5f - EdgePadding);
-                targetScreenPos = new Vector3(sx, sy, 0f);
-
-                float angle = Mathf.Atan2(edgeDir.x, edgeDir.y) * Mathf.Rad2Deg;
-                _offScreenArrow.rectTransform.localRotation = Quaternion.Euler(0f, 0f, -angle);
-            }
-
-            _smoothedScreenPos = Vector3.SmoothDamp(
-                _smoothedScreenPos, targetScreenPos, ref _screenVelocity, ScreenSmoothTime);
-
-            _markerRoot.position = _smoothedScreenPos;
+            UpdateCompassArrow(worldPos);
+            SetVisible(true);
         }
 
-        private static string ShortenLabel(string label)
+        private void SetVisible(bool visible)
+        {
+            if (_group != null) _group.alpha = visible ? 1f : 0f;
+            if (_bottomHud != null) _bottomHud.gameObject.SetActive(visible);
+        }
+
+        private void UpdateCompassArrow(Vector3 worldPos)
+        {
+            if (_compassArrow == null || _prisoner == null) return;
+
+            Vector3 delta = worldPos - _prisoner.transform.position;
+            delta.y = 0f;
+            if (delta.sqrMagnitude < 0.25f)
+            {
+                _compassArrow.color = new Color(1f, 0.82f, 0.12f, 0.35f);
+                return;
+            }
+
+            Vector3 camFwd = _cam.transform.forward;
+            camFwd.y = 0f;
+            if (camFwd.sqrMagnitude < 0.01f) return;
+            camFwd.Normalize();
+
+            Vector3 camRight = _cam.transform.right;
+            camRight.y = 0f;
+            camRight.Normalize();
+
+            Vector2 screenDir = new Vector2(Vector3.Dot(delta.normalized, camRight), Vector3.Dot(delta.normalized, camFwd));
+            float angle = Mathf.Atan2(screenDir.x, screenDir.y) * Mathf.Rad2Deg;
+            _compassArrow.rectTransform.localRotation = Quaternion.Euler(0f, 0f, -angle);
+            _compassArrow.color = PrisonUITheme.CautionYellow;
+        }
+
+        private static string FormatDestinationName(string label)
         {
             if (string.IsNullOrEmpty(label))
                 return "OBJECTIVE";
             int pipe = label.IndexOf('|');
             if (pipe >= 0)
                 label = label.Substring(0, pipe).Trim();
-            if (label.Length > 28)
-                label = label.Substring(0, 28);
+            if (label.StartsWith("GO TO:", System.StringComparison.OrdinalIgnoreCase))
+                label = label.Substring(6).Trim();
+            if (label.Length > 32)
+                label = label.Substring(0, 32);
             return label.ToUpperInvariant();
+        }
+
+        private string GetCompassBearing(Vector3 worldPos)
+        {
+            if (_prisoner == null) return string.Empty;
+            Vector3 delta = worldPos - _prisoner.transform.position;
+            delta.y = 0f;
+            if (delta.sqrMagnitude < 0.5f) return string.Empty;
+
+            float angle = Mathf.Atan2(delta.x, delta.z) * Mathf.Rad2Deg;
+            if (angle < 0f) angle += 360f;
+
+            if (angle < 22.5f || angle >= 337.5f) return "NORTH";
+            if (angle < 67.5f) return "NORTHEAST";
+            if (angle < 112.5f) return "EAST";
+            if (angle < 157.5f) return "SOUTHEAST";
+            if (angle < 202.5f) return "SOUTH";
+            if (angle < 247.5f) return "SOUTHWEST";
+            if (angle < 292.5f) return "WEST";
+            return "NORTHWEST";
         }
     }
 }

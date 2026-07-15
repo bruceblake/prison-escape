@@ -1,16 +1,16 @@
 # Graph Report - 3dgame  (2026-07-14)
 
 ## Corpus Check
-- 306 files · ~5,765,906 words
+- 308 files · ~6,218,578 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2815 nodes · 4512 edges · 210 communities (151 shown, 59 thin omitted)
+- 2763 nodes · 4556 edges · 178 communities (150 shown, 28 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b68947c0`
+- Built from commit: `316d4c6f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -109,7 +109,6 @@
 - [[_COMMUNITY_Community 91|Community 91]]
 - [[_COMMUNITY_Community 92|Community 92]]
 - [[_COMMUNITY_Community 93|Community 93]]
-- [[_COMMUNITY_Community 94|Community 94]]
 - [[_COMMUNITY_Community 95|Community 95]]
 - [[_COMMUNITY_Community 96|Community 96]]
 - [[_COMMUNITY_Community 97|Community 97]]
@@ -118,7 +117,6 @@
 - [[_COMMUNITY_Community 100|Community 100]]
 - [[_COMMUNITY_Community 101|Community 101]]
 - [[_COMMUNITY_Community 102|Community 102]]
-- [[_COMMUNITY_Community 103|Community 103]]
 - [[_COMMUNITY_Community 104|Community 104]]
 - [[_COMMUNITY_Community 105|Community 105]]
 - [[_COMMUNITY_Community 106|Community 106]]
@@ -133,7 +131,6 @@
 - [[_COMMUNITY_Community 115|Community 115]]
 - [[_COMMUNITY_Community 116|Community 116]]
 - [[_COMMUNITY_Community 117|Community 117]]
-- [[_COMMUNITY_Community 118|Community 118]]
 - [[_COMMUNITY_Community 119|Community 119]]
 - [[_COMMUNITY_Community 120|Community 120]]
 - [[_COMMUNITY_Community 121|Community 121]]
@@ -172,89 +169,58 @@
 - [[_COMMUNITY_Community 155|Community 155]]
 - [[_COMMUNITY_Community 156|Community 156]]
 - [[_COMMUNITY_Community 157|Community 157]]
+- [[_COMMUNITY_Community 158|Community 158]]
 - [[_COMMUNITY_Community 159|Community 159]]
-- [[_COMMUNITY_Community 160|Community 160]]
 - [[_COMMUNITY_Community 161|Community 161]]
 - [[_COMMUNITY_Community 162|Community 162]]
-- [[_COMMUNITY_Community 163|Community 163]]
 - [[_COMMUNITY_Community 164|Community 164]]
 - [[_COMMUNITY_Community 165|Community 165]]
 - [[_COMMUNITY_Community 166|Community 166]]
-- [[_COMMUNITY_Community 167|Community 167]]
-- [[_COMMUNITY_Community 168|Community 168]]
-- [[_COMMUNITY_Community 169|Community 169]]
-- [[_COMMUNITY_Community 170|Community 170]]
 - [[_COMMUNITY_Community 171|Community 171]]
-- [[_COMMUNITY_Community 172|Community 172]]
-- [[_COMMUNITY_Community 173|Community 173]]
 - [[_COMMUNITY_Community 174|Community 174]]
 - [[_COMMUNITY_Community 175|Community 175]]
 - [[_COMMUNITY_Community 176|Community 176]]
-- [[_COMMUNITY_Community 178|Community 178]]
 - [[_COMMUNITY_Community 179|Community 179]]
 - [[_COMMUNITY_Community 180|Community 180]]
-- [[_COMMUNITY_Community 181|Community 181]]
-- [[_COMMUNITY_Community 182|Community 182]]
-- [[_COMMUNITY_Community 183|Community 183]]
-- [[_COMMUNITY_Community 184|Community 184]]
-- [[_COMMUNITY_Community 185|Community 185]]
-- [[_COMMUNITY_Community 186|Community 186]]
-- [[_COMMUNITY_Community 187|Community 187]]
-- [[_COMMUNITY_Community 188|Community 188]]
-- [[_COMMUNITY_Community 189|Community 189]]
-- [[_COMMUNITY_Community 190|Community 190]]
 - [[_COMMUNITY_Community 191|Community 191]]
-- [[_COMMUNITY_Community 192|Community 192]]
 - [[_COMMUNITY_Community 193|Community 193]]
-- [[_COMMUNITY_Community 194|Community 194]]
-- [[_COMMUNITY_Community 195|Community 195]]
-- [[_COMMUNITY_Community 196|Community 196]]
 - [[_COMMUNITY_Community 197|Community 197]]
 - [[_COMMUNITY_Community 198|Community 198]]
-- [[_COMMUNITY_Community 199|Community 199]]
 - [[_COMMUNITY_Community 200|Community 200]]
 - [[_COMMUNITY_Community 201|Community 201]]
-- [[_COMMUNITY_Community 202|Community 202]]
-- [[_COMMUNITY_Community 203|Community 203]]
-- [[_COMMUNITY_Community 204|Community 204]]
-- [[_COMMUNITY_Community 205|Community 205]]
-- [[_COMMUNITY_Community 206|Community 206]]
-- [[_COMMUNITY_Community 207|Community 207]]
-- [[_COMMUNITY_Community 208|Community 208]]
-- [[_COMMUNITY_Community 209|Community 209]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `RoutineNowNextBarUI` - 130 edges
+1. `RoutineNowNextBarUI` - 131 edges
 2. `PrisonLevelLayoutRunner` - 78 edges
-3. `Prison` - 68 edges
-4. `PlayerInventory` - 54 edges
-5. `InventoryUI` - 46 edges
-6. `InventorySlotUI` - 45 edges
-7. `PrisonTimeManager` - 40 edges
-8. `SocialMathTests` - 39 edges
-9. `PrisonEventType` - 35 edges
-10. `ItemData` - 34 edges
+3. `Prison` - 69 edges
+4. `PlayerInventory` - 62 edges
+5. `PrisonEventType` - 54 edges
+6. `PrisonTimeManager` - 46 edges
+7. `InventoryUI` - 46 edges
+8. `InventorySlotUI` - 45 edges
+9. `ItemData` - 45 edges
+10. `SocialMathTests` - 39 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `StolenNotebookUI` --references--> `InventoryUI`  [EXTRACTED]
-  Assets/Scripts/Shared/UI/StolenNotebookUI.cs → Assets/Scripts/Shared/UI/InventoryUI.cs
-- `PlayerInteractor` --references--> `InventoryUI`  [EXTRACTED]
-  Assets/Scripts/Singleplayer/Player/PlayerInteractor.cs → Assets/Scripts/Shared/UI/InventoryUI.cs
-- `PlayerInteractor` --references--> `StolenNotebookUI`  [EXTRACTED]
-  Assets/Scripts/Singleplayer/Player/PlayerInteractor.cs → Assets/Scripts/Shared/UI/StolenNotebookUI.cs
-- `PrisonerController` --references--> `PlayerController`  [EXTRACTED]
-  Assets/Scripts/Singleplayer/Player/PrisonerController.cs → Assets/Scripts/Multiplayer/Player/PlayerController.cs
+- `SocialBalanceSimulatorWindow` --references--> `SocialActionType`  [EXTRACTED]
+  Assets/Scripts/Editor/SocialBalanceSimulatorWindow.cs → Assets/Scripts/Shared/Prison/SocialActionType.cs
+- `Interpolator` --references--> `TransformUpdate`  [EXTRACTED]
+  Assets/Scripts/Multiplayer/Interpolator.cs → Assets/Scripts/Multiplayer/TransformUpdate.cs
+- `Player` --references--> `Interpolator`  [EXTRACTED]
+  Assets/Scripts/Multiplayer/Player/Player.cs → Assets/Scripts/Multiplayer/Interpolator.cs
+- `CameraController` --references--> `Player`  [EXTRACTED]
+  Assets/Scripts/Multiplayer/Player/CameraController.cs → Assets/Scripts/Multiplayer/Player/Player.cs
 - `Player` --references--> `PlayerInventory`  [EXTRACTED]
   Assets/Scripts/Multiplayer/Player/Player.cs → Assets/Scripts/Multiplayer/Player/PlayerInventory.cs
 
 ## Import Cycles
 - None detected.
 
-## Communities (210 total, 59 thin omitted)
+## Communities (178 total, 28 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.06
-Nodes (25): Action, bool, Button, CanvasGroup, Color, Coroutine, CraftingRecipe, float (+17 more)
+Cohesion: 0.12
+Nodes (13): bool, Button, Color, Coroutine, float, GameObject, List, RectTransform (+5 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.03
@@ -265,8 +231,8 @@ Cohesion: 0.10
 Nodes (13): bool, float, int, NavMeshAgent, Transform, Vector3, PrisonerAI, bool (+5 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.07
-Nodes (23): bool, CanvasGroup, Color, float, Image, int, ItemCategory, PlayerInventory (+15 more)
+Cohesion: 0.08
+Nodes (20): bool, Canvas, CanvasGroup, Color, float, Image, int, Outline (+12 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.10
@@ -277,16 +243,16 @@ Cohesion: 0.11
 Nodes (13): bool, Canvas, Color, Color32, float, GameObject, Image, int (+5 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.14
-Nodes (9): CraftingRecipe, float, int, PrisonerController, PrisonEventType, Transform, EscapeManager, EscapeState (+1 more)
+Cohesion: 0.16
+Nodes (6): float, int, Transform, EscapeManager, EscapeState, EscapeState
 
 ### Community 8 - "Community 8"
 Cohesion: 0.12
 Nodes (13): float, Transform, CellData, Action, bool, Coroutine, float, IEnumerator (+5 more)
 
 ### Community 9 - "Community 9"
-Cohesion: 0.24
-Nodes (3): List, Test, CraftingInventoryLootTests
+Cohesion: 0.17
+Nodes (7): ItemCategory, ItemRarity, List, TearDown, Test, TestCase, CraftingInventoryLootTests
 
 ### Community 10 - "Community 10"
 Cohesion: 0.06
@@ -301,16 +267,16 @@ Cohesion: 0.06
 Nodes (30): 1.1 The main goal: ESCAPE 🔑, 1. What the game is, 2. Systems / features, 3. Automated test suite, 4. Coverage matrix (quick reference), 5. Roadmap, A. Time & Daily Schedule — 🟡 Partial, B. Locations, Zones & Cells — 🟡 Partial (+22 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.13
-Nodes (9): bool, float, GameObject, int, List, Transform, HotbarUI, CanvasGroupFader (+1 more)
+Cohesion: 0.08
+Nodes (14): CanvasGroupFader, Action, CanvasGroup, Coroutine, float, IEnumerator, bool, float (+6 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.06
-Nodes (36): dependencies, depth, source, version, dependencies, depth, source, version (+28 more)
+Nodes (35): dependencies, depth, source, version, dependencies, depth, source, version (+27 more)
 
 ### Community 15 - "Community 15"
-Cohesion: 0.15
-Nodes (6): bool, float, int, PrisonEventType, PrisonTimeManager, PrisonSchedule
+Cohesion: 0.11
+Nodes (4): bool, float, int, PrisonTimeManager
 
 ### Community 16 - "Community 16"
 Cohesion: 0.07
@@ -326,11 +292,11 @@ Nodes (16): Button, Dictionary, GameObject, Image, List, Sprite, string, TMP_Tex
 
 ### Community 19 - "Community 19"
 Cohesion: 0.07
-Nodes (24): a, CellMetrics, EdgeSide, FloorPlate, PrisonLevelLayoutRunner, b, Bounds, CellMetrics (+16 more)
+Nodes (22): a, CellMetrics, Dictionary, float, GameObject, IEnumerable, List, Material (+14 more)
 
 ### Community 20 - "Community 20"
 Cohesion: 0.06
-Nodes (26): Current state (7/14/2026), Key files, Notebook & Crafting UI, Polish backlog, To add, Widgets, Current state (7/14/2026), Key files (+18 more)
+Nodes (32): Current state (7/14/2026), Inventory & Hotbar UI, Key files, Polish backlog, To add, Widgets, Current state (7/14/2026), Key files (+24 more)
 
 ### Community 21 - "Community 21"
 Cohesion: 0.08
@@ -341,12 +307,12 @@ Cohesion: 0.10
 Nodes (11): ClientToServerId, bool, Message, MessageHandler, string, TMP_Text, ushort, NetworkManager (+3 more)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.08
-Nodes (25): dependencies, depth, source, version, dependencies, depth, source, version (+17 more)
+Cohesion: 0.10
+Nodes (21): dependencies, depth, source, version, dependencies, depth, source, version (+13 more)
 
 ### Community 24 - "Community 24"
-Cohesion: 0.16
-Nodes (8): bool, GameObject, int, List, InventorySlot, PlayerInventory, ItemData, ToolData
+Cohesion: 0.14
+Nodes (7): bool, GameObject, int, List, InventorySlot, PlayerInventory, WorldItemPickup
 
 ### Community 25 - "Community 25"
 Cohesion: 0.15
@@ -373,16 +339,16 @@ Cohesion: 0.06
 Nodes (31): Core loop (single-player), Game Vision & Core Loop, Known design gap, Pillars, Related notes, The prison ladder, Ways to escape (Minimum Security), What the game is (+23 more)
 
 ### Community 31 - "Community 31"
-Cohesion: 0.14
-Nodes (11): bool, CharacterController, float, GameObject, List, Transform, Vector3, InputState (+3 more)
+Cohesion: 0.15
+Nodes (10): bool, CharacterController, float, GameObject, List, Transform, ushort, Vector3 (+2 more)
 
 ### Community 32 - "Community 32"
-Cohesion: 0.11
-Nodes (14): bool, float, GameObject, IEnumerator, int, ParticleSystem, RaycastHit, string (+6 more)
+Cohesion: 0.09
+Nodes (17): bool, float, GameObject, IEnumerator, int, ParticleSystem, RaycastHit, string (+9 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.13
-Nodes (13): bool, CanvasGroup, Color, Coroutine, float, IEnumerator, PrisonTimeManager, RectTransform (+5 more)
+Cohesion: 0.14
+Nodes (11): bool, CanvasGroup, Color, Coroutine, float, IEnumerator, RectTransform, TMP_Text (+3 more)
 
 ### Community 34 - "Community 34"
 Cohesion: 0.12
@@ -393,35 +359,35 @@ Cohesion: 0.13
 Nodes (15): dependencies, depth, source, url, version, depth, source, version (+7 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.20
-Nodes (9): string, TMP_Text, Transform, EscapeEndScreenUI, Color, FontStyles, RectTransform, UnityAction (+1 more)
+Cohesion: 0.18
+Nodes (10): Color, Image, RectTransform, string, TMP_Text, Transform, UnityAction, Vector2 (+2 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.11
-Nodes (11): SceneLoaderCallback, bool, List, PrisonEventType, string, Vector3, RestrictedZone, Image (+3 more)
+Cohesion: 0.15
+Nodes (8): SceneLoaderCallback, bool, List, string, Vector3, RestrictedZone, BoxCollider, MonoBehaviour
 
 ### Community 38 - "Community 38"
 Cohesion: 0.06
 Nodes (29): CharacterVisualSetupRunner, Color, Material, MenuItem, string, Transform, RolePalette, Color (+21 more)
 
 ### Community 40 - "Community 40"
-Cohesion: 0.16
-Nodes (6): bool, Button, GameObject, PauseManager, CallbackContext, InputAction
+Cohesion: 0.15
+Nodes (7): bool, Button, GameObject, UnityAction, PauseManager, CallbackContext, InputAction
 
 ### Community 41 - "Community 41"
-Cohesion: 0.07
-Nodes (19): bool, float, IPrisoner, Transform, Vector3, GuardDetection, bool, float (+11 more)
+Cohesion: 0.15
+Nodes (8): bool, float, int, NavMeshAgent, Transform, GuardFSM, GuardDuty, GuardState
 
 ### Community 42 - "Community 42"
-Cohesion: 0.05
-Nodes (27): AnimationCurve, bool, CanvasGroup, Color, float, Image, RectTransform, string (+19 more)
+Cohesion: 0.13
+Nodes (12): AnimationCurve, bool, CanvasGroup, Color, float, Image, RectTransform, string (+4 more)
 
 ### Community 43 - "Community 43"
-Cohesion: 0.09
-Nodes (23): dependencies, depth, source, url, version, dependencies, depth, source (+15 more)
+Cohesion: 0.17
+Nodes (12): dependencies, depth, source, url, version, dependencies, depth, source (+4 more)
 
 ### Community 44 - "Community 44"
-Cohesion: 0.17
+Cohesion: 0.16
 Nodes (8): PrisonEventExtensions, PrisonEventType, NavMeshAgent, string, Transform, GuardShiftController, GuardSpawnEntry, GuardSpawnRole
 
 ### Community 45 - "Community 45"
@@ -429,27 +395,27 @@ Cohesion: 0.16
 Nodes (10): bool, Color, float, RaycastHit, RectTransform, string, TMP_Text, Transform (+2 more)
 
 ### Community 46 - "Community 46"
-Cohesion: 0.09
-Nodes (6): IPrisoner, bool, HashSet, MorningRollCallTracker, List, PrisonerPresence
+Cohesion: 0.15
+Nodes (3): bool, HashSet, MorningRollCallTracker
 
 ### Community 47 - "Community 47"
 Cohesion: 0.17
 Nodes (5): Dictionary, GameObject, List, Transform, PrisonLocationRegistry
 
 ### Community 48 - "Community 48"
-Cohesion: 0.13
-Nodes (6): float, int, PrisonEventType, PrisonSuspicion, int, SuspicionWindow
+Cohesion: 0.14
+Nodes (5): float, int, PrisonSuspicion, int, SuspicionWindow
 
 ### Community 49 - "Community 49"
 Cohesion: 0.14
 Nodes (9): bool, Button, GameObject, int, List, string, TMP_Text, Vector3 (+1 more)
 
 ### Community 50 - "Community 50"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (8): bool, Camera, float, string, TextMeshPro, Transform, Vector3, PrisonerSocialPresenter
 
 ### Community 51 - "Community 51"
-Cohesion: 0.16
+Cohesion: 0.14
 Nodes (6): Collider, int, string, Transform, PrisonLocationZone, ZoneType
 
 ### Community 52 - "Community 52"
@@ -457,12 +423,12 @@ Cohesion: 0.16
 Nodes (10): Animator, bool, Collider, float, GameObject, IEnumerator, int, Transform (+2 more)
 
 ### Community 53 - "Community 53"
-Cohesion: 0.22
+Cohesion: 0.24
 Nodes (6): bool, Color, Image, string, TMP_Text, MinimalSchedulePhaseTextHUD
 
 ### Community 54 - "Community 54"
-Cohesion: 0.18
-Nodes (10): 0. Brainstorm in chat first, 1. Design in Obsidian, 2. Implement with Cursor, 3. Execute & verify with Unity MCP, 4. Sync back, Development Workflow, End-of-task checklist (agents), Rules that keep this working (+2 more)
+Cohesion: 0.07
+Nodes (24): 0. Brainstorm in chat first, 1. Design in Obsidian, 2. Implement with Cursor, 3. Execute & verify with Unity MCP, 4. Sync back, Development Workflow, End-of-task checklist (agents), Rules that keep this working (+16 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.13
@@ -473,12 +439,16 @@ Cohesion: 0.14
 Nodes (13): 1. Core loop, 2. Schedule phase lock (Greeting), 3. Gift: variety and favored items, 4.1 Data: `FavorOfferDefinition` (ScriptableObject), 4.2 Runtime: `SocialManager`, 4.3 UI / interaction: `PrisonerSocialPresenter`, 4. Favor system (objectives, not random guessing), 5. Personality perks at +50 (hooks) (+5 more)
 
 ### Community 57 - "Community 57"
-Cohesion: 0.18
-Nodes (7): bool, float, int, MenuItem, SocialBalanceSimulatorWindow, SocialActionType, EditorWindow
+Cohesion: 0.22
+Nodes (6): bool, float, int, MenuItem, SocialBalanceSimulatorWindow, EditorWindow
 
 ### Community 58 - "Community 58"
-Cohesion: 0.13
-Nodes (10): CanvasGroup, Color, float, Image, PrisonerController, RectTransform, string, TMP_Text (+2 more)
+Cohesion: 0.14
+Nodes (9): bool, CanvasGroup, Color, float, Image, RectTransform, string, TMP_Text (+1 more)
+
+### Community 59 - "Community 59"
+Cohesion: 0.20
+Nodes (7): CraftingIngredient, CraftingRecipe, int, string, CraftingSystem, Image, NotebookRecipeIndexEntry
 
 ### Community 60 - "Community 60"
 Cohesion: 0.15
@@ -492,6 +462,10 @@ Nodes (7): GameObject, Message, MessageHandler, TMP_Text, GameClient, GameState,
 Cohesion: 0.35
 Nodes (5): Message, Quaternion, Vector2, Vector3, MessageExtensions
 
+### Community 63 - "Community 63"
+Cohesion: 0.22
+Nodes (6): bool, float, LayerMask, Transform, Vector3, GuardDetection
+
 ### Community 64 - "Community 64"
 Cohesion: 0.17
 Nodes (5): bool, float, Quaternion, Vector3, InteractableScrew
@@ -501,16 +475,16 @@ Cohesion: 0.18
 Nodes (5): bool, GameObject, string, FindGame, TMP_InputField
 
 ### Community 66 - "Community 66"
-Cohesion: 0.10
-Nodes (16): bool, Button, CanvasGroup, CanvasGroupFader, CraftingRecipe, float, GameObject, Image (+8 more)
+Cohesion: 0.12
+Nodes (13): bool, Button, CanvasGroup, float, GameObject, Image, int, List (+5 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.27
 Nodes (6): Action, CanvasGroup, float, IEnumerator, TMP_Text, SolitaryScreenUI
 
 ### Community 68 - "Community 68"
-Cohesion: 0.28
-Nodes (3): float, SocialMath, IReadOnlyDictionary
+Cohesion: 0.18
+Nodes (4): ReputationTier, float, SocialMath, IReadOnlyDictionary
 
 ### Community 69 - "Community 69"
 Cohesion: 0.21
@@ -520,13 +494,17 @@ Nodes (6): Color, float, Material, TMP_Text, Vector2, RoutineBarTimerReadability
 Cohesion: 0.10
 Nodes (13): bool, float, Graphic, Image, int, Outline, Sprite, string (+5 more)
 
+### Community 71 - "Community 71"
+Cohesion: 0.18
+Nodes (3): CanvasGroup, Color, GameObject
+
 ### Community 72 - "Community 72"
 Cohesion: 0.20
 Nodes (7): Color, float, GameObject, IEnumerator, int, RectTransform, AffinityFloatPopup
 
 ### Community 73 - "Community 73"
-Cohesion: 0.23
-Nodes (7): Animator, float, GameObject, ParticleSystem, RaycastHit, Transform, GunShoot
+Cohesion: 0.12
+Nodes (11): bool, Camera, int, GunAim, Animator, float, GameObject, ParticleSystem (+3 more)
 
 ### Community 74 - "Community 74"
 Cohesion: 0.17
@@ -537,16 +515,16 @@ Cohesion: 0.20
 Nodes (5): float, List, Vector3, Interpolator, TransformUpdate
 
 ### Community 76 - "Community 76"
-Cohesion: 0.09
-Nodes (19): Character Visuals, Dimensions (`CharacterVisualConstants`), Pipeline, Role → prefab mapping, Rules, Character set (`Materials/Characters/`), Content Inventory, Materials (+11 more)
+Cohesion: 0.06
+Nodes (30): Add a new prop/module, Blender Asset Kit, Build a new room or prison (Medium Security etc.), Change policy, Collections in PrisonKit.blend, Files & folders, How to iterate, Iterate on an existing piece (+22 more)
 
 ### Community 77 - "Community 77"
-Cohesion: 0.20
-Nodes (7): bool, CanvasGroup, float, int, PrisonerController, PrisonHeatUI, Graphic
+Cohesion: 0.22
+Nodes (6): bool, CanvasGroup, float, Graphic, int, PrisonHeatUI
 
 ### Community 78 - "Community 78"
-Cohesion: 0.13
-Nodes (11): bool, float, int, Transform, Vector3, ObjectiveWaypointUI, Camera, CanvasGroup (+3 more)
+Cohesion: 0.12
+Nodes (13): bool, Camera, CanvasGroup, Color, float, Image, int, RectTransform (+5 more)
 
 ### Community 79 - "Community 79"
 Cohesion: 0.18
@@ -561,8 +539,8 @@ Cohesion: 0.24
 Nodes (7): bool, ContextMenu, float, List, Transform, Vector3, PrisonNavMeshValidator
 
 ### Community 82 - "Community 82"
-Cohesion: 0.14
-Nodes (12): Codebase Map, Conventions, Core abstractions (most-connected nodes), Key singletons, Knowledge graph, Script layout, Character visuals (`CharacterVisualSetupRunner.cs`), Editor Tooling (+4 more)
+Cohesion: 0.11
+Nodes (16): Codebase Map, Conventions, Core abstractions (most-connected nodes), Key singletons, Knowledge graph, Script layout, Character visuals (`CharacterVisualSetupRunner.cs`), Editor Tooling (+8 more)
 
 ### Community 84 - "Community 84"
 Cohesion: 0.20
@@ -576,10 +554,6 @@ Nodes (5): bool, float, IEnumerator, ParticleSystem, ExtinguishableFire
 Cohesion: 0.20
 Nodes (10): dependencies, depth, source, version, dependencies, depth, source, version (+2 more)
 
-### Community 87 - "Community 87"
-Cohesion: 0.25
-Nodes (3): float, PrisonEventType, PlayerStats
-
 ### Community 88 - "Community 88"
 Cohesion: 0.28
 Nodes (4): bool, float, Vector3, GunView
@@ -592,33 +566,25 @@ Nodes (3): ClientLobbyHandlers, Message, MessageHandler
 Cohesion: 0.25
 Nodes (3): GameObject, int, GunsMenu
 
-### Community 91 - "Community 91"
-Cohesion: 0.12
-Nodes (4): IInteractable, InteractionInputType, WorldItemPickup, PickupItem
-
 ### Community 92 - "Community 92"
 Cohesion: 0.39
 Nodes (3): GameObject, int, WeaponController
 
 ### Community 93 - "Community 93"
-Cohesion: 0.21
-Nodes (4): PrisonEventType, RestrictedZoneRules, Prison.Tests, Prison
-
-### Community 94 - "Community 94"
-Cohesion: 0.25
-Nodes (4): Crafting, Key files, Mechanics, Recipe book (all 7, from `Assets/ScriptableObjects/Recipes/`)
+Cohesion: 0.15
+Nodes (5): Color, PrisonUITheme, RestrictedZoneRules, Prison.Tests, Prison
 
 ### Community 96 - "Community 96"
 Cohesion: 0.29
 Nodes (5): bool, float, string, TMP_Text, PrisonScheduleUI
 
 ### Community 97 - "Community 97"
-Cohesion: 0.17
-Nodes (6): StringBuilder, InitOnPlayMode(), SteamAPIDebugTextHook(), SteamManager, MonoPInvokeCallback, RuntimeInitializeOnLoadMethod
+Cohesion: 0.18
+Nodes (6): RuntimeInitializeOnLoadMethod, StringBuilder, InitOnPlayMode(), SteamAPIDebugTextHook(), SteamManager, MonoPInvokeCallback
 
 ### Community 98 - "Community 98"
-Cohesion: 0.20
-Nodes (9): Data & tuning, Design details, <Feature Name>, Feature Spec Template, Out of scope, Systems it touches, Test plan, What it is (+1 more)
+Cohesion: 0.12
+Nodes (16): dependencies, depth, source, version, dependencies, depth, source, version (+8 more)
 
 ### Community 99 - "Community 99"
 Cohesion: 0.29
@@ -653,20 +619,20 @@ Cohesion: 0.23
 Nodes (6): CharacterController, float, NavMeshAgent, Transform, Vector3, LowPolyLocomotionAnimator
 
 ### Community 112 - "Community 112"
-Cohesion: 0.29
-Nodes (6): Current state (7/14/2026), Inventory & Hotbar UI, Key files, Polish backlog, To add, Widgets
+Cohesion: 0.27
+Nodes (6): bool, Color, float, string, TMP_Text, TextRoutineComplianceHUD
 
 ### Community 113 - "Community 113"
 Cohesion: 0.13
 Nodes (14): Data & tuning (designer-facing), Design details, End screen (win), Escape Completion System, Getting caught → solitary confinement, Out of scope, Player stats (new, minimal v1), Restricted zones (+6 more)
 
 ### Community 114 - "Community 114"
-Cohesion: 0.10
-Nodes (21): dependencies, depth, source, version, dependencies, depth, source, version (+13 more)
+Cohesion: 0.18
+Nodes (11): dependencies, depth, source, version, dependencies, depth, source, url (+3 more)
 
 ### Community 115 - "Community 115"
-Cohesion: 0.19
-Nodes (6): CanvasGroup, int, PrisonerController, RuntimeInitializeOnLoadMethod, TMP_Text, CurrentLocationHUD
+Cohesion: 0.21
+Nodes (5): CanvasGroup, int, RuntimeInitializeOnLoadMethod, TMP_Text, CurrentLocationHUD
 
 ### Community 116 - "Community 116"
 Cohesion: 0.25
@@ -677,8 +643,8 @@ Cohesion: 0.33
 Nodes (6): dependencies, depth, hash, source, version, com.rlabrecque.steamworks.net
 
 ### Community 119 - "Community 119"
-Cohesion: 0.06
-Nodes (35): dependencies, depth, source, version, dependencies, depth, source, url (+27 more)
+Cohesion: 0.09
+Nodes (22): dependencies, depth, source, version, dependencies, depth, source, url (+14 more)
 
 ### Community 120 - "Community 120"
 Cohesion: 0.40
@@ -698,31 +664,31 @@ Nodes (3): float, IEnumerator, DecalDestroyer
 
 ### Community 124 - "Community 124"
 Cohesion: 0.12
-Nodes (11): bool, CanvasGroup, Color, Image, int, RuntimeInitializeOnLoadMethod, TMP_Text, Transform (+3 more)
+Nodes (11): bool, CanvasGroup, Color, Image, int, RuntimeInitializeOnLoadMethod, TextAlignmentOptions, TMP_Text (+3 more)
 
 ### Community 126 - "Community 126"
 Cohesion: 0.29
 Nodes (7): Affinity math (`SocialMath`, fully unit-tested), Implementation gaps (facts), Key files, Mechanics, Reputation tiers (average affinity), Social & Reputation, UI
 
 ### Community 128 - "Community 128"
-Cohesion: 0.33
-Nodes (3): float, Vector3, RecoilController
+Cohesion: 0.20
+Nodes (10): dependencies, depth, source, version, dependencies, depth, source, version (+2 more)
 
 ### Community 129 - "Community 129"
 Cohesion: 0.29
 Nodes (7): How it works, Key files, Phase types (`PrisonEventType`), Rules, The daily schedule (runtime asset), Time & Schedule, Tuning
 
 ### Community 131 - "Community 131"
-Cohesion: 0.15
-Nodes (11): float, GameObject, Sprite, string, ushort, ItemCategory, ItemData, ItemRarity (+3 more)
+Cohesion: 0.13
+Nodes (10): float, GameObject, Sprite, string, ushort, ItemData, int, PartData (+2 more)
 
 ### Community 132 - "Community 132"
 Cohesion: 0.33
 Nodes (3): GameObject, Transform, HeldItemDisplay
 
 ### Community 135 - "Community 135"
-Cohesion: 0.20
-Nodes (9): 01 Game Design, 02 Features — active feature specs, 03 Systems — one note per system, 04 Content & Assets, 05 Engineering, 06 Process, Devlog, 🔑 Prison Escape — Vault Home (+1 more)
+Cohesion: 0.12
+Nodes (14): 01 Game Design, 02 Features — active feature specs, 03 Systems — one note per system, 04 Content & Assets, 05 Engineering, 06 Process, Devlog, 🔑 Prison Escape — Vault Home (+6 more)
 
 ### Community 136 - "Community 136"
 Cohesion: 0.33
@@ -741,12 +707,12 @@ Cohesion: 0.33
 Nodes (6): Alerts (`PrisonSecurityAlerts`, static events, tested), Enforcement chain, Heat — the truth, Key files, Night security, Security, Heat & Alerts
 
 ### Community 140 - "Community 140"
-Cohesion: 0.36
+Cohesion: 0.67
 Nodes (3): Key files, Status snapshot (7/14/2026), UI & HUD
 
 ### Community 142 - "Community 142"
-Cohesion: 0.12
-Nodes (17): dependencies, depth, source, version, dependencies, depth, source, url (+9 more)
+Cohesion: 0.06
+Nodes (40): dependencies, depth, source, url, version, dependencies, dependencies, depth (+32 more)
 
 ### Community 143 - "Community 143"
 Cohesion: 0.40
@@ -761,32 +727,36 @@ Cohesion: 0.40
 Nodes (5): Controls, Interaction framework, Key files, Movement & camera, Player & Interaction
 
 ### Community 146 - "Community 146"
-Cohesion: 0.23
-Nodes (7): CraftingIngredient, CraftingRecipe, int, string, CraftingRecipeDescription, Color32, IEnumerable
+Cohesion: 0.33
+Nodes (3): CraftingRecipeDescription, Color32, IEnumerable
 
 ### Community 147 - "Community 147"
-Cohesion: 0.40
+Cohesion: 0.50
 Nodes (4): How everything connects, System notes, Systems Overview, The three biggest implementation gaps
 
 ### Community 149 - "Community 149"
-Cohesion: 0.50
-Nodes (3): Conventions, Git & Branching, Workflow
+Cohesion: 0.25
+Nodes (3): Action, CanvasGroup, IEnumerator
 
-### Community 150 - "Community 150"
+### Community 151 - "Community 151"
+Cohesion: 0.29
+Nodes (4): Color, Image, TMP_Text, RecipeRequirementSlotUI
+
+### Community 155 - "Community 155"
 Cohesion: 0.40
-Nodes (4): 7/14/2026, 7/14/2026 (evening), Devlog Dashboard, Earlier (pre-dashboard highlights)
+Nodes (5): dependencies, depth, source, version, com.unity.modules.androidjni
+
+### Community 156 - "Community 156"
+Cohesion: 0.50
+Nodes (4): Crafting, Key files, Mechanics, Recipe book (all 7, from `Assets/ScriptableObjects/Recipes/`)
+
+### Community 157 - "Community 157"
+Cohesion: 0.15
+Nodes (6): bool, CharacterController, float, HashSet, int, PrisonerController
 
 ### Community 159 - "Community 159"
 Cohesion: 0.29
 Nodes (4): CellBed, GameObject, int, Transform
-
-### Community 160 - "Community 160"
-Cohesion: 0.20
-Nodes (6): CanvasGroupFader, Action, CanvasGroup, Coroutine, float, IEnumerator
-
-### Community 162 - "Community 162"
-Cohesion: 0.38
-Nodes (5): PrisonerController, PrisonEventType, PrisonTimeManager, Vector3, PrisonRoutineDestination
 
 ### Community 164 - "Community 164"
 Cohesion: 0.29
@@ -797,8 +767,8 @@ Cohesion: 0.20
 Nodes (6): int, List, string, FavorOfferDefinition, bool, ActiveFavorInfo
 
 ### Community 174 - "Community 174"
-Cohesion: 0.25
-Nodes (5): float, int, Vector3, ToolData, Object
+Cohesion: 0.13
+Nodes (7): IInteractable, InteractionInputType, float, int, Vector3, ToolData, Object
 
 ### Community 175 - "Community 175"
 Cohesion: 0.38
@@ -812,25 +782,13 @@ Nodes (4): GameObject, Image, TMP_Text, PillowStashProximityUI
 Cohesion: 0.33
 Nodes (3): float, Image, InteractionReticleView
 
-### Community 190 - "Community 190"
-Cohesion: 0.40
-Nodes (4): Coverage status (summary), Test suites, Testing & QA, Testing rules for new features
-
 ### Community 191 - "Community 191"
-Cohesion: 0.24
+Cohesion: 0.29
 Nodes (5): float, int, List, string, NPCPersonalityData
 
 ### Community 193 - "Community 193"
 Cohesion: 0.27
 Nodes (5): ContrabandSpawner, GameObject, int, List, ItemType
-
-### Community 195 - "Community 195"
-Cohesion: 0.20
-Nodes (10): dependencies, depth, source, version, dependencies, depth, source, version (+2 more)
-
-### Community 196 - "Community 196"
-Cohesion: 0.25
-Nodes (4): bool, Camera, int, GunAim
 
 ### Community 197 - "Community 197"
 Cohesion: 0.33
@@ -840,28 +798,24 @@ Nodes (3): Dictionary, List, ItemDatabase
 Cohesion: 0.40
 Nodes (3): Image, TMP_Text, PrisonSocialRowUI
 
-### Community 202 - "Community 202"
-Cohesion: 0.40
-Nodes (5): dependencies, depth, source, version, com.unity.modules.umbra
-
 ## Knowledge Gaps
-- **574 isolated node(s):** `EdgeSide`, `7/14/2026 (evening)`, `7/14/2026`, `Earlier (pre-dashboard highlights)`, `Status snapshot (7/14/2026)` (+569 more)
+- **586 isolated node(s):** `Assembly-CSharp`, `com.rlabrecque.steamworks.net`, `Assembly-CSharp-Editor`, `com.rlabrecque.steamworks.net.editor`, `EdgeSide` (+581 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **59 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **28 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `RoutineNowNextBarUI` connect `Community 70` to `Community 5`, `Community 37`, `Community 103`, `Community 71`, `Community 42`, `Community 172`, `Community 143`, `Community 15`, `Community 83`?**
-  _High betweenness centrality (0.066) - this node is a cross-community bridge._
-- **Why does `Prison` connect `Community 93` to `Community 0`, `Community 2`, `Community 7`, `Community 8`, `Community 141`, `Community 13`, `Community 143`, `Community 26`, `Community 33`, `Community 162`, `Community 164`, `Community 37`, `Community 38`, `Community 41`, `Community 42`, `Community 171`, `Community 44`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 175`, `Community 51`, `Community 53`, `Community 57`, `Community 58`, `Community 191`, `Community 68`, `Community 69`, `Community 198`, `Community 199`, `Community 200`, `Community 72`, `Community 201`, `Community 77`, `Community 78`, `Community 81`, `Community 87`, `Community 95`, `Community 96`, `Community 105`, `Community 106`, `Community 107`, `Community 115`, `Community 118`, `Community 124`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
-- **Why does `InventoryUI` connect `Community 0` to `Community 66`, `Community 45`, `Community 37`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
-- **What connects `EdgeSide`, `7/14/2026 (evening)`, `7/14/2026` to the rest of the system?**
-  _574 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `RoutineNowNextBarUI` connect `Community 70` to `Community 33`, `Community 5`, `Community 37`, `Community 71`, `Community 103`, `Community 143`, `Community 15`, `Community 83`, `Community 152`, `Community 157`?**
+  _High betweenness centrality (0.100) - this node is a cross-community bridge._
+- **Why does `Prison` connect `Community 93` to `Community 0`, `Community 2`, `Community 7`, `Community 8`, `Community 141`, `Community 13`, `Community 143`, `Community 19`, `Community 150`, `Community 151`, `Community 153`, `Community 154`, `Community 26`, `Community 157`, `Community 158`, `Community 33`, `Community 162`, `Community 164`, `Community 37`, `Community 38`, `Community 42`, `Community 171`, `Community 44`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 175`, `Community 51`, `Community 57`, `Community 58`, `Community 191`, `Community 63`, `Community 68`, `Community 69`, `Community 198`, `Community 200`, `Community 72`, `Community 201`, `Community 77`, `Community 78`, `Community 81`, `Community 87`, `Community 95`, `Community 96`, `Community 105`, `Community 106`, `Community 107`, `Community 112`, `Community 115`, `Community 124`?**
+  _High betweenness centrality (0.075) - this node is a cross-community bridge._
+- **Why does `PrisonEventType` connect `Community 44` to `Community 2`, `Community 7`, `Community 8`, `Community 15`, `Community 17`, `Community 19`, `Community 29`, `Community 157`, `Community 161`, `Community 162`, `Community 164`, `Community 37`, `Community 41`, `Community 42`, `Community 171`, `Community 46`, `Community 47`, `Community 48`, `Community 53`, `Community 198`, `Community 200`, `Community 87`, `Community 93`, `Community 96`, `Community 105`, `Community 106`?**
+  _High betweenness centrality (0.045) - this node is a cross-community bridge._
+- **What connects `Assembly-CSharp`, `com.rlabrecque.steamworks.net`, `Assembly-CSharp-Editor` to the rest of the system?**
+  _586 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.0632996632996633 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12105263157894737 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.03333333333333333 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**

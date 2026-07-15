@@ -11,12 +11,13 @@
 
 ## 02 Features — active feature specs
 - [[Escape Completion System]] — 🚧 in progress (win state, solitary, suspicion, stats)
+- [[Social Ecosystem & Gangs]] — 📐 specced (v1 social teardown; identities & personalities, memory & gossip, gangs, trading & bribes, two-way favors, snitching)
 
 ## 03 Systems — one note per system
 - [[Systems Overview]] — connection map + status of everything
 - Core sim: [[Time & Schedule]] · [[Locations, Zones & Cells]] · [[Roll Call & Shakedown]]
 - AI: [[Guard AI]] · [[Prisoner AI & NPCs]]
-- Progression: [[Social & Reputation]] · [[Inventory & Items]] · [[Crafting]] · [[Loot & Economy]]
+- Progression: [[Social & Reputation]] (v1 — being replaced by [[Social Ecosystem & Gangs]]) · [[Inventory & Items]] · [[Crafting]] · [[Loot & Economy]]
 - The goal: [[Escape Routes & Mechanics]]
 - Pressure: [[Security, Heat & Alerts]]
 - Presentation: [[UI & HUD]]
@@ -26,6 +27,7 @@
 - [[Content Inventory]] — scenes, prefabs, materials, models, packages
 - [[Item Catalog]] — every item + recipe usage + data issues
 - [[Character Visuals]] — procedural low-poly character pipeline
+- [[Blender Asset Kit]] — modular 3D kit + assembled prison (PrisonKit.blend → FBX pipeline)
 
 ## 05 Engineering
 - [[Codebase Map]] — folder layout, core abstractions, conventions

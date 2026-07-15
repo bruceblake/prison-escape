@@ -2,6 +2,8 @@
 
 Guards patrol, detect non-compliant inmates, escort them back to their cells, verify beds at night, and run the morning shakedown.
 
+> 🔭 **Planned (specced):** guards join the social ecosystem — per-guard archetypes (By-the-Book, **Corrupt/bribable**, Rookie 75° cone, Veteran 8 m proximity spot), per-player guard trust (≥ 50 → +10 s compliance tolerance; ≤ −25 → +2 m detection vs you), and snitch **tips** that queue targeted shakedowns. Design: [[Social Ecosystem & Gangs]] (§ guard archetypes, bribes, snitching).
+
 ## Duties & spawn roles
 
 Configured via `GameManager.guardSpawnTable` (`GuardSpawnEntry`: name, spawn point, waypoints, role, `onDutyDuring[]` phases — empty = always on duty).

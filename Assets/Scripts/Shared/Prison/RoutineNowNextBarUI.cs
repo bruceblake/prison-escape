@@ -1666,6 +1666,13 @@ namespace Prison
             if (tm.IsMorningRollCallShakedownGateActive)
                 return GetMorningRollCallStatusFragment(tm, ref color);
 
+            string guidance = PrisonScheduleGuidance.BuildStatusLine(tm, _prisoner, _state, nextGoTo);
+            if (!string.IsNullOrEmpty(guidance))
+            {
+                color = compliantStatusColor;
+                return guidance;
+            }
+
             if (_prisoner != null && !_prisoner.IsCompliant)
             {
                 color = travelGraceStatusColor;
@@ -1713,6 +1720,10 @@ namespace Prison
 
         private bool ShouldShowPath(string goTo, string nextGoTo)
         {
+            var tm = PrisonTimeManager.Instance;
+            if (tm != null && PrisonScheduleGuidance.ShouldAlwaysShowTravelPath(tm))
+                return true;
+
             if (_state == RoutineBarVisualState.Enforcement)
                 return true;
             if (_state == RoutineBarVisualState.TravelGrace && _prisoner != null && !ShouldShowCompliantStatus(PrisonTimeManager.Instance))
@@ -1720,7 +1731,6 @@ namespace Prison
             if (_state == RoutineBarVisualState.MandatoryWarning && _prisoner != null && !_prisoner.IsCompliant)
                 return true;
 
-            var tm = PrisonTimeManager.Instance;
             if (tm != null && tm.IsMorningRollCallShakedownGateActive && _prisoner != null
                 && MorningRollCallTracker.Instance != null
                 && MorningRollCallTracker.Instance.IsInmateShakedownComplete(_prisoner))
@@ -1747,6 +1757,9 @@ namespace Prison
                 int cellIdx = _prisoner?.CellIndex ?? 0;
                 return PrisonRoutineLabels.GetMorningRollCallLineUpDestinationLabel(cellIdx);
             }
+
+            if (tm != null && tm.CurrentEvent == PrisonEventType.FreeTime)
+                return nextGoTo;
 
             return goTo;
         }

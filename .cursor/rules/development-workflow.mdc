@@ -1,55 +1,86 @@
 ---
-description: End-to-end development loop from Obsidian vault — design, implement, verify, sync, devlog, git
+description: End-to-end development loop — design, implement, playtest, sync, devlog; hard gates on commit/push
 alwaysApply: true
 ---
 
 # Development Workflow (Obsidian → Cursor → Unity → Git)
 
-Canonical process: `docs/PrisonEscape/06 Process/Development Workflow.md`. Follow it on **every** feature, fix, or doc/code change — no exceptions.
+Canonical process: `docs/PrisonEscape/06 Process/Development Workflow.md`. **No exceptions.**
 
 ## The loop
 
 ```
-Brainstorm → Obsidian spec → Implement → Unity verify → Sync vault → Devlog → Git (with user approval)
+Brainstorm → Obsidian spec → Implement → Agent verify → YOU playtest → Sync vault → Devlog → Git (only when YOU say so)
 ```
 
-1. **Read the vault first** — relevant notes in `docs/PrisonEscape/` before design or code changes ([[obsidian-source-of-truth]]).
-2. **Design before code** — if there is no spec note, propose one (use `Feature Spec Template`) and **ask the user** before implementing.
-3. **One feature per branch** — `feat/...` / `fix/...` off `dev`; PRs target `dev`, not `main` ([[git-branching]]).
-4. **Verify in Unity** — recompile, run editor scripts or Unity MCP checks, confirm 0 compile errors when MCP is available.
-5. **Sync back** — if code deviates from the spec, **update the vault** so docs match reality (do not leave stale "to add" / "partial" status).
+| Phase | Who | When |
+|-------|-----|------|
+| Design | Agent + you | Before code — vault spec exists or you approve creating one |
+| Implement | Agent | After spec; one feature per `feat/...` branch off `dev` (prefer a worktree — `git-worktrees.mdc`) |
+| Agent verify | Agent | After code — compile, Unity MCP, EditMode tests, layout rebuild logs |
+| **Playtest** | **You** | **Before commit/push** for anything affecting gameplay, UI, layout, or scenes |
+| Sync + devlog | Agent | Before asking you to commit — vault and devlog must match reality |
+| Git record | Agent | **Only when you explicitly say commit and/or push in that message** |
 
-## End-of-task checklist (run before saying "done")
+## HARD GATE — commit & push (agent MUST enforce)
 
-Present this checklist to the user with ✅/❌/⚠️ for each item. **Do not declare work complete until the user confirms.**
+**Never run `git commit`, `git push`, `gh pr create`, or `gh pr merge` unless ALL are true:**
 
-| Step | Action |
-|------|--------|
-| Spec | Vault notes updated — hub note + per-surface/system notes, key files listed |
-| Status | `Systems Overview`, feature spec status, and hub snapshots reflect reality |
-| Devlog | New entry in `docs/PrisonEscape/Prison Escape Devlog Dashboard.md` (newest first) |
-| Code | Implementation matches vault; `.meta` files staged with new assets |
-| Verify | Unity compile/playtest noted (pass, fail, or blocked) |
-| Graph | `graphify update .` after code edits when CLI exists; otherwise note graph is stale |
-| Git | Branch named correctly; **ask user before `git commit` or `git push`** |
+1. You **explicitly requested** commit/push/PR in the **same message** (not implied by "keep going" or "looks good").
+2. The end-of-task checklist below was presented with ✅/❌/⚠️.
+3. **Playtest gate passed** (see next section) — or you gave an **explicit written waiver** in chat: e.g. `skip playtest, commit anyway`.
 
-## Ask the user first — always
+If you ask to commit without playtest confirmation → **STOP. Do not commit.** Present the playtest gate and ask again.
 
-Stop and ask before:
+If you ask to skip checklist items → **STOP.** List what's missing and ask how to proceed.
 
-- Committing or pushing (unless the user explicitly requested it in the same message)
-- Skipping any checklist item above
-- Changing design without a vault update
-- Merging to `main` or opening a PR (unless explicitly requested)
-- Deleting or excluding files the user may expect tracked (screenshots, `.meta`, vault notes)
+## HARD GATE — playtest (before any commit/push)
 
-When gaps exist (missing screenshots, unverified playtest, stale overview), **report them explicitly** and ask how to proceed — never silently skip.
+For changes touching **code, scenes, UI, layout, or gameplay**:
+
+1. Agent completes technical verify (compile, MCP, tests).
+2. Agent gives you a **short playtest script** (what to open, what to click, what to look for).
+3. Agent asks: **"Have you playtested this in Unity? (pass / fail / not yet)"**
+4. **Do not commit until:**
+   - You reply **pass** (or describe fixes → agent fixes → you re-test), OR
+   - You reply **skip playtest, commit anyway** with a one-line reason.
+
+Doc-only or rule-only changes with zero runtime impact: playtest gate may be marked N/A — state that explicitly in the checklist.
+
+## End-of-task checklist (present before "done" or commit)
+
+| Step | Required before commit? |
+|------|-------------------------|
+| Spec — vault notes updated | Yes (unless doc-only typo) |
+| Status — Systems Overview / feature spec current | Yes |
+| Devlog — entry in `Prison Escape Devlog Dashboard.md` | Yes |
+| Code — matches vault; `.meta` with new assets | Yes |
+| Agent verify — compile / MCP / tests | Yes for code changes |
+| **Your playtest** — pass, fail, N/A, or waived | **Yes — gate** |
+| Graph — `graphify-out/` refreshed or noted stale | Yes for code changes |
+| Git — correct branch; **your explicit commit/push request** | **Yes — gate** |
+
+**Do not say "done", "all set", or "ready to merge" until you confirm the checklist.**
+
+## What the agent does when you forget
+
+- Remind you of the gate instead of committing silently.
+- Refuse commit/push until playtest is confirmed or explicitly waived.
+- If you used a diff-tab or UI "commit" action: run the checklist first, report gaps, ask before executing git.
+- Opening/updating a PR requires the same gates as commit/push.
+
+## Ask first — always
+
+- Commit, push, PR, merge to `main`
+- Skipping playtest, devlog, or vault sync
+- Design changes without a vault update
+- Excluding files you may expect tracked (screenshots, `.meta`, vault notes)
 
 ## Where updates go
 
-| Change type | Update |
-|-------------|--------|
-| Game design / UI / layout | `docs/PrisonEscape/` (not `Assets/Docs/` for design) |
-| Technical / test docs | `Assets/Docs/` or `05 Engineering/` |
+| Change | Location |
+|--------|----------|
+| Game design / UI / layout | `docs/PrisonEscape/` |
+| Technical / test docs | `05 Engineering/` or `Assets/Docs/` |
 | Milestones | `Prison Escape Devlog Dashboard.md` |
-| UI surfaces | Hub `03 Systems/UI & HUD.md` + the matching note under `03 Systems/UI/` |
+| UI surfaces | `03 Systems/UI & HUD.md` + matching note under `03 Systems/UI/` |

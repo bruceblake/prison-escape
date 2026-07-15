@@ -239,5 +239,51 @@ namespace Prison.Tests
                 UnityEngine.Object.DestroyImmediate(fresh.gameObject);
             }
         }
+
+        [Test]
+        public void ComputeDoorOpenOffsetLocal_IsHorizontalLocalAxis()
+        {
+            var doorGo = new GameObject("door");
+            doorGo.transform.rotation = Quaternion.Euler(0f, 30f, 0f);
+            var bedGo = new GameObject("bed");
+            bedGo.transform.position = doorGo.transform.position + doorGo.transform.forward * 3f;
+
+            Vector3 offset = PrisonFacilityInstaller.ComputeDoorOpenOffsetLocal(doorGo.transform, bedGo.transform);
+
+            Assert.AreEqual(0f, offset.y, 1e-4f, "Door slide offset must stay horizontal in local space.");
+            Assert.GreaterOrEqual(offset.magnitude, 5.5f, "Door must slide far enough to clear the doorway.");
+            float dominant = Mathf.Max(Mathf.Abs(offset.x), Mathf.Abs(offset.z));
+            Assert.AreEqual(offset.magnitude, dominant, 1e-4f, "Slide must be along a single local horizontal axis.");
+        }
+
+        [Test]
+        public void AlignDoorToCellWall_PlacesDoorOnCorridorFace()
+        {
+            var shell = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            shell.name = "Cell_09";
+            shell.transform.position = new Vector3(-55f, 3.82f, -90.3f);
+            shell.transform.localScale = new Vector3(4f, 6f, 5.6f);
+
+            var bed = new GameObject("Cell_09_Bed");
+            bed.transform.position = new Vector3(-51.6f, 0.82f, -88.7f);
+
+            var door = new GameObject("Cell_09_Door");
+            door.transform.position = new Vector3(-61.73f, 0.82f, -94.04f);
+
+            try
+            {
+                PrisonFacilityInstaller.AlignDoorToCellWall(door.transform, shell.transform, bed.transform);
+
+                float distToSouthWall = Mathf.Abs(door.transform.position.z - (-93.1f));
+                Assert.Less(distToSouthWall, 1.0f, "Door should sit on the corridor-facing south wall, not float in the hallway.");
+                Assert.Less(Mathf.Abs(door.transform.position.x - (-53f)), 1.5f, "Door should be centered on the cell opening in X.");
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(door);
+                UnityEngine.Object.DestroyImmediate(bed);
+                UnityEngine.Object.DestroyImmediate(shell);
+            }
+        }
     }
 }

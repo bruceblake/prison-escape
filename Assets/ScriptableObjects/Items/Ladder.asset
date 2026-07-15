@@ -19,7 +19,7 @@ MonoBehaviour:
   category: 1
   rarity: 2
   weightMultiplier: 1
-  worldPrefab: {fileID: 0}
+  worldPrefab: {fileID: 3899585900800549217, guid: e379067e44c655e45b4d762fd3da1055, type: 3}
   durability: 100
   interactionSpeedModifier: 1.5
   holdModelPrefab: {fileID: 0}

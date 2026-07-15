@@ -2,6 +2,8 @@
 
 Every item asset in `Assets/ScriptableObjects/`. Rarity drives loot weight (Common 60 / Uncommon 25 / Rare 10 / Legendary 5 — see [[Loot & Economy]]).
 
+> All items below have 3D pickup models: `Assets/Models/BlenderKit/Items/SM_Item_<Name>.fbx` — see [[Blender Asset Kit]]. Wiring them into pickup prefabs is an open task.
+
 ## Crafting parts
 
 | Item | Rarity | Weight × | Used in |

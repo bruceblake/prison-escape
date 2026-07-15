@@ -1,6 +1,6 @@
 # Character Visuals
 
-Characters are **procedurally built low-poly humanoids** — no imported models. Rebuild everything via **Prison → Setup Character Visuals**.
+In-game characters are currently **procedurally built low-poly humanoids** (rebuild via **Prison → Setup Character Visuals**). As of 7/14/2026 there are also **rigged + animated Blender characters** in the asset kit — see [[#Rigged Blender characters (asset kit)]] below; migrating the prefabs to them is an open task.
 
 ## Dimensions (`CharacterVisualConstants`)
 
@@ -38,4 +38,18 @@ Palettes are in [[Content Inventory]]. Cached meshes: `Assets/Meshes/Characters/
 
 Key files: `Assets/Scripts/Shared/Visuals/` + `Assets/Editor/CharacterVisualSetupRunner.cs`
 
-Related: [[Player & Interaction]] · [[Editor Tooling]] · [[Content Inventory]]
+## Rigged Blender characters (asset kit)
+
+Skinned, animated characters built in `ArtSource/PrisonKit.blend` (`Kit_Characters` collection) and exported to `Assets/Models/BlenderKit/Characters/`:
+
+| FBX | Look (doc palettes) |
+|---|---|
+| `SM_Char_Guard.fbx` | Navy uniform, dark vest, belt + gold buckle, gold epaulettes/badge, navy cap (2.66 m with cap) |
+| `SM_Char_Prisoner.fbx` | Orange jumpsuit, 3 white stripe bands + chest pocket (2.56 m) |
+
+- **Rig:** 17 bones, Unity-friendly names (`Root/Hips/Spine/Chest/Head`, `UpperLeg/LowerLeg/Foot`, `UpperArm/LowerArm/Hand` L/R), rigid per-part skinning (one bone per cube). Import as **Generic** rig.
+- **Animations** (baked into each FBX as takes, 24 fps): `Idle` (2 s breathing bob), `Walk` (1 s cycle — leg swing 38°, arm 28°, knee bend, matching the procedural animator constants), `Run` (0.67 s, bigger swing + forward lean), `Jump` (1 s non-looping: crouch → takeoff → tuck → land). Locomotion clips loop; animate in place (no root motion) — code drives movement, same as the procedural pipeline.
+- Character faces −Y in Blender → +Z forward in Unity. Shared `M_Char_*` materials (skin 0.82/0.62/0.48 + role palettes).
+- **Migration (7/14/2026):** complete — `BlenderKitLocomotionAnimator` + `Assets/Animations/Characters/Char_Locomotion.controller`. Player is the prisoner mesh (inmate).
+
+Related: [[Player & Interaction]] · [[Editor Tooling]] · [[Content Inventory]] · [[Blender Asset Kit]]

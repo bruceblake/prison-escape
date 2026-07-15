@@ -37,7 +37,7 @@ Map of every implemented system. One note per system in this folder — keep it 
 | [[Roll Call & Shakedown]] | Morning sweep, confiscation, early release | 🟡 confiscation ✅ |
 | [[Guard AI]] | Patrol / detection / escort / night checks | ⚪ planned |
 | [[Prisoner AI & NPCs]] | NPC routines, player compliance, personalities | ⚪ planned |
-| [[Social & Reputation]] | Affinity math, tiers, favors, greetings | 🟡 math ✅ |
+| [[Social & Reputation]] | v1 affinity (deprecated) — replacement specced: [[Social Ecosystem & Gangs]] | 🔴 v1 slated for teardown |
 | [[Security, Heat & Alerts]] | Attention eye + lockdown/suspicion hooks | ✅ alerts |
 | [[Player & Interaction]] | FPS controls + raycast interactions | ⚪ planned |
 | [[Inventory & Items]] | 6-slot inventory + item taxonomy | ✅ core |
@@ -51,6 +51,6 @@ Map of every implemented system. One note per system in this folder — keep it 
 
 1. **Escape routes geometry** — win/lose systems live on `feat/escape-completion`; vent corridors and fence cut still needed to reach the boundary ([[Roadmap & Priorities]] #1)
 2. **Guard AI depth** — patrol/detection exist; full FSM polish and consequence wiring still thin
-3. **Social content unauthored** — no personality or favor assets; gift/betrayal UI missing
+3. **Social v1 → v2 rebuild** — v1 (affinity, greet, one-way favors) is deprecated wholesale; the [[Social Ecosystem & Gangs]] spec (identities, memory, gangs, trading, snitching) replaces it and is not yet implemented
 
 Related: [[Game Vision & Core Loop]] · [[World Rules]] · [[Codebase Map]]

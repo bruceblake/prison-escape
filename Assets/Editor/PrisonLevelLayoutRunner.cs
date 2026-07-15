@@ -111,7 +111,7 @@ public static class PrisonLevelLayoutRunner
     [MenuItem("Prison/Layout/3 — Build All Lighting")]
     public static void BuildLightingMenu() => BuildAllLighting();
 
-    [MenuItem("Prison/Layout/4 — Furnish Rooms (Scratch Build)")]
+    [MenuItem("Prison/Layout/4 — Furnish Rooms (BlenderKit)")]
     public static void FurnishRoomsMenu() => FurnishRooms();
 
     [MenuItem("Prison/Layout/5 — Wire Registry")]
@@ -123,19 +123,28 @@ public static class PrisonLevelLayoutRunner
     [MenuItem("Prison/Layout/Run Full Build")]
     public static void RunFullBuild()
     {
-        RenameEastCells();
-        SyncFloorHeightToCells();
-        ApplyConnectedDiagramLayout();
-        BuildWallsAroundFloors();
-        BuildRoofs();
-        BuildRoofSoffits();
-        BuildAllLighting();
-        FurnishRooms();
+        if (AssetDatabase.LoadAssetAtPath<GameObject>(PrisonFacilityInstaller.PrefabPath) == null)
+            BlenderKitAssetSetup.SetupAll();
+        PrisonFacilityInstaller.ClearLegacyGeometry();
+        var facility = PrisonFacilityInstaller.Install();
+        if (facility == null)
+        {
+            Debug.LogError("[PrisonLayout] Full build aborted — PrisonFacility missing.");
+            return;
+        }
+
+        PrisonFacilityInstaller.WireCellAnchors(facility);
+        PrisonFacilityInstaller.WireInteractables(facility);
+        PrisonFacilityInstaller.WireZones(facility);
         WireRegistry();
         BuildEscapeSystems();
         SaveScene();
-        Debug.Log("[PrisonLayout] Full build complete.");
+        Debug.Log("[PrisonLayout] Full build complete (PrisonFacility.fbx).");
     }
+
+    public static void WireRegistryPublic() => WireRegistry();
+    public static void BuildEscapeSystemsPublic() => BuildEscapeSystems();
+    public static void SaveScenePublic() => SaveScene();
 
     struct FloorPlate
     {
@@ -311,6 +320,12 @@ public static class PrisonLevelLayoutRunner
 
     static void CreateFloorFromPlate(Transform parent, FloorPlate plate)
     {
+        if (BlenderKitLayout.IsAvailable)
+        {
+            BlenderKitLayout.TileFloorPlate(parent, plate.Name, new Vector3(plate.Cx, FloorSurfaceY, plate.Cz), plate.Sx, plate.Sz, FloorSurfaceY);
+            return;
+        }
+
         var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
         go.name = plate.Name;
         go.transform.SetParent(parent, false);
@@ -431,6 +446,15 @@ public static class PrisonLevelLayoutRunner
         var spawn = cell.Find("SpawnPoint");
         if (spawn == null) return false;
 
+        if (BlenderKitLayout.IsAvailable)
+        {
+            var rot = cell.rotation;
+            BlenderKitLayout.PlaceCellShell(cell, spawn.position, rot);
+            BlenderKitLayout.PlaceCellDoor(cell, spawn.position, rot);
+            BlenderKitLayout.FurnishCellInterior(cell, spawn.position, rot);
+            return true;
+        }
+
         float w = CellInteriorWidth;
         float d = CellInteriorDepth;
         float h = metrics.WallHeight;
@@ -438,7 +462,6 @@ public static class PrisonLevelLayoutRunner
         float cy = floorTop + h * 0.5f;
         Vector3 spawnPos = spawn.position;
         Vector3 right = cell.right;
-        Vector3 forward = cell.forward;
 
         // Door faces +right; back wall opposite corridor.
         CreateWallBlock(cell, "CellShell_Back",
@@ -690,13 +713,32 @@ public static class PrisonLevelLayoutRunner
             Vector3 scale = alongX ? new Vector3(len, wallH, t) : new Vector3(t, wallH, len);
             if (IsCellWingPlate(plate) && IntersectsJailCellInterior(pos, scale))
                 continue;
-            CreateWallBlock(parent, $"Wall_{sideTag}_{count}", pos, scale, wallMat);
-            count++;
+
+            if (BlenderKitLayout.IsAvailable)
+            {
+                var start = alongX ? new Vector3(sa, floorTop, edgeCoord) : new Vector3(edgeCoord, floorTop, sa);
+                var end = alongX ? new Vector3(sb, floorTop, edgeCoord) : new Vector3(edgeCoord, floorTop, sb);
+                count += BlenderKitLayout.TileWallRun(parent, $"Wall_{sideTag}_{count}", start, end, floorTop, wallH, alongX, structural: true);
+            }
+            else
+            {
+                CreateWallBlock(parent, $"Wall_{sideTag}_{count}", pos, scale, wallMat);
+                count++;
+            }
         }
 
         // Lintels close the wall above each doorway.
         foreach (var (center, width) in doors)
         {
+            if (BlenderKitLayout.IsAvailable && width >= 3.2f)
+            {
+                Vector3 doorPos = alongX ? new Vector3(center, floorTop, edgeCoord) : new Vector3(edgeCoord, floorTop, center);
+                var rot = alongX ? Quaternion.identity : Quaternion.Euler(0f, 90f, 0f);
+                BlenderKitLayout.PlaceDoorway(parent, $"Doorway_{sideTag}_{count}", doorPos, rot, floorTop);
+                count++;
+                continue;
+            }
+
             float lintelH = wallH - DoorHeight;
             if (lintelH < 0.1f) continue;
             float lintelY = floorTop + DoorHeight + lintelH * 0.5f;
@@ -777,8 +819,18 @@ public static class PrisonLevelLayoutRunner
             var group = new GameObject("Roof_" + plate.Name);
             group.transform.SetParent(roofsRoot.transform, false);
             float ceilingY = FloorSurfaceY + metrics.WallHeight;
-            CreateBlock(group.transform, "Ceiling", new Vector3(plate.Cx, ceilingY + RoofThickness * 0.5f, plate.Cz),
-                new Vector3(plate.Sx + RoofOverhang * 2f, RoofThickness, plate.Sz + RoofOverhang * 2f), ceilingMat);
+
+            if (BlenderKitLayout.IsAvailable)
+            {
+                BlenderKitLayout.TileRoofPlate(group.transform, plate.Name,
+                    new Vector3(plate.Cx, ceilingY, plate.Cz), plate.Sx + RoofOverhang * 2f, plate.Sz + RoofOverhang * 2f, ceilingY);
+            }
+            else
+            {
+                CreateBlock(group.transform, "Ceiling", new Vector3(plate.Cx, ceilingY + RoofThickness * 0.5f, plate.Cz),
+                    new Vector3(plate.Sx + RoofOverhang * 2f, RoofThickness, plate.Sz + RoofOverhang * 2f), ceilingMat);
+            }
+
             built++;
         }
 
@@ -942,6 +994,12 @@ public static class PrisonLevelLayoutRunner
     static void CreateCeilingLight(Transform parent, string name, Vector3 worldPos, Material lightMat,
         float intensity, float range, bool shadows)
     {
+        if (BlenderKitLayout.IsAvailable)
+        {
+            BlenderKitLayout.PlaceLight(parent, name, worldPos, shadows);
+            return;
+        }
+
         var fixture = GameObject.CreatePrimitive(PrimitiveType.Cube);
         fixture.name = name + "_Fixture";
         fixture.transform.SetParent(parent, true);
@@ -1039,7 +1097,9 @@ public static class PrisonLevelLayoutRunner
         FurnishWorkshop(FindPlateFloor("WorkshopFloor"), propsRoot.transform, metrics);
         FurnishMainSecurity(FindPlateFloor("MainSecurityFloor"), propsRoot.transform, metrics);
 
-        Debug.Log("[PrisonLayout] Scratch-built room props placed.");
+        Debug.Log(BlenderKitLayout.IsAvailable
+            ? "[PrisonLayout] BlenderKit room props placed."
+            : "[PrisonLayout] Scratch-built room props placed.");
     }
 
     static Transform FindPlateFloor(string plateName)
@@ -1053,13 +1113,36 @@ public static class PrisonLevelLayoutRunner
     {
         if (floor == null) return;
         var room = CreateRoomRoot(root, "CafeteriaProps", floor);
-        var panel = LoadMat(PanelMatPath);
-        var metal = LoadMat(MetalMatPath);
-        var tile = LoadMat(TileMatPath);
         var c = floor.position;
         float fy = metrics.FloorTopFor(floor);
         float hx = floor.lossyScale.x * 0.5f;
         float hz = floor.lossyScale.z * 0.5f;
+
+        if (BlenderKitLayout.IsAvailable)
+        {
+            BlenderKitLayout.PlaceKit("SM_Caf_ServingLine_4m", room, new Vector3(c.x, fy, c.z + hz - 2f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Kitchen_Counter_3m", room, new Vector3(c.x - hx * 0.35f, fy, c.z + hz - 1.2f), Quaternion.identity, false);
+
+            int tableCols = 3, tableRows = 2;
+            float tableSx = Mathf.Min(7f, hx * 1.4f / tableCols);
+            float tableSz = Mathf.Min(8f, hz * 0.9f / tableRows);
+            for (int row = 0; row < tableRows; row++)
+            {
+                for (int col = 0; col < tableCols; col++)
+                {
+                    float x = c.x - (tableCols - 1) * tableSx * 0.5f + col * tableSx;
+                    float z = c.z - hz * 0.1f + row * tableSz;
+                    BlenderKitLayout.PlaceKit("SM_Caf_TableBench", room, new Vector3(x, fy, z), Quaternion.identity, false);
+                }
+            }
+
+            EnsureZone(room.gameObject, ZoneType.Cafeteria, "CAFETERIA", floor, metrics);
+            return;
+        }
+
+        var panel = LoadMat(PanelMatPath);
+        var metal = LoadMat(MetalMatPath);
+        var tile = LoadMat(TileMatPath);
 
         CreateBlock(room, "ServingCounter", new Vector3(c.x, fy + 0.55f, c.z + hz - 1.2f),
             new Vector3(hx * 1.5f, 1.1f, 0.9f), panel);
@@ -1105,11 +1188,34 @@ public static class PrisonLevelLayoutRunner
     {
         if (floor == null) return;
         var room = CreateRoomRoot(root, "ShowerProps", floor);
-        var wall = LoadMat(WallMatPath);
         var c = floor.position;
         float fy = metrics.FloorTopFor(floor);
         float hx = floor.lossyScale.x * 0.5f;
         float hz = floor.lossyScale.z * 0.5f;
+
+        if (BlenderKitLayout.IsAvailable)
+        {
+            int stallCols = 3, stallRows = 2;
+            float stallSx = hx * 1.2f / stallCols;
+            float stallSz = hz * 0.8f / stallRows;
+            for (int row = 0; row < stallRows; row++)
+            {
+                for (int col = 0; col < stallCols; col++)
+                {
+                    float x = c.x - hx * 0.45f + col * stallSx + stallSx * 0.5f;
+                    float z = c.z - hz * 0.2f + row * stallSz;
+                    BlenderKitLayout.PlaceKit("SM_Shower_Stall", room, new Vector3(x, fy, z), Quaternion.identity, false);
+                }
+            }
+
+            BlenderKitLayout.PlaceKit("SM_Shower_SinkRow_3", room, new Vector3(c.x, fy, c.z - hz + 1.5f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Shower_Bench", room, new Vector3(c.x - hx + 1.2f, fy, c.z - 6f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Shower_Bench", room, new Vector3(c.x - hx + 1.2f, fy, c.z + 6f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Prop_FloorDrain", room, new Vector3(c.x, fy, c.z), Quaternion.identity, false);
+            return;
+        }
+
+        var wall = LoadMat(WallMatPath);
 
         int cols = 3, rows = 2;
         float sx = hx * 1.2f / cols;
@@ -1190,12 +1296,23 @@ public static class PrisonLevelLayoutRunner
     {
         if (floor == null) return;
         var room = CreateRoomRoot(root, "CourtyardProps", floor);
-        var metal = LoadMat(MetalMatPath);
-        var tile = LoadMat(TileMatPath);
         var c = floor.position;
         float fy = metrics.FloorTopFor(floor);
         float hx = floor.lossyScale.x * 0.5f;
         float hz = floor.lossyScale.z * 0.5f;
+
+        if (BlenderKitLayout.IsAvailable)
+        {
+            BlenderKitLayout.PlaceKit("SM_Yard_PullUpBar", room, new Vector3(c.x, fy, c.z - 4f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Yard_WeightBench", room, new Vector3(c.x - 8f, fy, c.z), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Yard_BasketballHoop", room, new Vector3(c.x + hx - 2f, fy, c.z), Quaternion.Euler(0f, 90f, 0f), false);
+            BlenderKitLayout.TileCourtyardFence(room, c, hx, hz, fy);
+            EnsureZone(room.gameObject, ZoneType.Yard, "COURTYARD", floor, metrics);
+            return;
+        }
+
+        var metal = LoadMat(MetalMatPath);
+        var tile = LoadMat(TileMatPath);
 
         CreateBlock(room, "ExercisePad", new Vector3(c.x, fy + 0.03f, c.z), new Vector3(5f, 0.06f, 5f), tile);
         CreateBlock(room, "PullUp_L", new Vector3(c.x - 2.5f, fy + 1.2f, c.z - 4f), new Vector3(0.12f, 2.4f, 0.12f), metal);
@@ -1215,11 +1332,29 @@ public static class PrisonLevelLayoutRunner
     {
         if (floor == null) return;
         var room = CreateRoomRoot(root, "WorkshopProps", floor);
-        var panel = LoadMat(PanelMatPath);
-        var metal = LoadMat(MetalMatPath);
         var c = floor.position;
         float fy = metrics.FloorTopFor(floor);
         float hx = floor.lossyScale.x * 0.5f;
+
+        if (BlenderKitLayout.IsAvailable)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                float x = c.x - hx * 0.45f + i * (hx * 0.45f);
+                BlenderKitLayout.PlaceKit("SM_Work_Bench", room, new Vector3(x, fy, c.z - 4f), Quaternion.identity, false);
+                BlenderKitLayout.PlaceKit("SM_Work_ShelfUnit", room, new Vector3(x, fy, c.z + 3f), Quaternion.identity, false);
+                BlenderKitLayout.PlaceKit("SM_Work_ToolBoard", room, new Vector3(x, fy + 1.5f, c.z - 4.5f), Quaternion.identity, false);
+            }
+
+            BlenderKitLayout.PlaceKit("SM_Work_StorageCrate", room, new Vector3(c.x - hx + 2f, fy, c.z), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Prop_Machine", room, new Vector3(c.x + hx - 3f, fy, c.z - 2f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Prop_Barrel", room, new Vector3(c.x + hx - 2f, fy, c.z + 2f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Prop_Pallet", room, new Vector3(c.x, fy, c.z + 5f), Quaternion.identity, false);
+            return;
+        }
+
+        var panel = LoadMat(PanelMatPath);
+        var metal = LoadMat(MetalMatPath);
 
         for (int i = 0; i < 3; i++)
         {
@@ -1249,12 +1384,25 @@ public static class PrisonLevelLayoutRunner
     {
         if (floor == null) return;
         var room = CreateRoomRoot(root, "MainSecurityProps", floor);
-        var panel = LoadMat(PanelMatPath);
-        var security = LoadMat(SecurityMatPath);
-        var metal = LoadMat(MetalMatPath);
         var c = floor.position;
         float fy = metrics.FloorTopFor(floor);
         float hz = floor.lossyScale.z * 0.5f;
+
+        if (BlenderKitLayout.IsAvailable)
+        {
+            BlenderKitLayout.PlaceKit("SM_Sec_Desk", room, new Vector3(c.x, fy, c.z - hz * 0.2f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Sec_MonitorBank", room, new Vector3(c.x, fy + 1.2f, c.z - hz * 0.38f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Sec_Chair", room, new Vector3(c.x, fy, c.z - hz * 0.05f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Prop_FilingCabinet", room, new Vector3(c.x - 4f, fy, c.z - hz * 0.3f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Fence_Gate_4m", room, new Vector3(c.x, fy, c.z + hz - 0.8f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Prop_FireExtinguisher", room, new Vector3(c.x + 5f, fy, c.z - hz + 1f), Quaternion.identity, false);
+            BlenderKitLayout.PlaceKit("SM_Prop_WallClock", room, new Vector3(c.x - 6f, fy + 2.5f, c.z - hz + 0.5f), Quaternion.identity, false);
+            return;
+        }
+
+        var panel = LoadMat(PanelMatPath);
+        var security = LoadMat(SecurityMatPath);
+        var metal = LoadMat(MetalMatPath);
 
         CreateBlock(room, "DeskBase", new Vector3(c.x, fy + 0.45f, c.z - hz * 0.2f), new Vector3(2.4f, 0.9f, 0.9f), panel);
         CreateBlock(room, "DeskTop", new Vector3(c.x, fy + 0.92f, c.z - hz * 0.2f), new Vector3(2.6f, 0.06f, 1.0f), panel);
@@ -1329,30 +1477,55 @@ public static class PrisonLevelLayoutRunner
             var cell = cellTransforms[i];
             var spawn = cell.Find("SpawnPoint");
             var rollCall = cell.Find("RollCallPoint");
-            var bed = cell.Find("Bed");
+            var bed = cell.Find("Bed") ?? cell.Find("CellKit_Bed");
+            var nightCheck = cell.Find("NightCheckApproach");
+            var shakedown = cell.Find("ShakedownCenter");
+
+            if (bed == null)
+            {
+                int gameNum = i + 1;
+                var facilityBed = PrisonFacilityInstaller.FindFacilityBed(gameNum);
+                if (facilityBed != null)
+                {
+                    var bedRef = new GameObject("Bed");
+                    bedRef.transform.SetParent(cell, false);
+                    bedRef.transform.position = facilityBed.position;
+                    bedRef.transform.rotation = facilityBed.rotation;
+                    bed = bedRef.transform;
+                }
+            }
 
             cells.Add(new CellData
             {
                 spawnPoint = spawn,
                 rollCallStandPoint = rollCall != null ? rollCall : spawn,
+                nightCheckApproachPoint = nightCheck,
                 bedPresenceCenter = bed != null ? bed : spawn,
-                shakedownSweepCenter = spawn,
-                interiorCheckRadius = 10.32f
+                shakedownSweepCenter = shakedown != null ? shakedown : spawn,
+                interiorCheckRadius = 2.75f
             });
 
-            var zone = cell.GetComponent<PrisonLocationZone>() ?? cell.gameObject.AddComponent<PrisonLocationZone>();
-            zone.zoneType = ZoneType.Cell;
-            zone.cellIndex = i;
-            zone.hudDisplayName = $"CELL {i + 1:D2}";
+            var zone = cell.GetComponentInChildren<PrisonLocationZone>();
+            if (zone != null)
+            {
+                zone.zoneType = ZoneType.Cell;
+                zone.cellIndex = i;
+                zone.hudDisplayName = $"CELL {i + 1:D2}";
+            }
         }
 
         registry.cells = cells.ToArray();
 
-        var cafeteriaZone = GameObject.Find("CafeteriaProps")?.GetComponent<PrisonLocationZone>();
+        var cafeteriaZone = PrisonFacilityInstaller.FindZoneOnPlatePublic("ASM_CafeteriaFloor")
+            ?? GameObject.Find("CafeteriaProps")?.GetComponent<PrisonLocationZone>();
         if (cafeteriaZone != null) registry.cafeteria = cafeteriaZone;
 
-        var yardZone = GameObject.Find("CourtyardProps")?.GetComponent<PrisonLocationZone>();
+        var yardZone = PrisonFacilityInstaller.FindZoneOnPlatePublic("ASM_CourtyardFloor")
+            ?? GameObject.Find("CourtyardProps")?.GetComponent<PrisonLocationZone>();
         if (yardZone != null) registry.yard = yardZone;
+
+        registry.rollCallArea = PrisonFacilityInstaller.FindZoneOnPlatePublic("ASM_CellWingFloor_West")
+            ?? PrisonFacilityInstaller.FindZoneOnPlatePublic("ASM_CellWingFloor_East");
 
         EditorUtility.SetDirty(registry);
     }
@@ -1366,14 +1539,18 @@ public static class PrisonLevelLayoutRunner
 
     static void BuildEscapeSystems()
     {
-        if (_activePlates.Count == 0)
-            _activePlates = BuildDiagramPlates().ToList();
-
-        var metrics = CellMetrics.SampleFromScene();
         var root = GetOrCreateRoot("EscapeSystems");
         ClearChildren(root);
 
-        var spawns = BuildSolitaryBlock(root.transform, metrics);
+        var facilityGo = GameObject.Find(PrisonFacilityInstaller.RootName);
+        var facilityMesh = facilityGo != null
+            ? facilityGo.transform.Find("PrisonFacility_Mesh")
+            : null;
+
+        Transform[] spawns = facilityMesh != null
+            ? PrisonFacilityInstaller.GetSolitarySpawnPoints(facilityMesh)
+            : BuildSolitaryBlock(root.transform, CellMetrics.SampleFromScene());
+
         BuildEscapeBoundaryRing(root.transform);
         BuildRestrictedZones(root.transform);
         WireEscapeManager(spawns);
@@ -1410,25 +1587,41 @@ public static class PrisonLevelLayoutRunner
         float southZ = security.MinZ + 2f;             // 2 m off the exterior south wall
         float northZ = southZ + cellDepth;              // barred front line
 
-        // Partitions between/flanking cells (5 walls).
-        for (int i = 0; i <= cellCount; i++)
+        // Partitions between/flanking cells (5 walls) — cube fallback only; BlenderKit shells include geometry.
+        if (!BlenderKitLayout.IsAvailable)
         {
-            float x = blockWest + i * cellWidth;
-            CreateWallBlock(block.transform, $"SolitaryPartition_{i}",
-                new Vector3(x, wallCy, (southZ + northZ) * 0.5f),
-                new Vector3(WallThickness, wallH, cellDepth), wallMat);
-        }
+            for (int i = 0; i <= cellCount; i++)
+            {
+                float x = blockWest + i * cellWidth;
+                CreateWallBlock(block.transform, $"SolitaryPartition_{i}",
+                    new Vector3(x, wallCy, (southZ + northZ) * 0.5f),
+                    new Vector3(WallThickness, wallH, cellDepth), wallMat);
+            }
 
-        // Back wall closing the 2 m gap line.
-        CreateWallBlock(block.transform, "SolitaryBackWall",
-            new Vector3(security.Cx, wallCy, southZ),
-            new Vector3(cellCount * cellWidth + WallThickness, wallH, WallThickness), wallMat);
+            CreateWallBlock(block.transform, "SolitaryBackWall",
+                new Vector3(security.Cx, wallCy, southZ),
+                new Vector3(cellCount * cellWidth + WallThickness, wallH, WallThickness), wallMat);
+        }
 
         var spawns = new Transform[cellCount];
         for (int i = 0; i < cellCount; i++)
         {
             float cellWestX = blockWest + i * cellWidth;
             float cellCenterX = cellWestX + cellWidth * 0.5f;
+            float cellCenterZ = (southZ + northZ) * 0.5f;
+
+            if (BlenderKitLayout.IsAvailable)
+            {
+                var shell = BlenderKitLayout.PlaceKit("SM_Solitary_Shell_3x4m", block.transform,
+                    new Vector3(cellCenterX, floorTop, cellCenterZ), Quaternion.identity, structural: true);
+                if (shell != null) shell.name = $"SolitaryShell_{i}";
+
+                var solitarySpawn = new GameObject($"SolitarySpawn_{i}");
+                solitarySpawn.transform.SetParent(block.transform, false);
+                solitarySpawn.transform.position = new Vector3(cellCenterX, floorTop + 0.1f, cellCenterZ);
+                spawns[i] = solitarySpawn.transform;
+                continue;
+            }
 
             // Barred front with a centered door gap.
             float segW = (cellWidth - doorWidth) * 0.5f;
@@ -1514,11 +1707,25 @@ public static class PrisonLevelLayoutRunner
             new Vector3(east + band * 0.5f, 6f, cz), new Vector3(band, 12f, outerSpanZ), true, null);
 
         var nightPhases = new[] { PrisonEventType.LightsOut, PrisonEventType.NightRollCall };
-        foreach (var name in new[] { "CafeteriaFloor", "WorkshopFloor" })
+        foreach (var (asmName, label) in new[] { ("ASM_CafeteriaFloor", "Cafeteria"), ("ASM_WorkshopFloor", "Workshop") })
         {
-            var plate = _activePlates.FirstOrDefault(p => p.Name == name);
+            var plateTf = GameObject.Find(asmName)?.transform;
+            if (plateTf != null)
+            {
+                var renderers = plateTf.GetComponentsInChildren<Renderer>();
+                if (renderers.Length > 0)
+                {
+                    var b = renderers[0].bounds;
+                    for (int i = 1; i < renderers.Length; i++) b.Encapsulate(renderers[i].bounds);
+                    CreateRestrictedBox(zonesRoot.transform, "Restricted_" + label + "_Night",
+                        b.center, b.size + Vector3.up * 2f, false, nightPhases);
+                    continue;
+                }
+            }
+
+            var plate = _activePlates.FirstOrDefault(p => p.Name == label + "Floor");
             if (plate.Name == null) continue;
-            CreateRestrictedBox(zonesRoot.transform, "Restricted_" + name.Replace("Floor", "") + "_Night",
+            CreateRestrictedBox(zonesRoot.transform, "Restricted_" + label + "_Night",
                 new Vector3(plate.Cx, 3.7f, plate.Cz), new Vector3(plate.Sx, 6f, plate.Sz), false, nightPhases);
         }
     }
@@ -1540,6 +1747,19 @@ public static class PrisonLevelLayoutRunner
 
     static void GetFacilityOuterBounds(out float west, out float east, out float south, out float north)
     {
+        var bounds = PrisonFacilityInstaller.GetFacilityBounds();
+        if (bounds.size.sqrMagnitude > 1f)
+        {
+            west = bounds.min.x;
+            east = bounds.max.x;
+            south = bounds.min.z;
+            north = bounds.max.z;
+            return;
+        }
+
+        if (_activePlates.Count == 0)
+            _activePlates = BuildDiagramPlates().ToList();
+
         west = float.MaxValue; east = float.MinValue; south = float.MaxValue; north = float.MinValue;
         foreach (var p in _activePlates)
         {

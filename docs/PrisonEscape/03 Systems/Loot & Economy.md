@@ -32,7 +32,7 @@ World seed: `GameManager.worldSeed` (or random) seeds `Random` before spawns —
 - **Nothing pays or charges the wallet yet** — no gameplay code calls `Add`/`SetBalance`; the Coin item is not wired
 - Favors pay **affinity**, not cash ([[Social & Reputation]])
 
-Design intent: cash should become the medium for inmate trading/bribes — needs a spec note before implementation.
+Design intent: cash becomes the medium for inmate trading, guard bribes, and favor fees — **now specced in [[Social Ecosystem & Gangs]]** (§ trading & bribes: trade price formula, daily stock refresh, bribe prices $25/$40/$60, favor costs).
 
 ## Key files
 

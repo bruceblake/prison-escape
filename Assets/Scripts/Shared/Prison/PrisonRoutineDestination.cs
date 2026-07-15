@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Prison
 {
@@ -12,6 +13,9 @@ namespace Prison
         {
             if (tm == null || prisoner == null)
                 return false;
+
+            if (tm.IsHighStakesTransitionWarningActive)
+                return true;
 
             if (tm.IsMandatoryTravelGraceActive)
                 return !prisoner.IsAtRequiredLocation;
@@ -49,12 +53,48 @@ namespace Prison
             if (registry == null)
                 return false;
 
-            Transform stand = registry.GetStandPointForEvent(destEvent, cellIndex);
+            Transform stand = ResolveStandPoint(registry, destEvent, cellIndex, tm, prisoner);
             if (stand == null)
                 return false;
 
             worldPos = stand.position;
+            if (NavMesh.SamplePosition(worldPos, out NavMeshHit hit, 2.5f, NavMesh.AllAreas))
+                worldPos = hit.position;
+
             return !string.IsNullOrEmpty(label);
+        }
+
+        public static bool IsInCellObjective(PrisonEventType evt)
+        {
+            return evt is PrisonEventType.MorningRollCall
+                or PrisonEventType.RollCall
+                or PrisonEventType.LightsOut
+                or PrisonEventType.NightRollCall;
+        }
+
+        static Transform ResolveStandPoint(
+            PrisonLocationRegistry registry,
+            PrisonEventType destEvent,
+            int cellIndex,
+            PrisonTimeManager tm,
+            PrisonerController prisoner)
+        {
+            var cell = registry.GetCell(cellIndex);
+
+            if (destEvent is PrisonEventType.MorningRollCall or PrisonEventType.RollCall)
+            {
+                bool released = MorningRollCallTracker.IsInmateReleasedFromRollCallStand(prisoner);
+                if (!released && cell?.spawnPoint != null)
+                    return cell.spawnPoint;
+            }
+
+            if (destEvent is PrisonEventType.LightsOut or PrisonEventType.NightRollCall)
+            {
+                if (cell?.spawnPoint != null)
+                    return cell.spawnPoint;
+            }
+
+            return registry.GetStandPointForEvent(destEvent, cellIndex);
         }
 
         private static PrisonEventType ResolveDestinationEvent(PrisonTimeManager tm, PrisonerController prisoner, PrisonEventType nextEvent)

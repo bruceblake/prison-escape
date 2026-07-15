@@ -20,7 +20,7 @@ Chat (brainstorm) → Obsidian (spec) → Cursor (implement) → Unity MCP (exec
 
 ### 2. Implement with Cursor
 - Reference the vault note explicitly when starting a chat.
-- One feature per chat / per `feat/...` branch (see [[Git & Branching]]).
+- One feature per chat / per `feat/...` branch in a **worktree** when practical (see [[Git & Branching]]).
 - Prefer **repeatable editor scripts** (menu items under `Prison/...`) over manual scene edits — see [[Editor Tooling]].
 
 ### 3. Execute & verify with Unity MCP
@@ -40,6 +40,19 @@ Chat (brainstorm) → Obsidian (spec) → Cursor (implement) → Unity MCP (exec
 4. **Log milestones** in [[Prison Escape Devlog Dashboard]].
 5. **Cursor enforces this loop** — `.cursor/rules/development-workflow.mdc` (always on). Agents must run the end-of-task checklist, report gaps, and **ask you before commit/push or declaring done**.
 
+## When YOU test vs when YOU commit
+
+| Step | Who | Rule |
+|------|-----|------|
+| Agent verify (compile, MCP, EditMode tests) | Cursor agent | After every code/scene change — automatic |
+| **Playtest in Unity** | **You** | **Before** telling the agent to commit/push anything that affects gameplay, UI, layout, or scenes |
+| Commit / push / PR | Cursor agent | **Only when you explicitly ask in chat** — never implied by "keep going" |
+| Merge to `dev` | You (via PR) | After branch playtest passes |
+
+**Playtest gate:** If you ask to commit without confirming playtest, the agent **must stop and ask** — pass, fail, not yet, or `skip playtest, commit anyway`. The agent does not commit until you answer.
+
+**Doc-only / rules-only changes:** Playtest N/A; agent still asks before commit.
+
 ## End-of-task checklist (agents)
 
 Before closing a session, verify and report:
@@ -47,8 +60,9 @@ Before closing a session, verify and report:
 - [ ] Vault spec + hub notes updated (including per-surface UI docs when UI changes)
 - [ ] [[Systems Overview]] / feature spec status current
 - [ ] Devlog entry added (newest first)
-- [ ] Unity verified (compile / MCP / playtest — note result)
-- [ ] Git: correct branch; user approved commit/push
+- [ ] Unity verified (compile / MCP / tests — agent)
+- [ ] **User playtest** (pass / fail / not yet / waived — **required before commit** for runtime changes)
+- [ ] Git: correct branch; **user explicitly requested commit/push in chat**
 - [ ] `graphify-out/` refreshed after code changes (hook or manual)
 
 ## Where things go

@@ -7,7 +7,12 @@ namespace Prison
         Cell,
         Cafeteria,
         Yard,
-        RollCallArea
+        RollCallArea,
+        Workshop,
+        Showers,
+        Security,
+        Corridor,
+        Solitary
     }
 
     public class PrisonLocationZone : MonoBehaviour
@@ -55,6 +60,11 @@ namespace Prison
             if (zoneType == ZoneType.Cafeteria) return "CAFETERIA";
             if (zoneType == ZoneType.Yard) return "YARD";
             if (zoneType == ZoneType.RollCallArea) return "ROLL CALL";
+            if (zoneType == ZoneType.Workshop) return "WORKSHOP";
+            if (zoneType == ZoneType.Showers) return "SHOWERS";
+            if (zoneType == ZoneType.Security) return "SECURITY";
+            if (zoneType == ZoneType.Corridor) return "CORRIDOR";
+            if (zoneType == ZoneType.Solitary) return "SOLITARY";
             return zoneType.ToString().ToUpperInvariant();
         }
 

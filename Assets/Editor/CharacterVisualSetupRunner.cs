@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
-/// Generates low-poly humanoid rigs/materials and wires them into player, guard, and NPC prefabs.
+/// Wires BlenderKit rigged characters into player, guard, and NPC prefabs.
 /// Menu: Prison / Setup Character Visuals
 /// </summary>
 public static class CharacterVisualSetupRunner
@@ -23,6 +23,7 @@ public static class CharacterVisualSetupRunner
     public static void Run()
     {
         EnsureFolders();
+        BlenderKitCharacterSetup.GenerateCharacterPrefabs();
 
         Material skin = EnsureMaterial("Char_Skin", new Color(0.82f, 0.62f, 0.48f), 0.05f);
 
@@ -30,9 +31,9 @@ public static class CharacterVisualSetupRunner
         {
             (CharacterVisualRole.Player, new RolePalette
             {
-                Clothing = new Color(0.18f, 0.35f, 0.52f),
-                Accent = new Color(0.28f, 0.78f, 0.72f),
-                Boots = new Color(0.15f, 0.16f, 0.2f),
+                Clothing = new Color(0.92f, 0.48f, 0.18f),
+                Accent = new Color(0.95f, 0.95f, 0.92f),
+                Boots = new Color(0.55f, 0.55f, 0.58f),
                 DefaultName = "You"
             }),
             (CharacterVisualRole.Guard, new RolePalette
@@ -61,7 +62,7 @@ public static class CharacterVisualSetupRunner
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log($"[CharacterVisualSetup] Character rigs updated at {CharacterVisualConstants.VisualScale:P0} scale (~{CharacterVisualConstants.ColliderHeight:0.0#}m tall).");
+        Debug.Log($"[CharacterVisualSetup] BlenderKit characters wired (~{CharacterVisualConstants.ColliderHeight:0.0#}m tall).");
     }
 
     private static void EnsureFolders()
@@ -113,6 +114,16 @@ public static class CharacterVisualSetupRunner
             _ => System.Array.Empty<string>()
         };
 
+        GameObject kitSource = role == CharacterVisualRole.Guard
+            ? BlenderKitCharacterSetup.LoadGuardVisual()
+            : BlenderKitCharacterSetup.LoadPrisonerVisual();
+
+        if (kitSource == null)
+        {
+            Debug.LogError("[CharacterVisualSetup] Missing BlenderKit character prefab — run Prison → Assets → Setup BlenderKit first.");
+            return;
+        }
+
         foreach (string path in prefabPaths)
         {
             if (AssetDatabase.LoadAssetAtPath<GameObject>(path) == null)
@@ -129,31 +140,24 @@ public static class CharacterVisualSetupRunner
 
                 string visualName = role == CharacterVisualRole.Player ? "Model" : "BodyVisual";
                 Transform visualRoot = FindOrCreateVisualRoot(instance.transform, visualName);
-                visualRoot.localPosition = new Vector3(0f, CharacterVisualConstants.ColliderCenterY, 0f);
+                visualRoot.localPosition = Vector3.zero;
                 visualRoot.localRotation = Quaternion.identity;
                 visualRoot.localScale = Vector3.one;
 
                 ClearVisualChildren(visualRoot);
-                RemoveLegacyPrimitiveColliders(visualRoot);
 
-                LowPolyCharacterRigBuilder.RigResult rig = LowPolyCharacterRigBuilder.Build(
-                    visualRoot, role, skin, clothing, boots, accent);
+                var kitInstance = (GameObject)PrefabUtility.InstantiatePrefab(kitSource, visualRoot);
+                kitInstance.name = "KitVisual";
+                kitInstance.transform.localPosition = Vector3.zero;
+                kitInstance.transform.localRotation = Quaternion.identity;
+                kitInstance.transform.localScale = Vector3.one;
 
-                var animator = visualRoot.GetComponent<LowPolyLocomotionAnimator>();
-                if (animator == null)
-                    animator = visualRoot.gameObject.AddComponent<LowPolyLocomotionAnimator>();
-                animator.Configure(
-                    rig.AnimRoot,
-                    rig.Torso,
-                    rig.Head,
-                    rig.LeftLegPivot,
-                    rig.RightLegPivot,
-                    rig.LeftKneePivot,
-                    rig.RightKneePivot,
-                    rig.LeftArmPivot,
-                    rig.RightArmPivot,
-                    rig.LeftElbowPivot,
-                    rig.RightElbowPivot);
+                RemapKitMaterials(kitInstance, skin, clothing, boots, accent);
+
+                Object.DestroyImmediate(visualRoot.GetComponent<LowPolyLocomotionAnimator>());
+                Object.DestroyImmediate(visualRoot.GetComponent<BlenderKitLocomotionAnimator>());
+
+                EnsureKitRig(kitInstance);
 
                 EnsureNameLabel(instance.transform, defaultName);
                 FixRoleAttachments(instance.transform, role);
@@ -165,6 +169,52 @@ public static class CharacterVisualSetupRunner
             {
                 PrefabUtility.UnloadPrefabContents(instance);
             }
+        }
+    }
+
+    static void EnsureKitRig(GameObject kitRoot)
+    {
+        var animator = kitRoot.GetComponent<Animator>();
+        if (animator == null)
+            animator = kitRoot.GetComponentInChildren<Animator>();
+        if (animator == null)
+            animator = kitRoot.AddComponent<Animator>();
+
+        if (animator.avatar == null)
+        {
+            string avatarPath = kitRoot.name.Contains("Guard", System.StringComparison.OrdinalIgnoreCase)
+                ? BlenderKitCharacterSetup.GuardPrefab.Replace(".prefab", "_Avatar.asset")
+                : BlenderKitCharacterSetup.PrisonerPrefab.Replace(".prefab", "_Avatar.asset");
+            animator.avatar = AssetDatabase.LoadAssetAtPath<Avatar>(avatarPath);
+        }
+
+        if (animator.runtimeAnimatorController == null)
+            animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(
+                BlenderKitCharacterSetup.ControllerPath);
+        animator.applyRootMotion = false;
+        if (animator.avatar == null)
+            animator.enabled = false;
+
+        if (kitRoot.GetComponent<BlenderKitLocomotionAnimator>() == null)
+            kitRoot.AddComponent<BlenderKitLocomotionAnimator>();
+    }
+
+    static void RemapKitMaterials(GameObject kitRoot, Material skin, Material clothing, Material boots, Material accent)
+    {
+        foreach (var renderer in kitRoot.GetComponentsInChildren<Renderer>(true))
+        {
+            var mats = renderer.sharedMaterials;
+            for (int i = 0; i < mats.Length; i++)
+            {
+                string n = mats[i]?.name ?? "";
+                if (n.Contains("Skin")) mats[i] = skin;
+                else if (n.Contains("Boot")) mats[i] = boots;
+                else if (n.Contains("Accent") || n.Contains("Stripe") || n.Contains("Band")) mats[i] = accent;
+                else if (n.Contains("Clothing") || n.Contains("Prisoner") || n.Contains("Guard") || n.Contains("Uniform"))
+                    mats[i] = clothing;
+            }
+
+            renderer.sharedMaterials = mats;
         }
     }
 
@@ -279,12 +329,7 @@ public static class CharacterVisualSetupRunner
         Object.DestroyImmediate(visualRoot.GetComponent<MeshFilter>());
         Object.DestroyImmediate(visualRoot.GetComponent<MeshRenderer>());
         Object.DestroyImmediate(visualRoot.GetComponent<LowPolyLocomotionAnimator>());
-    }
-
-    private static void RemoveLegacyPrimitiveColliders(Transform visualRoot)
-    {
-        foreach (var collider in visualRoot.GetComponents<Collider>())
-            Object.DestroyImmediate(collider);
+        Object.DestroyImmediate(visualRoot.GetComponent<BlenderKitLocomotionAnimator>());
     }
 
     private static void RemoveLegacyRootAccessories(Transform root, CharacterVisualRole role)

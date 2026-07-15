@@ -24,8 +24,8 @@ The Obsidian vault at **`docs/PrisonEscape/`** is the **canonical source of trut
 ## When updating design
 
 - Update Obsidian notes first (or together with code), then align Unity assets.
-- After every work session, also update the **devlog** (`Prison Escape Devlog Dashboard.md`) and run the full checklist in **development-workflow** (`.cursor/rules/development-workflow.mdc`).
-- If you change layout or features in Unity, update the vault note — do not only remind the user.
+- After every work session, also update the **devlog** and run the checklist in **development-workflow** (`.cursor/rules/development-workflow.mdc`).
+- Agents **must not commit or push** unless you explicitly request it **and** the playtest gate is pass, N/A, or explicitly waived in chat.
 
 ## Vault location
 

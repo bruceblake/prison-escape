@@ -1,61 +1,52 @@
 # Social & Reputation
 
-Per-NPC affinity in [-100, +100]; prison-wide reputation is the average across registered inmates. Social standing exists to unlock help for escapes (favors, perks, allies).
+> ⚠️ **v1 is deprecated — full replacement specced.** The design of record is **[[Social Ecosystem & Gangs]]** (two-axis Respect/Trust relationships, NPC memory & gossip, gangs + membership, trading & bribes, two-way favors, snitching, guard personalities). Everything below documents what is *currently implemented* and is **slated for teardown** per the spec's teardown table. Do not extend v1.
 
-Design depth doc: `Assets/Docs/Prison_Social_And_Reputation_System.md` (v1.2 — secondary to this vault).
+## v1 — what exists in code today (to be removed/reworked)
 
-## Affinity math (`SocialMath`, fully unit-tested)
+Per-NPC affinity in [-100, +100]; prison-wide reputation is the average across registered inmates.
+
+### Affinity math (`SocialMath`, unit-tested)
 
 | Action | Base delta |
 |---|---|
-| Greeting | **+2** |
-| Favor (fallback; usually `affinityReward`) | **+15** |
-| Gift (default) | **+5** |
-| Betrayal / Theft / Snitch | **-50** (or personality `betrayalPenalty`) |
+| Greeting | +2 |
+| Favor (fallback; usually `affinityReward`) | +15 |
+| Gift (default) | +5 |
+| Betrayal / Theft / Snitch | -50 (or personality `betrayalPenalty`) |
 
-Modifiers:
-- **Favored gift** × 2 (item in the NPC's `favoredItems`)
-- **Same-category gift repeat** × 0.5 (favored items exempt)
-- **Positive soft cap:** `effective = base × gainMultiplier × (1 − affinity/100)` — gains shrink as affinity rises; negatives are never capped
-- Final clamp to [-100, +100]
+Modifiers: favored gift ×2 · same-category repeat ×0.5 · **positive soft cap** `effective = base × gainMultiplier × (1 − affinity/100)` (negatives never capped) · clamp to [-100, +100].
 
-## Reputation tiers (average affinity)
+> The soft-cap curve is the one piece of v1 math that **survives into v2** (moves into `RelationshipMath`).
 
-| Tier | Threshold |
+### Reputation tiers (average affinity)
+
+Outsider < 25 · Associate ≥ 25 · Respected ≥ 50 · Kingpin ≥ 75. Thresholds serialized on `SocialManager`. Tier names/thresholds are **kept** in v2; the score computation changes (standing average + gang rank bonus).
+
+### v1 mechanics
+
+- Greeting cooldown: one greet per NPC per phase
+- One-way favors: NPCs roll a `FavorOfferDefinition` per phase; deliver item → `affinityReward`
+- Interaction priority (`PrisonerSocialPresenter`): deliver favor → "needs item" → "Busy…" → Greet
+- Gift/Betrayal/Theft/Snitch were API-only (no in-world UI); no personality or favor assets were ever authored
+
+### v1 key files and their fate (from the [[Social Ecosystem & Gangs#Teardown of v1 (what "get rid of everything" means)|teardown table]])
+
+| File | Fate |
 |---|---|
-| Outsider | < 25 |
-| Associate | ≥ 25 |
-| Respected | ≥ 50 |
-| Kingpin | ≥ 75 |
+| `Assets/Scripts/Shared/Prison/SocialMath.cs` | Delete (soft cap moves to `RelationshipMath`) |
+| `Assets/Scripts/Shared/Prison/SocialManager.cs` | Delete |
+| `Assets/Scripts/Shared/Prison/FavorOfferDefinition.cs` | Delete (→ directional `FavorDefinition`) |
+| `Assets/Scripts/Shared/Prison/NPCPersonalityData.cs` | Delete (→ `ArchetypeDefinition` + traits) |
+| `Assets/Scripts/Shared/Prison/PrisonerSocialPresenter.cs` | Rework → Talk Menu entry point |
+| `PrisonSocialRowUI` / `AffinityFloatPopup` | Delete / keep-retitle |
+| `Assets/Scripts/Editor/SocialBalanceSimulatorWindow.cs` | Rebuild for v2 math |
+| `Assets/Docs/Prison_Social_And_Reputation_System.md` | Superseded by the vault spec |
 
-Thresholds serialized on `SocialManager`. **Personality perk** unlocks per-NPC at affinity ≥ **50** (`OnPersonalityPerkUnlocked` event — Broker/Narc/Bully perk handlers not yet implemented).
+## v2 — where the system is going
 
-## Mechanics
+See **[[Social Ecosystem & Gangs]]** for the full design. One-paragraph summary: every prisoner and guard gets a generated identity, archetype, and five personality traits; relationships are sparse two-axis records (**Respect** + **Trust**) between all actors; NPCs hold a decaying **memory** of direct, witnessed, and gossiped events; two **gangs** (Vipers, Syndicate) claim territory and offer a membership ladder with initiation; the Talk Menu provides chat/intel, gifts, **trading** (wallet goes live), **favors both ways**, intimidation, and snitching; snitches feed guard **tips** that trigger targeted shakedowns; corrupt guards take **bribes**.
 
-- **Greeting cooldown:** one successful greet per NPC per schedule phase (anti-spam)
-- **Favors:** on start/phase change, each NPC may roll a valid `FavorOfferDefinition` (filtered by phase + personality). Deliver the required item → consume 1 from inventory → `affinityReward` (default +15). Unfinished favors re-roll next phase.
-- **Interaction priority** (`PrisonerSocialPresenter`): Deliver favor item → "needs item" → "Busy…" (cooldown) → Greet
+This note will be rewritten as the implemented-system reference once v2 milestones land.
 
-## UI
-
-- `PrisonSocialRowUI` — affinity bar, fill = (affinity+100)/200, snitch hint text
-- `AffinityFloatPopup` — +N float popup (1.1 s)
-- `SocialBalanceSimulatorWindow` — **Tools → Prison → Social Balance Simulator** editor preview of the exact math
-
-## Implementation gaps (facts)
-
-- Gift / Betrayal / Theft / Snitch are **API-ready but have no in-world UI** — only Greet and Favor delivery are playable
-- **No `FavorOfferDefinition` or `NPCPersonalityData` assets authored yet** — content work needed
-- Global reputation averages **registered** prisoners (not normalized to 8 as the old doc suggests)
-
-## Key files
-
-| File | Role |
-|---|---|
-| `Assets/Scripts/Shared/Prison/SocialMath.cs` | Pure math (tested) |
-| `Assets/Scripts/Shared/Prison/SocialManager.cs` | Orchestration singleton |
-| `Assets/Scripts/Shared/Prison/FavorOfferDefinition.cs` | Favor SO |
-| `Assets/Scripts/Shared/Prison/PrisonerSocialPresenter.cs` | In-world interaction |
-| `Assets/Scripts/Editor/SocialBalanceSimulatorWindow.cs` | Balance tool |
-
-Related: [[Prisoner AI & NPCs]] · [[Inventory & Items]] · [[Time & Schedule]] · [[Testing & QA]]
+Related: [[Prisoner AI & NPCs]] · [[Guard AI]] · [[Inventory & Items]] · [[Loot & Economy]] · [[Time & Schedule]] · [[Testing & QA]]

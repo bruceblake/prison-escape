@@ -60,7 +60,7 @@ Hub (cafeteria center) at world `(-26, -98)`. Floor plates sync their surface Y 
 - **Cell wing keep-out:** layout walls on `CellWingFloor_West` / `CellWingFloor_East` **must not intersect** jail cell volumes (spawn-centered 4×5.5 m keep-out). **Cell shell cleanup:** each build strips legacy duplicated wing-sized cell pieces (`LeftWall`/`RightWall`/`BackWall` at 20 m, duplicate `(1)` children) and rebuilds proper 4×5.5 m back walls + shared row/column partitions from spawn points.
 - **Roofs:** every plate **except the Courtyard** (open air for the fence escape). Roof slabs overhang exterior walls by 0.5 m; **soffit lips** on exterior edges hide wall/roof gaps.
 - **Lighting:** grid of ceiling fixtures per room/corridor + one light per cell (~370 point lights after density pass); warm color (1, 0.95, 0.85)
-- **Furniture:** scratch-built from cubes + prison materials (no prefabs) — cafeteria tables/serving line, shower stalls/sinks/benches, workshop benches/shelves, security desk/monitor bank, courtyard exercise equipment
+- **Furniture / structure:** `PrisonFacility.fbx` monolith via `PrisonFacilityInstaller` (see [[Blender Asset Kit]])
 
 ## Solitary confinement block
 
@@ -88,4 +88,4 @@ This note is the **source of truth for the map**. To change the layout:
 3. Re-run **Prison → Layout → Run Full Build**
 4. Never hand-move generated floors/walls — they are wiped on rebuild
 
-Related: [[Game Vision & Core Loop]] · [[Escape Routes & Mechanics]] · [[Editor Tooling]]
+Related: [[Game Vision & Core Loop]] · [[Escape Routes & Mechanics]] · [[Editor Tooling]] · [[Blender Asset Kit]]

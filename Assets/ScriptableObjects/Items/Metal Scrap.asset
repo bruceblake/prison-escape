@@ -19,4 +19,4 @@ MonoBehaviour:
   category: 0
   rarity: 1
   weightMultiplier: 1
-  worldPrefab: {fileID: 0}
+  worldPrefab: {fileID: 2951151963346062262, guid: fee4e0266adc6ca45bb54dda1934f21a, type: 3}

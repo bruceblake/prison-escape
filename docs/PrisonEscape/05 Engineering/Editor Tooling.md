@@ -54,6 +54,9 @@ Layout truth lives in `BuildDiagramPlates()` — keep in sync with [[Prison Layo
 | Tool | Menu / usage |
 |---|---|
 | `PrisonOverhaulRunner` | **Prison → Fix Cell Doors & UI** (legacy door replacement) |
+| `PrisonDoorAndWaypointFixer` | **Prison → Fix Cell Doors & Waypoints** — canonical door realign (dedupes stacked doors from the two build paths), creates missing cell stand points, snaps patrol waypoints to NavMesh, re-wires registry, saves |
+| `PrisonPolishPass` | **Prison → Polish Pass** — convex colliders on all props, procedural concrete/tile/metal textures, extra props, trilight ambient, NavMesh rebake, guard patrol routes (perimeter/inner/wings) from the plate table |
+| `PrisonBatchRunner` | `RunFullSetup` — headless chain for `Unity.exe -batchmode -quit -executeMethod` |
 | `SocialBalanceSimulatorWindow` | **Tools → Prison → Social Balance Simulator** — preview affinity math |
 | `PrisonNavMeshValidator` | Component context menu **Validate Prison NavMesh Now** — checks stand points sit on NavMesh |
 

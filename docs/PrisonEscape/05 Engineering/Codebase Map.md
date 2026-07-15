@@ -42,7 +42,17 @@ No `.asmdef` files — everything compiles into `Assembly-CSharp` (deliberate: z
 
 ## Key singletons
 
-`PrisonTimeManager` · `PrisonLocationRegistry` · `MorningRollCallTracker` · `SocialManager` · `PlayerWallet` · `NetworkManager` · `GameManager` (exec order -1000)
+`PrisonTimeManager` · `PrisonLocationRegistry` · `MorningRollCallTracker` · `FormalCountMonitor` (midday/evening count → lockdown) · `SocialManager` · `PlayerWallet` · `NetworkManager` · `GameManager` (exec order -1000)
+
+## Added 7/15/2026 (realistic schedule + scene repair)
+
+| File | Role |
+|---|---|
+| `Assets/Scripts/Shared/Prison/FormalCountMonitor.cs` | Cell-count mismatch → `RaiseLockdown` |
+| `Assets/Editor/PrisonDoorAndWaypointFixer.cs` | *Prison → Fix Cell Doors & Waypoints* — door realign/dedupe, stand points, waypoint snap, registry, save |
+| `Assets/Editor/PrisonPolishPass.cs` | *Prison → Polish Pass* — prop colliders, procedural textures, extra props, ambient, NavMesh rebake, patrol route generation |
+| `Assets/Editor/PrisonBatchRunner.cs` | `RunFullSetup` — batchmode chain (character visuals → polish → fixer → save) |
+| `Assets/Animations/Characters/Char_Locomotion_{Prisoner,Guard}.controller` | Per-role locomotion + Jump (generated) |
 
 ## Knowledge graph
 

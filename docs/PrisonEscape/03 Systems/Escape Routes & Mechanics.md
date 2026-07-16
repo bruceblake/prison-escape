@@ -1,6 +1,6 @@
 # Escape Routes & Mechanics
 
-The main goal of the game. The *ingredients* of escape are implemented; the **win condition is not** (top roadmap item).
+The main goal of the game. Route *mechanics* and the **escape completion win/lose keystone (v1)** are implemented on `dev`; vent corridors and fence cut geometry are still needed to make the boundary reachable ([[Roadmap & Priorities]]).
 
 ## Designed routes (Minimum Security)
 

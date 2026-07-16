@@ -5,11 +5,12 @@ NPC inmates follow the daily routine via NavMesh; the player follows the same co
 ## NPC routine (`PrisonerAI`)
 
 1. Register as cell occupant; subscribe to schedule changes
-2. On each phase change → get stand point from the registry → `SetDestination`
-3. Compliant when within **0.5 m** (`arriveDistance`) of the stand point, or when travel grace / post-shakedown release applies
-4. After morning shakedown clears their cell → path toward the **next** phase destination early
-5. During `WorkProgram` phases the registry routes everyone to the Workshop zone (per-inmate kitchen/laundry/classroom assignments: follow-up — [[Locations, Zones & Cells]])
-6. When arrested: agent disabled; `SendToCell` teleports to cell spawn, releases after **1 s**
+2. On each phase change → resolve a **deterministic, spread** stand position from the registry (`GetStandPointForIndex` + lateral offset by `cellIndex`) → `SetDestination`
+3. Compliant when within **0.85 m** (`arriveDistance`) of the resolved stand, or when travel grace / post-shakedown release applies. Near-zero velocity close to the stand also counts (crowd NavMesh never hits the exact point).
+4. **On arrival:** `NavMeshAgent.isStopped = true` + `ResetPath` so idle NPCs stand still instead of circling a shared stand
+5. After morning shakedown clears their cell → path toward the **next** phase destination early
+6. During `WorkProgram` phases the registry routes everyone to the Workshop zone (per-inmate kitchen/laundry/classroom assignments: follow-up — [[Locations, Zones & Cells]])
+7. When arrested: agent disabled; `SendToCell` teleports to cell spawn, releases after **1 s**
 
 ## Player compliance (`PrisonerController`)
 
@@ -23,7 +24,7 @@ NPC inmates follow the daily routine via NavMesh; the player follows the same co
 
 > ⚠️ **`NPCPersonalityData` is deprecated** (no assets were ever authored) and will be **deleted** in the social overhaul. Its replacement: every NPC (prisoner *and* guard) gets a generated `NPCIdentity` — name, archetype (Shot-Caller, Soldier, Hustler, Old-Timer, Bruiser, Snitch, Loner), five rolled trait axes (Aggression, Loyalty, Greed, Sociability, Nerve), and gang affiliation — all seeded from `worldSeed`. Full design: **[[Social Ecosystem & Gangs]]**.
 
-The overhaul also adds ambient social behavior on top of the routine: territory warn-offs, ambient chats/arguments between NPCs during social phases (`SocialSimulationTicker`), and interaction via the Talk Menu instead of the v1 greet/favor presenter.
+The overhaul also adds ambient social behavior on top of the routine: territory warn-offs, ambient chats/arguments between NPCs during social phases (`SocialSimulationTicker`), and interaction via the [[Talk Menu & NPC Profile]] instead of the v1 greet/favor presenter. Player-facing web: [[Social Dossier — Relationships & Gangs]].
 
 ## Spawning
 

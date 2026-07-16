@@ -2,6 +2,44 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/16/2026 (social ecosystem v3 — vault design pass)
+- **Research + vault expand** — deep pass on real prison social order (inmate code → gang governance / Skarbek), **The Escapists / Escapists 2** (Opinion, profile tabs, gifts, favors, trade markers, name colors; no real gangs), and **Back to Dawn** (exclusive gangs, rapport/gifts, relationship + faction UIs, gang shops). Synthesis locked into [[Social Ecosystem & Gangs]] **v3**.
+- **Feature spec v3** — Standing bands Enemy→Confidant; complete gang membership (Outsider→Trusted, exclusive join, Traitor lockout, Syndicate under-bed store); career carry vs local reset; open questions closed (intimidation fail = report risk; snitch discovery = gossip + Old-Timer; cash = Hustlers + favors + light job).
+- **New UI notes** — [[Talk Menu & NPC Profile]] (tabbed real-time overlay, overhead `!`/coin, band-tinted nameplates) · [[Social Dossier — Relationships & Gangs]] (notebook Relationships + Gangs pages — full visual social web).
+- **Synced** — [[Social & Reputation]], [[UI & HUD]], [[Notebook & Crafting UI]], [[Status & World UI]], [[Inventory & Items]], [[Loot & Economy]], [[Systems Overview]], [[Prisoner AI & NPCs]], [[Home]], [[Roadmap & Priorities]]. Docs-only — no code.
+- **Next:** implement on `feat/social-ecosystem` (worktree) starting M1 Foundation when you greenlight.
+
+## 7/15/2026 (career ladder — design specced, D0)
+- **Prison Career Ladder specced** — new primary design doc [[Prison Career Ladder]]: 9-facility career (County → State ×3 → Federal ×5) + Dev Sandbox (the current Min-Sec map leaves the career path); **escape = caught & transferred**, never freedom until Federal ADX (career win, world stays playable); County alternatively serves a 7-day sentence; named **world saves** with global carry (cash, respect, gang, stats, recipes) vs full local reset per facility entry — farming easier prisons is intended play; full difficulty/economy curve table + soft Fed-tier transfer gates; JSON save model + per-visit seeds.
+- **Feature specs** — [[World Saves & Start Screen]] (CareerWorld JSON store, MainMenu → worlds list + prison-select hub, black-silhouette locked slots) and [[Facility Transfer & Graduation]] (boundary/sentence → transfer ceremony, `EscapeEndScreenUI` rewrite, state-change ordering, revisit reset).
+- **Synced** — [[Game Vision & Core Loop]] (ladder + "time investment is strategy" pillar; stale escape-completion gap fixed), [[World Rules]] (rule 22 annotated; career rules 27–33 added as specced), [[Escape Completion System]] (v2 rewrite callout), [[Screens & Menus]], [[Home]], [[Roadmap & Priorities]] (career ladder = Now #2; Later list updated).
+- **Next:** M1 `feat/career-world-saves` on approval. Docs-only — no code touched.
+
+## 7/15/2026 (night — playtest: idle, guards, lighting, HUD)
+- **NPC idle circling** — stand points are now deterministic + laterally spread by `cellIndex`; on arrival `PrisonerAI` stops the NavMeshAgent (`isStopped` + `ResetPath`) so inmates hold still instead of repathing/circling crowded meal/yard stands. See [[Prisoner AI & NPCs]].
+- **Guards** — spawn table already had 4 rows; spawns now **snap to NavMesh**, normalize empty shift windows to always-on, and log each spawn so missing guards are diagnosable. See [[Guard AI]].
+- **Flat look** — root cause: empty/broken `PrisonPostProcess` profile + ~222 BlenderKit `Light_*` meshes with **no Light components** (only 2 directionals). New menu **Prison → Lighting/Configure Post-Process + Fixture Lights** (mild bloom, ACES, color grade; thinned realtime point lights on fixtures). Apply in Editor after domain reload. See [[Editor Tooling]].
+- **HUD** — removed ObjectiveWaypointUI bottom strip over the hotbar (kept world beacon/breadcrumbs); moved `CurrentLocationHUD` to **top-right**. Duplicate EventSystem already cleaned in-scene; `HudBootstrap` still dedupes at runtime. See [[Status & World UI]] · [[UI & HUD]].
+- **Graphify** — CLI unavailable this session; graph noted stale.
+
+## 7/15/2026 (evening — walk cycle, fit doors, nav, guide)
+- **Walk cycle axis** — procedural legs were swinging on local Z (sideways). Now auto-picks the sagittal axis (usually local X); smoothed speed cuts jitter. See [[Character Visuals]].
+- **Player/NPC fit** — `VisualScale` 1.3→1.0, capsule radius **0.38 m** so characters fit ~1.2 m cell doors. Re-run **Prison → Setup Character Visuals**.
+- **Cell doors schedule** — closed for night **and** cell counts (`MorningRollCall` / midday / evening); open from **Breakfast** onward (meals / work / free time). See [[Locations, Zones & Cells]].
+- **NavMesh** — rebake prefers PhysicsColliders + 0.05 m voxels so agents don't path through 0.2 m walls. **Prison → Polish Pass**.
+- **World objective guide** — yellow destination beacon + moving next-corner marker + path breadcrumbs (not a static HUD-only arrow). See [[Status & World UI]].
+
+## 7/15/2026 (evening — cell exit + NPC stance)
+- **Cell doors exit path** — root cause of blocked cell doors: Play Mode `Start` re-captured a door left at the **open** pose as `closedLocalPosition`, then slid further by `openOffset` (~1.35 m), leaving bars across the doorway. Fix: restore authored FBX poses, bake closed with `hasAuthoredClosedPosition`, snap scene doors back to closed after setup. Shell-center align remains legacy-only. Verified in Play: closed stays authored; day phase reaches true open; ray from spawn through doorway is clear. See [[Locations, Zones & Cells]].
+- **NPC frozen mid-stride** — procedural locomotion preferred; standing rest from Idle sample / L–R average so idle is not bind-pose walk. Re-ran **Prison → Setup Character Visuals**. See [[Character Visuals]].
+- **HUD** — routine bar fill uses a solid 32×32 sprite (not `whiteTexture`); objective compass uses a chevron sprite; in-cell objectives say `WAIT IN …`. See [[UI & HUD]].
+- **Apply in Editor:** scene already saved with 16/16 doors at authored closed. If doors drift again: **Prison → Fix Cell Doors & Waypoints** (edit mode, not while Playing).
+
+## 7/15/2026 (feature integration — all branches → `dev`)
+- **Feature branches integrated into `dev`** — audited all open `feat/*` branches. `feat/escape-completion`, `feat/blenderkit-assets`, and `feat/realistic-schedule` were already on `dev`. **Cherry-picked** the ProBuilder rebuild pipeline from `feat/prison-probuilder-rebuild` (`PrisonProBuilderRebuildRunner`, `PrisonLayoutRebuildRunner`, `PrisonLayoutSpec`/`Validator`, layout validation tests, `SpawnPlacementUtility`). Pulled `PrisonLootSetupRunner` from `feat/prison-level-layout-and-loot`. Did **not** wholesale-merge `feat/low-poly-character-visuals` or old layout scene commits — superseded by BlenderKit characters + facility install. See [[Git & Branching]] integration table.
+- **Vault synced** — [[Roadmap & Priorities]] (escape completion → done on `dev`; social v2 is now #1), [[Systems Overview]], [[Escape Routes & Mechanics]], [[Escape Completion System]], [[Home]], [[Editor Tooling]], [[Testing & QA]] (146 tests), [[Content Inventory]].
+- **Scene polish in progress** — cinderblock/concrete textures, character materials, animation controllers, prefabs (local WIP on `dev`).
+
 ## 7/15/2026 (playtest fixes — HUD, NPCs, doors, navmesh, textures)
 - **Routine bar simplified** — the top bar now shows **one** plain-language, colour-coded instruction ("Go to the Cafeteria · 29m", "You're in the right place", "Free time — go anywhere", "Wait in your cell for roll call", "Out of position — … now") instead of a jargon status word plus a "HERE TO DEST" GPS fragment. Phase title lost its brackets. See [[UI & HUD]] · [[Routine & Schedule HUD]].
 - **Waypoint ↔ top-bar consistency** — `PrisonRoutineDestination.ResolveActiveDestination` is now the single source both the floating objective waypoint and the routine bar read, so they can't disagree; travel grace targets the **current** phase venue (was wrongly showing the next phase). New `PrisonRoutineLabels.GetInstruction`.

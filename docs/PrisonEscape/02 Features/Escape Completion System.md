@@ -1,8 +1,11 @@
 # Escape Completion System
 
 **Status:** Implemented (v1) — 7/14/2026. Note: the boundary is only *reachable* once escape route geometry (vent corridors, fence cut) exists; the win/lose systems are live.
+
+> [!warning] v2 rewrite specced (7/15/2026)
+> Under the career ladder, crossing the boundary no longer means freedom — you are **caught and transferred** to the next facility ("CAUGHT — TRANSFERRED" ceremony; "CAREER CLEARED" only at Federal ADX). The **capture path below (restricted zones → solitary → suspicion) is unchanged**; only the win path and end screen are rewritten. See [[Prison Career Ladder]] · [[Facility Transfer & Graduation]].
 **System notes:** [[Escape Routes & Mechanics]] · [[Security, Heat & Alerts]] · [[Guard AI]] · [[Prison Layout — Minimum Security]]
-**Branch:** `feat/escape-completion`
+**Branch:** merged to `dev` (7/14/2026)
 **Brainstormed:** 7/14/2026 (chat) — decisions below are final unless overridden here.
 
 ## What it is
@@ -20,9 +23,10 @@ Escape is the game's stated goal but currently has no completion state. This fea
 - **Anytime escape:** no phase restriction. Opened routes stay open (unscrewed vents stay unscrewed). Guards are the only gate.
 - **No progress UI** — the player tracks their own plan.
 
-### End screen (win)
+### End screen (win) — *v1, superseded by the transfer ceremony*
 - Stats: in-game days to escape, real play time, times arrested, solitary stays, items crafted, final reputation tier.
 - Ladder framing: "MINIMUM SECURITY: ESCAPED → Next stop: Medium Security." Button returns to main menu (until Medium exists).
+- **v2:** becomes the transfer/graduation ceremony — headline per trigger, ledger beat (cash carried, respect gained, inventory confiscated), next-facility unlock card ([[Facility Transfer & Graduation]] § The transfer ceremony).
 
 ### Restricted zones
 - New `RestrictedZone` volumes. Two flavors:

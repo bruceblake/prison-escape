@@ -40,10 +40,12 @@ Per-cell serializable transforms + radius:
 
 Barred doors slide with the schedule:
 
-- **Open during** all day phases (05:00–21:00): Morning Count, Breakfast, Lunch, Dinner, Free Time, `WorkProgram`, `MiddayCount`, `EveningCount`, legacy Roll Call
-- **Closed during** Final Lockdown & Lights Out (21:00–05:00): `NightRollCall`, `LightsOut`
-- **Alignment** is now a single canonical path (`PrisonFacilityInstaller.AlignDoorToCellWall` + 6 m `ComputeDoorOpenOffsetLocal`) used by both the facility installer and the modular kit; **Prison → Fix Cell Doors & Waypoints** realigns every door, creates missing cell stand-point children, snaps patrol waypoints to the NavMesh, re-wires the registry, and saves the scene
-- Slide: local `openOffset` default **(0, 0, 6)**, `slideSpeed` **3**/s lerp
+- **Open during** movement blocks: Breakfast, Lunch, Dinner, Free Time, `WorkProgram`
+- **Closed during** night lock-in **and cell counts**: `LightsOut`, `NightRollCall`, `MorningRollCall` / legacy `RollCall`, `MiddayCount`, `EveningCount` — doors unlock when Breakfast begins after morning count
+- **Pose** — BlenderKit facility doors keep their **authored FBX local TRS** (`RestoreAuthoredDoorPose`). Shell-center `AlignDoorToCellWall` is legacy/tests only — it drifted doors one bay and flipped yaw.
+- **Closed pose** is baked by the installer/fixer and marked authored so Play Mode `Start` does **not** re-capture a left-open door as closed (that bug blocked cell exits).
+- **Prison → Fix Cell Doors & Waypoints** restores authored poses, wires controllers (~1.35 m slide, capped ~1.6 m), creates missing stand points, snaps patrol waypoints, re-wires the registry, and saves.
+- Slide: local `openOffset` default **~1.35 m** along the wall, `slideSpeed` **3**/s lerp
 - Fully covered by EditMode tests (see [[Testing & QA]])
 
 ## The 16 cells

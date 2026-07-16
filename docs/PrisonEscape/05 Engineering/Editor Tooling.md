@@ -2,6 +2,27 @@
 
 Repeatable scene generation and balance tools. **Rule: change the tool and re-run — never hand-edit generated objects** (they're wiped on rebuild).
 
+## ProBuilder rebuild pipeline (`PrisonProBuilderRebuildRunner.cs`, `PrisonLayoutRebuildRunner.cs`)
+
+Alternative layout path for enclosed-shell geometry. See `Assets/Docs/Prison_Rebuild_Master_Plan.md`.
+
+Menu **Prison → Rebuild/**:
+
+| Item | Action |
+|---|---|
+| 0 — Strip Legacy Outer Shell | Archive procedural shell pieces; restore cell floors |
+| 1 — Create ProBuilder Workspace | Room guide volumes from `PrisonLayoutAnchors` |
+| 2 — Wire Gameplay Integration | Delegates to `PrisonLayoutRebuildRunner.WireGameplayIntegration()` |
+| 3 — Validate Layout | `PrisonLayoutValidator` scene checks |
+
+**Prison → Rebuild Prison Layout** (`PrisonLayoutRebuildRunner`) — v4 enclosed shell: corridor tunnels, wing rooms, yard gate, cafeteria wiring, cell spawn fixes. Calls `PrisonLootSetupRunner.PlaceWorldSpawnNodesFromLayout()` at the end.
+
+**Prison → Setup Items & World Loot** (`PrisonLootSetupRunner`) — world pickup prefab, loot tables, item network IDs, `ItemSpawnNode` placement.
+
+`PrisonLayoutSpec` + `PrisonLayoutValidator` + `PrisonLayoutValidationTests` (EditMode) keep anchors and room bounds aligned with [[Prison Layout — Minimum Security]].
+
+> **Note:** `dev`’s primary build path is still **BlenderKit Install Prison Facility** (above). ProBuilder is the documented alternate when iterating on shell geometry without re-exporting Blender.
+
 ## BlenderKit pipeline (`BlenderKitAssetSetup.cs`, `BlenderKitCatalog.cs`)
 
 Menu **Prison → Assets →**:
@@ -55,7 +76,7 @@ Layout truth lives in `BuildDiagramPlates()` — keep in sync with [[Prison Layo
 |---|---|
 | `PrisonOverhaulRunner` | **Prison → Fix Cell Doors & UI** (legacy door replacement) |
 | `PrisonDoorAndWaypointFixer` | **Prison → Fix Cell Doors & Waypoints** — canonical door realign (dedupes stacked doors from the two build paths), creates missing cell stand points, snaps patrol waypoints to NavMesh, re-wires registry, saves |
-| `PrisonPolishPass` | **Prison → Polish Pass** — convex colliders on all props, procedural concrete/tile/metal textures, extra props, trilight ambient, NavMesh rebake, guard patrol routes (perimeter/inner/wings) from the plate table |
+| `PrisonPolishPass` | **Prison → Polish Pass** — convex colliders on all props, procedural concrete/tile/metal textures, extra props, trilight ambient, NavMesh rebake, guard patrol routes (perimeter/inner/wings) from the plate table. **Prison → Lighting/Configure Post-Process + Fixture Lights** fills `PrisonPostProcess` (bloom/grading/ACES) and attaches realtime PointLights to a thinned subset of BlenderKit `Light_*` meshes (visual-only fixtures otherwise leave the level flat). |
 | `PrisonBatchRunner` | `RunFullSetup` — headless chain for `Unity.exe -batchmode -quit -executeMethod` |
 | `SocialBalanceSimulatorWindow` | **Tools → Prison → Social Balance Simulator** — preview affinity math |
 | `PrisonNavMeshValidator` | Component context menu **Validate Prison NavMesh Now** — checks stand points sit on NavMesh |

@@ -27,7 +27,7 @@ What exists in `Assets/` — scenes, prefabs, materials, models. See [[Item Cata
 ## Materials
 
 ### Prison set (`Materials/Prison/` + `Accents/`)
-Concrete walls (0.28, 0.27, 0.25) / ceilings / floor tile / cafeteria tile, metal bars, shelf/sink metal, porcelain, bed mattress/blanket/pillow, emissive light fixture (~2.5× warm emission), accents: caution yellow, panel white, security red, sign blue.
+Concrete walls (0.28, 0.27, 0.25) / ceilings / floor tile / cafeteria tile, metal bars, shelf/sink metal, porcelain, bed mattress/blanket/pillow, emissive light fixture (~2.5× warm emission), accents: caution yellow, panel white, security red, sign blue. Procedural **cinderblock** (`T_CinderBlockWall`) and **concrete grain** (`T_ConcreteGrain`) textures applied via Polish Pass (7/15).
 
 ### Character set (`Materials/Characters/`)
 Shared skin (0.82, 0.62, 0.48); per-role palettes:

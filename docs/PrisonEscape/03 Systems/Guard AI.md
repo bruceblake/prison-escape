@@ -6,7 +6,7 @@ Guards patrol, detect non-compliant inmates, escort them back to their cells, ve
 
 ## Duties & spawn roles
 
-Configured via `GameManager.guardSpawnTable` (`GuardSpawnEntry`: name, spawn point, waypoints, role, `onDutyDuring[]` phases — empty = always on duty).
+Configured via `GameManager.guardSpawnTable` (`GuardSpawnEntry`: name, spawn point, waypoints, role, `onDutyDuring[]` phases — empty/`null` = always on duty). Spawns **snap to NavMesh** (6 m sample) so off-mesh / sunk spawn points still place a visible, pathable guard.
 
 | Role | Behavior |
 |---|---|

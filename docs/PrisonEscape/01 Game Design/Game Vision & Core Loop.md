@@ -6,16 +6,19 @@ A **prison-escape simulation** built in **Unity 6 (URP)**. Single-player core wi
 
 **The main goal is to ESCAPE the prison.** Escape is the intended primary objective — though the player is never *forced* to escape and can keep living the prison life. Every other system (schedule compliance, social standing, crafting, contraband) exists to **enable, fund, or cover for an escape attempt**.
 
-## The prison ladder
+**Escape is never freedom until the very top.** Crossing the wall gets you *caught and transferred* to the next, harder facility — the career ladder itself is the game ([[Prison Career Ladder]]).
 
-Multiple prisons planned, in order of difficulty:
+## The prison career ladder
 
-1. **Minimum Security** ← current MVP ([[Prison Layout — Minimum Security]])
-2. Medium Security
-3. High Security
-4. Supermax
+One career, nine facilities, strictly increasing difficulty ([[Prison Career Ladder]] — full catalog, curves, transfer rules):
 
-Each escape presumably graduates the player to a harder facility.
+1. **County Detention Center** — start here; escape *or* serve the 7-day sentence to graduate
+2. **State** — Minimum → Medium → Maximum
+3. **Federal** — Camp → Low → Medium → High → **ADX** (escape it = career win; the world stays playable)
+
+The current Minimum-Security prison ([[Prison Layout — Minimum Security]]) is the **Dev Sandbox** — the layout/tooling/playtest facility, not a rung on the career ladder.
+
+Careers live in **named world saves**; only unlocked facilities are enterable (locked = black silhouettes), and revisiting an easier prison to farm cash/respect is a legitimate strategy — global carry (money, respect, gang, stats, recipes) persists while each run's local state starts fresh ([[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]).
 
 ## Core loop (single-player)
 
@@ -30,7 +33,8 @@ Craft tools → open escape routes → hide the evidence
         ↓
 Defeat night checks / shakedowns / guard detection
         ↓
-ESCAPE (win) — or get caught and lose progress
+CROSS THE WALL → caught & transferred UP the ladder
+(or get caught attempting → solitary, suspicion)
 ```
 
 The prison day is micro-managed to the minute around **headcounts**: morning count, meals, work/education/program blocks, midday and evening counts, yard & recreation, final lockdown, lights out (see [[Time & Schedule]]). The player must **be in the right place at the right time** — or fake it — while secretly preparing an escape. Work assignments and the 17:00–21:00 recreation window are where the plan gets built.
@@ -43,8 +47,9 @@ The prison day is micro-managed to the minute around **headcounts**: morning cou
 | **Every system feeds escape** | Social, economy, crafting, and stealth all exist to serve escape plans |
 | **Appear compliant** | The tension is between what guards see and what the player is actually doing |
 | **Fail-forward** | Getting caught raises heat/suspicion rather than instantly ending the run |
+| **Time investment is strategy** | Easier facilities have better money/loot/favor rates; harder ones demand more cash, favors, and power to open routes. Leaving early is possible — and punishing later ([[Prison Career Ladder]]) |
 
-## Ways to escape (Minimum Security)
+## Ways to escape (Dev Sandbox / Minimum Security)
 
 From the design spec (see [[Escape Routes & Mechanics]] for implementation status):
 
@@ -54,10 +59,11 @@ From the design spec (see [[Escape Routes & Mechanics]] for implementation statu
 
 ## Known design gap
 
-There is **no escape completion / win state implemented yet** — the ingredients exist (vents, fake bed, tools, guard evasion) but no `EscapeZone`/`EscapeManager` keystone. This is the highest-priority gameplay feature. See [[Roadmap & Priorities]].
+Escape completion **v1 is live** ([[Escape Completion System]]) but still ends in a "YOU ESCAPED — you're free" screen. The career ladder rewrites that ending into caught-and-transferred ([[Facility Transfer & Graduation]]); until then the ladder exists only as framing text on the end screen.
 
 ## Related notes
 
+- [[Prison Career Ladder]] — the career-spanning progression this note summarizes
 - [[World Rules]] — the laws of the game world
-- [[Prison Layout — Minimum Security]] — the MVP map
+- [[Prison Layout — Minimum Security]] — the Dev Sandbox map
 - [[Systems Overview]] — every implemented system

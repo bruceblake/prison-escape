@@ -8,6 +8,7 @@ Where code lives and how it's organized. ~2,200 graph nodes across 253 files; no
 Assets/Scripts/
 ├── Shared/          # Both SP & MP
 │   ├── Prison/      # Time, zones, cells, social, heat, wallet, labels
+│   ├── Career/      # Prison Career Ladder: worlds, facility catalog/SOs, transfer, hub UI (namespace Prison.Career)
 │   ├── Crafting/    # CraftingSystem, recipes, descriptions
 │   ├── Interaction/ # IInteractable, pickups, vent cover, pillow stash
 │   ├── UI/          # Inventory, hotbar, notebook, HUDs (vitals, location, waypoint), pause, UIMenuFocus
@@ -53,6 +54,37 @@ No `.asmdef` files — everything compiles into `Assembly-CSharp` (deliberate: z
 | `Assets/Editor/PrisonPolishPass.cs` | *Prison → Polish Pass* — prop colliders, procedural textures, extra props, ambient, NavMesh rebake, patrol route generation |
 | `Assets/Editor/PrisonBatchRunner.cs` | `RunFullSetup` — batchmode chain (character visuals → polish → fixer → save) |
 | `Assets/Animations/Characters/Char_Locomotion_{Prisoner,Guard}.controller` | Per-role locomotion + Jump (generated) |
+
+## Added 7/15/2026 (Prison Career Ladder M1–M5)
+
+All under `Assets/Scripts/Shared/Career/` unless noted. Design: [[Prison Career Ladder]].
+
+| File | Role |
+|---|---|
+| `FacilityIds` / `FacilityCatalog` | Canonical ids + locked design numbers for the 10 slots (dev sandbox + ladder 0–8) |
+| `CareerWorld` / `CareerWorldStore` | Named career saves; JSON per world, atomic writes, schema migration |
+| `CareerSeed` / `CareerRespectMath` / `SentenceClockMath` / `CareerTransfer` / `CareerGates` | Pure career logic (EditMode-tested) |
+| `FacilityDefinition` (SO) / `FacilityDirectory` | Tunable per-facility assets in `Resources/Facilities` with catalog fallback |
+| `CareerSession` | Static run context: active world/facility, difficulty multipliers (all default 1 outside careers) |
+| `CareerRunBootstrap` | Scene-entry glue: per-visit seed, carry apply, Morning-Count day tick, autosave, sentence clock |
+| `CareerTransferFlow` / `EscapeEndScreenUI` (UI/) | Transfer orchestration + ceremony screen rebuild |
+| `CareerMainMenuUI` / `CareerQuitConfirmUI` / `SentenceClockHUD` | Hub UI over MainMenu scene, pause-quit confirm, County HUD line |
+| `Assets/Editor/FacilityDefinitionInstaller.cs` | *Tools → Prison → Career → Install Facility Definitions* |
+| `Assets/Editor/CareerTestRunner.cs` | *Tools → Prison → Career → Run Career EditMode Tests* (writes result log) |
+| `Assets/Scenes/CountyJail.unity` | County's own scene (stub copy of the dev layout; free to diverge) |
+
+Career hooks in existing code: `EscapeManager` (boundary → transfer flow, −2 respect on capture), `GameManager` (loot abundance ×, arrival-affinity seed), `GuardDetection` (facility detection-range ×), `MorningShakedownSweeper` (strictness skip), `PlayerStats.ApplyCareerCarry`, `PauseManager` (QUIT TO PRISON SELECT).
+
+## Added 7/16/2026 (loading screen, waypoint guidance, collision repair)
+
+| File | Role |
+|---|---|
+| `Shared/Career/SceneTransitionScreen.cs` | Async loading screen (facility title + progress bar) for every career scene change |
+| `Shared/UI/WaypointWorldGuide.cs` | Physical objective guidance: caution-yellow route line on the floor along the NavMesh path + pulsing beacon (beam + ground ring) at the destination; driven by `ObjectiveWaypointUI` |
+| `Shared/Prison/CellDoorNavMeshLink.cs` | Doorway `NavMeshLink` gated by the door schedule — the only cell↔corridor NavMesh connection; active only while the door is open |
+| `Assets/Editor/PrisonCollisionAndCameraFixer.cs` | *Prison → Fix Collision & Camera Clipping* — missing MeshColliders (438/scene), duplicate `GlobalNavMesh` removal, legacy scene-bake clear, doors-open rebake, door obstacles+links, camera near-clip → 0.05 |
+
+**Collision root causes found (7/16):** a stale duplicate `GlobalNavMesh (1)` surface plus a legacy built-in scene bake unioned into the runtime NavMesh and still contained the pre-wall layout (agents pathed straight through cell walls); 438 renderers per facility scene (lights, pipes, ducts, props, signs, doors) had no colliders; the Humanoid bake radius of 0.5 sealed the 1.2 m cell doorways (lowered to 0.3 in ProjectSettings — doorways keep a 0.6 m channel, 0.1 m walls still block at voxel 0.05); cell interiors connect to corridors exclusively via the schedule-gated door links; `LocalPlayer` camera near-clip was 0.3 (saw through walls when hugging them) → 0.05. Guards/inmates already carried CapsuleColliders — their wall-clipping was entirely the NavMesh, not physics.
 
 ## Knowledge graph
 

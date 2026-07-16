@@ -585,10 +585,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 210586828579725973}
+  - {fileID: 1248191176741706790}
   m_Father: {fileID: 8309886428360842465}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1019694527578990808
+--- !u!1001 &2132733823755540075
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -636,6 +636,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2375622102689669877, guid: dcb353c7987107d4c937ed92e55d9bfb, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4bb25434936835d4e82484527ac1e362, type: 2}
     - target: {fileID: 8423308808600728407, guid: dcb353c7987107d4c937ed92e55d9bfb, type: 3}
       propertyPath: m_Name
       value: KitVisual
@@ -645,8 +649,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb353c7987107d4c937ed92e55d9bfb, type: 3}
---- !u!4 &210586828579725973 stripped
+--- !u!4 &1248191176741706790 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 921700119028402765, guid: dcb353c7987107d4c937ed92e55d9bfb, type: 3}
-  m_PrefabInstance: {fileID: 1019694527578990808}
+  m_PrefabInstance: {fileID: 2132733823755540075}
   m_PrefabAsset: {fileID: 0}

@@ -4,23 +4,26 @@
 
 ## 01 Game Design
 - [[Game Vision & Core Loop]] — what the game is, pillars, the escape fantasy
-- [[World Rules]] — the 26 laws of the game world (docs-first: schedule redesign approved, code pending)
-- [[Prison Layout — Minimum Security]] — the MVP map (diagram + dimensions)
-- [[Roadmap & Priorities]] — what's next (top: **escape win condition**)
+- [[Prison Career Ladder]] — 📐 the career: County → State ×3 → Federal ×5; escape = caught & transferred; worlds, global carry, difficulty curves
+- [[World Rules]] — the laws of the game world (26 implemented + career rules 27–33 specced)
+- [[Prison Layout — Minimum Security]] — the Dev Sandbox map (diagram + dimensions)
+- [[Roadmap & Priorities]] — what's next (top: **social ecosystem v3**)
 - [[Prison Escape]] — original founding note (multi-prison vision)
 
 ## 02 Features — active feature specs
-- [[Escape Completion System]] — 🚧 in progress (win state, solitary, suspicion, stats)
-- [[Social Ecosystem & Gangs]] — 📐 specced (v1 social teardown; identities & personalities, memory & gossip, gangs, trading & bribes, two-way favors, snitching)
+- [[Escape Completion System]] — ✅ v1 on `dev` (win state, solitary, suspicion, stats); v2 transfer rewrite specced
+- [[Social Ecosystem & Gangs]] — 📐 **v3** specced (research + UI; identities & personalities, Standing bands, exclusive gangs, Talk Menu, notebook dossier, trading & bribes, two-way favors, snitching)
+- [[World Saves & Start Screen]] — 📐 specced (named career worlds, JSON saves, MainMenu → worlds + prison-select hub, locked silhouettes)
+- [[Facility Transfer & Graduation]] — 📐 specced (escape → caught-transfer ceremony, County sentence clock, global carry / local reset, career win)
 
 ## 03 Systems — one note per system
 - [[Systems Overview]] — connection map + status of everything
 - Core sim: [[Time & Schedule]] · [[Locations, Zones & Cells]] · [[Roll Call & Shakedown]]
 - AI: [[Guard AI]] · [[Prisoner AI & NPCs]]
-- Progression: [[Social & Reputation]] (v1 — being replaced by [[Social Ecosystem & Gangs]]) · [[Inventory & Items]] · [[Crafting]] · [[Loot & Economy]]
+- Progression: [[Social & Reputation]] (v1 — being replaced by [[Social Ecosystem & Gangs]] v3) · [[Inventory & Items]] · [[Crafting]] · [[Loot & Economy]]
 - The goal: [[Escape Routes & Mechanics]]
 - Pressure: [[Security, Heat & Alerts]]
-- Presentation: [[UI & HUD]]
+- Presentation: [[UI & HUD]] (incl. [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]])
 - Online: [[Multiplayer & Networking]]
 
 ## 04 Content & Assets
@@ -32,7 +35,7 @@
 ## 05 Engineering
 - [[Codebase Map]] — folder layout, core abstractions, conventions
 - [[Editor Tooling]] — layout runner and friends (regenerate, don't hand-edit)
-- [[Testing & QA]] — 136 EditMode tests, coverage matrix, testing rules
+- [[Testing & QA]] — 146 EditMode tests, coverage matrix, testing rules
 
 ## 06 Process
 - [[Development Workflow]] — Obsidian → Cursor → Unity MCP → Git loop
@@ -45,4 +48,4 @@
 ---
 
 ### The game in one paragraph
-A prison-escape sim: a count-driven daily routine (morning count → meals → work & programs → midday/evening counts → yard time → final lockdown) creates the puzzle; the player appears compliant while looting parts, crafting tools, building social standing, and defeating guard checks (vision cones, morning shakedowns, night bed verification) to open an escape route. Minimum-security prison first; Medium, High, and Supermax to follow.
+A prison-escape sim: a count-driven daily routine (morning count → meals → work & programs → midday/evening counts → yard time → final lockdown) creates the puzzle; the player appears compliant while looting parts, crafting tools, building social standing, and defeating guard checks (vision cones, morning shakedowns, night bed verification) to open an escape route. Escaping never means freedom until the top: you're caught and transferred up a career ladder of nine facilities — County → State ×3 → Federal ×5 — carrying cash, respect, and gang ties with you ([[Prison Career Ladder]]). The current minimum-security prison is the Dev Sandbox.

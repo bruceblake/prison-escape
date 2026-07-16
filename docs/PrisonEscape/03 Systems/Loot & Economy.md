@@ -30,9 +30,9 @@ World seed: `GameManager.worldSeed` (or random) seeds `Random` before spawns —
 - Balance ≥ 0, NaN/Inf rejected; `SetContrabandCashState` flags dirty money (UI tint)
 - HUD: `CashUIController`, `"$0.00"` format, 0.5 s roll animation
 - **Nothing pays or charges the wallet yet** — no gameplay code calls `Add`/`SetBalance`; the Coin item is not wired
-- Favors pay **affinity**, not cash ([[Social & Reputation]])
+- Favors pay **affinity**, not cash ([[Social & Reputation]]) — **v3 replaces this:** favor payouts and trade become live wallet sources ([[Social Ecosystem & Gangs]])
 
-Design intent: cash becomes the medium for inmate trading, guard bribes, and favor fees — **now specced in [[Social Ecosystem & Gangs]]** (§ trading & bribes: trade price formula, daily stock refresh, bribe prices $25/$40/$60, favor costs).
+Design intent: cash becomes the medium for inmate trading, guard bribes, and favor fees — **specced in [[Social Ecosystem & Gangs]] v3** (§ trading & bribes: trade price formula, daily stock refresh, bribe prices $25/$40/$60, favor costs; cash sources = Hustler sales + favor payouts + one light job at M4). Syndicate gang store delivers under bed after morning count.
 
 ## Key files
 
@@ -42,4 +42,4 @@ Design intent: cash becomes the medium for inmate trading, guard bribes, and fav
 | `Assets/Scripts/Singleplayer/Items/ContrabandSpawner.cs` | Legacy spawner |
 | `Assets/Scripts/Shared/Prison/PlayerWallet.cs` / `CashUIController.cs` | Economy |
 
-Related: [[Inventory & Items]] · [[Crafting]] · [[Roadmap & Priorities]]
+Related: [[Inventory & Items]] · [[Crafting]] · [[Social Ecosystem & Gangs]] · [[Roadmap & Priorities]]

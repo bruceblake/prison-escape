@@ -8,11 +8,20 @@ Crafting spread with readable category tabs, styled ASSEMBLE button, and muted `
 
 ## Widgets
 
-- `StolenNotebookUI` (Tab) — map / social / workbench / schedule pages
+- `StolenNotebookUI` (Tab) — map / **Relationships · Gangs** (social dossier) / workbench / schedule pages
 - `InventoryUI` (E) — bag + the crafting spread shown above (recipe index grid, 3 requirement slots, assemble)
 - `RecipeRequirementSlotUI` — ingredient thumbnail + `have/need` readout (green satisfied / red short)
 - `NotebookRecipeIndexEntry` — one recipe cell in the index grid
 - `PauseManager` — timescale-0 pause (singleplayer only)
+
+## Specced — social dossier (v3)
+
+The empty "social" tab becomes the full **[[Social Dossier — Relationships & Gangs]]**:
+
+- **Relationships** — filterable people list (Friends / Enemies / Gang / …), Trust/Respect bars, person detail with gift-pref fog and memory snippets
+- **Gangs** — Vipers / Syndicate cards, your rank + standing, roster fog-of-war, territory callouts, initiation tracker
+
+In-person Chat / Gift / Trade stay on [[Talk Menu & NPC Profile]] (not from the notebook). Feature design: [[Social Ecosystem & Gangs]].
 
 ## Polish backlog
 
@@ -24,6 +33,7 @@ Crafting spread with readable category tabs, styled ASSEMBLE button, and muted `
 
 ## To add
 
+- [ ] **Relationships + Gangs notebook pages** — [[Social Dossier — Relationships & Gangs]] (M2/M3 of social v3).
 - [ ] Recipe count per category on the tab (e.g. `TOOLS 6`) — nice-to-have.
 - [ ] Scribbled "new recipe" marker when a recipe becomes craftable for the first time — nice-to-have.
 
@@ -31,4 +41,4 @@ Crafting spread with readable category tabs, styled ASSEMBLE button, and muted `
 
 `Assets/Scripts/Shared/UI/StolenNotebookUI.cs` · `InventoryUI.cs` · `RecipeRequirementSlotUI.cs` · `NotebookRecipeIndexEntry.cs` · `PauseManager.cs`
 
-Related: [[UI & HUD]] · [[Crafting]] · [[Inventory & Hotbar UI]] · [[UI Theme & Style Guide]]
+Related: [[UI & HUD]] · [[Crafting]] · [[Inventory & Hotbar UI]] · [[Social Dossier — Relationships & Gangs]] · [[Talk Menu & NPC Profile]] · [[UI Theme & Style Guide]]

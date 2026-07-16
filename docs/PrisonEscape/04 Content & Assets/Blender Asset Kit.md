@@ -15,7 +15,7 @@ The **canonical source of truth for 3D assets**. The modular kit + assembled pri
 
 ## Modularity rules (follow these for every new piece)
 
-1. **Scale:** 1 Blender unit = 1 m. Characters are 2.6 m tall; doorway clearance is 3 m.
+1. **Scale:** 1 Blender unit = 1 m. Characters are **2.0 m** tall in-game (`VisualScale` 1.0); doorway clearance is 3 m; cell sliding doors are ~1.2 m wide.
 2. **Snap grid:** all footprints are multiples of **0.5 m**; fine detail on 0.1 m. Wall thickness **0.2 m**, wall height **6 m**.
 3. **Origins:** wall/floor modules → **bottom-back-left on the grid** (walls: start of run on the centerline, thickness ±0.1). Furniture/props → **bottom-center**. Wall-mounted props (signs, vents, posters, pipes) → **on the wall plane**, facing −Y.
 4. **Shared walls are half-thickness:** cell shells use 0.1 m side/back partitions so two adjacent cells butt to exactly 0.2 m. Any repeating room module should do the same.
@@ -65,7 +65,7 @@ Edit the mesh in `Kit_*` — every linked duplicate in every assembly updates au
 - **`Prison/Assets/Setup BlenderKit`** assigns tileable PNGs to `Materials/Prison/` URP mats, remaps `M_*` slots, generates prefabs under `Assets/Prefabs/BlenderKit/`, character prefabs, and wires `ItemData.worldPrefab`.
 - `PrisonLevelLayoutRunner` instantiates kit prefabs on **Run Full Build** — structural pieces keep colliders, props do not (see [[Editor Tooling]]).
 - `PrisonFacility.fbx` is the **assembled prison** used by `PrisonFacilityInstaller` — the layout runner's **Run Full Build** installs this monolith and wires gameplay (cells, doors, vents, zones). Per-piece kit FBX remain for isolated edits/re-export.
-- **Cell gameplay anchors (7/14/2026):** `PrisonFacilityInstaller` derives spawn/roll-call from `Cell_XX_Bed` (interior floor), night-check from outside `Cell_XX_Door`; doors slide on a computed **local** horizontal axis (~3.75 m). Rebake NavMesh after anchor changes.
+- **Cell gameplay anchors (7/15/2026):** `PrisonFacilityInstaller` derives spawn/roll-call from `Cell_XX_Bed` (interior floor), night-check from outside `Cell_XX_Door`; doors keep authored FBX poses and slide ~1.35 m on a local wall axis (not shell-center align). Rebake NavMesh after anchor changes.
 - Kit FBX pivots match the snap conventions, so Unity grid snapping at 0.5 m works out of the box.
 
 ## Change policy

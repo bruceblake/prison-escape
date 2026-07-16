@@ -1,6 +1,6 @@
 # Social & Reputation
 
-> ⚠️ **v1 is deprecated — full replacement specced.** The design of record is **[[Social Ecosystem & Gangs]]** (two-axis Respect/Trust relationships, NPC memory & gossip, gangs + membership, trading & bribes, two-way favors, snitching, guard personalities). Everything below documents what is *currently implemented* and is **slated for teardown** per the spec's teardown table. Do not extend v1.
+> ⚠️ **v1 is deprecated — full replacement specced (v3).** The design of record is **[[Social Ecosystem & Gangs]]** (research-backed Respect/Trust, Standing bands Enemy→Confidant, memory & gossip, exclusive gangs + membership ladder, trading & bribes, two-way favors, snitching, guard personalities). Player UI: [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]]. Everything below documents what is *currently implemented* and is **slated for teardown** per the spec's teardown table. Do not extend v1.
 
 ## v1 — what exists in code today (to be removed/reworked)
 
@@ -43,10 +43,10 @@ Outsider < 25 · Associate ≥ 25 · Respected ≥ 50 · Kingpin ≥ 75. Thresho
 | `Assets/Scripts/Editor/SocialBalanceSimulatorWindow.cs` | Rebuild for v2 math |
 | `Assets/Docs/Prison_Social_And_Reputation_System.md` | Superseded by the vault spec |
 
-## v2 — where the system is going
+## v3 — where the system is going
 
-See **[[Social Ecosystem & Gangs]]** for the full design. One-paragraph summary: every prisoner and guard gets a generated identity, archetype, and five personality traits; relationships are sparse two-axis records (**Respect** + **Trust**) between all actors; NPCs hold a decaying **memory** of direct, witnessed, and gossiped events; two **gangs** (Vipers, Syndicate) claim territory and offer a membership ladder with initiation; the Talk Menu provides chat/intel, gifts, **trading** (wallet goes live), **favors both ways**, intimidation, and snitching; snitches feed guard **tips** that trigger targeted shakedowns; corrupt guards take **bribes**.
+See **[[Social Ecosystem & Gangs]]** for the full design (v3). One-paragraph summary: every prisoner and guard gets a generated identity, archetype, and five personality traits; relationships are sparse two-axis records (**Respect** + **Trust**) with named Standing **bands** (Enemy → Confidant); NPCs hold a decaying **memory** of direct, witnessed, and gossiped events; two **gangs** (Vipers, Syndicate) claim territory with exclusive membership (Outsider → Trusted) and Traitor lockout; the [[Talk Menu & NPC Profile]] provides chat/intel, gifts, **trading** (wallet goes live), **favors both ways**, intimidation, and snitching; the notebook [[Social Dossier — Relationships & Gangs]] shows the whole web; snitches feed guard **tips** that trigger targeted shakedowns; corrupt guards take **bribes**.
 
-This note will be rewritten as the implemented-system reference once v2 milestones land.
+This note will be rewritten as the implemented-system reference once v3 milestones land.
 
-Related: [[Prisoner AI & NPCs]] · [[Guard AI]] · [[Inventory & Items]] · [[Loot & Economy]] · [[Time & Schedule]] · [[Testing & QA]]
+Related: [[Prisoner AI & NPCs]] · [[Guard AI]] · [[Inventory & Items]] · [[Loot & Economy]] · [[Time & Schedule]] · [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]] · [[Testing & QA]]

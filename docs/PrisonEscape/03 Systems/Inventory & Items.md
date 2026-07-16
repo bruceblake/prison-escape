@@ -12,7 +12,11 @@
 | Equip | Selected slot = held item; required for tools (screws), gifts, stash |
 | Illegal tint (UI) | Weapon, Tool, Contraband |
 
-Bag UI (`InventoryUI`, key E) supports drag-swap; `StolenNotebookUI` (Tab) hosts map/social/workbench/schedule tabs.
+Bag UI (`InventoryUI`, key E) supports drag-swap; `StolenNotebookUI` (Tab) hosts map / **Relationships · Gangs** ([[Social Dossier — Relationships & Gangs]]) / workbench / schedule tabs.
+
+## Social inventory uses (specced v3)
+
+Held / bag items feed [[Talk Menu & NPC Profile]] **Gift** and **Trade** (barter). Favored gift categories live on `ArchetypeDefinition` ([[Social Ecosystem & Gangs]]). Stash-hold favors park 2 items with a trusted NPC through shakedown. Contraband traded at ×2 markup still confiscates on sweep if left in your bag.
 
 ## Item taxonomy
 
@@ -49,4 +53,4 @@ All under `Assets/ScriptableObjects/` — full table in [[Item Catalog]]. Summar
 | `Assets/Scripts/Shared/UI/InventoryUI.cs` / `HotbarUI.cs` / `InventorySlotUI.cs` | UI |
 | `Assets/ScriptableObjects/Items/` | Item assets |
 
-Related: [[Crafting]] · [[Loot & Economy]] · [[Item Catalog]] · [[Player & Interaction]]
+Related: [[Crafting]] · [[Loot & Economy]] · [[Item Catalog]] · [[Player & Interaction]] · [[Social Ecosystem & Gangs]] · [[Talk Menu & NPC Profile]]

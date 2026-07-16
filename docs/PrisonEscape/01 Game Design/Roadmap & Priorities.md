@@ -4,7 +4,8 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 
 ## Now (highest priority)
 
-1. **Social ecosystem & gangs overhaul** — 📐 **specced**: [[Social Ecosystem & Gangs]]. Full v1 teardown; NPC identities + personality traits (prisoners **and** guards), Respect/Trust relationships, NPC memory + gossip, 2 gangs with territory + membership ladder, Talk Menu (chat/intel, gifts, trading, two-way favors, intimidation), snitching → guard tips, corrupt-guard bribes, wallet goes live. Build in milestones M1–M6 on `feat/social-ecosystem`.
+1. **Social ecosystem & gangs overhaul** — 📐 **specced (v3)**: [[Social Ecosystem & Gangs]]. Research-backed (real prison governance + Escapists/TE2 + Back to Dawn); NPC identities + personality traits (prisoners **and** guards); Respect/Trust + Standing bands (Enemy→Confidant); NPC memory + gossip; 2 exclusive gangs with territory + Outsider→Trusted ladder; [[Talk Menu & NPC Profile]]; notebook [[Social Dossier — Relationships & Gangs]]; trading + live wallet; two-way favors; snitching → guard tips; corrupt-guard bribes. Build M1–M6 on `feat/social-ecosystem`.
+2. **Prison career ladder** — 📐 **specced**: [[Prison Career Ladder]] (+ [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]). County → State ×3 → Federal ×5; escape = caught & transferred; named world saves, prison-select hub with locked silhouettes, global carry vs local reset, County sentence clock. Build M1–M5 (`feat/career-world-saves` → `feat/county-sentence-clock`); facility scenes are M6+ content epics.
 
 ## Next
 
@@ -26,7 +27,7 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 - Yard roll-call zone + full zone wiring for all 16 cells
 - Kitchen (back-of-house behind the cafeteria serving line)
 - Laundry room
-- Medium-security prison (second facility)
+- Career facility scenes (County greybox first, then State ×3, Federal ×5 — [[Prison Career Ladder]] M6+; replaces the old "medium-security second facility" item)
 - PlayMode test infrastructure (`.asmdef` migration)
 
 ## Test debt (from the coverage matrix)

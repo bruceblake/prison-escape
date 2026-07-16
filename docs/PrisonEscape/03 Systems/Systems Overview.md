@@ -37,13 +37,13 @@ Map of every implemented system. One note per system in this folder — keep it 
 | [[Roll Call & Shakedown]] | Morning sweep, confiscation, early release | 🟡 confiscation ✅ |
 | [[Guard AI]] | Patrol / detection / escort / night checks | ⚪ planned |
 | [[Prisoner AI & NPCs]] | NPC routines, player compliance, personalities | ⚪ planned |
-| [[Social & Reputation]] | v1 affinity (deprecated) — replacement specced: [[Social Ecosystem & Gangs]] | 🔴 v1 slated for teardown |
+| [[Social & Reputation]] | v1 affinity (deprecated) — replacement **v3** specced: [[Social Ecosystem & Gangs]] (+ [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]]) | 🔴 v1 slated for teardown |
 | [[Security, Heat & Alerts]] | Attention eye + lockdown/suspicion hooks | ✅ alerts |
 | [[Player & Interaction]] | FPS controls + raycast interactions | ⚪ planned |
 | [[Inventory & Items]] | 6-slot inventory + item taxonomy | ✅ core |
 | [[Crafting]] | 7 recipes → escape tools | ✅ |
 | [[Loot & Economy]] | Weighted loot + (dormant) wallet | 🟡 weights ✅ |
-| [[Escape Routes & Mechanics]] | Vents, fake bed, stash + boundary win (v1 on `dev`) | 🟡 routes partial, win v1 ✅ |
+| [[Escape Routes & Mechanics]] | Vents, fake bed, stash + boundary win (v1 on `dev`) — win path becomes caught-transfer under [[Prison Career Ladder]] (📐 specced) | 🟡 routes partial, win v1 ✅ |
 | [[Multiplayer & Networking]] | Riptide FPS layer, lobby, weapons | ⚪ |
 | [[UI & HUD]] | Routine bar, heat eye, vitals, location, waypoint, notebook, inventory | 🟢 core HUD done (7/15) |
 
@@ -51,6 +51,8 @@ Map of every implemented system. One note per system in this folder — keep it 
 
 1. **Escape routes geometry** — win/lose systems are on `dev`; vent corridors and fence cut still needed to reach the boundary ([[Roadmap & Priorities]] #2)
 2. **Guard AI depth** — patrol/detection exist; full FSM polish and consequence wiring still thin
-3. **Social v1 → v2 rebuild** — v1 (affinity, greet, one-way favors) is deprecated wholesale; the [[Social Ecosystem & Gangs]] spec (identities, memory, gangs, trading, snitching) replaces it and is not yet implemented
+3. **Social v1 → v3 rebuild** — v1 (affinity, greet, one-way favors) is deprecated wholesale; the [[Social Ecosystem & Gangs]] v3 spec (research basis, Standing bands, exclusive gangs, Talk Menu + notebook dossier, trading, snitching) replaces it and is not yet implemented
+
+Meta-progression (specced, no system note yet — lives in design/features): [[Prison Career Ladder]] · [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]
 
 Related: [[Game Vision & Core Loop]] · [[World Rules]] · [[Codebase Map]]

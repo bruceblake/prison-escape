@@ -82,15 +82,17 @@ Guards use the same band colors (Trust-heavy Standing). See [[Status & World UI]
 - Closing the menu does not consume the Chat charge if Chat was not pressed.
 - Busy NPCs (mid-escort, locked in count formation) show a one-liner and no tabs.
 
-## Widgets / files (planned)
+## Widgets / files (implemented)
 
 | Piece | Role |
 |---|---|
-| `SocialInteractionMenu` | Root overlay, tab host |
-| `NpcProfileTab` / `NpcTalkTab` / … | Tab bodies |
-| `SocialOverheadMarker` | `!` / coin |
-| `CharacterNameLabel` | Band tint (extend existing) |
-| `PrisonerSocialPresenter` | Rework: opens menu instead of greet chain |
+| `SocialInteractionMenu` | Root overlay, tab host (Profile / Talk / Gift / Trade / Favors / Threat / Bribe) |
+| `PrisonerSocialPresenter` | Interact entry → opens Talk; overhead `!` / coin markers |
+| `CharacterNameLabel` + `StandingBandUI` | Band-tinted nameplates |
+| `AffinityFloatPopup` | Trust/Respect delta floaters |
+| `TradingService` / `FavorService` / `SocialWorld` | Backend for trade / favors / bribes |
+
+Polish backlog: richer tab chrome / predicted-delta previews where still thin.
 
 ## Related
 

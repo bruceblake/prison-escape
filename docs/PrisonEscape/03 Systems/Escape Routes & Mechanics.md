@@ -37,18 +37,17 @@ The main goal of the game. Route *mechanics* and the **escape completion win/los
 Craft Screwdriver → stash it through shakedowns
 → craft Fake Bed Dummy → place at Lights Out
 → open vent while beds "pass" checks
-→ traverse vent corridor → reach exit → WIN (not yet implemented)
+→ traverse vent corridor → reach exit → **boundary** (career: transfer; sandbox: YOU ESCAPED)
 ```
 
-## Escape completion (implemented v1)
+## Escape completion (implemented on `dev`)
 
-The win/lose keystone exists — see [[Escape Completion System]]:
+The win/lose keystone exists — see [[Escape Completion System]] · [[Facility Transfer & Graduation]]:
 
-- **`EscapeBoundary`** ring outside the walls → crossing it = win (end screen + stats + ladder framing)
+- **`EscapeBoundary`** ring outside the walls → crossing it ends the run (career ceremony / sandbox YOU ESCAPED)
 - **`RestrictedZone`** volumes (perimeter band always; cafeteria/workshop at night) — spotted inside → **caught escaping**
 - **`EscapeManager`** runs the caught flow: confiscation (stash survives), solitary block in Main Security, −20 MH / −10 STR, day skip, 2-day suspicion
 - Route geometry (vent corridors, fence cut) is what makes the boundary *reachable* — next on [[Roadmap & Priorities]]
-
 ## Key files
 
 | File | Role |

@@ -6,8 +6,8 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 
 1. **Vent network geometry** — plumbing/electrical corridors behind the cell rows exist in design ([[Prison Layout — Minimum Security]]) but need to be built into the level and connected to the vent-cover mechanic so the escape boundary is reachable in play
 2. **Courtyard fence + cut-through escape route** — barbed-wire fence, wire cutters as the tool gate
-3. **Vault sync P2–P3** — HUD/waypoint/Locations/Loot/Guard surface notes + final process polish (P0–P1 hub/engineering done)
-4. **Social polish** — install `Resources/Social/` assets; overhead Talk markers; fuller per-guard Trust→detection ([[Social & Reputation]])
+3. **Vault sync P3** — process note cleanup (P0–P2 hub/engineering/surface notes done)
+4. **Social polish** — install `Resources/Social/` assets; richer Talk chrome; fuller per-guard Trust→detection ([[Social & Reputation]])
 
 ## Next
 

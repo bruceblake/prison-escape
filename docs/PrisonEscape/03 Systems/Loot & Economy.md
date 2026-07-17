@@ -1,6 +1,6 @@
 # Loot & Economy
 
-Where escape ingredients come from, and the (mostly dormant) cash system.
+Where escape ingredients come from, and the live cash system.
 
 ## Loot rolls (`LootTable`, weights tested)
 
@@ -21,18 +21,28 @@ Weighted random: final weight = rarity base × item `weightMultiplier` (min 0.01
 | `WorldContainer` | Rolls 1–3 items into a browse list | ⚠️ Search shows names but **doesn't transfer to inventory** yet |
 | `ContrabandSpawner` (legacy) | 6 items at random points via `ItemType` enum → prefab map | Legacy path |
 
-World seed: `GameManager.worldSeed` (or random) seeds `Random` before spawns — same seed = same loot layout.
+World seed: `GameManager.worldSeed` (or career visit seed) seeds `Random` before spawns — same seed = same loot layout. Facility loot-abundance multiplier applies on career runs.
 
-> ⚠️ **No `LootTable` assets exist yet** — the type is ready; tables are authored on scene nodes. Creating proper table assets per room type (cells, workshop, kitchen…) is content work tied to escape-route pacing.
+> ⚠️ **No `LootTable` ScriptableObject assets exist yet** — the type is ready; tables are authored on scene nodes. Creating proper table assets per room type is content work tied to escape-route pacing.
 
-## Economy (`PlayerWallet`)
+## Economy (`PlayerWallet`) — live on `dev`
 
 - Balance ≥ 0, NaN/Inf rejected; `SetContrabandCashState` flags dirty money (UI tint)
-- HUD: `CashUIController`, `"$0.00"` format, 0.5 s roll animation
-- **Nothing pays or charges the wallet yet** — no gameplay code calls `Add`/`SetBalance`; the Coin item is not wired
-- Favors pay **affinity**, not cash ([[Social & Reputation]]) — **v3 replaces this:** favor payouts and trade become live wallet sources ([[Social Ecosystem & Gangs]])
+- Primary HUD: `PlayerVitalsHUD` cash line (legacy `CashUIController` superseded)
 
-Design intent: cash becomes the medium for inmate trading, guard bribes, and favor fees — **specced in [[Social Ecosystem & Gangs]] v3** (§ trading & bribes: trade price formula, daily stock refresh, bribe prices $25/$40/$60, favor costs; cash sources = Hustler sales + favor payouts + one light job at M4). Syndicate gang store delivers under bed after morning count.
+### Sources & sinks
+
+| Path | Where |
+|---|---|
+| Trade buy / sell | `SocialInteractionMenu` Trade tab (stock from `TradingService`; cash via `PlayerWallet`) |
+| Guard bribes | `SocialWorld.BribeCorrupt` |
+| Favor cash costs / payouts | `SocialFavorRuntime` / `SocialWorld` |
+| Light job pay | `PrisonJobPaymaster` |
+| Career carry restore | `CareerRunBootstrap` / global cash on transfer |
+
+Syndicate under-bed store delivery after morning count is part of the Social economy path when stock is active.
+
+Design detail (prices, stock refresh, bribe tiers): [[Social Ecosystem & Gangs]] · [[Social & Reputation]].
 
 ## Key files
 
@@ -40,6 +50,9 @@ Design intent: cash becomes the medium for inmate trading, guard bribes, and fav
 |---|---|
 | `Assets/Scripts/Shared/Prison/LootTable.cs` / `ItemSpawnNode.cs` / `WorldContainer.cs` | Loot |
 | `Assets/Scripts/Singleplayer/Items/ContrabandSpawner.cs` | Legacy spawner |
-| `Assets/Scripts/Shared/Prison/PlayerWallet.cs` / `CashUIController.cs` | Economy |
+| `Assets/Scripts/Shared/Prison/PlayerWallet.cs` | Cash balance |
+| `Assets/Scripts/Shared/Social/TradingService.cs` / `TradeMath.cs` | Trade stock + pricing |
+| `Assets/Scripts/Shared/Social/PrisonJobPaymaster.cs` | Job pay |
+| `Assets/Scripts/Shared/UI/PlayerVitalsHUD.cs` | Cash readout |
 
-Related: [[Inventory & Items]] · [[Crafting]] · [[Social Ecosystem & Gangs]] · [[Roadmap & Priorities]]
+Related: [[Inventory & Items]] · [[Crafting]] · [[Social & Reputation]] · [[Social Ecosystem & Gangs]] · [[Prison Career Ladder]] · [[Roadmap & Priorities]]

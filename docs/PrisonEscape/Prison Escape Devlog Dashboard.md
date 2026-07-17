@@ -2,11 +2,17 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/16/2026 (night — vault truth P2)
+
+- **Phase 7 P2** — surface notes: [[Status & World UI]] (hybrid waypoint + sentence clock), [[UI & HUD]], [[Loot & Economy]] (live wallet), [[Locations, Zones & Cells]] (`CellDoorNavMeshLink`), [[Guard AI]] / [[Prisoner AI & NPCs]] / [[Security, Heat & Alerts]] social hooks, [[Notebook & Crafting UI]] + Talk/Dossier widget tables.
+- **Branch:** `chore/vault-truth-p2` (docs-only).
+- **Still open (P3):** Slice Plan body trim; Roadmap vault-sync item closeout; any residual Escape Routes framing.
+
 ## 7/16/2026 (night — vault truth P1)
 
 - **Phase 7 P1** — engineering/content inventory notes match tip: [[Codebase Map]] (`Shared/Social`, `SocialWorld`, Career, ~2800 graph nodes), [[Testing & QA]] (11 suites / ~195 `[Test]`), [[Editor Tooling]] (collision + Career/Social menus), [[Content Inventory]] (PrisonLevel1 + CountyJail enabled; Facilities resources).
-- **Branch:** `chore/vault-truth-p1` (docs-only).
-- **Still open (P2–P3):** HUD/waypoint/Locations/Loot/Guard/Prisoner/Security surface notes; Talk/Dossier widget naming; Slice Plan historical body trim.
+- **Merged:** PR #87 → `dev` (`e3ca3a8`).
+- **Still open after P1:** P2–P3 surface notes; `Resources/Social/` assets; escape route geometry.
 
 ## 7/16/2026 (night — vault truth P0)
 

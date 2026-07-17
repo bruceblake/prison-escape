@@ -46,7 +46,8 @@ Barred doors slide with the schedule:
 - **Closed pose** is baked by the installer/fixer and marked authored so Play Mode `Start` does **not** re-capture a left-open door as closed (that bug blocked cell exits).
 - **Prison → Fix Cell Doors & Waypoints** restores authored poses, wires controllers (~1.35 m slide, capped ~1.6 m), creates missing stand points, snaps patrol waypoints, re-wires the registry, and saves.
 - Slide: local `openOffset` default **~1.35 m** along the wall, `slideSpeed` **3**/s lerp
-- Fully covered by EditMode tests (see [[Testing & QA]])
+- **NavMesh doorway gating** — `CellDoorNavMeshLink` keeps a `NavMeshLink` through the doorway **only while the door is open** (installed by **Prison → Fix Collision & Camera Clipping**). Closed doors = no agent path cell↔corridor through that bay.
+- Fully covered by EditMode tests for the controller (see [[Testing & QA]])
 
 ## The 16 cells
 
@@ -60,6 +61,7 @@ Two blocks of 8 (see [[Prison Layout — Minimum Security]]): `JailCells` (01–
 | `Assets/Scripts/Shared/Prison/PrisonLocationZone.cs` | Zone triggers + labels |
 | `Assets/Scripts/Shared/Prison/CellData.cs` | Per-cell data |
 | `Assets/Scripts/Shared/Prison/CellDoorController.cs` | Schedule-driven doors |
+| `Assets/Scripts/Shared/Prison/CellDoorNavMeshLink.cs` | Schedule-gated doorway NavMeshLink |
 | `Assets/Scripts/Shared/Prison/PrisonNavMeshValidator.cs` | Editor check: stand points on NavMesh |
 
 Related: [[Time & Schedule]] · [[Prisoner AI & NPCs]] · [[Roll Call & Shakedown]] · [[Prison Layout — Minimum Security]]

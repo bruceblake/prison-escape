@@ -477,8 +477,11 @@ namespace Prison.Social
                 foreach (var entry in stock)
                 {
                     var item = entry.item;
-                    float price = TradeMath.BuyPrice(TradeMath.EffectiveBaseValue(item), identity.traits.greed,
-                        trust, member, item.category == ItemCategory.Contraband);
+                    // Career ladder: harder facilities inflate what everything costs the player.
+                    float price = TradeMath.ApplyFacilityPriceMult(
+                        TradeMath.BuyPrice(TradeMath.EffectiveBaseValue(item), identity.traits.greed,
+                            trust, member, item.category == ItemCategory.Contraband),
+                        Prison.Career.CareerSession.TradePriceMult);
                     AddButton($"Buy {item.itemName} ×{entry.count} — ${price:0}", () =>
                     {
                         if (wallet == null || wallet.Balance < price) { SocialToastUI.Show("Not enough cash."); return; }
@@ -517,8 +520,10 @@ namespace Prison.Social
                 foreach (var entry in world.Trading.GetGangStoreStock(identity.gangId))
                 {
                     var item = entry.item;
-                    float price = TradeMath.BuyPrice(TradeMath.EffectiveBaseValue(item), 50,
-                        trust, true, item.category == ItemCategory.Contraband);
+                    float price = TradeMath.ApplyFacilityPriceMult(
+                        TradeMath.BuyPrice(TradeMath.EffectiveBaseValue(item), 50,
+                            trust, true, item.category == ItemCategory.Contraband),
+                        Prison.Career.CareerSession.TradePriceMult);
                     AddButton($"Order {item.itemName} — ${price:0}", () =>
                     {
                         if (wallet == null || wallet.Balance < price) { SocialToastUI.Show("Not enough cash."); return; }
@@ -665,7 +670,9 @@ namespace Prison.Social
                 var cat = category;
                 var sample = world.Favors.RandomItemOfCategory(cat);
                 if (sample == null) continue;
-                float price = Mathf.Round(TradeMath.EffectiveBaseValue(sample) * SocialTuning.SourceItemPriceFactor);
+                float price = TradeMath.ApplyFacilityPriceMult(
+                    TradeMath.EffectiveBaseValue(sample) * SocialTuning.SourceItemPriceFactor,
+                    Prison.Career.CareerSession.TradePriceMult);
                 AddButton($"{cat} — ${price:0}", () =>
                 {
                     var wallet = Prison.PlayerWallet.Instance;
@@ -718,6 +725,11 @@ namespace Prison.Social
             float chance = RelationshipMath.IntimidationChance(respect, strength, identity.traits.nerve);
             AddLine($"Success chance: ~{chance * 100f:0}% (your respect + strength vs their nerve)", Prison.PrisonUITheme.ConcreteGrey);
             AddLine("Fail: you lose respect — and they might report you.", Prison.PrisonUITheme.ConcreteGrey);
+            if (world.IntimidateUsedThisPhase(_actorId))
+            {
+                AddLine("You've already leaned on them this phase. Push again later.", Prison.PrisonUITheme.ConcreteGrey);
+                return;
+            }
             AddButton("Intimidate", () =>
             {
                 bool success = world.Intimidate(_actorId, out _);
@@ -731,21 +743,26 @@ namespace Prison.Social
         private void BuildBribeTab(SocialWorld world, NPCIdentity identity)
         {
             AddLine("\"Everything's negotiable. Quietly.\"", Color.white);
-            AddButton($"Clear a tip against you — ${SocialTuning.BribeClearTip:0}", () =>
+            // Career ladder: bribes are the steepest sink up the ladder (bribeCostMult).
+            float bribeMult = Prison.Career.CareerSession.BribeCostMult;
+            float clearTip = TradeMath.ApplyFacilityPriceMult(SocialTuning.BribeClearTip, bribeMult);
+            float skipCell = TradeMath.ApplyFacilityPriceMult(SocialTuning.BribeSkipShakedown, bribeMult);
+            float blindEye = TradeMath.ApplyFacilityPriceMult(SocialTuning.BribeBlindEye, bribeMult);
+            AddButton($"Clear a tip against you — ${clearTip:0}", () =>
             {
-                if (!world.BribeCorrupt(_actorId, SocialTuning.BribeClearTip, "cleartip"))
+                if (!world.BribeCorrupt(_actorId, clearTip, "cleartip"))
                     SocialToastUI.Show("Not enough cash.");
                 RebuildBody();
             });
-            AddButton($"Skip your cell next shakedown — ${SocialTuning.BribeSkipShakedown:0}", () =>
+            AddButton($"Skip your cell next shakedown — ${skipCell:0}", () =>
             {
-                if (!world.BribeCorrupt(_actorId, SocialTuning.BribeSkipShakedown, "skipcell"))
+                if (!world.BribeCorrupt(_actorId, skipCell, "skipcell"))
                     SocialToastUI.Show("Not enough cash.");
                 RebuildBody();
             });
-            AddButton($"Blind eye this phase — ${SocialTuning.BribeBlindEye:0}", () =>
+            AddButton($"Blind eye this phase — ${blindEye:0}", () =>
             {
-                if (!world.BribeCorrupt(_actorId, SocialTuning.BribeBlindEye, "blindeye"))
+                if (!world.BribeCorrupt(_actorId, blindEye, "blindeye"))
                     SocialToastUI.Show("Not enough cash.");
                 RebuildBody();
             });

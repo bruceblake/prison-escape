@@ -70,16 +70,31 @@ Layout truth lives in `BuildDiagramPlates()` — keep in sync with [[Prison Layo
 
 **Prison → Setup Character Visuals** — parents `Char_Prisoner` / `Char_Guard` kit prefabs into role prefabs, remaps materials, sizes colliders ([[Character Visuals]]). Run **Setup BlenderKit** first.
 
-## Other tools
+## Facility polish & collision
 
 | Tool | Menu / usage |
 |---|---|
 | `PrisonOverhaulRunner` | **Prison → Fix Cell Doors & UI** (legacy door replacement) |
-| `PrisonDoorAndWaypointFixer` | **Prison → Fix Cell Doors & Waypoints** — canonical door realign (dedupes stacked doors from the two build paths), creates missing cell stand points, snaps patrol waypoints to NavMesh, re-wires registry, saves |
-| `PrisonPolishPass` | **Prison → Polish Pass** — convex colliders on all props, procedural concrete/tile/metal textures, extra props, trilight ambient, NavMesh rebake, guard patrol routes (perimeter/inner/wings) from the plate table. **Prison → Lighting/Configure Post-Process + Fixture Lights** fills `PrisonPostProcess` (bloom/grading/ACES) and attaches realtime PointLights to a thinned subset of BlenderKit `Light_*` meshes (visual-only fixtures otherwise leave the level flat). |
+| `PrisonDoorAndWaypointFixer` | **Prison → Fix Cell Doors & Waypoints** — door realign/dedupe, stand points, waypoint snap, registry, save |
+| `PrisonPolishPass` | **Prison → Polish Pass** — prop colliders, procedural textures, extra props, ambient, NavMesh rebake, patrol routes. **Prison → Lighting/Configure Post-Process + Fixture Lights** fills `PrisonPostProcess` and PointLights on BlenderKit fixtures |
+| `PrisonCollisionAndCameraFixer` | **Prison → Fix Collision & Camera Clipping** — missing MeshColliders, duplicate GlobalNavMesh cleanup, doors-open rebake, `CellDoorNavMeshLink`, camera near-clip → 0.05 |
 | `PrisonBatchRunner` | `RunFullSetup` — headless chain for `Unity.exe -batchmode -quit -executeMethod` |
-| `SocialBalanceSimulatorWindow` | **Tools → Prison → Social Balance Simulator** — preview affinity math |
-| `PrisonNavMeshValidator` | Component context menu **Validate Prison NavMesh Now** — checks stand points sit on NavMesh |
+| `PrisonNavMeshValidator` | Runtime component under `Shared/Prison/` — context menu **Validate Prison NavMesh Now** |
+
+## Career tooling (`Assets/Editor/`)
+
+| Tool | Menu |
+|---|---|
+| `FacilityDefinitionInstaller` | **Tools → Prison → Career → Install Facility Definitions** → `Resources/Facilities/` |
+| `CareerTestRunner` | **Tools → Prison → Career → Run Career EditMode Tests** |
+
+## Social tooling
+
+| Tool | Location | Menu |
+|---|---|---|
+| `SocialAssetInstaller` | `Assets/Editor/` | **Tools → Prison → Social → Install Social Assets** → `Resources/Social/` (archetypes/gangs; runtime uses code catalogs until run) |
+| `SocialTestRunner` | `Assets/Editor/` | **Tools → Prison → Social → Run All EditMode Tests** |
+| `SocialBalanceSimulatorWindow` | `Assets/Scripts/Editor/` | **Tools → Prison → Social → Balance Simulator** — preview `RelationshipMath` / `TradeMath` (not deleted v1 affinity) |
 
 ## Workflow with Unity MCP
 
@@ -93,4 +108,4 @@ Cursor can run these menu items directly in the live editor, read console output
 4. Log a `[PrisonLayout]`-style summary line for MCP verification
 5. Save the scene at the end of full builds
 
-Related: [[Prison Layout — Minimum Security]] · [[Codebase Map]] · [[Development Workflow]]
+Related: [[Prison Layout — Minimum Security]] · [[Codebase Map]] · [[Development Workflow]] · [[Social & Reputation]] · [[Prison Career Ladder]]

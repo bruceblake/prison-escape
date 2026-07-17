@@ -35,7 +35,7 @@
 ## 05 Engineering
 - [[Codebase Map]] — folder layout, core abstractions, conventions
 - [[Editor Tooling]] — layout runner and friends (regenerate, don't hand-edit)
-- [[Testing & QA]] — EditMode coverage matrix and testing rules *(P1 vault sync: count ~195 on tip)*
+- [[Testing & QA]] — EditMode coverage (~195 `[Test]` / ~256 runnable); Career + Social suites
 
 ## 06 Process
 - [[Development Workflow]] — Obsidian → Cursor → Unity MCP → Git loop

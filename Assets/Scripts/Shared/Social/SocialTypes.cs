@@ -288,5 +288,11 @@ namespace Prison.Social
         // Guard archetype modifiers — spec §2
         public const float RookieConeAngle = 75f;
         public const float VeteranProximitySpot = 8f;
+
+        // Per-player guard Trust modifiers — Guard AI note, M6 (see GuardTrustMath)
+        public const float GuardTrustGraceAtTrust = 50f;
+        public const float GuardTrustGraceSeconds = 10f;
+        public const float GuardDistrustDetectAtTrust = -25f;
+        public const float GuardDistrustDetectRangeMult = 1.2f;
     }
 }

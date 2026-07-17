@@ -27,6 +27,11 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
     public bool MovementBlocked => _movementBlocked;
     public int CellIndex => cellIndex;
 
+    /// <summary>Time.time when compliance was last lost; -1 while compliant.</summary>
+    public float NonCompliantSince { get; private set; } = -1f;
+    /// <summary>Seconds since compliance was lost (0 while compliant). High-trust guards grace short lapses (Social v3 §2).</summary>
+    public float NonCompliantSeconds => NonCompliantSince < 0f ? 0f : Time.time - NonCompliantSince;
+
     /// <summary>Roll-call early release (shakedown) ignored until this time — avoids pre-sweep before spawn.</summary>
     public float RollCallReleaseAllowedAfter { get; private set; }
 
@@ -125,6 +130,13 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
     }
 
     private void UpdateCompliance()
+    {
+        UpdateComplianceCore();
+        if (IsCompliant) NonCompliantSince = -1f;
+        else if (NonCompliantSince < 0f) NonCompliantSince = Time.time;
+    }
+
+    private void UpdateComplianceCore()
     {
         // Restricted zones override everything (grace, release, flexible phases):
         // being inside one is an escape attempt, not schedule non-compliance.

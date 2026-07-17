@@ -35,5 +35,8 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Recovery/SinglePlayerScene.unity
     guid: 3cd866e3700ded1418818f62cdedb7a5
+  - enabled: 1
+    path: Assets/Scenes/CountyJail.unity
+    guid: 74f83bbd66a270f4aa09cd94a962def5
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

@@ -126,7 +126,7 @@ public static class BlenderKitLayout
         door.name = "CellKit_Door";
 
         // Canonical alignment path (same as the facility installer): snap to the
-        // corridor-facing shell wall, slide 6 m along the wall, bake the closed pose.
+        // corridor-facing shell wall, slide 2.4 m along the wall, bake the closed pose.
         var shell = cell.Find("CellKit_Shell");
         var bed = cell.Find("CellKit_Bed");
         if (shell != null)

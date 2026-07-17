@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class CraftingSystem
@@ -19,24 +20,44 @@ public static class CraftingSystem
         return true;
     }
 
+    /// <summary>
+    /// Transactional craft: either the ingredients are consumed AND the result lands in the
+    /// inventory, or nothing changes. Consumed parts are refunded when the result can't be
+    /// added (they always fit back into the slots they just freed).
+    /// </summary>
     public static bool TryCraft(CraftingRecipe recipe, PlayerInventory inventory)
     {
         if (!CanCraft(recipe, inventory))
             return false;
 
+        var consumed = new List<CraftingIngredient>();
         foreach (CraftingIngredient ingredient in recipe.ingredients)
         {
-            inventory.RemoveItem(ingredient.item, ingredient.amount);
+            if (inventory.RemoveItem(ingredient.item, ingredient.amount))
+            {
+                consumed.Add(ingredient);
+                continue;
+            }
+            Debug.LogWarning($"[CraftingSystem] Could not consume {ingredient.amount}x {ingredient.item?.itemName} — craft aborted, parts returned.");
+            Refund(inventory, consumed);
+            return false;
         }
 
-        bool added = inventory.AddItem(recipe.result, recipe.resultAmount);
-        if (!added)
+        if (!inventory.AddItem(recipe.result, recipe.resultAmount))
         {
-            Debug.LogWarning($"[CraftingSystem] Crafted {recipe.result.itemName} but inventory was full. Parts were consumed.");
+            Debug.LogWarning($"[CraftingSystem] No room for {recipe.result.itemName} — craft aborted, parts returned.");
+            Refund(inventory, consumed);
+            return false;
         }
 
         Debug.Log($"[CraftingSystem] Crafted {recipe.resultAmount}x {recipe.result.itemName}");
         OnItemCrafted?.Invoke(recipe);
         return true;
+    }
+
+    private static void Refund(PlayerInventory inventory, List<CraftingIngredient> consumed)
+    {
+        foreach (CraftingIngredient ingredient in consumed)
+            inventory.AddItem(ingredient.item, ingredient.amount);
     }
 }

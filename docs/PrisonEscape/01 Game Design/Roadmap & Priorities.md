@@ -4,7 +4,7 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 
 ## Now (highest priority)
 
-1. **Social ecosystem & gangs overhaul** — 📐 **specced (v3)**: [[Social Ecosystem & Gangs]]. Research-backed (real prison governance + Escapists/TE2 + Back to Dawn); NPC identities + personality traits (prisoners **and** guards); Respect/Trust + Standing bands (Enemy→Confidant); NPC memory + gossip; 2 exclusive gangs with territory + Outsider→Trusted ladder; [[Talk Menu & NPC Profile]]; notebook [[Social Dossier — Relationships & Gangs]]; trading + live wallet; two-way favors; snitching → guard tips; corrupt-guard bribes. Build M1–M6 on `feat/social-ecosystem`.
+1. **Social ecosystem & gangs overhaul** — 🔄 **in review**: PRs #46 (library) + #47 (wire/teardown). Spec: [[Social Ecosystem & Gangs]].
 2. **Prison career ladder** — 📐 **specced**: [[Prison Career Ladder]] (+ [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]). County → State ×3 → Federal ×5; escape = caught & transferred; named world saves, prison-select hub with locked silhouettes, global carry vs local reset, County sentence clock. Build M1–M5 (`feat/career-world-saves` → `feat/county-sentence-clock`); facility scenes are M6+ content epics.
 
 ## Next

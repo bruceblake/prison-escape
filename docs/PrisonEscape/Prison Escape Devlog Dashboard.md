@@ -2,11 +2,17 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/16/2026 (night — vault truth P3)
+
+- **Phase 7 P3** — process closeout: [[Social & Career PR Slice Plan]] rewritten as short post-merge gap list; [[Social Ecosystem & Gangs]] milestones/architecture marked shipped; [[Inventory & Items]] social/wallet wording; [[Roadmap & Priorities]] drops vault-sync from Now (P0–P2 done).
+- **Branch:** `chore/vault-truth-p3` (docs-only). **Phase 7 vault truth complete.**
+- **Still open (gameplay/content):** `Resources/Social/` install; escape route geometry; Career M6+ scenes; Unity playtest smoke.
+
 ## 7/16/2026 (night — vault truth P2)
 
 - **Phase 7 P2** — surface notes: [[Status & World UI]] (hybrid waypoint + sentence clock), [[UI & HUD]], [[Loot & Economy]] (live wallet), [[Locations, Zones & Cells]] (`CellDoorNavMeshLink`), [[Guard AI]] / [[Prisoner AI & NPCs]] / [[Security, Heat & Alerts]] social hooks, [[Notebook & Crafting UI]] + Talk/Dossier widget tables.
-- **Branch:** `chore/vault-truth-p2` (docs-only).
-- **Still open (P3):** Slice Plan body trim; Roadmap vault-sync item closeout; any residual Escape Routes framing.
+- **Merged:** PR #88 → `dev` (`3a11032`).
+- **Still open after P2:** P3 process trim; Social assets; route geometry.
 
 ## 7/16/2026 (night — vault truth P1)
 

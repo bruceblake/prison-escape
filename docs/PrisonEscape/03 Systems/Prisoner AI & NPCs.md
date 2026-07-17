@@ -20,11 +20,11 @@ NPC inmates follow the daily routine via NavMesh; the player follows the same co
 - Travel grace ([[Time & Schedule]]) → compliant while moving
 - `MovementBlocked` (arrest) disables the movement controller
 
-## Personalities — being replaced
+## Identities & social (v3 on `dev`)
 
-> ⚠️ **`NPCPersonalityData` is deprecated** (no assets were ever authored) and will be **deleted** in the social overhaul. Its replacement: every NPC (prisoner *and* guard) gets a generated `NPCIdentity` — name, archetype (Shot-Caller, Soldier, Hustler, Old-Timer, Bruiser, Snitch, Loner), five rolled trait axes (Aggression, Loyalty, Greed, Sociability, Nerve), and gang affiliation — all seeded from `worldSeed`. Full design: **[[Social Ecosystem & Gangs]]**.
+Every NPC (prisoner *and* guard) gets a generated **`NPCIdentity`** — name, archetype (Shot-Caller, Soldier, Hustler, Old-Timer, Bruiser, Snitch, Loner / guard archetypes), five trait axes, gang affiliation — seeded from the visit/world seed. `NPCPersonalityData` (v1) is **deleted**. Design: **[[Social Ecosystem & Gangs]]** · system: [[Social & Reputation]].
 
-The overhaul also adds ambient social behavior on top of the routine: territory warn-offs, ambient chats/arguments between NPCs during social phases (`SocialSimulationTicker`), and interaction via the [[Talk Menu & NPC Profile]] instead of the v1 greet/favor presenter. Player-facing web: [[Social Dossier — Relationships & Gangs]].
+Ambient social: territory warn-offs, chats/arguments (`SocialSimulationTicker`). Player interaction: [[Talk Menu & NPC Profile]] via `PrisonerSocialPresenter` → `SocialInteractionMenu`. Strategy view: [[Social Dossier — Relationships & Gangs]] (`SocialDossierUI`).
 
 ## Spawning
 
@@ -37,7 +37,8 @@ The overhaul also adds ambient social behavior on top of the routine: territory 
 | `Assets/Scripts/Singleplayer/AI/PrisonerAI.cs` | NPC routine |
 | `Assets/Scripts/Singleplayer/Player/PrisonerController.cs` | Player compliance |
 | `Assets/Scripts/Shared/Prison/IPrisoner.cs` | Shared contract |
-| `Assets/Scripts/Shared/Prison/NPCPersonalityData.cs` | Personality SO (deprecated → [[Social Ecosystem & Gangs]]) |
-| `Assets/Scripts/Singleplayer/GameManager.cs` | Spawning + world boot |
+| `Assets/Scripts/Shared/Social/SocialRosterBuilder.cs` / `SocialTypes.cs` | Identities + roster |
+| `Assets/Scripts/Shared/Social/SocialWorld.cs` | Social hub (built from `GameManager`) |
+| `Assets/Scripts/Singleplayer/GameManager.cs` | Spawning + world boot + Social bridge |
 
 Related: [[Locations, Zones & Cells]] · [[Guard AI]] · [[Social & Reputation]] · [[Time & Schedule]]

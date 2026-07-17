@@ -97,20 +97,15 @@ If Vipers standing &lt; 0 and you are not a member → ink stamp: "Vipers don't 
 
 Prison-wide reputation tier (Outsider / Associate / Respected / Kingpin) from average Standing + gang rank bonus — same names as legacy v1 tiers, new math.
 
-## Widgets / files (planned)
+## Widgets / files (implemented)
 
 | Piece | Role |
 |---|---|
-| `NotebookRelationshipsPage` | List + detail |
-| `NotebookGangsPage` | Cards + meters |
-| `SocialDossierEntry` | Row view-model |
-| `StolenNotebookUI` | Hosts sub-tabs (extend existing map/social/workbench/schedule) |
+| `SocialDossierUI` | Relationships list/detail + Gangs pages (attached by `StolenNotebookUI`) |
+| `StolenNotebookUI` | Notebook host (map / social / workbench / schedule) |
+| `StandingBandUI` | Band colors shared with nameplates |
 
-## Milestone mapping
-
-- **M2** — Relationships list + bars + basic detail; nameplate sync.
-- **M3** — Gangs page + territory + rank.
-- **M5** — Memory snippets + gift fog unlocks fully wired.
+Milestone M2/M3/M5 design intent is **shipped** in `SocialDossierUI`; remaining work is art/UX polish, not missing pages.
 
 ## Related
 

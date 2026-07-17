@@ -2,7 +2,9 @@
 
 Guards patrol, detect non-compliant inmates, escort them back to their cells, verify beds at night, and run the morning shakedown.
 
-> 🔭 **Planned (specced):** guards join the social ecosystem — per-guard archetypes (By-the-Book, **Corrupt/bribable**, Rookie 75° cone, Veteran 8 m proximity spot), per-player guard trust (≥ 50 → +10 s compliance tolerance; ≤ −25 → +2 m detection vs you), and snitch **tips** that queue targeted shakedowns. Design: [[Social Ecosystem & Gangs]] (§ guard archetypes, bribes, snitching).
+> ✅ **Social / career hooks (on `dev`):** guard archetypes via `GuardSocialProfile` / `GuardArchetype` (By-the-Book, **Corrupt/bribable**, Rookie **75°** cone, Veteran **8 m** proximity + distraction immune); Corrupt bribes from Talk; snitch tips → `MorningShakedownSweeper.QueueTargetedShakedown`. Facility / career `DetectionRangeMult` scales detection. Design: [[Social Ecosystem & Gangs]] · [[Social & Reputation]].
+>
+> 🔭 **Still polish:** per-player Trust ≥ 50 → +10 s compliance tolerance and Trust ≤ −25 → +2 m detection vs you specifically (aggregate tip filtering exists; full per-guard trust geometry does not).
 
 ## Duties & spawn roles
 

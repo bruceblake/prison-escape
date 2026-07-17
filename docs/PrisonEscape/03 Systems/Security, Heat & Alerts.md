@@ -25,7 +25,9 @@ If a future design wants accumulating/decaying heat, that's a new system — spe
 
 > ✅ **Implemented (7/15/2026):** `OnLockdown` is raised for **any cell-count mismatch** — `FormalCountMonitor` checks presence when a midday/evening count ends (`"Count mismatch — Midday Count: 15/16 accounted for"`), alongside the existing night bed-check lockdown ([[Time & Schedule]] § The Count). Consequence listeners remain the open gap above.
 
-> 🔭 **Planned (specced):** the [[Social Ecosystem & Gangs]] overhaul adds **snitch tips** — an NPC who saw/heard about your crime reports it, queuing a targeted shakedown of your cell next morning and holding the heat eye at half for 1 day. Per-guard trust also modifies detection (±2 m / +10 s tolerance) against you specifically.
+> ✅ **Snitch tips (on `dev`):** `SnitchSystem` / `SocialWorld` can raise suspicion events and queue a **targeted morning shakedown** via `MorningShakedownSweeper`. See [[Social & Reputation]].
+>
+> 🔭 **Still polish:** snitch path does **not** currently floor the heat eye at half for 1 day via `PrisonSuspicion` (that floor is the post-capture suspicion window). Per-guard Trust → ±2 m / +10 s tolerance is also still polish ([[Guard AI]]).
 
 ## Enforcement chain
 

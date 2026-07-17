@@ -454,31 +454,79 @@ public static class PrisonFacilityInstaller
         var door = FindDeepChild(facility, doorName);
         if (door == null) return;
 
-        AlignDoorToCellWall(door, cellShell, bed);
-
-        var controller = door.GetComponent<CellDoorController>() ?? door.gameObject.AddComponent<CellDoorController>();
-        controller.slideSpeed = 3f;
-        controller.openOffset = ComputeDoorOpenOffsetLocal(door, bed);
-        controller.InitializeClosedPosition();
-        EnsureDoorCollider(door);
-        EditorUtility.SetDirty(door.gameObject);
+        // Keep BlenderKit authored pose — shell-center re-align drifts doors one bay
+        // sideways and can flip yaw relative to the mesh.
+        RestoreAuthoredDoorPose(door);
+        SetupDoorController(door, bed);
         count++;
     }
 
     /// <summary>
-    /// Snaps a barred door to the corridor-facing wall of its cell shell, facing into the cell.
-    /// FBX assembly exports often parent doors at the wrong offset — bounds + bed fix that at install time.
+    /// Wires <see cref="CellDoorController"/> on an already-posed door (authored FBX pose).
+    /// </summary>
+    public static void SetupDoorController(Transform door, Transform bed)
+    {
+        if (door == null) return;
+        var controller = door.GetComponent<CellDoorController>() ?? door.gameObject.AddComponent<CellDoorController>();
+        controller.slideSpeed = 3f;
+        controller.openOffset = ComputeDoorOpenOffsetLocal(door, bed);
+        // Capture closed from the authored/restored pose, then keep the scene door there.
+        // Leaving doors slid open caused Play Mode Start() to treat open as closed.
+        controller.InitializeClosedPosition();
+        door.localPosition = controller.closedLocalPosition;
+        EnsureDoorCollider(door);
+        EditorUtility.SetDirty(door.gameObject);
+        EditorUtility.SetDirty(controller);
+    }
+
+    /// <summary>
+    /// Restores local TRS from <see cref="PrefabPath"/> so doors sit in the BlenderKit
+    /// doorway again after a bad align pass.
+    /// </summary>
+    public static bool RestoreAuthoredDoorPose(Transform door)
+    {
+        if (door == null) return false;
+        var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+        if (prefab == null) return false;
+
+        Transform auth = null;
+        foreach (var t in prefab.GetComponentsInChildren<Transform>(true))
+        {
+            if (t.name == door.name)
+            {
+                auth = t;
+                break;
+            }
+        }
+
+        if (auth == null) return false;
+
+        door.localPosition = auth.localPosition;
+        door.localRotation = auth.localRotation;
+        door.localScale = auth.localScale;
+        EditorUtility.SetDirty(door.gameObject);
+        return true;
+    }
+
+    /// <summary>
+    /// Legacy align helper kept for EditMode tests. Runtime/facility wiring uses
+    /// <see cref="RestoreAuthoredDoorPose"/> instead — shell-center placement drifts.
     /// </summary>
     public static void AlignDoorToCellWall(Transform door, Transform cellShell, Transform bed)
     {
         if (door == null || cellShell == null) return;
 
-        var bounds = GetObjectBounds(cellShell);
+        // Prefer authored pose when this is a facility door.
+        if (door.name.StartsWith("Cell_", System.StringComparison.Ordinal) && door.name.EndsWith("_Door"))
+        {
+            if (RestoreAuthoredDoorPose(door))
+                return;
+        }
+
+        var bounds = GetObjectBounds(cellShell, excludeDoorAndBed: true);
         if (bounds.size.sqrMagnitude < 0.01f) return;
 
         Vector3 bedPos = bed != null ? bed.position : bounds.center;
-        // Beds can poke past the measured render bounds; clamp inside so the
-        // furthest-wall pick can't flip to a side wall.
         bedPos = new Vector3(
             Mathf.Clamp(bedPos.x, bounds.min.x, bounds.max.x),
             bedPos.y,
@@ -486,28 +534,24 @@ public static class PrisonFacilityInstaller
         if (!TryGetCorridorDoorFace(bounds, bedPos, out Vector3 faceCenter, out Vector3 outwardNormal))
             return;
 
-        Vector3 intoCell = bedPos - faceCenter;
-        intoCell.y = 0f;
-        if (intoCell.sqrMagnitude < 0.01f)
-            intoCell = -outwardNormal;
-        intoCell.Normalize();
+        // Project the door onto the corridor face, keeping authored lateral position.
+        Vector3 pos = door.position;
+        float depth = Vector3.Dot(pos - faceCenter, outwardNormal);
+        pos -= depth * outwardNormal;
+        pos.y = FloorY;
 
-        door.rotation = Quaternion.LookRotation(intoCell, Vector3.up);
-
-        // Seat by pivot first (this is the fallback for renderer-less test doubles).
-        door.position = new Vector3(faceCenter.x, FloorY, faceCenter.z);
+        door.rotation = Quaternion.LookRotation(-outwardNormal, Vector3.up);
+        door.position = pos;
 
         var doorBounds = GetObjectBounds(door);
         if (doorBounds.size.sqrMagnitude > 0.01f)
         {
-            // Center the door's MESH (not its pivot) on the doorway opening and seat its
-            // bottom on the floor, sitting in the wall plane — no outward nudge.
-            Vector3 centerOffset = doorBounds.center - door.position;
             float bottomOffset = doorBounds.min.y - door.position.y;
-            door.position = new Vector3(
-                faceCenter.x - centerOffset.x,
-                FloorY - bottomOffset,
-                faceCenter.z - centerOffset.z);
+            // Only correct depth onto the face + floor; do NOT recentre laterally onto shell.
+            Vector3 center = doorBounds.center;
+            float depthErr = Vector3.Dot(center - faceCenter, outwardNormal);
+            door.position -= outwardNormal * depthErr;
+            door.position = new Vector3(door.position.x, FloorY - bottomOffset, door.position.z);
         }
     }
 
@@ -539,16 +583,18 @@ public static class PrisonFacilityInstaller
         return true;
     }
 
-    static Bounds GetObjectBounds(Transform root)
+    static Bounds GetObjectBounds(Transform root, bool excludeDoorAndBed = false)
     {
-        var renderers = root.GetComponents<Renderer>();
-        if (renderers.Length == 0)
-            renderers = root.GetComponentsInChildren<Renderer>();
+        var renderers = root.GetComponentsInChildren<Renderer>(true);
 
         Bounds bounds = default;
         bool has = false;
         foreach (var r in renderers)
         {
+            if (r == null) continue;
+            if (excludeDoorAndBed && IsDoorOrBedRenderer(r.transform))
+                continue;
+
             if (!has)
             {
                 bounds = r.bounds;
@@ -561,6 +607,22 @@ public static class PrisonFacilityInstaller
         }
 
         return bounds;
+    }
+
+    static bool IsDoorOrBedRenderer(Transform t)
+    {
+        while (t != null)
+        {
+            if (t.GetComponent<CellDoorController>() != null)
+                return true;
+            string n = t.name;
+            if (n.IndexOf("Door", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                return true;
+            if (n.IndexOf("Bed", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                return true;
+            t = t.parent;
+        }
+        return false;
     }
 
     public static void EnsureDoorCollider(Transform door)
@@ -608,20 +670,18 @@ public static class PrisonFacilityInstaller
         Debug.Log($"[PrisonFacility] Added {added} cell prop colliders.");
     }
 
-    const float DoorSlideDistance = 6f;
+    // Authored BlenderKit doors are ~1.2 m wide; slide just past that onto the pier.
+    public const float DoorSlideDistance = 1.35f;
 
     public static Vector3 ComputeDoorOpenOffsetLocal(Transform door, Transform bed)
     {
+        // door.forward is set by AlignDoorToCellWall to the wall inward normal.
+        // Do not re-derive from the bed — off-center beds skew the slide axis.
         Vector3 intoCell = door.forward;
-        if (bed != null)
-        {
-            intoCell = bed.position - door.position;
-            intoCell.y = 0f;
-            if (intoCell.sqrMagnitude > 0.01f)
-                intoCell.Normalize();
-            else
-                intoCell = door.forward;
-        }
+        intoCell.y = 0f;
+        if (intoCell.sqrMagnitude < 0.01f)
+            intoCell = Vector3.forward;
+        intoCell.Normalize();
 
         Vector3 alongWall = Vector3.Cross(Vector3.up, intoCell);
         if (alongWall.sqrMagnitude < 0.01f)
@@ -639,7 +699,16 @@ public static class PrisonFacilityInstaller
             ? new Vector3(Mathf.Sign(localDir.x), 0f, 0f)
             : new Vector3(0f, 0f, Mathf.Sign(localDir.z));
 
-        return axis * DoorSlideDistance;
+        // Slide at least the fitted door width so the opening fully clears.
+        float doorWidth = 0f;
+        var bounds = GetObjectBounds(door);
+        if (bounds.size.sqrMagnitude > 0.01f)
+            doorWidth = Mathf.Abs(Vector3.Dot(bounds.size, alongWall));
+        float slide = Mathf.Max(DoorSlideDistance, doorWidth + 0.1f);
+        // Cap so an open door parks on the pier, not in the neighbor opening (~4 m pitch).
+        slide = Mathf.Min(slide, 1.6f);
+
+        return axis * slide;
     }
 
     static void WireBed(Transform facility, string bedName, int cellIndex, ref int count)

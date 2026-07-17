@@ -28,6 +28,7 @@ public static class PrisonDoorAndWaypointFixer
 
         int doors = FixCellDoors();
         int points = EnsureCellStandPoints();
+        int routes = PrisonPolishPass.RebuildGuardPatrolRoutes();
         int waypoints = SnapPatrolWaypointsToNavMesh();
 
         PrisonLevelLayoutRunner.WireRegistryPublic();
@@ -36,7 +37,7 @@ public static class PrisonDoorAndWaypointFixer
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
 
-        Debug.Log($"[DoorWaypointFixer] Done — {doors} doors realigned, {points} stand points created, {waypoints} patrol waypoints snapped. Scene saved.");
+        Debug.Log($"[DoorWaypointFixer] Done — {doors} doors realigned ({PrisonFacilityInstaller.DoorSlideDistance:0.##} m slide), {points} stand points, {routes} guards assigned patrol routes, {waypoints} waypoints snapped. Scene saved.");
     }
 
     static void EnsureSceneOpen()
@@ -66,12 +67,10 @@ public static class PrisonDoorAndWaypointFixer
                 continue;
             }
 
-            PrisonFacilityInstaller.AlignDoorToCellWall(door.transform, shell, bed);
-            door.openOffset = PrisonFacilityInstaller.ComputeDoorOpenOffsetLocal(door.transform, bed);
-            door.slideSpeed = Mathf.Max(door.slideSpeed, 3f);
-            door.InitializeClosedPosition();
-            PrisonFacilityInstaller.EnsureDoorCollider(door.transform);
-            EditorUtility.SetDirty(door.gameObject);
+            // Restore BlenderKit authored TRS — shell-center align was shifting doors one bay.
+            if (!PrisonFacilityInstaller.RestoreAuthoredDoorPose(door.transform))
+                PrisonFacilityInstaller.AlignDoorToCellWall(door.transform, shell, bed);
+            PrisonFacilityInstaller.SetupDoorController(door.transform, bed);
             fixedCount++;
         }
 

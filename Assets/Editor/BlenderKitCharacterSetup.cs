@@ -54,38 +54,53 @@ public static class BlenderKitCharacterSetup
         importer.bakeAxisConversion = false;
         importer.globalScale = 1f;
 
-        // Without explicit frame ranges Unity imports each clip as frames 0-0 —
-        // a single-frame pose, so characters never play the actual cycles.
-        // Pull the real ranges from the FBX takes.
+        // FBX takes are named "SM_Char_Prisoner|Walk". takeName MUST be that full id —
+        // using the short name ("Walk") drops real clips and leaves only __preview__ stubs
+        // that freeze characters mid-pose at runtime.
         var takeInfos = importer.importedTakeInfos;
         var clips = new List<ModelImporterClipAnimation>();
-        foreach (var take in new[] { "Idle", "Walk", "Run", "Jump" })
+        if (takeInfos != null)
         {
-            var clip = new ModelImporterClipAnimation
+            foreach (var info in takeInfos)
             {
-                name = take,
-                takeName = take,
-                loopTime = take != "Jump",
-                loopPose = take != "Jump",
-            };
+                string shortName = info.name;
+                int pipe = shortName.LastIndexOf('|');
+                if (pipe >= 0 && pipe < shortName.Length - 1)
+                    shortName = shortName.Substring(pipe + 1);
 
-            if (takeInfos != null)
-            {
-                foreach (var info in takeInfos)
+                if (shortName is not ("Idle" or "Walk" or "Run" or "Jump"))
+                    continue;
+
+                float rate = info.sampleRate > 0f ? info.sampleRate : 24f;
+                float first = info.bakeStartTime * rate;
+                float last = info.bakeStopTime * rate;
+                if (last <= first)
                 {
-                    if (info.name != take && !info.name.EndsWith("|" + take, System.StringComparison.Ordinal))
-                        continue;
-                    float rate = info.sampleRate > 0f ? info.sampleRate : 24f;
-                    clip.firstFrame = info.bakeStartTime * rate;
-                    clip.lastFrame = info.bakeStopTime * rate;
-                    break;
+                    first = 0f;
+                    last = shortName switch
+                    {
+                        "Idle" => 48f,
+                        "Run" => 16f,
+                        _ => 24f
+                    };
                 }
+
+                clips.Add(new ModelImporterClipAnimation
+                {
+                    name = shortName,
+                    takeName = info.name,
+                    firstFrame = first,
+                    lastFrame = last,
+                    loopTime = shortName != "Jump",
+                    loopPose = shortName != "Jump",
+                });
             }
+        }
 
-            if (clip.lastFrame <= clip.firstFrame)
-                Debug.LogWarning($"[BlenderKitCharacter] Take '{take}' in {fbxPath} has no frame range — clip will be a static pose.");
-
-            clips.Add(clip);
+        if (clips.Count == 0)
+        {
+            Debug.LogWarning($"[BlenderKitCharacter] No Idle/Walk/Run/Jump takes found on {fbxPath}");
+            return;
         }
 
         importer.clipAnimations = clips.ToArray();
@@ -166,9 +181,10 @@ public static class BlenderKitCharacterSetup
     {
         return AssetDatabase.LoadAllAssetsAtPath(fbxPath)
             .OfType<AnimationClip>()
+            .Where(c => !c.name.StartsWith("__preview__", System.StringComparison.Ordinal))
             .FirstOrDefault(c => c.name == clipName
-                || c.name.Contains(clipName)
-                || c.name.EndsWith("|" + clipName, System.StringComparison.Ordinal));
+                || c.name.EndsWith("|" + clipName, System.StringComparison.Ordinal)
+                || c.name.EndsWith("/" + clipName, System.StringComparison.Ordinal));
     }
 
     static bool CreateCharacterPrefab(string fbxPath, string prefabPath, RuntimeAnimatorController controller)

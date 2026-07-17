@@ -154,9 +154,18 @@ public static class PrisonProBuilderRebuildRunner
             bakedGo.transform.SetPositionAndRotation(pb.transform.position, pb.transform.rotation);
             bakedGo.transform.localScale = pb.transform.lossyScale;
 
-            Mesh mesh = new Mesh();
-            pb.ToMesh(mesh);
+            // ProBuilder 6+: ToMesh(MeshTopology) rebuilds the MeshFilter; copy that mesh out.
+            pb.ToMesh();
             pb.Refresh(RefreshMask.All);
+            Mesh source = pb.GetComponent<MeshFilter>()?.sharedMesh;
+            if (source == null)
+            {
+                Object.DestroyImmediate(bakedGo);
+                continue;
+            }
+
+            Mesh mesh = Object.Instantiate(source);
+            mesh.name = pb.gameObject.name + "_Baked";
 
             var filter = bakedGo.AddComponent<MeshFilter>();
             filter.sharedMesh = mesh;

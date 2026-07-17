@@ -29,7 +29,11 @@ namespace Prison.Social
         private readonly Dictionary<GameObject, int> _actorIdsByObject = new Dictionary<GameObject, int>();
         private readonly HashSet<int> _metActors = new HashSet<int>();
         private readonly HashSet<int> _heardOfActors = new HashSet<int>();
-        private readonly Dictionary<int, PrisonEventType> _lastChatPhase = new Dictionary<int, PrisonEventType>();
+        private readonly Dictionary<int, int> _lastChatPhase = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _lastIntimidatePhase = new Dictionary<int, int>();
+        // Monotonic phase counter: gates "once per phase" acts correctly even when the same
+        // PrisonEventType occurs more than once in a day (e.g. multiple FreeTime blocks).
+        private int _phaseSerial;
         private readonly Dictionary<int, ItemCategory> _lastGiftCategory = new Dictionary<int, ItemCategory>();
         private readonly Dictionary<int, HashSet<ItemCategory>> _knownGiftPrefs = new Dictionary<int, HashSet<ItemCategory>>();
         private readonly HashSet<int> _knownCorruptGuards = new HashSet<int>();
@@ -266,12 +270,12 @@ namespace Prison.Social
         // ------------------------------------------------------------------ player acts
 
         /// <summary>True once the player already chatted with this NPC in the current phase.</summary>
-        public bool ChatUsedThisPhase(int actorId)
-        {
-            if (PrisonTimeManager.Instance == null) return false;
-            return _lastChatPhase.TryGetValue(actorId, out var phase)
-                   && phase == PrisonTimeManager.Instance.CurrentEvent;
-        }
+        public bool ChatUsedThisPhase(int actorId) =>
+            _lastChatPhase.TryGetValue(actorId, out var serial) && serial == _phaseSerial;
+
+        /// <summary>True once the player already tried intimidating this NPC in the current phase.</summary>
+        public bool IntimidateUsedThisPhase(int actorId) =>
+            _lastIntimidatePhase.TryGetValue(actorId, out var serial) && serial == _phaseSerial;
 
         /// <summary>Chat: +2 trust, 1/phase/NPC. Returns the dialogue line (intel by trust band).</summary>
         public string Chat(int actorId)
@@ -279,8 +283,7 @@ namespace Prison.Social
             var identity = GetIdentity(actorId);
             if (identity == null || ChatUsedThisPhase(actorId)) return null;
 
-            if (PrisonTimeManager.Instance != null)
-                _lastChatPhase[actorId] = PrisonTimeManager.Instance.CurrentEvent;
+            _lastChatPhase[actorId] = _phaseSerial;
             MarkMet(actorId);
 
             ApplyPlayerAct(actorId, SocialEventType.Chat);
@@ -479,7 +482,8 @@ namespace Prison.Social
         {
             chance = 0f;
             var identity = GetIdentity(actorId);
-            if (identity == null) return false;
+            if (identity == null || IntimidateUsedThisPhase(actorId)) return false;
+            _lastIntimidatePhase[actorId] = _phaseSerial;
 
             float respect = Relationships.GetRespect(actorId, SocialTuning.PlayerActorId);
             float strength = PlayerStats.Instance != null ? PlayerStats.Instance.Strength : 0f;
@@ -623,6 +627,7 @@ namespace Prison.Social
 
         private void OnPhaseChanged(PrisonEventType phase)
         {
+            _phaseSerial++;
             if (Roster == null) return;
 
             if (phase == PrisonEventType.MorningRollCall)

@@ -1,17 +1,25 @@
 # Social & Career PR Slice Plan
 
-**Status:** Active plan — slice the local uncommitted blob; then finish remaining Social gaps.
+**Status:** Execution complete on `dev` (Career #51–#57 · Social #58–#72 · bridge · chores). This note is now the **post-merge gap list** + historical slice record.
 **Policy:** [[Small PRs & Feature Slices]]
 **Specs:** [[Social Ecosystem & Gangs]] · [[Prison Career Ladder]] · [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]
-**Branch context (7/16/2026):** `feat/social-ecosystem` tip = docs-only (`a8651b2`, already on `dev` via PR #41). A large **uncommitted** Career + Social + misc polish tree sits on the primary checkout.
+**Branch context:** Integrated tip on `dev` (`dca50db` docs flip after code merge `d25a3ad`). Backup of pre-split WIP: `backup/pre-split-20260716`. Open feature PRs: none.
 
-## Locked decisions
+## Post-merge remaining gaps
+
+1. **Vault sync** — P0 hub truth done this pass; P1–P3 still open (Codebase Map, Testing & QA, Content Inventory, HUD/waypoint, Loot wallet wording).
+2. **`Resources/Social/`** — installer exists; ScriptableObject catalogs not committed (code fallbacks in use).
+3. **Social polish** — overhead Talk markers; fuller per-guard Trust→detection.
+4. **Career M6+** — State/Federal facility scenes beyond County stub + Dev Sandbox.
+5. **Escape route geometry** — vents / fence so the boundary is reachable ([[Roadmap & Priorities]]).
+
+## Locked decisions (historical — split already executed)
 
 1. **Do not rewrite** merged PR #41 / `dev` history.
-2. **Do** split the uncommitted working tree into sequential small PRs off latest `origin/dev`.
-3. Snapshot with `git stash create` → `refs/backup/pre-split-*` before moving files.
-4. Primary checkout returns to **`dev`**; each slice gets its own worktree.
-5. Playtest gate still applies per slice ([[Development Workflow]]).
+2. Split was applied to the uncommitted blob via micro-PRs off `origin/dev`.
+3. Snapshot: `backup/pre-split-20260716`.
+4. Primary checkout stays on **`dev`**; feature work uses worktrees.
+5. Playtest gate still applies for gameplay slices ([[Development Workflow]]).
 
 ```mermaid
 flowchart LR

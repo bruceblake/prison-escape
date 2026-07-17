@@ -4,23 +4,23 @@
 
 ## 01 Game Design
 - [[Game Vision & Core Loop]] — what the game is, pillars, the escape fantasy
-- [[Prison Career Ladder]] — 📐 the career: County → State ×3 → Federal ×5; escape = caught & transferred; worlds, global carry, difficulty curves
-- [[World Rules]] — the laws of the game world (26 implemented + career rules 27–33 specced)
+- [[Prison Career Ladder]] — ✅ M1–M5 on `dev` (County → State ×3 → Federal ×5; escape = caught & transferred; worlds, global carry, difficulty curves). M6+ = facility scenes
+- [[World Rules]] — the laws of the game world (rules 1–33 as implemented; social = Respect/Trust v3)
 - [[Prison Layout — Minimum Security]] — the Dev Sandbox map (diagram + dimensions)
-- [[Roadmap & Priorities]] — what's next (top: **social ecosystem v3**)
+- [[Roadmap & Priorities]] — what's next (top: **escape route geometry** — vents / fence)
 - [[Prison Escape]] — original founding note (multi-prison vision)
 
 ## 02 Features — active feature specs
-- [[Escape Completion System]] — ✅ v1 on `dev` (win state, solitary, suspicion, stats); v2 transfer rewrite specced
-- [[Social Ecosystem & Gangs]] — 📐 **v3** specced (research + UI; identities & personalities, Standing bands, exclusive gangs, Talk Menu, notebook dossier, trading & bribes, two-way favors, snitching)
-- [[World Saves & Start Screen]] — 📐 specced (named career worlds, JSON saves, MainMenu → worlds + prison-select hub, locked silhouettes)
-- [[Facility Transfer & Graduation]] — 📐 specced (escape → caught-transfer ceremony, County sentence clock, global carry / local reset, career win)
+- [[Escape Completion System]] — ✅ on `dev`: capture path unchanged; career boundary → transfer ceremony; Dev Sandbox still "YOU ESCAPED"
+- [[Social Ecosystem & Gangs]] — ✅ **v3** on `dev` (Respect/Trust, Standing bands, gangs, Talk Menu, dossier, trading & bribes, favors, snitching). Polish/assets still open — see system note
+- [[World Saves & Start Screen]] — ✅ on `dev` (named career worlds, JSON saves, MainMenu → worlds + prison-select hub, locked silhouettes)
+- [[Facility Transfer & Graduation]] — ✅ on `dev` (escape → caught-transfer ceremony, County sentence clock, global carry / local reset, career win)
 
 ## 03 Systems — one note per system
 - [[Systems Overview]] — connection map + status of everything
 - Core sim: [[Time & Schedule]] · [[Locations, Zones & Cells]] · [[Roll Call & Shakedown]]
 - AI: [[Guard AI]] · [[Prisoner AI & NPCs]]
-- Progression: [[Social & Reputation]] (v1 — being replaced by [[Social Ecosystem & Gangs]] v3) · [[Inventory & Items]] · [[Crafting]] · [[Loot & Economy]]
+- Progression: [[Social & Reputation]] (v3 — `SocialWorld`; design: [[Social Ecosystem & Gangs]]) · [[Inventory & Items]] · [[Crafting]] · [[Loot & Economy]]
 - The goal: [[Escape Routes & Mechanics]]
 - Pressure: [[Security, Heat & Alerts]]
 - Presentation: [[UI & HUD]] (incl. [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]])
@@ -35,12 +35,12 @@
 ## 05 Engineering
 - [[Codebase Map]] — folder layout, core abstractions, conventions
 - [[Editor Tooling]] — layout runner and friends (regenerate, don't hand-edit)
-- [[Testing & QA]] — 146 EditMode tests, coverage matrix, testing rules
+- [[Testing & QA]] — EditMode coverage matrix and testing rules *(P1 vault sync: count ~195 on tip)*
 
 ## 06 Process
 - [[Development Workflow]] — Obsidian → Cursor → Unity MCP → Git loop
 - [[Small PRs & Feature Slices]] — **mandatory** one-concern PRs; mega-diff recovery
-- [[Social & Career PR Slice Plan]] — ordered slices for the uncommitted Social+Career blob + remaining work
+- [[Social & Career PR Slice Plan]] — post-merge remaining gaps (Social assets, M6+ scenes, polish)
 - [[Feature Spec Template]] — copy for every new feature
 - [[Git & Branching]] — dev/main model
 

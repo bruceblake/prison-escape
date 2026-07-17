@@ -2,11 +2,17 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/16/2026 (night — vault truth P1)
+
+- **Phase 7 P1** — engineering/content inventory notes match tip: [[Codebase Map]] (`Shared/Social`, `SocialWorld`, Career, ~2800 graph nodes), [[Testing & QA]] (11 suites / ~195 `[Test]`), [[Editor Tooling]] (collision + Career/Social menus), [[Content Inventory]] (PrisonLevel1 + CountyJail enabled; Facilities resources).
+- **Branch:** `chore/vault-truth-p1` (docs-only).
+- **Still open (P2–P3):** HUD/waypoint/Locations/Loot/Guard/Prisoner/Security surface notes; Talk/Dossier widget naming; Slice Plan historical body trim.
+
 ## 7/16/2026 (night — vault truth P0)
 
-- **Phase 7 P0 vault sync** — hub notes rewritten to match `dev` @ `dca50db`: [[Home]], [[Systems Overview]], [[World Rules]] (social 18–20 + career 27–33), [[Social & Reputation]] → `SocialWorld` v3, [[Screens & Menus]], [[Escape Completion System]], [[Game Vision & Core Loop]] gap, [[Roadmap & Priorities]], [[Social & Career PR Slice Plan]] post-merge framing.
-- **Branch:** `chore/vault-truth-p0` (docs-only).
-- **Still open (P1–P3):** Codebase Map, Testing & QA (~195), Editor Tooling, Content Inventory, HUD/waypoint/sentence-clock notes, Loot wallet wording; `Resources/Social/` assets; escape route geometry.
+- **Phase 7 P0 vault sync** — hub notes rewritten to match `dev`: [[Home]], [[Systems Overview]], [[World Rules]] (social 18–20 + career 27–33), [[Social & Reputation]] → `SocialWorld` v3, [[Screens & Menus]], [[Escape Completion System]], [[Game Vision & Core Loop]] gap, [[Roadmap & Priorities]], [[Social & Career PR Slice Plan]] post-merge framing.
+- **Merged:** PR #86 → `dev` (`f1a5d48`).
+- **Still open after P0:** P1–P3 vault notes; `Resources/Social/` assets; escape route geometry.
 
 ## 7/16/2026 (night — small PR split execution)
 

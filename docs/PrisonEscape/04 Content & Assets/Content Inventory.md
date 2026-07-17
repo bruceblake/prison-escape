@@ -6,23 +6,33 @@ What exists in `Assets/` — scenes, prefabs, materials, models. See [[Item Cata
 
 | Scene | Role | In build? |
 |---|---|---|
-| `Scenes/MainMenu` | Lobby/menu (Steam, find game, map vote) | ✅ |
+| `Scenes/MainMenu` | Career hub (`CareerMainMenuUI`: worlds + prison select) + MP lobby | ✅ |
+| `Scenes/PrisonLevel1` | **Dev Sandbox** (off career ladder; layout / BlenderKit target) | ✅ |
+| `Scenes/CountyJail` | County facility stub (ladder slot 0; free to diverge from sandbox) | ✅ |
 | `Scenes/Warehouse` / `Scenes/Factory` | Multiplayer FPS maps | ✅ |
-| `Scenes/PrisonLevel1` | **Current prison level** (layout runner target) | ⚠️ disabled |
-| `Scenes/SinglePlayerScene` | Older SP prison scene | disabled (+ root & `_Recovery` copies; one recovery copy enabled) |
-| `Scenes/Warmup` | Pre-match role/timer UI | not listed |
+| `Scenes/SinglePlayerScene` | Older SP prison scene | disabled (+ root & `_Recovery` copies) |
+| `Scenes/Warmup` | Pre-match role/timer UI | on disk, **not** in build list |
 | `Scenes/Game` | Legacy | disabled |
+| `Scenes/PrisonLevel01` | Orphan build entry — **file missing** | disabled (cleanup) |
 
-> Cleanup candidates: duplicate `SinglePlayerScene` copies; build list should eventually enable `PrisonLevel1` and drop recovery entries.
+> Cleanup candidates: drop orphan `PrisonLevel01` GUID, duplicate `SinglePlayerScene` / recovery entries. Future ladder scenes (`StateMin`…`FedAdx`) are named in `FacilityCatalog` but not authored yet ([[Prison Career Ladder]] M6+).
 
-## Prefabs (`Assets/Prefabs/`, 22)
+## Resources
+
+| Path | Contents |
+|---|---|
+| `Assets/Resources/Facilities/` | **10** `FacilityDefinition` assets (dev + County → Fed ADX) |
+| `Assets/Resources/Social/` | **Not present** until **Tools → Prison → Social → Install Social Assets**; catalogs fall back to code |
+
+## Prefabs (`Assets/Prefabs/`, ~113)
 
 | Group | Prefabs |
 |---|---|
-| Players | `Player` (networked avatar), `LocalPlayer` (first-person local), `GhostPrefab` (prediction ghost) |
-| AI | `AIPrefabs/Guard`, `AIPrefabs/Prisoner`, `NPCs/Prisoner_NPC`, waypoints 1–3 |
-| Combat/FX | `assault1/2`, `Bomb`, `BulletTracer`, `Hitmarker`, `Effects/BulletImpactStoneEffect`, `Particle System` |
-| Items/UI | `PartA/B` (legacy pickups), `Slot`, `MapButton`, `PlayerEntryPrefab`, `PlayerListEntryPrefab` |
+| Players | `Player` (networked), `LocalPlayer` (FPS local), `GhostPrefab` |
+| AI / NPC | `AIPrefabs/Guard`, `AIPrefabs/Prisoner`, `NPCs/Prisoner_NPC`, waypoints |
+| **BlenderKit** | `Prefabs/BlenderKit/` (~91) — facility pieces, characters, item world prefabs |
+| Combat/FX | `assault1/2`, `Bomb`, `BulletTracer`, `Hitmarker`, `Effects/…` |
+| Items/UI (legacy) | `PartA/B`, `Slot`, `MapButton`, lobby list entries |
 
 ## Materials
 
@@ -42,8 +52,9 @@ Shared skin (0.82, 0.62, 0.48); per-role palettes:
 
 `Models/BlenderKit/` — **the canonical asset kit** (see [[Blender Asset Kit]]): 61 modular pieces (walls, doorways, cells, furniture, props, fence), 25 item pickups in `Items/`, `PrisonFacility.fbx` (whole assembled prison), tileable textures in `Textures/`. Master file: `ArtSource/PrisonKit.blend`.
 
-Legacy `Models/`: CafeteriaTable, ConcretePillar, GymBench, PrisonBed, PrisonCellDoor, PrisonCellModule, StorageCrate + `Modular/` kit — superseded by BlenderKit; candidates for removal once the level uses BlenderKit meshes.
-Note: the current level build still **scratch-builds furniture from cubes** via the layout runner; migrating it to BlenderKit FBX is an open task.
+Legacy `Models/`: CafeteriaTable, ConcretePillar, GymBench, PrisonBed, PrisonCellDoor, PrisonCellModule, StorageCrate + `Modular/` kit — superseded by BlenderKit; candidates for removal once unused.
+
+Primary playable geometry path: **Install Prison Facility** (`PrisonFacility.fbx`). Procedural layout runner remains for alternate/rebuild workflows ([[Editor Tooling]]).
 
 ## Third-party / support
 
@@ -56,4 +67,4 @@ Note: the current level build still **scratch-builds furniture from cubes** via 
 
 URP 17.4.0 · ProBuilder 6.0.9 · AI Navigation 2.0.12 · Input System 1.19.0 · Steamworks.NET (git) · Test Framework 1.6.0 · Riptide (embedded DLL, not UPM)
 
-Related: [[Prison Layout — Minimum Security]] · [[Editor Tooling]] · [[Multiplayer & Networking]]
+Related: [[Prison Layout — Minimum Security]] · [[Editor Tooling]] · [[Multiplayer & Networking]] · [[Prison Career Ladder]] · [[World Saves & Start Screen]]

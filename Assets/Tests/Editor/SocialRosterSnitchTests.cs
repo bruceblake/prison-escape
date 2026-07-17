@@ -292,6 +292,30 @@ namespace Prison.Tests
             Assert.IsNull(favors.CreateInitiationFavor(shotCaller, 1));
         }
 
+        // ------------------------------------------------------------------ guard trust modifiers (M6)
+
+        [Test]
+        public void GuardTrust_DetectionMult_WidensOnlyBelowDistrustThreshold()
+        {
+            // Guard AI note: trust ≤ −25 → +2 m on the 10 m base cone (×1.2); neutral otherwise.
+            Assert.AreEqual(1f, GuardTrustMath.DetectionRangeMultiplier(0f), 0.001f);
+            Assert.AreEqual(1f, GuardTrustMath.DetectionRangeMultiplier(75f), 0.001f);
+            Assert.AreEqual(1f, GuardTrustMath.DetectionRangeMultiplier(-24f), 0.001f);
+            Assert.AreEqual(1.2f, GuardTrustMath.DetectionRangeMultiplier(-25f), 0.001f);
+            Assert.AreEqual(1.2f, GuardTrustMath.DetectionRangeMultiplier(-100f), 0.001f);
+        }
+
+        [Test]
+        public void GuardTrust_ComplianceGrace_TenSecondsAtTrustFiftyPlus()
+        {
+            // Guard AI note: trust ≥ 50 → +10 s compliance tolerance; none below.
+            Assert.AreEqual(0f, GuardTrustMath.ComplianceGraceSeconds(0f), 0.001f);
+            Assert.AreEqual(0f, GuardTrustMath.ComplianceGraceSeconds(49f), 0.001f);
+            Assert.AreEqual(10f, GuardTrustMath.ComplianceGraceSeconds(50f), 0.001f);
+            Assert.AreEqual(10f, GuardTrustMath.ComplianceGraceSeconds(100f), 0.001f);
+            Assert.AreEqual(0f, GuardTrustMath.ComplianceGraceSeconds(-60f), 0.001f); // never negative
+        }
+
         // ------------------------------------------------------------------ names
 
         [Test]

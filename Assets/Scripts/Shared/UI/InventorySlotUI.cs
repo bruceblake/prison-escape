@@ -195,8 +195,9 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         if (quantityText != null)
         {
-            quantityText.enabled = showQuantity;
-            quantityText.text = $"x{slot.quantity}";
+            // Single items don't need an "x1" badge — quantity only reads as signal when stacked.
+            quantityText.enabled = showQuantity && slot.quantity > 1;
+            quantityText.text = slot.quantity > 1 ? $"x{slot.quantity}" : "";
             quantityText.color = occupiedQuantityColor;
         }
 
@@ -263,8 +264,9 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         if (backgroundImage != null)
         {
-            // Reset to default dark grey for empty look
-            backgroundImage.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
+            // Same well color SetSelected uses for empty slots, so slots don't flicker
+            // between two different "empty" greys as selection moves.
+            backgroundImage.color = emptySlotColor;
             backgroundImage.raycastTarget = true;
         }
         if (illegalWarningGlow != null) illegalWarningGlow.enabled = false;
@@ -304,7 +306,8 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             selectionHighlight.enabled = selected;
             if (selected)
             {
-                selectionHighlight.color = new Color(0.95f, 0.85f, 0.35f, 0.95f);
+                var accent = Prison.PrisonUITheme.CautionYellow;
+                selectionHighlight.color = new Color(accent.r, accent.g, accent.b, 0.95f);
                 var rt = selectionHighlight.rectTransform;
                 rt.anchorMin = Vector2.zero;
                 rt.anchorMax = Vector2.one;

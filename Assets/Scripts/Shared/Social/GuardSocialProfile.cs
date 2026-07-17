@@ -20,6 +20,17 @@ namespace Prison.Social
         /// <summary>Blind-eye bribe: this guard's detection is off until the schedule phase changes.</summary>
         public bool BlindEyeActive { get; private set; }
 
+        /// <summary>This guard's Trust toward the player (0 until the social world is built).</summary>
+        public float TrustTowardPlayer
+        {
+            get
+            {
+                var world = SocialWorld.Instance;
+                if (world == null || !world.IsBuilt || Identity == null) return 0f;
+                return world.Relationships.GetTrust(ActorId, SocialTuning.PlayerActorId);
+            }
+        }
+
         public void Bind(NPCIdentity identity)
         {
             Identity = identity;

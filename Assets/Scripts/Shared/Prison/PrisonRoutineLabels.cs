@@ -158,16 +158,8 @@ namespace Prison
         public static string GetMorningRollCallLineUpDestinationLabel(int cellIndex)
         {
             var reg = PrisonLocationRegistry.Instance;
-            if (reg != null && reg.GetRollCallArea() != null)
-            {
-                string area = reg.GetRollCallArea().GetHudLabel();
-                return string.IsNullOrEmpty(area) ? "WAIT IN YOUR CELL" : $"{area} | WAIT IN CELL";
-            }
-
-            string cell = reg != null ? reg.GetCellHudLabel(cellIndex) : $"CELL {cellIndex}";
-            return string.IsNullOrEmpty(cell)
-                ? "WAIT IN YOUR CELL"
-                : $"WAIT IN CELL ({cell})";
+            string cell = reg != null ? reg.GetCellHudLabel(cellIndex) : $"CELL {cellIndex + 1}";
+            return string.IsNullOrEmpty(cell) ? "YOUR CELL" : cell;
         }
 
         /// <summary>Strips leading "LOC: " from <see cref="PrisonerController.GetCurrentLocationLabel"/>.</summary>

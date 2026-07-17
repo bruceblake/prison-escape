@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Prison
 {
-    /// <summary>Bottom-right current location label (e.g. "CELL 5", "CAFETERIA").</summary>
+    /// <summary>Top-right current location label (e.g. "CELL 5", "CAFETERIA").</summary>
     public class CurrentLocationHUD : MonoBehaviour
     {
         private const int SortOrder = 121;
@@ -71,9 +71,10 @@ namespace Prison
             var panel = new GameObject("Panel", typeof(RectTransform), typeof(Image));
             panel.transform.SetParent(transform, false);
             var panelRt = (RectTransform)panel.transform;
-            panelRt.anchorMin = panelRt.anchorMax = new Vector2(1f, 0f);
-            panelRt.pivot = new Vector2(1f, 0f);
-            panelRt.anchoredPosition = new Vector2(-16f, 16f);
+            // Top-right — clears the bottom hotbar and sits below the routine strip (top-center).
+            panelRt.anchorMin = panelRt.anchorMax = new Vector2(1f, 1f);
+            panelRt.pivot = new Vector2(1f, 1f);
+            panelRt.anchoredPosition = new Vector2(-16f, -72f);
             panelRt.sizeDelta = new Vector2(280f, 40f);
             panel.GetComponent<Image>().color = PrisonUITheme.CommandStripBackdrop;
 

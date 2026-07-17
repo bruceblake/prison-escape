@@ -924,9 +924,19 @@ namespace Prison
         {
             if (_defaultUiSprite != null) return _defaultUiSprite;
 
-            // Built-in UI/Skin/*.psd sprites are not available in all Unity versions; use a solid white quad.
-            Texture2D tex = Texture2D.whiteTexture;
-            _defaultUiSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100f);
+            // Texture2D.whiteTexture is tiny and produces jagged Filled-image artifacts
+            // (white chevron/triangle in the routine bar). Use a clean 32x32 solid.
+            var tex = new Texture2D(32, 32, TextureFormat.RGBA32, false);
+            tex.name = "RoutineBarFillTex";
+            tex.wrapMode = TextureWrapMode.Clamp;
+            tex.filterMode = FilterMode.Bilinear;
+            var pixels = new Color32[32 * 32];
+            for (int i = 0; i < pixels.Length; i++)
+                pixels[i] = new Color32(255, 255, 255, 255);
+            tex.SetPixels32(pixels);
+            tex.Apply(false, true);
+            _defaultUiSprite = Sprite.Create(tex, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 100f);
+            _defaultUiSprite.name = "RoutineBarFillSprite";
             return _defaultUiSprite;
         }
 

@@ -80,6 +80,18 @@ namespace Prison
             RaiseStatsChanged();
         }
 
+        /// <summary>
+        /// Career transfer/revisit carry: stat current values are global saveables and arrive
+        /// with the player (Prison Career Ladder § Global vs local persistence).
+        /// </summary>
+        public void ApplyCareerCarry(float mental, float physical, float str)
+        {
+            mentalHealth = Mathf.Clamp(mental, 0f, PlayerStatsMath.MaxStat);
+            physicalHealth = Mathf.Clamp(physical, 0f, PlayerStatsMath.MaxStat);
+            strength = Mathf.Clamp(str, 0f, PlayerStatsMath.MaxStat);
+            RaiseStatsChanged();
+        }
+
         /// <summary>Applies the solitary-confinement penalty (-20 MH, -10 BODY, -10 STR).</summary>
         public void ApplySolitaryPenalty()
         {

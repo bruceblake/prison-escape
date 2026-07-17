@@ -153,7 +153,7 @@ namespace Prison
                     if (cell != null && (cell.rollCallStandPoint != null || cell.spawnPoint != null))
                         return cell.rollCallStandPoint != null ? cell.rollCallStandPoint : cell.spawnPoint;
                     if (rollCallArea != null)
-                        return rollCallArea.GetRandomStandPoint();
+                        return rollCallArea.GetStandPointForIndex(cellIndex);
                     break;
                 case PrisonEventType.NightRollCall:
                 case PrisonEventType.LightsOut:
@@ -162,14 +162,65 @@ namespace Prison
                 case PrisonEventType.Breakfast:
                 case PrisonEventType.Lunch:
                 case PrisonEventType.Dinner:
-                    return cafeteria != null ? cafeteria.GetRandomStandPoint() : null;
+                    return cafeteria != null ? cafeteria.GetStandPointForIndex(cellIndex) : null;
                 case PrisonEventType.FreeTime:
-                    return yard != null ? yard.GetRandomStandPoint() : (cafeteria != null ? cafeteria.GetRandomStandPoint() : null);
+                    if (yard != null) return yard.GetStandPointForIndex(cellIndex);
+                    return cafeteria != null ? cafeteria.GetStandPointForIndex(cellIndex) : null;
                 case PrisonEventType.WorkProgram:
-                    if (workshop != null) return workshop.GetRandomStandPoint();
-                    return cafeteria != null ? cafeteria.GetRandomStandPoint() : (yard != null ? yard.GetRandomStandPoint() : null);
+                    if (workshop != null) return workshop.GetStandPointForIndex(cellIndex);
+                    if (cafeteria != null) return cafeteria.GetStandPointForIndex(cellIndex);
+                    return yard != null ? yard.GetStandPointForIndex(cellIndex) : null;
             }
             return null;
+        }
+
+        /// <summary>
+        /// NavMesh-friendly stand position with per-cell spread so NPCs idle without stacking.
+        /// </summary>
+        public bool TryGetSpreadStandPosition(PrisonEventType evt, int cellIndex, out Vector3 worldPos)
+        {
+            worldPos = Vector3.zero;
+            PrisonLocationZone zone = null;
+            switch (evt)
+            {
+                case PrisonEventType.Breakfast:
+                case PrisonEventType.Lunch:
+                case PrisonEventType.Dinner:
+                    zone = cafeteria;
+                    break;
+                case PrisonEventType.FreeTime:
+                    zone = yard != null ? yard : cafeteria;
+                    break;
+                case PrisonEventType.WorkProgram:
+                    zone = workshop != null ? workshop : (cafeteria != null ? cafeteria : yard);
+                    break;
+                case PrisonEventType.RollCall:
+                case PrisonEventType.MorningRollCall:
+                case PrisonEventType.MiddayCount:
+                case PrisonEventType.EveningCount:
+                {
+                    var cell = GetCell(cellIndex);
+                    if (cell != null && (cell.rollCallStandPoint != null || cell.spawnPoint != null))
+                    {
+                        worldPos = cell.RollCallPosition;
+                        return true;
+                    }
+                    zone = rollCallArea;
+                    break;
+                }
+                case PrisonEventType.NightRollCall:
+                case PrisonEventType.LightsOut:
+                {
+                    var cell = GetCell(cellIndex);
+                    if (cell == null) return false;
+                    worldPos = cell.SpawnPosition;
+                    return true;
+                }
+            }
+
+            if (zone == null) return false;
+            worldPos = zone.GetSpreadStandPosition(cellIndex);
+            return true;
         }
 
         private void OnDestroy()

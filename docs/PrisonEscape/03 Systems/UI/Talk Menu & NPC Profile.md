@@ -2,7 +2,7 @@
 
 Real-time interaction overlay for inmates and guards. Design of record for the Talk surface of [[Social Ecosystem & Gangs]] (v3). Theme rules: [[UI Theme & Style Guide]].
 
-**Status:** Implemented in review (PRs #46–#47).
+**Status:** Implemented in review (PRs #58–#72).
 **Opens from:** raycast interact on an NPC (`PrisonerSocialPresenter` rework → Talk entry point).
 **Pause:** **none** — world keeps running (Escapists-style). Player movement locked while menu is open; look still works enough to cancel with Escape / interact-again.
 

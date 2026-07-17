@@ -15,7 +15,10 @@ MIN_TESTS="${MIN_TESTS:-100}"
 
 required=(
   "Assets/Tests/Editor/CellDoorControllerTests.cs"
-  "Assets/Tests/Editor/SocialMathTests.cs"
+  "Assets/Tests/Editor/SocialRelationshipTests.cs"
+  "Assets/Tests/Editor/SocialGangTradeTests.cs"
+  "Assets/Tests/Editor/SocialRosterSnitchTests.cs"
+  "Assets/Tests/Editor/CareerWorldStoreTests.cs"
   "Assets/Tests/Editor/PrisonRulesAndLabelsTests.cs"
   "Assets/Tests/Editor/CraftingInventoryLootTests.cs"
 )

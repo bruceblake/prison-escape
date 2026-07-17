@@ -2,6 +2,16 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/17/2026 (gap audit — economy mults + guard trust live)
+
+- **Career economy multipliers consumed** — `tradePriceMult` / `bribeCostMult` / `cashIncomeMult` now hit gameplay via `TradeMath.ApplyFacilityPriceMult`, favor payouts, and workshop stipends (PR #93 + #92 menu wiring). See [[Loot & Economy]] · [[Prison Career Ladder]].
+- **Guard trust modifiers (M6)** — `GuardTrustMath` + `GuardDetection`: trust ≥ 50 → 10 s schedule-lapse grace (not in restricted zones); trust ≤ −25 → ×1.2 detection. `PrisonerController.NonCompliantSeconds` tracks lapse (PR #95).
+- **Social phase gating** — monotonic phase serial fixes Chat once-per-phase; Intimidate limited to one attempt per NPC per phase (PR #92).
+- **Inventory/crafting fixes** — cross-stack removal, transactional craft refund, notebook UI polish (PR #90 · #94).
+- **CI** — `ci/test-suite-audit.sh` requires v3 Social/Career suites, not deleted `SocialMathTests` (PR #91).
+- **Tests** — new EditMode cases for facility price mult + guard trust. Full EditMode run reported **257/260** pass; 3 failures are pre-existing `PrisonLevel1` scene drift (#81) — fix with **Prison → Fix Cell Doors & Waypoints** + spawn-height pass.
+- **Still open:** `Resources/Social/` install; escape route geometry; Career M6+ scenes; Unity playtest smoke.
+
 ## 7/16/2026 (night — vault truth P3)
 
 - **Phase 7 P3** — process closeout: [[Social & Career PR Slice Plan]] rewritten as short post-merge gap list; [[Social Ecosystem & Gangs]] milestones/architecture marked shipped; [[Inventory & Items]] social/wallet wording; [[Roadmap & Priorities]] drops vault-sync from Now (P0–P2 done).

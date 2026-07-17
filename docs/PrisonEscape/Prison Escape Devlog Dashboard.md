@@ -2,12 +2,18 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/16/2026 (night — vault truth P0)
+
+- **Phase 7 P0 vault sync** — hub notes rewritten to match `dev` @ `dca50db`: [[Home]], [[Systems Overview]], [[World Rules]] (social 18–20 + career 27–33), [[Social & Reputation]] → `SocialWorld` v3, [[Screens & Menus]], [[Escape Completion System]], [[Game Vision & Core Loop]] gap, [[Roadmap & Priorities]], [[Social & Career PR Slice Plan]] post-merge framing.
+- **Branch:** `chore/vault-truth-p0` (docs-only).
+- **Still open (P1–P3):** Codebase Map, Testing & QA (~195), Editor Tooling, Content Inventory, HUD/waypoint/sentence-clock notes, Loot wallet wording; `Resources/Social/` assets; escape route geometry.
+
 ## 7/16/2026 (night — small PR split execution)
 
 - **Split & push** — Social+Career WIP resliced into micro-PRs: Career #51–#57, Social #58–#72, bridge draft #73, chores #49/#74–#84. Backup: `backup/pre-split-20260716`. Mega PRs #43–#47/#50 closed.
-- **Integrated to `dev`** — Career #51–#57 + Social #58–#72 + bridge + chores #49/#74–#84 merged; open PRs closed; feature branches deleted. Tip `d25a3ad`.
+- **Integrated to `dev`** — Career #51–#57 + Social #58–#72 + bridge + chores #49/#74–#84 merged; open PRs closed; feature branches deleted. Tip `d25a3ad` → docs flip `dca50db`.
 - **Policy live** — [[Small PRs & Feature Slices]] · [[Social & Career PR Slice Plan]].
-- **Still open after merge:** Career↔Social difficulty/gang-tag bridge; Social Resources assets; vault Implemented flip post-playtest; scene polish chores.
+- **Closed by later P0:** hub vault Implemented flip. **Still open:** Social Resources assets; P1–P3 vault notes; scene/route polish.
 
 ## 7/16/2026 (evening — small PR policy + slice plan)
 - **Recurring process** — new vault note [[Small PRs & Feature Slices]]: one concern / one milestone per PR into `dev`; no epic mega-PRs; mega-diff recovery via backup ref + named-file slices; do not rewrite merged history without explicit order. Wired into [[Development Workflow]], [[Git & Branching]], Home, and Cursor rules (`git-branching.mdc`, `development-workflow.mdc`).

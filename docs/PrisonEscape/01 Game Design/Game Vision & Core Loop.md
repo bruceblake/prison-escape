@@ -59,7 +59,7 @@ From the design spec (see [[Escape Routes & Mechanics]] for implementation statu
 
 ## Known design gap
 
-Escape completion **v1 is live** ([[Escape Completion System]]) but still ends in a "YOU ESCAPED — you're free" screen. The career ladder rewrites that ending into caught-and-transferred ([[Facility Transfer & Graduation]]); until then the ladder exists only as framing text on the end screen.
+Escape **systems** are live ([[Escape Completion System]] · [[Facility Transfer & Graduation]]): career facilities end in **CAUGHT — TRANSFERRED** / sentence / career-cleared ceremonies; only the Dev Sandbox still shows **YOU ESCAPED**. The remaining gap is **route geometry** — vent corridors and fence cut so the boundary is reachable in normal play ([[Roadmap & Priorities]]).
 
 ## Related notes
 

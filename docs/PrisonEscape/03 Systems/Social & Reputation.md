@@ -1,52 +1,62 @@
 # Social & Reputation
 
-> ⚠️ **v1 is deprecated — full replacement specced (v3).** The design of record is **[[Social Ecosystem & Gangs]]** (research-backed Respect/Trust, Standing bands Enemy→Confidant, memory & gossip, exclusive gangs + membership ladder, trading & bribes, two-way favors, snitching, guard personalities). Player UI: [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]]. Everything below documents what is *currently implemented* and is **slated for teardown** per the spec's teardown table. Do not extend v1.
+**Status:** Implemented (v3) on `dev` — Social micro-stack #58–#72 + Career↔Social bridge. Design of record: **[[Social Ecosystem & Gangs]]**. Player UI: [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]].
 
-## v1 — what exists in code today (to be removed/reworked)
+> v1 (affinity / `SocialManager` / `SocialMath`) was **deleted**. Do not resurrect those types. This note is the implemented-system reference.
 
-Per-NPC affinity in [-100, +100]; prison-wide reputation is the average across registered inmates.
+## What exists in code today
 
-### Affinity math (`SocialMath`, unit-tested)
+Runtime hub: **`SocialWorld`** (`Assets/Scripts/Shared/Social/`). Builds a seeded roster of prisoners and guards, owns relationships, gangs, memory/gossip tickers, and wires Talk / Dossier / trade / favors / snitch.
 
-| Action | Base delta |
+### Relationships
+
+| Concept | Implementation |
 |---|---|
-| Greeting | +2 |
-| Favor (fallback; usually `affinityReward`) | +15 |
-| Gift (default) | +5 |
-| Betrayal / Theft / Snitch | -50 (or personality `betrayalPenalty`) |
+| Axes | **Respect** + **Trust** per directed pair, clamped [-100, +100] (`RelationshipStore` / `RelationshipMath`) |
+| Soft cap | Positive deltas shrink as the axis rises; negatives never soft-capped |
+| Standing bands | Derived from axes — Enemy → Confidant (`StandingBandUI` helpers) |
+| Prison reputation tier | Standing average across inmates + gang-rank bonus → Outsider / Associate / Respected / Kingpin (`SocialWorld` + `RelationshipMath.ComputeTier`) |
+| Memory & gossip | `SocialMemory` + `GossipSystem` — direct / witnessed / gossiped events with decay |
 
-Modifiers: favored gift ×2 · same-category repeat ×0.5 · **positive soft cap** `effective = base × gainMultiplier × (1 − affinity/100)` (negatives never capped) · clamp to [-100, +100].
+### Gangs
 
-> The soft-cap curve is the one piece of v1 math that **survives into v2** (moves into `RelationshipMath`).
+- Two exclusive gangs (Vipers, Syndicate) via `GangManager` / `GangDefinition` catalog (code fallbacks until `Resources/Social/` assets are installed).
+- Membership ladder Outsider → Trusted; Traitor lockout.
+- Career bridge: `SocialWorld.ApplyCareerGangTag` + Respect arrival seed from `GameManager.BuildSocialWorld` / `CareerSession`.
 
-### Reputation tiers (average affinity)
+### Player surfaces
 
-Outsider < 25 · Associate ≥ 25 · Respected ≥ 50 · Kingpin ≥ 75. Thresholds serialized on `SocialManager`. Tier names/thresholds are **kept** in v2; the score computation changes (standing average + gang rank bonus).
-
-### v1 mechanics
-
-- Greeting cooldown: one greet per NPC per phase
-- One-way favors: NPCs roll a `FavorOfferDefinition` per phase; deliver item → `affinityReward`
-- Interaction priority (`PrisonerSocialPresenter`): deliver favor → "needs item" → "Busy…" → Greet
-- Gift/Betrayal/Theft/Snitch were API-only (no in-world UI); no personality or favor assets were ever authored
-
-### v1 key files and their fate (from the [[Social Ecosystem & Gangs#Teardown of v1 (what "get rid of everything" means)|teardown table]])
-
-| File | Fate |
+| Surface | Role |
 |---|---|
-| `Assets/Scripts/Shared/Prison/SocialMath.cs` | Delete (soft cap moves to `RelationshipMath`) |
-| `Assets/Scripts/Shared/Prison/SocialManager.cs` | Delete |
-| `Assets/Scripts/Shared/Prison/FavorOfferDefinition.cs` | Delete (→ directional `FavorDefinition`) |
-| `Assets/Scripts/Shared/Prison/NPCPersonalityData.cs` | Delete (→ `ArchetypeDefinition` + traits) |
-| `Assets/Scripts/Shared/Prison/PrisonerSocialPresenter.cs` | Rework → Talk Menu entry point |
-| `PrisonSocialRowUI` / `AffinityFloatPopup` | Delete / keep-retitle |
-| `Assets/Scripts/Editor/SocialBalanceSimulatorWindow.cs` | Rebuild for v2 math |
-| `Assets/Docs/Prison_Social_And_Reputation_System.md` | Superseded by the vault spec |
+| [[Talk Menu & NPC Profile]] | `SocialInteractionMenu` — chat/intel, gifts, trade, bribes, two-way favors, intimidation, snitch |
+| [[Social Dossier — Relationships & Gangs]] | `SocialDossierUI` — notebook Relationships + Gangs pages |
+| Wallet | Live: `TradingService`, bribes, `PrisonJobPaymaster`, favor costs (`PlayerWallet`) |
+| Snitch tips | `SnitchSystem` → targeted shakedown hooks ([[Security, Heat & Alerts]]) |
 
-## v3 — where the system is going
+### Career / facility hooks
 
-See **[[Social Ecosystem & Gangs]]** for the full design (v3). One-paragraph summary: every prisoner and guard gets a generated identity, archetype, and five personality traits; relationships are sparse two-axis records (**Respect** + **Trust**) with named Standing **bands** (Enemy → Confidant); NPCs hold a decaying **memory** of direct, witnessed, and gossiped events; two **gangs** (Vipers, Syndicate) claim territory with exclusive membership (Outsider → Trusted) and Traitor lockout; the [[Talk Menu & NPC Profile]] provides chat/intel, gifts, **trading** (wallet goes live), **favors both ways**, intimidation, and snitching; the notebook [[Social Dossier — Relationships & Gangs]] shows the whole web; snitches feed guard **tips** that trigger targeted shakedowns; corrupt guards take **bribes**.
+- Arrival Respect seed scales with facility difficulty.
+- Escape end-screen reputation reads Social standing (not deleted affinity).
+- `CareerSession.DetectionRangeMult` / shakedown strictness apply in guard/shakedown systems.
 
-This note will be rewritten as the implemented-system reference once v3 milestones land.
+## Key files
 
-Related: [[Prisoner AI & NPCs]] · [[Guard AI]] · [[Inventory & Items]] · [[Loot & Economy]] · [[Time & Schedule]] · [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]] · [[Testing & QA]]
+| Path | Role |
+|---|---|
+| `Assets/Scripts/Shared/Social/SocialWorld.cs` | Runtime hub |
+| `RelationshipStore.cs` / `RelationshipMath.cs` / `SocialActs.cs` | Axes, soft cap, act deltas |
+| `GangManager.cs` / `GangDefinition.cs` / `GangTerritoryMonitor.cs` | Gangs |
+| `SocialMemory.cs` / `GossipSystem.cs` / `SocialSimulationTicker.cs` | Memory + tick |
+| `SocialInteractionMenu.cs` / `SocialDossierUI.cs` / `StandingBandUI.cs` | UI |
+| `TradingService.cs` / `TradeMath.cs` / `FavorService.cs` / `SnitchSystem.cs` | Economy & consequences |
+| `ArchetypeDefinition.cs` / `SocialRosterBuilder.cs` / `SocialNameGenerator.cs` | Identities |
+| `Assets/Tests/Editor/Social*.cs` | EditMode coverage for math / standing / gangs / trade |
+
+## Remaining polish (not blockers for “Implemented”)
+
+- [ ] Run Social asset installer → commit `Assets/Resources/Social/` ScriptableObjects (catalogs currently use code fallbacks)
+- [ ] Overhead Talk markers (`!` / coin) and richer dossier widgets called out in UI notes
+- [ ] Fuller per-guard Trust → detection scaling beyond facility/career multipliers
+- [ ] Balance pass in Editor social simulator (rebuild for v3 math)
+
+Related: [[Prisoner AI & NPCs]] · [[Guard AI]] · [[Inventory & Items]] · [[Loot & Economy]] · [[Time & Schedule]] · [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]] · [[Prison Career Ladder]] · [[Testing & QA]]

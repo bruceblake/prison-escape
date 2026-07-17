@@ -4,22 +4,25 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 
 ## Now (highest priority)
 
-1. **Social ecosystem & gangs overhaul** — 🔄 **done on `dev`**: Social micro-stack #58�#72. Spec: [[Social Ecosystem & Gangs]].
-2. **Prison career ladder** — 📐 **specced**: [[Prison Career Ladder]] (+ [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]). County → State ×3 → Federal ×5; escape = caught & transferred; named world saves, prison-select hub with locked silhouettes, global carry vs local reset, County sentence clock. Build M1–M5 (`feat/career-world-saves` → `feat/county-sentence-clock`); facility scenes are M6+ content epics.
+1. **Vent network geometry** — plumbing/electrical corridors behind the cell rows exist in design ([[Prison Layout — Minimum Security]]) but need to be built into the level and connected to the vent-cover mechanic so the escape boundary is reachable in play
+2. **Courtyard fence + cut-through escape route** — barbed-wire fence, wire cutters as the tool gate
+3. **Vault sync P1–P3** — engineering notes still catching up (Codebase Map, Testing & QA ~195, Content Inventory, HUD/waypoint notes) after Career/Social landed
+4. **Social polish** — install `Resources/Social/` assets; overhead Talk markers; fuller per-guard Trust→detection ([[Social & Reputation]])
 
 ## Next
 
-2. **Vent network geometry** — the plumbing/electrical corridors behind the cell rows exist in design ([[Prison Layout — Minimum Security]]) but need to be built into the level and connected to the vent-cover mechanic
-3. **Courtyard fence + cut-through escape route** — barbed-wire fence, wire cutters as the tool gate
-4. **Front-entrance escape route** — Main Security bypass (disguise? keycard? timing?) — needs design in this vault first
-5. **Escape route prerequisites → loot placement pass** — make sure the items each route needs actually spawn ([[Loot & Economy]]); **Prison → Setup Items & World Loot** (`PrisonLootSetupRunner`) is on `dev` for one-click placement
+5. **Front-entrance escape route** — Main Security bypass (disguise? keycard? timing?) — needs design in this vault first
+6. **Escape route prerequisites → loot placement pass** — make sure the items each route needs actually spawn ([[Loot & Economy]]); **Prison → Setup Items & World Loot** (`PrisonLootSetupRunner`) is on `dev` for one-click placement
+7. **Career M6+ facility scenes** — State ×3 → Federal ×5 (County stub `CountyJail` + Dev Sandbox already playable)
 
-## Done on `dev` (7/15/2026 integration)
+## Done on `dev`
 
-- **Escape completion v1** — [[Escape Completion System]] merged (boundary win, solitary, suspicion, stats, restricted zones)
+- **Social ecosystem v3** — [[Social Ecosystem & Gangs]] / [[Social & Reputation]] (Respect/Trust, gangs, Talk, dossier, trade, favors, snitch) — micro-stack #58–#72
+- **Prison career ladder M1–M5** — [[Prison Career Ladder]] (+ [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]): worlds, MainMenu hub, facility defs, transfer ceremony, County sentence clock; County stub scene
+- **Escape completion** — [[Escape Completion System]] (boundary end, solitary, suspicion, stats, restricted zones + career transfer framing)
 - **Realistic 13-phase schedule** — count-driven prison day ([[Time & Schedule]])
 - **BlenderKit prison build** — facility install, polish pass, door/waypoint fixer ([[Blender Asset Kit]] · [[Editor Tooling]])
-- **ProBuilder rebuild pipeline** — alternative layout path from `feat/prison-probuilder-rebuild` ([[Editor Tooling]])
+- **ProBuilder rebuild pipeline** — alternative layout path ([[Editor Tooling]])
 - **Character visuals** — rigged BlenderKit characters + procedural fallback ([[Character Visuals]])
 
 ## Later
@@ -27,7 +30,7 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 - Yard roll-call zone + full zone wiring for all 16 cells
 - Kitchen (back-of-house behind the cafeteria serving line)
 - Laundry room
-- Career facility scenes (County greybox first, then State ×3, Federal ×5 — [[Prison Career Ladder]] M6+; replaces the old "medium-security second facility" item)
+- Career facility scenes polish beyond County stub ([[Prison Career Ladder]] M6+)
 - PlayMode test infrastructure (`.asmdef` migration)
 
 ## Test debt (from the coverage matrix)

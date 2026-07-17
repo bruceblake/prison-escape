@@ -1,20 +1,19 @@
 # Escape Completion System
 
-**Status:** Implemented (v1) — 7/14/2026. Note: the boundary is only *reachable* once escape route geometry (vent corridors, fence cut) exists; the win/lose systems are live.
+**Status:** Implemented on `dev` — capture path 7/14/2026; career transfer ceremony (M4) + County sentence path 7/15/2026. Note: the boundary is only *reachable* once escape route geometry (vent corridors, fence cut) exists; win/lose + transfer systems are live.
 
-> [!warning] v2 rewrite specced (7/15/2026)
-> Under the career ladder, crossing the boundary no longer means freedom — you are **caught and transferred** to the next facility ("CAUGHT — TRANSFERRED" ceremony; "CAREER CLEARED" only at Federal ADX). The **capture path below (restricted zones → solitary → suspicion) is unchanged**; only the win path and end screen are rewritten. See [[Prison Career Ladder]] · [[Facility Transfer & Graduation]].
+> Career framing is **live**: crossing a career facility boundary → **CAUGHT — TRANSFERRED** (not freedom). County sentence → **SENTENCE COMPLETE**. Federal ADX → **CAREER CLEARED**. Dev Sandbox alone still shows **YOU ESCAPED**. Capture path (restricted zones → solitary → suspicion) unchanged. See [[Prison Career Ladder]] · [[Facility Transfer & Graduation]] · [[Screens & Menus]].
 **System notes:** [[Escape Routes & Mechanics]] · [[Security, Heat & Alerts]] · [[Guard AI]] · [[Prison Layout — Minimum Security]]
-**Branch:** merged to `dev` (7/14/2026)
+**Branch:** merged to `dev` (completion 7/14; career ceremony with ladder stack)
 **Brainstormed:** 7/14/2026 (chat) — decisions below are final unless overridden here.
 
 ## What it is
 
-The win/lose keystone of the game. Cross the prison's outer boundary → **you escaped** (end screen + stats + ladder to the next prison). Get spotted in a restricted zone → **caught escaping**: arrested, thrown in solitary confinement, inventory confiscated, suspicion raised.
+The win/lose keystone of the game. Cross the prison's outer boundary → **run ends** (transfer ceremony on career facilities; sandbox "YOU ESCAPED"). Get spotted in a restricted zone → **caught escaping**: arrested, thrown in solitary confinement, inventory confiscated, suspicion raised.
 
 ## Why it exists
 
-Escape is the game's stated goal but currently has no completion state. This feature closes the loop and gives the lockdown/suspicion alert hooks real consequences.
+Escape is the game's stated goal; this feature closes the loop, gives lockdown/suspicion hooks real consequences, and (with the career ladder) turns "escape" into progression rather than premature freedom.
 
 ## Design details
 
@@ -23,10 +22,10 @@ Escape is the game's stated goal but currently has no completion state. This fea
 - **Anytime escape:** no phase restriction. Opened routes stay open (unscrewed vents stay unscrewed). Guards are the only gate.
 - **No progress UI** — the player tracks their own plan.
 
-### End screen (win) — *v1, superseded by the transfer ceremony*
-- Stats: in-game days to escape, real play time, times arrested, solitary stays, items crafted, final reputation tier.
-- Ladder framing: "MINIMUM SECURITY: ESCAPED → Next stop: Medium Security." Button returns to main menu (until Medium exists).
-- **v2:** becomes the transfer/graduation ceremony — headline per trigger, ledger beat (cash carried, respect gained, inventory confiscated), next-facility unlock card ([[Facility Transfer & Graduation]] § The transfer ceremony).
+### End screen — transfer ceremony (career) / sandbox win
+- Stats: in-game days, real play time, times arrested, solitary stays, items crafted, final reputation tier (from Social standing).
+- Career: headline per trigger, ledger beat (cash carried, respect gained, inventory confiscated), next-facility unlock card — [[Facility Transfer & Graduation]] § The transfer ceremony; UI: [[Screens & Menus]].
+- Dev Sandbox: **YOU ESCAPED** with "not on the career ladder" subtitle.
 
 ### Restricted zones
 - New `RestrictedZone` volumes. Two flavors:
@@ -66,7 +65,7 @@ Solitary stat costs, regen rate, suspicion duration (days) and detection multipl
 
 ## Out of scope
 
-- Medium Security prison (ladder is framing only)
+- Full State/Federal facility scenes (career M6+ content — County stub + Dev Sandbox exist)
 - Mental-health gameplay effects beyond storage
 - Numeric heat meter beyond the suspicion window
 - Escape progress UI

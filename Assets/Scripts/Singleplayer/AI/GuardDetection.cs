@@ -52,6 +52,11 @@ public class GuardDetection : MonoBehaviour
         // Suspicion after a caught escape widens detection against the player for a few days.
         float suspicionMult = PrisonSuspicion.GlobalDetectionRangeMultiplier;
 
+        // Per-player guard Trust (Social v3 §2, M6): trusted guards watch the player less
+        // closely and sit a moment on a fresh schedule lapse; distrusted guards watch harder.
+        float guardTrust = socialProfile != null ? socialProfile.TrustTowardPlayer : 0f;
+        float trustMult = Prison.Social.GuardTrustMath.DetectionRangeMultiplier(guardTrust);
+
         foreach (var p in playerPrisoners)
         {
             if (p.MovementBlocked)
@@ -65,15 +70,23 @@ public class GuardDetection : MonoBehaviour
             float crouchMult = crouchController != null && crouchController.IsCrouched ? 0.6f : 1f;
 
             float dist = Vector3.Distance(eyePos, p.transform.position);
-            bool inCone = IsInSight(p.transform.position, eyePos, forward, suspicionMult * crouchMult);
-            bool inProximity = proximitySpotDistance > 0.01f && dist <= proximitySpotDistance * suspicionMult * crouchMult;
+            bool inCone = IsInSight(p.transform.position, eyePos, forward, suspicionMult * crouchMult * trustMult);
+            bool inProximity = proximitySpotDistance > 0.01f && dist <= proximitySpotDistance * suspicionMult * crouchMult * trustMult;
             bool spotted = inCone || inProximity;
 
             if (logScan)
-                Debug.Log($"[GuardDetection] Player {p.name}: compliant={p.IsCompliant} dist={dist:F2} cone={inCone} proximity={inProximity} crouched={crouchMult < 1f} eyeFwd={forward}", this);
+                Debug.Log($"[GuardDetection] Player {p.name}: compliant={p.IsCompliant} dist={dist:F2} cone={inCone} proximity={inProximity} crouched={crouchMult < 1f} trustMult={trustMult:F2} eyeFwd={forward}", this);
 
             if (!p.IsCompliant && spotted)
             {
+                // Trust grace covers schedule lapses only — never a restricted-zone escape attempt.
+                float grace = Prison.Social.GuardTrustMath.ComplianceGraceSeconds(guardTrust);
+                if (grace > 0f && !p.IsInActiveRestrictedZone && p.NonCompliantSeconds < grace)
+                {
+                    if (logScan)
+                        Debug.Log($"[GuardDetection] Player {p.name}: within trust grace ({p.NonCompliantSeconds:F1}s < {grace:F1}s) — holding off.", this);
+                    continue;
+                }
                 if (debugLogs)
                     Debug.Log($"[GuardDetection] *** TARGET player {p.name} (non-compliant) via {(inProximity && !inCone ? "PROXIMITY" : "CONE/PROX")}", this);
                 return p;

@@ -67,8 +67,29 @@ public class GuardFSM : MonoBehaviour
     private int _nightVerifyCellIndex;
     private bool _nightSweepDoneThisPhase;
     private float _escortArrestedRealtime = -1f;
+    private float _distractedUntilRealtime = -1f;
+    private Vector3 _distractionPoint;
 
     public GuardState State => _state;
+
+    public bool IsDistracted => Time.realtimeSinceStartup < _distractedUntilRealtime;
+
+    /// <summary>
+    /// Social favor hook (Social Ecosystem v3 §6): a staged argument pulls this guard to a
+    /// point for a few seconds. Only interrupts plain patrol; Veterans are immune (checked
+    /// via <see cref="Prison.Social.GuardSocialProfile"/>).
+    /// </summary>
+    public bool TryApplyDistraction(Vector3 point, float seconds)
+    {
+        if (_state != GuardState.Patrol) return false;
+        var profile = GetComponent<Prison.Social.GuardSocialProfile>();
+        if (profile != null && profile.ImmuneToDistraction) return false;
+        _distractedUntilRealtime = Time.realtimeSinceStartup + seconds;
+        _distractionPoint = point;
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+            agent.SetDestination(point);
+        return true;
+    }
 
     private void OnEnable()
     {
@@ -104,7 +125,11 @@ public class GuardFSM : MonoBehaviour
         if (debugLogs)
             Debug.Log($"[GuardFSM][{gameObject.name}] Start: state=Patrol, duty={duty}, agent={(agent != null)}, detection={(detection != null)}, waypointCount={patrolWaypoints?.Length ?? 0}", this);
         if (patrolWaypoints != null && patrolWaypoints.Length > 0)
-            agent.SetDestination(patrolWaypoints[0].position);
+        {
+            Transform first = FirstValidWaypoint();
+            if (first != null)
+                agent.SetDestination(first.position);
+        }
 
         ApplyAgentMovementTuning();
     }
@@ -147,6 +172,15 @@ public class GuardFSM : MonoBehaviour
             && PrisonEventExtensions.IsNightBedPhase(PrisonTimeManager.Instance.CurrentEvent))
         {
             UpdateNightCellVerification();
+            return;
+        }
+
+        // Distraction favor: linger at the staged argument instead of patrolling.
+        if (_state == GuardState.Patrol && IsDistracted)
+        {
+            if (agent != null && agent.enabled && agent.isOnNavMesh
+                && Vector3.Distance(transform.position, _distractionPoint) > waypointArriveDistance)
+                agent.SetDestination(_distractionPoint);
             return;
         }
 
@@ -257,7 +291,7 @@ public class GuardFSM : MonoBehaviour
             return;
         }
 
-        if (patrolWaypoints == null || patrolWaypoints.Length == 0)
+        if (patrolWaypoints == null || patrolWaypoints.Length == 0 || FirstValidWaypoint() == null)
         {
             if (debugLogs && Time.frameCount % 120 == 0)
                 Debug.LogWarning($"[GuardFSM][{gameObject.name}] Patrol: no patrol waypoints assigned.", this);
@@ -267,11 +301,30 @@ public class GuardFSM : MonoBehaviour
         float dist = agent.remainingDistance;
         if (!agent.pathPending && dist != float.PositiveInfinity && dist <= waypointArriveDistance)
         {
-            _currentWaypointIndex = (_currentWaypointIndex + 1) % patrolWaypoints.Length;
+            Transform next = FirstValidWaypointFrom(_currentWaypointIndex + 1);
+            if (next == null) return;
+            _currentWaypointIndex = System.Array.IndexOf(patrolWaypoints, next);
+            if (_currentWaypointIndex < 0) _currentWaypointIndex = 0;
             if (debugLogs)
-                Debug.Log($"[GuardFSM][{gameObject.name}] Patrol: advance waypoint index={_currentWaypointIndex} -> {patrolWaypoints[_currentWaypointIndex].position}", this);
-            agent.SetDestination(patrolWaypoints[_currentWaypointIndex].position);
+                Debug.Log($"[GuardFSM][{gameObject.name}] Patrol: advance waypoint index={_currentWaypointIndex} -> {next.position}", this);
+            agent.SetDestination(next.position);
         }
+    }
+
+    private Transform FirstValidWaypoint()
+        => FirstValidWaypointFrom(_currentWaypointIndex);
+
+    private Transform FirstValidWaypointFrom(int startIndex)
+    {
+        if (patrolWaypoints == null || patrolWaypoints.Length == 0) return null;
+        for (int i = 0; i < patrolWaypoints.Length; i++)
+        {
+            int idx = (startIndex + i) % patrolWaypoints.Length;
+            Transform wp = patrolWaypoints[idx];
+            if (wp != null)
+                return wp;
+        }
+        return null;
     }
 
     private void UpdateEnforce()

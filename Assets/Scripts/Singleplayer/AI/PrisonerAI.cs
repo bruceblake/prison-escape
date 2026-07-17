@@ -10,7 +10,9 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
     [Header("Movement")]
     public NavMeshAgent agent;
     [Tooltip("Distance to stand point / NavMesh destination to count as compliant (meters)")]
-    public float arriveDistance = 0.5f;
+    public float arriveDistance = 0.85f;
+    [Tooltip("When true, stop the NavMeshAgent on arrival so idle NPCs do not circle.")]
+    public bool stopAgentWhenIdle = true;
 
     [Header("Debug")]
     [Tooltip("Verbose logs for schedule, pathfinding, and compliance.")]
@@ -22,6 +24,9 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
 
     private PrisonEventType _currentEvent;
     private Transform _currentDestination;
+    private Vector3 _resolvedDestination;
+    private bool _hasResolvedDestination;
+    private bool _holdingAtStand;
     private bool _isCompliant;
     private bool _isAtRequiredLocation;
     private bool _movementBlocked;
@@ -219,11 +224,18 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
         {
             Dbg($"GoToExpectedLocation({reason}): NO stand point for event={evt}, cellIndex={cellIndex}. Marking compliant, clearing destination.");
             _currentDestination = null;
+            _hasResolvedDestination = false;
+            _holdingAtStand = false;
             _isCompliant = true;
+            StopAgentAtStand("no-stand");
             return;
         }
 
-        Dbg($"GoToExpectedLocation({reason}): event={evt} standPoint='{standPoint.name}' at {standPoint.position}");
+        Vector3 rawTarget = standPoint.position;
+        if (PrisonLocationRegistry.Instance.TryGetSpreadStandPosition(evt, cellIndex, out var spread))
+            rawTarget = spread;
+
+        Dbg($"GoToExpectedLocation({reason}): event={evt} standPoint='{standPoint.name}' raw={standPoint.position} spread={rawTarget}");
 
         if (agent == null)
         {
@@ -240,21 +252,52 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
         if (!EnsureAgentOnNavMesh($"GoToExpectedLocation/{reason}"))
             return;
 
-        if (!TryGetReachableDestination(standPoint.position, out var destination))
+        if (!TryGetReachableDestination(rawTarget, out var destination))
         {
-            DbgWarn($"StandPoint {standPoint.name} at {standPoint.position} is off NavMesh and no nearby mesh found within {navMeshSnapRadius}m. NPC cannot path for event={evt}.");
+            DbgWarn($"StandPoint {standPoint.name} at {rawTarget} is off NavMesh and no nearby mesh found within {navMeshSnapRadius}m. NPC cannot path for event={evt}.");
             _isCompliant = false;
             _currentDestination = standPoint;
+            _resolvedDestination = rawTarget;
+            _hasResolvedDestination = true;
+            _holdingAtStand = false;
+            return;
+        }
+
+        // Already holding near the same target — do not repath (avoids crowd circling).
+        if (_holdingAtStand && _hasResolvedDestination &&
+            Vector3.Distance(transform.position, destination) <= arriveDistance * 1.25f &&
+            Vector3.Distance(_resolvedDestination, destination) <= 0.35f)
+        {
+            Dbg($"GoToExpectedLocation({reason}): already holding near destination — skip repath.");
+            _isCompliant = true;
+            _isAtRequiredLocation = true;
             return;
         }
 
         _isCompliant = false;
+        _holdingAtStand = false;
         _currentDestination = standPoint;
+        _resolvedDestination = destination;
+        _hasResolvedDestination = true;
+        agent.stoppingDistance = Mathf.Max(0.15f, arriveDistance * 0.65f);
         agent.isStopped = false;
         agent.SetDestination(destination);
 
         Dbg($"After SetDestination: hasPath={agent.hasPath} pathPending={agent.pathPending} pathStatus={agent.pathStatus} " +
             $"destination={agent.destination} resolvedDest={destination} isOnNavMesh={agent.isOnNavMesh} remainingDistance={agent.remainingDistance}");
+    }
+
+    private void StopAgentAtStand(string reason)
+    {
+        if (!stopAgentWhenIdle || agent == null || !agent.enabled)
+            return;
+        if (!agent.isOnNavMesh)
+            return;
+
+        agent.isStopped = true;
+        agent.ResetPath();
+        agent.velocity = Vector3.zero;
+        Dbg($"StopAgentAtStand({reason}): velocity cleared, isStopped=true");
     }
 
     private void UpdateCompliance()
@@ -266,6 +309,11 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
         {
             _isAtRequiredLocation = true;
             _isCompliant = true;
+            if (!_holdingAtStand)
+            {
+                _holdingAtStand = true;
+                StopAgentAtStand("roll-call-released");
+            }
             return;
         }
 
@@ -281,9 +329,24 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
 
         float navDist = agent.remainingDistance;
         bool navArrived = !agent.pathPending && navDist != float.PositiveInfinity && navDist <= arriveDistance;
-        float posDist = Vector3.Distance(transform.position, _currentDestination.position);
+        Vector3 targetPos = _hasResolvedDestination ? _resolvedDestination : _currentDestination.position;
+        float posDist = Vector3.Distance(transform.position, targetPos);
         bool posArrived = posDist <= arriveDistance;
-        _isAtRequiredLocation = navArrived || posArrived;
+        // Near-zero speed near destination also counts — agents often never reach exact point in crowds.
+        bool idleNear = agent.velocity.magnitude < 0.08f && posDist <= arriveDistance * 1.6f && !agent.pathPending;
+        _isAtRequiredLocation = navArrived || posArrived || idleNear;
+
+        if (_isAtRequiredLocation && !_holdingAtStand)
+        {
+            _holdingAtStand = true;
+            StopAgentAtStand("arrived");
+        }
+        else if (!_isAtRequiredLocation && _holdingAtStand)
+        {
+            _holdingAtStand = false;
+            if (agent != null && agent.enabled)
+                agent.isStopped = false;
+        }
 
         if (PrisonTimeManager.Instance != null && PrisonTimeManager.Instance.IsMandatoryTravelGraceActive)
         {
@@ -295,7 +358,7 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
 
         _isCompliant = _isAtRequiredLocation;
 
-        string detail2 = $"navRem={navDist} posDist={posDist:F3} pathPending={agent.pathPending} navArrived={navArrived} posArrived={posArrived}";
+        string detail2 = $"navRem={navDist} posDist={posDist:F3} pathPending={agent.pathPending} navArrived={navArrived} posArrived={posArrived} idleNear={idleNear} holding={_holdingAtStand}";
         LogComplianceTransition(prev, detail2);
     }
 

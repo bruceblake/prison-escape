@@ -1,4 +1,4 @@
-using System.Text;
+using Prison.Social;
 using Prison.Visuals;
 using TMPro;
 using UnityEngine;
@@ -6,21 +6,16 @@ using UnityEngine;
 namespace Prison
 {
     /// <summary>
-    /// World label (name, affinity) + [F] greet via existing <see cref="PlayerInteractor"/> / <see cref="IInteractable"/> ray.
-    /// Add to the same GameObject as <see cref="PrisonerAI"/>. Use a <see cref="SocialManager"/> in the scene.
+    /// Talk Menu entry point for any social actor (inmates and guards) — reworked from the
+    /// v1 greet chain (Social Ecosystem &amp; Gangs v3). [F] opens <see cref="SocialInteractionMenu"/>.
+    /// Also drives the nameplate Standing-band tint and the Escapists-style overhead markers
+    /// (green ! = open favor, coin = trade stock today).
     /// </summary>
-    [RequireComponent(typeof(PrisonerAI))]
     public class PrisonerSocialPresenter : MonoBehaviour, IInteractable
     {
-        [Header("Display")]
-        [SerializeField] private string displayName = "Inmate";
-        [SerializeField] [TextArea(1, 2)] private string personalitySubtitle = "";
-
         [Header("Label layout")]
+        [Tooltip("Kept for editor tooling compatibility; overhead marker anchor.")]
         [SerializeField] private Vector3 labelLocalOffset = new Vector3(0f, CharacterVisualConstants.SocialLabelHeight, 0f);
-        [Tooltip("Scales the whole world label. Smaller = smaller text in world space.")]
-        [SerializeField] private float labelRootUniformScale = 0.05f;
-        [SerializeField] private float lineFontSize = 3.2f;
 
         [Header("Raycast (F interaction)")]
         [Tooltip("Physics.Raycast does not hit CharacterController. If no other Collider exists, add a character-sized capsule (non-trigger) so the player can target this NPC.")]
@@ -29,134 +24,112 @@ namespace Prison
         [SerializeField] private float capsuleRadius = 0.4f;
         [SerializeField] private float capsuleHeight = 1.8f;
 
-        private PrisonerAI _ai;
-        private Transform _labelRoot;
-        private TextMeshPro _text;
+        private Transform _markerRoot;
+        private TextMeshPro _markerText;
         private Camera _mainCamera;
+        private float _nextRefresh;
 
         public InteractionInputType InputType => InteractionInputType.Press;
         public float HoldDuration => 0f;
 
-        public void SetRuntimeLabel(string name, string subtitle = null)
+        private int ActorId
         {
-            if (!string.IsNullOrEmpty(name))
-                displayName = name;
-
-            var nameLabel = GetComponent<CharacterNameLabel>();
-            if (nameLabel != null)
-                nameLabel.SetDisplayName(displayName);
-
-            personalitySubtitle = subtitle ?? "";
-            RefreshText();
+            get
+            {
+                var world = SocialWorld.Instance;
+                return world != null ? world.GetActorId(gameObject) : SocialTuning.NoActor;
+            }
         }
 
         private void Awake()
         {
-            _ai = GetComponent<PrisonerAI>();
             if (addInteractionCapsuleIfMissing && !HasUsableBodyCollider())
                 AddInteractionCapsule();
-            CreateLabel();
+            CreateMarker();
         }
 
         private void OnEnable()
         {
-            if (SocialManager.Instance != null)
-                SocialManager.Instance.OnAffinityChanged += OnAffinityChanged;
+            if (SocialWorld.Instance != null)
+                SocialWorld.Instance.OnPlayerRelationshipChanged += OnRelationshipChanged;
         }
 
         private void OnDisable()
         {
-            if (SocialManager.Instance != null)
-                SocialManager.Instance.OnAffinityChanged -= OnAffinityChanged;
-        }
-
-        private void Start()
-        {
-            RefreshText();
+            if (SocialWorld.Instance != null)
+                SocialWorld.Instance.OnPlayerRelationshipChanged -= OnRelationshipChanged;
         }
 
         private void LateUpdate()
         {
-            if (_labelRoot == null) return;
-            if (_mainCamera == null)
-                _mainCamera = Camera.main;
-            if (_mainCamera == null) return;
+            if (Time.time >= _nextRefresh)
+            {
+                _nextRefresh = Time.time + 0.75f;
+                RefreshBandTint();
+                RefreshMarker();
+            }
 
-            Vector3 toCamera = _labelRoot.position - _mainCamera.transform.position;
-            if (toCamera.sqrMagnitude < 0.0001f)
+            if (_markerRoot == null) return;
+            if (_mainCamera == null) _mainCamera = Camera.main;
+            if (_mainCamera == null) return;
+            Vector3 toCamera = _markerRoot.position - _mainCamera.transform.position;
+            if (toCamera.sqrMagnitude < 0.0001f) return;
+            _markerRoot.rotation = Quaternion.LookRotation(toCamera, Vector3.up);
+        }
+
+        private void OnRelationshipChanged(int observer, float trustDelta, float respectDelta, RelationshipRecord record)
+        {
+            if (observer == ActorId)
+                RefreshBandTint();
+        }
+
+        private void RefreshBandTint()
+        {
+            var world = SocialWorld.Instance;
+            int actorId = ActorId;
+            if (world == null || !world.IsBuilt || actorId == SocialTuning.NoActor) return;
+
+            var label = GetComponent<CharacterNameLabel>();
+            if (label == null) return;
+            var band = world.Relationships.GetBand(actorId, SocialTuning.PlayerActorId);
+            label.SetTint(StandingBandUI.ColorOf(band));
+        }
+
+        private void RefreshMarker()
+        {
+            var world = SocialWorld.Instance;
+            int actorId = ActorId;
+            if (_markerText == null || world == null || !world.IsBuilt || actorId == SocialTuning.NoActor)
                 return;
 
-            _labelRoot.rotation = Quaternion.LookRotation(toCamera, Vector3.up);
+            var identity = world.GetIdentity(actorId);
+            if (identity == null) { _markerText.text = ""; return; }
+
+            bool hasFavor = !identity.isGuard && world.Favors.OpenOfferFor(actorId) != null;
+            bool hasStock = !identity.isGuard && world.Trading.HasStockToday(actorId);
+
+            if (hasFavor) _markerText.text = "<color=#4CD24C>!</color>";
+            else if (hasStock) _markerText.text = "<color=#F4D03F>$</color>";
+            else _markerText.text = "";
         }
 
-        private void OnAffinityChanged(int cellIndex, float newValue, float delta)
+        private void CreateMarker()
         {
-            if (_ai != null && cellIndex == _ai.cellIndex)
-                RefreshText();
-        }
-
-        private void CreateLabel()
-        {
-            _labelRoot = new GameObject("WorldSocialLabel").transform;
-            _labelRoot.SetParent(transform, false);
-            _labelRoot.localPosition = labelLocalOffset;
-            _labelRoot.localRotation = Quaternion.identity;
-            _labelRoot.localScale = Vector3.one * labelRootUniformScale;
+            _markerRoot = new GameObject("SocialOverheadMarker").transform;
+            _markerRoot.SetParent(transform, false);
+            _markerRoot.localPosition = labelLocalOffset + new Vector3(0f, 0.55f, 0f);
+            _markerRoot.localScale = Vector3.one * 0.06f;
 
             var textGo = new GameObject("Text");
-            textGo.transform.SetParent(_labelRoot, false);
-            _text = textGo.AddComponent<TextMeshPro>();
-            _text.alignment = TextAlignmentOptions.Center;
-            _text.horizontalAlignment = HorizontalAlignmentOptions.Center;
-            _text.fontSize = lineFontSize;
-            _text.textWrappingMode = TextWrappingModes.Normal;
-            _text.raycastTarget = false;
-            _text.outlineWidth = 0.2f;
-            _text.outlineColor = new Color(0f, 0f, 0f, 0.85f);
-        }
-
-        private void RefreshText()
-        {
-            if (_text == null) return;
-
-            var pers = SocialManager.Instance != null
-                ? SocialManager.Instance.GetPersonality(_ai.cellIndex)
-                : null;
-            float aff = SocialManager.Instance != null
-                ? SocialManager.Instance.GetAffinity(_ai.cellIndex)
-                : 0f;
-
-            string secondLine = "";
-            if (!string.IsNullOrWhiteSpace(personalitySubtitle))
-                secondLine = $"<size=70%><color=#aaaaaa>{personalitySubtitle}</color></size>\n";
-            else if (pers != null && !string.IsNullOrWhiteSpace(pers.personalityName))
-                secondLine = $"<size=70%><color=#aaaaaa>{pers.personalityName}</color></size>\n";
-
-            string bar = BuildAffinityBar(aff);
-            string sign = aff >= 0f ? "+" : "";
-
-            bool hasNameLabel = GetComponent<CharacterNameLabel>() != null;
-            var sb = new StringBuilder();
-            if (!hasNameLabel)
-                sb.AppendLine($"<b>{displayName}</b>");
-
-            if (!string.IsNullOrEmpty(secondLine))
-                sb.Append(secondLine);
-
-            sb.Append($"<size=90%>Affinity: {sign}{aff:0}</size>\n");
-            sb.Append($"<size=75%><color=#99ccff>{bar}</color></size>");
-            _text.text = sb.ToString();
-        }
-
-        private static string BuildAffinityBar(float affinity)
-        {
-            const int segments = 10;
-            int filled = Mathf.RoundToInt(Mathf.InverseLerp(SocialMath.MinAffinity, SocialMath.MaxAffinity, affinity) * segments);
-            filled = Mathf.Clamp(filled, 0, segments);
-            var sb = new StringBuilder(segments);
-            for (int i = 0; i < segments; i++)
-                sb.Append(i < filled ? "█" : "░");
-            return sb.ToString();
+            textGo.transform.SetParent(_markerRoot, false);
+            _markerText = textGo.AddComponent<TextMeshPro>();
+            _markerText.alignment = TextAlignmentOptions.Center;
+            _markerText.fontSize = 9f;
+            _markerText.fontStyle = FontStyles.Bold;
+            _markerText.raycastTarget = false;
+            _markerText.outlineWidth = 0.22f;
+            _markerText.outlineColor = new Color(0f, 0f, 0f, 0.85f);
+            _markerText.text = "";
         }
 
         private bool HasUsableBodyCollider()
@@ -185,62 +158,32 @@ namespace Prison
             cap.isTrigger = false;
         }
 
+        // ------------------------------------------------------------------ IInteractable
+
         public string GetInteractionPrompt(PlayerInventory inventory)
         {
-            if (SocialManager.Instance == null)
-                return displayName;
+            var world = SocialWorld.Instance;
+            int actorId = ActorId;
+            if (world == null || !world.IsBuilt || actorId == SocialTuning.NoActor)
+                return "";
 
-            int cell = _ai.cellIndex;
-            var favor = SocialManager.Instance.GetActiveFavorInfo(cell);
-            if (favor.HasFavor && favor.Definition != null && favor.Definition.requiredItem != null)
-            {
-                if (inventory != null && inventory.HasItem(favor.Definition.requiredItem, 1))
-                    return $"[F] Deliver {favor.Definition.requiredItem.itemName}";
-                return $"[F] Needs {favor.Definition.requiredItem.itemName}";
-            }
-
-            if (SocialManager.Instance.IsGreetingBlockedByPhaseCooldown(cell))
-                return "[F] Busy...";
-
-            return "[F] Greet (+2)";
+            var identity = world.GetIdentity(actorId);
+            if (identity == null) return "";
+            string name = world.HasMet(actorId) || identity.isGuard ? identity.DisplayName : "the inmate";
+            return $"[F] Talk to {name}";
         }
 
         public bool CanInteract(PlayerInventory inventory)
         {
-            if (SocialManager.Instance == null) return false;
-
-            int cell = _ai.cellIndex;
-            var favor = SocialManager.Instance.GetActiveFavorInfo(cell);
-            if (favor.HasFavor && favor.Definition != null && favor.Definition.requiredItem != null)
-                return inventory != null && inventory.HasItem(favor.Definition.requiredItem, 1);
-            if (SocialManager.Instance.IsGreetingBlockedByPhaseCooldown(cell))
-                return false;
-            return true;
+            var world = SocialWorld.Instance;
+            return world != null && world.IsBuilt && ActorId != SocialTuning.NoActor;
         }
 
         public void Interact(PlayerInventory inventory)
         {
-            if (SocialManager.Instance == null)
-            {
-                Debug.LogWarning("[PrisonerSocialPresenter] No SocialManager in scene.");
-                return;
-            }
-
-            int cell = _ai.cellIndex;
-            var favor = SocialManager.Instance.GetActiveFavorInfo(cell);
-            if (favor.HasFavor && favor.Definition != null && favor.Definition.requiredItem != null)
-            {
-                if (SocialManager.Instance.TryCompleteFavor(cell, inventory, out _))
-                {
-                    RefreshText();
-                    return;
-                }
-            }
-
-            if (SocialManager.Instance.IsGreetingBlockedByPhaseCooldown(cell))
-                return;
-
-            SocialManager.Instance.ChangeAffinity(cell, SocialActionType.Greeting);
+            int actorId = ActorId;
+            if (actorId == SocialTuning.NoActor) return;
+            SocialInteractionMenu.Open(actorId);
         }
     }
 }

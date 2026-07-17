@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3632aa6e37151eb41b33e022b548755c, type: 3}
+  m_Name: Facility_fed_adx
+  m_EditorClassIdentifier: Assembly-CSharp::Prison.Career.FacilityDefinition
+  id: fed_adx
+  system: Federal
+  securityLabel: ADX
+  title: Federal Administrative Max
+  description: "The last box. Nobody has ever left it early \u2014 which is exactly
+    why you're going to."
+  icon: {fileID: 0}
+  silhouette: {fileID: 0}
+  sceneName: FedAdx
+  ladderIndex: 8
+  lootAbundance: 0.45
+  cashIncomeMult: 2.7
+  tradePriceMult: 2.6
+  bribeCostMult: 4.5
+  escapeRouteCostMult: 4.6
+  detectionRangeMult: 1.55
+  shakedownStrictness: 1.75
+  recommendedStayDaysMin: 16
+  recommendedStayDaysMax: 22
+  sentenceDays: 0
+  gateMode: 2
+  gateCash: 10000
+  gateRespect: 75

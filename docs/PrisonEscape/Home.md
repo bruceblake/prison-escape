@@ -39,6 +39,8 @@
 
 ## 06 Process
 - [[Development Workflow]] — Obsidian → Cursor → Unity MCP → Git loop
+- [[Small PRs & Feature Slices]] — **mandatory** one-concern PRs; mega-diff recovery
+- [[Social & Career PR Slice Plan]] — ordered slices for the uncommitted Social+Career blob + remaining work
 - [[Feature Spec Template]] — copy for every new feature
 - [[Git & Branching]] — dev/main model
 

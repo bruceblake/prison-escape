@@ -14,9 +14,9 @@
 
 Bag UI (`InventoryUI`, key E) supports drag-swap; `StolenNotebookUI` (Tab) hosts map / **Relationships · Gangs** ([[Social Dossier — Relationships & Gangs]]) / workbench / schedule tabs.
 
-## Social inventory uses (specced v3)
+## Social inventory uses (v3 on `dev`)
 
-Held / bag items feed [[Talk Menu & NPC Profile]] **Gift** and **Trade** (barter). Favored gift categories live on `ArchetypeDefinition` ([[Social Ecosystem & Gangs]]). Stash-hold favors park 2 items with a trusted NPC through shakedown. Contraband traded at ×2 markup still confiscates on sweep if left in your bag.
+Held / bag items feed [[Talk Menu & NPC Profile]] **Gift** and **Trade** (barter). Favored gift categories live on `ArchetypeDefinition` ([[Social Ecosystem & Gangs]]). Stash-hold favors park items with a trusted NPC through shakedown when that favor type is active. Contraband traded at markup still confiscates on sweep if left in your bag.
 
 ## Item taxonomy
 
@@ -42,7 +42,7 @@ All under `Assets/ScriptableObjects/` — full table in [[Item Catalog]]. Summar
 - Duplicate assets: `Metal Scrap` / `MetalScrap`, `Wood Scrap` / `WoodScrap`
 - `networkId` collisions (several items at 0; Metal Rod=1 vs AK-47=1) — matters if inventory ever networks
 - Molotov is categorized **Tool**, not Consumable
-- Coin exists but is **not wired** to the wallet ([[Loot & Economy]])
+- Coin item SO exists as loot flavor; **cash economy uses `PlayerWallet`**, not the Coin item ([[Loot & Economy]])
 
 ## Key files
 

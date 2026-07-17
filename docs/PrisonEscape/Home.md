@@ -40,7 +40,7 @@
 ## 06 Process
 - [[Development Workflow]] — Obsidian → Cursor → Unity MCP → Git loop
 - [[Small PRs & Feature Slices]] — **mandatory** one-concern PRs; mega-diff recovery
-- [[Social & Career PR Slice Plan]] — post-merge remaining gaps (Social assets, M6+ scenes, polish)
+- [[Social & Career PR Slice Plan]] — post-merge gaps (Social assets, M6+ scenes, route geometry)
 - [[Feature Spec Template]] — copy for every new feature
 - [[Git & Branching]] — dev/main model
 

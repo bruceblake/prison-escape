@@ -70,11 +70,14 @@ public class PlayerInventory : MonoBehaviour
         // slot (slot.item == null) would match itemToAdd == null below and NRE on itemToAdd.category.
         if (itemToAdd == null) return false;
 
-        // 1. Check if we already have this item to stack it
+        // 1. Check if we already have this item to stack it. Match by reference OR name —
+        // the same identity rule CountItem/RemoveItem use — so duplicate ItemData instances
+        // (scene prefab vs Resources asset) never split into parallel stacks.
         EnsureSlotCapacity();
         foreach (InventorySlot slot in inventorySlots)
         {
-            if (slot.item != itemToAdd) continue;
+            if (slot.item == null) continue;
+            if (slot.item != itemToAdd && slot.item.itemName != itemToAdd.itemName) continue;
 
             // If it's a Crafting Part, we can stack it. (Tools usually don't stack)
             if (itemToAdd.category == ItemCategory.CraftingPart)
@@ -136,32 +139,37 @@ public class PlayerInventory : MonoBehaviour
 
     public bool RemoveItem(ItemData itemToRemove, int amountToRemove = 1)
     {
-        if (itemToRemove == null) return false;
+        if (itemToRemove == null || amountToRemove <= 0) return false;
 
-        for (int i = 0; i < inventorySlots.Count; i++)
+        // All-or-nothing across stacks: HasItem/CountItem sum every matching stack, so
+        // removal must too — otherwise 2+1 screws can pass CanCraft but fail to consume.
+        if (CountItem(itemToRemove) < amountToRemove)
         {
-            if (inventorySlots[i].item == null) continue;
-            bool match = inventorySlots[i].item == itemToRemove || inventorySlots[i].item.itemName == itemToRemove.itemName;
+            Debug.LogWarning("Tried to remove an item you don't have enough of!");
+            return false;
+        }
+
+        int remaining = amountToRemove;
+        for (int i = 0; i < inventorySlots.Count && remaining > 0; i++)
+        {
+            var slot = inventorySlots[i];
+            if (slot.item == null || slot.quantity <= 0) continue;
+            bool match = slot.item == itemToRemove || slot.item.itemName == itemToRemove.itemName;
             if (!match) continue;
 
-            if (inventorySlots[i].quantity >= amountToRemove)
+            int take = Mathf.Min(slot.quantity, remaining);
+            slot.quantity -= take;
+            remaining -= take;
+            if (slot.quantity <= 0)
             {
-                inventorySlots[i].quantity -= amountToRemove;
-
-                if (inventorySlots[i].quantity <= 0)
-                {
-                    inventorySlots[i].item = null;
-                    inventorySlots[i].quantity = 0;
-                }
-
-                Debug.Log($"Removed {amountToRemove} {itemToRemove.itemName}(s).");
-                RaiseSlotsChanged();
-                return true;
+                slot.item = null;
+                slot.quantity = 0;
             }
         }
-        
-        Debug.LogWarning("Tried to remove an item you don't have enough of!");
-        return false;
+
+        Debug.Log($"Removed {amountToRemove} {itemToRemove.itemName}(s).");
+        RaiseSlotsChanged();
+        return true;
     }
 
     // --------------------------------------------------------

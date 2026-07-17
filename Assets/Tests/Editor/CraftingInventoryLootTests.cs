@@ -127,6 +127,36 @@ namespace Prison.Tests
         }
 
         [Test]
+        public void AddItem_CraftingPart_StacksAcrossDuplicateAssetsByName()
+        {
+            var inv = NewInventory();
+            var soapA = NewItem("Soap", ItemCategory.CraftingPart);
+            var soapB = NewItem("Soap", ItemCategory.CraftingPart); // different asset, same name
+            inv.AddItem(soapA, 2);
+            inv.AddItem(soapB, 3);
+            Assert.AreEqual(5, inv.CountItem(soapA));
+            int occupied = 0;
+            foreach (var slot in inv.inventorySlots)
+                if (!slot.IsEmpty) occupied++;
+            Assert.AreEqual(1, occupied, "Same-named crafting parts must merge into one stack, not split.");
+        }
+
+        [Test]
+        public void RemoveItem_SpansMultipleStacks()
+        {
+            var inv = NewInventory();
+            var wire = NewItem("Wire", ItemCategory.CraftingPart);
+            var wireDupe = NewItem("Wire", ItemCategory.CraftingPart);
+            // Force split stacks (legacy saves / scene-authored slots can contain them).
+            inv.inventorySlots[0] = new InventorySlot(wire, 2);
+            inv.inventorySlots[1] = new InventorySlot(wireDupe, 1);
+
+            Assert.IsTrue(inv.HasItem(wire, 3), "HasItem sums across stacks");
+            Assert.IsTrue(inv.RemoveItem(wire, 3), "RemoveItem must span stacks like HasItem does");
+            Assert.AreEqual(0, inv.CountItem(wire));
+        }
+
+        [Test]
         public void GetEquippedItem_ReturnsSelectedSlotItem()
         {
             var inv = NewInventory();
@@ -191,6 +221,24 @@ namespace Prison.Tests
             var wire = NewItem("Wire");
             var recipe = NewRecipe(NewItem("Shiv", ItemCategory.Weapon), 1, (wire, 2));
             Assert.IsFalse(CraftingSystem.TryCraft(recipe, inv));
+        }
+
+        [Test]
+        public void TryCraft_NoRoomForResult_RefundsIngredients()
+        {
+            // 3 slots: wire×2 + two tools → consuming 1 wire leaves no empty slot for the
+            // non-stackable result, so the craft must abort and give the wire back.
+            var inv = NewInventory(3);
+            var wire = NewItem("Wire");
+            inv.AddItem(wire, 2);
+            inv.AddItem(NewItem("ToolA", ItemCategory.Tool));
+            inv.AddItem(NewItem("ToolB", ItemCategory.Tool));
+            var shiv = NewItem("Shiv", ItemCategory.Weapon);
+            var recipe = NewRecipe(shiv, 1, (wire, 1));
+
+            Assert.IsFalse(CraftingSystem.TryCraft(recipe, inv), "Craft must fail when the result has no slot.");
+            Assert.AreEqual(2, inv.CountItem(wire), "Consumed parts must be refunded.");
+            Assert.AreEqual(0, inv.CountItem(shiv));
         }
 
         // ============ CraftingRecipeDescription ============

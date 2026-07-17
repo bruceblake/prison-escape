@@ -10,17 +10,22 @@ namespace Prison
     /// </summary>
     public class CellDoorController : MonoBehaviour
     {
-        [Tooltip("The local position of the door when fully closed. Captured automatically on Start.")]
+        [Tooltip("The local position of the door when fully closed. Set by facility install / door fixer.")]
         public Vector3 closedLocalPosition;
 
         [Tooltip("Local-space offset added to the closed position to reach the fully OPEN position. " +
                  "For a barred cell door this should slide it sideways far enough to clear the doorway.")]
-        public Vector3 openOffset = new Vector3(0f, 0f, 6.0f);
+        public Vector3 openOffset = new Vector3(0f, 0f, 1.35f);
 
         [Tooltip("Slide responsiveness (lerp factor per second) between open and closed.")]
         public float slideSpeed = 3.0f;
 
-        private bool isInitialized = false;
+        [SerializeField]
+        [Tooltip("When true, Start keeps closedLocalPosition instead of re-capturing from the live transform " +
+                 "(avoids treating a left-open door as the new closed pose).")]
+        private bool hasAuthoredClosedPosition;
+
+        private bool isInitialized;
 
         /// <summary>True once the closed position has been captured.</summary>
         public bool IsInitialized => isInitialized;
@@ -33,7 +38,14 @@ namespace Prison
 
         private void Start()
         {
-            InitializeClosedPosition();
+            // Never re-capture from a door that was left slid open in the scene — that made
+            // Start treat the open pose as closed, then slide further and block the doorway.
+            if (!hasAuthoredClosedPosition)
+                InitializeClosedPosition();
+            else
+                isInitialized = true;
+
+            SnapToScheduleTarget(immediate: true);
         }
 
         /// <summary>
@@ -43,7 +55,19 @@ namespace Prison
         public void InitializeClosedPosition()
         {
             closedLocalPosition = transform.localPosition;
+            hasAuthoredClosedPosition = true;
             isInitialized = true;
+        }
+
+        /// <summary>Moves the door to the open or closed pose for the current schedule phase.</summary>
+        public void SnapToScheduleTarget(bool immediate)
+        {
+            if (PrisonTimeManager.Instance == null) return;
+            Vector3 target = GetTargetLocalPosition(PrisonTimeManager.Instance.CurrentEvent);
+            if (immediate)
+                transform.localPosition = target;
+            else
+                transform.localPosition = StepToward(transform.localPosition, target, slideSpeed, Time.deltaTime);
         }
 
         private void Update()
@@ -56,24 +80,22 @@ namespace Prison
 
         /// <summary>
         /// Returns true when the door should be OPEN for the given schedule phase.
-        /// Open during all day phases (05:00-21:00): counts, meals, work, free time.
-        /// Closed phases: LightsOut, NightRollCall (the 21:00-05:00 lock-in).
+        /// Open for movement blocks (meals, work, free time). Closed for night lock-in
+        /// and cell counts (morning / midday / evening) so inmates stay locked for roll call.
+        /// Doors open after morning count when Breakfast begins.
         /// </summary>
         public static bool IsOpenPhase(PrisonEventType evt)
         {
             switch (evt)
             {
-                case PrisonEventType.RollCall:
                 case PrisonEventType.Breakfast:
                 case PrisonEventType.Lunch:
                 case PrisonEventType.Dinner:
                 case PrisonEventType.FreeTime:
-                case PrisonEventType.MorningRollCall:
                 case PrisonEventType.WorkProgram:
-                case PrisonEventType.MiddayCount:
-                case PrisonEventType.EveningCount:
                     return true;
                 default:
+                    // LightsOut, NightRollCall, MorningRollCall, MiddayCount, EveningCount, RollCall
                     return false;
             }
         }

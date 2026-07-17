@@ -1,6 +1,6 @@
 # Social Ecosystem & Gangs
 
-**Status:** Implemented in review — Social micro-stack PRs #58�#72 (stack onto `dev`). Playtest after merge.
+**Status:** Implemented — Social micro-stack PRs #58�#72 (stack onto `dev`). Playtest after merge.
 **System notes:** [[Social & Reputation]] (v1 deprecated; rewrite after implement) · [[Talk Menu & NPC Profile]] · [[Social Dossier — Relationships & Gangs]] · [[Prisoner AI & NPCs]] · [[Guard AI]] · [[Security, Heat & Alerts]] · [[Loot & Economy]] · [[Inventory & Items]]
 **Branch:** `feat/social-ecosystem`
 **Specced:** v2 7/14/2026 · **v3** 7/16/2026 (research basis, friends/enemies bands, complete gang membership, Talk + dossier UI). Decisions below are the design of record unless overridden in this note.

@@ -2,7 +2,7 @@
 
 Diegetic notebook pages that show the **entire social system** at a glance: who likes you, who hates you, which gangs run the yard, and where you stand. Design of record for [[Social Ecosystem & Gangs]] (v3). Hosted by `StolenNotebookUI` (Tab). Theme: [[UI Theme & Style Guide]].
 
-**Status:** Implemented in review (PRs #58–#72).
+**Status:** Implemented (merged to `dev`).
 **Access:** Notebook (Tab) → sub-tabs **Relationships** | **Gangs** (replaces the empty "social" placeholder). No separate `N`/`Y` keys (Back to Dawn had those; we stay inside the stolen notebook). Optional hotkey jump later.
 
 ## Why it exists

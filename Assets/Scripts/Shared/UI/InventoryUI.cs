@@ -128,32 +128,24 @@ if (hotbarHiddenWhileOpen == null)
                 
                 bool canCraft = CraftingSystem.CanCraft(entry.recipe, inventory);
                 bool isSelected = (entry.recipe == _selectedRecipe);
-                
-                // Base background color - darker for better icon visibility
-                Color bgColor = new Color(0, 0, 0, 0.5f); 
-                
-                // Muted ink green for craftable rows (see PrisonUITheme.InkGreen)
+
+                // Craftable rows read ink green; everything else recedes. Selection is carried
+                // by the outline (theme accent), and a selected craftable row gets both.
+                Color bgColor = new Color(0, 0, 0, 0.5f);
                 if (canCraft)
                 {
                     Color ink = PrisonUITheme.InkGreen;
-                    bgColor = new Color(ink.r, ink.g, ink.b, 0.85f);
+                    bgColor = new Color(ink.r, ink.g, ink.b, isSelected ? 0.95f : 0.7f);
                 }
-                else if (isSelected)
-                {
-                    // Selection highlight (Blue-ish) if not craftable
-                    bgColor = new Color(0.2f, 0.5f, 0.9f, 0.8f);
-                }
-                
                 entry.rowBackground.color = bgColor;
-                
-                // Add/Update outline for selection
+
                 UnityEngine.UI.Outline outline = entry.GetComponent<UnityEngine.UI.Outline>();
                 if (isSelected)
                 {
                     if (outline == null) outline = entry.gameObject.AddComponent<UnityEngine.UI.Outline>();
-                    // Bright outline for selection
-                    outline.effectColor = canCraft ? Color.white : new Color(1f, 1f, 1f, 0.8f);
-                    outline.effectDistance = new Vector2(3, -3);
+                    var accent = PrisonUITheme.CautionYellow;
+                    outline.effectColor = new Color(accent.r, accent.g, accent.b, 0.95f);
+                    outline.effectDistance = new Vector2(2, -2);
                     outline.enabled = true;
                 }
                 else if (outline != null)
@@ -304,11 +296,15 @@ if (hotbarHiddenWhileOpen == null)
             UnityEngine.UI.Image img = tabs[i].GetComponent<UnityEngine.UI.Image>();
             if (img != null)
             {
-                // Highlight selected tab with a bright tint, dim others
-                img.color = (i == selectedIndex) 
-                    ? new Color(0.4f, 0.35f, 0.25f, 1f) 
-                    : new Color(0.15f, 0.12f, 0.1f, 0.8f);
+                // Selected tab carries the theme accent; the rest recede into the backdrop.
+                var accent = PrisonUITheme.CautionYellow;
+                img.color = (i == selectedIndex)
+                    ? new Color(accent.r * 0.55f, accent.g * 0.5f, accent.b * 0.25f, 1f)
+                    : PrisonUITheme.CommandStripBackdrop;
             }
+            var label = tabs[i].GetComponentInChildren<TMP_Text>();
+            if (label != null)
+                label.color = (i == selectedIndex) ? Color.white : PrisonUITheme.ConcreteGrey;
         }
     }
 
@@ -465,12 +461,14 @@ if (hotbarHiddenWhileOpen == null)
         vlg.childControlHeight = true; vlg.childControlWidth = true;
         vlg.padding = new RectOffset(5, 5, 5, 5);
 
-        // Icon
+        // Icon — hidden when the item has no sprite yet (a blazing white square reads as a bug)
         GameObject iconObj = CreateUIObj("Icon", inner.transform);
         UnityEngine.UI.Image iconImg = iconObj.AddComponent<UnityEngine.UI.Image>();
-        iconImg.sprite = recipe.result != null ? recipe.result.icon : null;
+        Sprite resultIcon = recipe.result != null ? recipe.result.icon : null;
+        iconImg.sprite = resultIcon;
         iconImg.preserveAspect = true;
         iconImg.raycastTarget = false;
+        iconImg.enabled = resultIcon != null;
 
         // Short Name Label
         GameObject nameObj = CreateUIObj("Name", inner.transform);

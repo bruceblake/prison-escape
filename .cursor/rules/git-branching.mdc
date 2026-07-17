@@ -37,6 +37,13 @@ This repo uses a **three-stage release model**. Agents and contributors must fol
 5. **Hotfixes (rare)**
    - Branch from `main`, fix, PR to `main`, then merge/cherry-pick back into `dev`
 
+## Small PRs (mandatory)
+
+- **One concern / one milestone per PR** into `dev`. Prefer branch names like `feat/social-m1-foundation`, `feat/career-hub-transfer`.
+- Propose a **slice list** before committing a large feature. Refuse mixed-system mega-PRs (e.g. Career + Social + scene polish) unless the user writes an explicit waiver (`ok mega-PR: <reason>`).
+- Do **not** rewrite already-merged `dev`/`main` history without explicit approval. To split a dirty mega-diff: snapshot → return primary to `dev` → named-file slices in worktrees.
+- Vault policy: `docs/PrisonEscape/06 Process/Small PRs & Feature Slices.md`. Live Social/Career split: `docs/PrisonEscape/06 Process/Social & Career PR Slice Plan.md`.
+
 ## Agent defaults
 
 - Assume **`dev`** is the active integration branch unless the user says otherwise.
@@ -48,4 +55,5 @@ This repo uses a **three-stage release model**. Agents and contributors must fol
 ## Reference docs
 
 - Human-readable: `docs/WORKFLOW.md`
+- Vault: `docs/PrisonEscape/06 Process/Git & Branching.md` · `Small PRs & Feature Slices.md`
 - Prison rebuild epic: `Assets/Docs/Prison_Rebuild_Master_Plan.md`

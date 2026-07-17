@@ -11,10 +11,16 @@ Two-branch release model. Repo: `github.com/bruceblake/prison-escape`.
 
 1. Start from `dev` on the **primary checkout** (`C:\Users\bruce\3dgame`): `git checkout dev && git pull origin dev`
 2. Feature branches off `dev`: `feat/...`, `fix/...`, `chore/...` — do the work in a **git worktree** (below), not by parking the primary folder on the feature branch long-term
-3. PRs target **`dev`** (never `main` directly)
-4. Test and playtest on the feature worktree, then merge to `dev`
-5. Promote `dev` → `main` only when releasing
-6. Hotfixes (rare): branch from `main`, fix, PR to `main`, then sync back to `dev`
+3. **One slice per branch / PR** — see [[Small PRs & Feature Slices]]. Prefer `feat/<system>-<slice>` names (e.g. `feat/social-m1-foundation`). Do not pile a whole epic onto one long-lived branch.
+4. PRs target **`dev`** (never `main` directly). Keep PRs reviewable (one concern, short playtest script).
+5. Test and playtest on the feature worktree, then merge to `dev`
+6. Start the **next** slice from the new tip of `dev` (new worktree/branch)
+7. Promote `dev` → `main` only when releasing
+8. Hotfixes (rare): branch from `main`, fix, PR to `main`, then sync back to `dev`
+
+### Recovering a mega-diff
+
+If the working tree already mixes systems: snapshot (`refs/backup/pre-split-*`), return primary to `dev`, cut ordered slices with **named-file** staging only. Do **not** rewrite already-merged `dev`/`main` history unless you explicitly order history surgery. Live example: [[Social & Career PR Slice Plan]].
 
 ## Worktrees
 
@@ -58,5 +64,6 @@ These branches are **fully represented on `dev`** — do not re-merge wholesale 
 - The `graphify-out/` knowledge graph regenerates on commit/branch-switch hooks — its churn is expected
 - Unity `.meta` files always commit alongside their assets
 - Large binaries (images) go through Git LFS
+- Agents must not open a PR that mixes unrelated systems (e.g. Career + Social + NavMesh) without your written waiver
 
-See also: [[Development Workflow]]
+See also: [[Development Workflow]] · [[Small PRs & Feature Slices]]

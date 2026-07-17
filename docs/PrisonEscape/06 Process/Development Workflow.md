@@ -21,6 +21,7 @@ Chat (brainstorm) → Obsidian (spec) → Cursor (implement) → Unity MCP (exec
 ### 2. Implement with Cursor
 - Reference the vault note explicitly when starting a chat.
 - One feature per chat / per `feat/...` branch in a **worktree** when practical (see [[Git & Branching]]).
+- **Small PRs only** — one concern / one milestone per PR into `dev`. Never accumulate an epic on one branch and dump it. Policy: [[Small PRs & Feature Slices]]. Current Social/Career split: [[Social & Career PR Slice Plan]].
 - Prefer **repeatable editor scripts** (menu items under `Prison/...`) over manual scene edits — see [[Editor Tooling]].
 
 ### 3. Execute & verify with Unity MCP
@@ -39,6 +40,7 @@ Chat (brainstorm) → Obsidian (spec) → Cursor (implement) → Unity MCP (exec
 3. **Update `Assets/Docs/` only for technical/test docs** — design belongs here.
 4. **Log milestones** in [[Prison Escape Devlog Dashboard]].
 5. **Cursor enforces this loop** — `.cursor/rules/development-workflow.mdc` (always on). Agents must run the end-of-task checklist, report gaps, and **ask you before commit/push or declaring done**.
+6. **Small PRs are mandatory** — see [[Small PRs & Feature Slices]]. Agents propose a slice list before committing a large feature; refuse mixed-system mega-PRs without an explicit waiver.
 
 ## When YOU test vs when YOU commit
 

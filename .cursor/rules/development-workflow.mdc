@@ -16,7 +16,7 @@ Brainstorm → Obsidian spec → Implement → Agent verify → YOU playtest →
 | Phase | Who | When |
 |-------|-----|------|
 | Design | Agent + you | Before code — vault spec exists or you approve creating one |
-| Implement | Agent | After spec; one feature per `feat/...` branch off `dev` (prefer a worktree — `git-worktrees.mdc`) |
+| Implement | Agent | After spec; **one small slice** per `feat/...` branch off `dev` (prefer a worktree — `git-worktrees.mdc`). Policy: `docs/PrisonEscape/06 Process/Small PRs & Feature Slices.md` |
 | Agent verify | Agent | After code — compile, Unity MCP, EditMode tests, layout rebuild logs |
 | **Playtest** | **You** | **Before commit/push** for anything affecting gameplay, UI, layout, or scenes |
 | Sync + devlog | Agent | Before asking you to commit — vault and devlog must match reality |
@@ -75,6 +75,7 @@ Doc-only or rule-only changes with zero runtime impact: playtest gate may be mar
 - Skipping playtest, devlog, or vault sync
 - Design changes without a vault update
 - Excluding files you may expect tracked (screenshots, `.meta`, vault notes)
+- Opening a **mega-PR** that mixes unrelated systems (requires explicit waiver). Prefer slices per `docs/PrisonEscape/06 Process/Small PRs & Feature Slices.md`.
 
 ## Where updates go
 

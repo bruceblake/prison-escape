@@ -1,6 +1,6 @@
 # Social & Career PR Slice Plan
 
-**Status:** Complete — Career #51–#57 · Social #58–#72 · bridge · chores integrated to `dev`. Vault Phase 7 P0–P2 synced; this note is the **post-merge gap list** + short historical record.
+**Status:** Complete — Career/Social integrated; Vault Phase 7 done; **7/17 gap-audit** landed (#90–#95). Post-merge gaps below.
 **Policy:** [[Small PRs & Feature Slices]]
 **Specs:** [[Social Ecosystem & Gangs]] · [[Prison Career Ladder]] · [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]
 **Backup of pre-split WIP:** `backup/pre-split-20260716`. Open feature PRs: none.
@@ -8,10 +8,11 @@
 ## Remaining gaps (not vault drift)
 
 1. **`Resources/Social/`** — run **Tools → Prison → Social → Install Social Assets** and commit SOs (code catalogs fallback today).
-2. **Social polish** — richer Talk chrome; full per-guard Trust → detection tolerance/range ([[Guard AI]]).
+2. **Social polish** — richer Talk chrome / dossier art pass ([[Talk Menu & NPC Profile]]).
 3. **Career M6+** — State ×3 / Federal ×5 facility scenes (County stub + Dev Sandbox exist).
 4. **Escape route geometry** — vent corridors + courtyard fence so the boundary is reachable ([[Roadmap & Priorities]]).
 5. **Playtest** — Career hub → facility enter → Talk / dossier / transfer ceremony smoke after next Unity session.
+6. **PrisonLevel1 scene drift** — 3 EditMode layout/door tests failing (#81 snapshot); run **Prison → Fix Cell Doors & Waypoints**.
 
 ## Historical execution (2026-07-16)
 

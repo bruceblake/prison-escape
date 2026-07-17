@@ -42,6 +42,8 @@ World seed: `GameManager.worldSeed` (or career visit seed) seeds `Random` before
 
 Syndicate under-bed store delivery after morning count is part of the Social economy path when stock is active.
 
+**Career scaling (7/17):** buy/source prices × `CareerSession.TradePriceMult`, bribes × `BribeCostMult`, stipend + favor payouts × `CashIncomeMult` via `TradeMath.ApplyFacilityPriceMult` — all default to 1 outside a career run ([[Prison Career Ladder]] economy table).
+
 Design detail (prices, stock refresh, bribe tiers): [[Social Ecosystem & Gangs]] · [[Social & Reputation]].
 
 ## Key files

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3632aa6e37151eb41b33e022b548755c, type: 3}
+  m_Name: Facility_fed_med
+  m_EditorClassIdentifier: Assembly-CSharp::Prison.Career.FacilityDefinition
+  id: fed_med
+  system: Federal
+  securityLabel: Medium
+  title: Federal Medium
+  description: Fixers here don't work for strangers. Bring cash or a reputation.
+  icon: {fileID: 0}
+  silhouette: {fileID: 0}
+  sceneName: FedMed
+  ladderIndex: 6
+  lootAbundance: 0.65
+  cashIncomeMult: 2.15
+  tradePriceMult: 1.9
+  bribeCostMult: 3
+  escapeRouteCostMult: 3.1
+  detectionRangeMult: 1.35
+  shakedownStrictness: 1.4
+  recommendedStayDaysMin: 12
+  recommendedStayDaysMax: 16
+  sentenceDays: 0
+  gateMode: 1
+  gateCash: 2500
+  gateRespect: 40

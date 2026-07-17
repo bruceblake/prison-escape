@@ -51,6 +51,32 @@ namespace Prison
             return standPoints[Random.Range(0, standPoints.Length)];
         }
 
+        /// <summary>
+        /// Deterministic stand assignment so NPCs do not all repath to the same random point.
+        /// </summary>
+        public Transform GetStandPointForIndex(int occupantIndex)
+        {
+            if (standPoints == null || standPoints.Length == 0)
+                return transform;
+            int i = Mathf.Abs(occupantIndex) % standPoints.Length;
+            return standPoints[i];
+        }
+
+        /// <summary>
+        /// World position near a stand point with a small lateral offset so multiple inmates
+        /// sharing one stand (or nearby stands) do not stack and circle on the NavMesh.
+        /// </summary>
+        public Vector3 GetSpreadStandPosition(int occupantIndex, float spreadRadius = 0.9f)
+        {
+            Transform stand = GetStandPointForIndex(occupantIndex);
+            Vector3 origin = stand != null ? stand.position : transform.position;
+            int count = standPoints != null && standPoints.Length > 0 ? standPoints.Length : 1;
+            int ring = Mathf.Abs(occupantIndex) / count;
+            float angle = (Mathf.Abs(occupantIndex) * 137.508f) * Mathf.Deg2Rad;
+            float radius = spreadRadius * (0.25f + (ring % 3) * 0.35f);
+            return origin + new Vector3(Mathf.Cos(angle) * radius, 0f, Mathf.Sin(angle) * radius);
+        }
+
         public string GetHudLabel()
         {
             if (!string.IsNullOrEmpty(hudDisplayName))

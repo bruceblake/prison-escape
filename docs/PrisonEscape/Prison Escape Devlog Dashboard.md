@@ -4,7 +4,7 @@ Newest first. Log milestones here after each work session (see [[Development Wor
 
 ## 7/16/2026 (night — small PR split execution)
 
-- **Split & push** — uncommitted Social+Career WIP cut into stacked PRs: #42 docs policy · #43 Career store · #44 Career hub · #45 CountyJail · #46 Social library · #47 Social wire/teardown. Backup: `backup/pre-split-20260716`.
+- **Split & push** — Social+Career WIP resliced into micro-PRs: Career #51–#57, Social #58–#72, bridge draft #73, chores #49/#74–#84. Backup: `backup/pre-split-20260716`. Mega PRs #43–#47/#50 closed.
 - **Policy live** — [[Small PRs & Feature Slices]] · [[Social & Career PR Slice Plan]].
 - **Still open after merge:** Career↔Social difficulty/gang-tag bridge; Social Resources assets; vault Implemented flip post-playtest; scene polish chores.
 

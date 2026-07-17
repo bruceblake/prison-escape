@@ -31,6 +31,15 @@ flowchart LR
 
 ---
 
+
+## Micro-stack (2026-07-16 execution)
+
+Active open PRs (supersede Phase branch names above when they conflict):
+
+- **Career:** #51 world-model ? #52 facilities ? #53 session-math ? #54 main-menu ? #55 transfer ? #56 run-hooks ? #57 CountyJail
+- **Social:** #58 types ? … ? #71 wire ? #72 teardown ? draft #73 bridge
+- **Chores:** #49, #74–#79, #81–#84 (editor/polish/content). Old #38 and mega #43–#47/#50 closed/deleted.
+
 ## Phase 0 â€” Process (docs only)
 
 | Field | Value |

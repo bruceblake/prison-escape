@@ -4,7 +4,7 @@ Living note — reorder as the game evolves. Log completed items in [[Prison Esc
 
 ## Now (highest priority)
 
-1. **Social ecosystem & gangs overhaul** — 🔄 **in review**: PRs #46 (library) + #47 (wire/teardown). Spec: [[Social Ecosystem & Gangs]].
+1. **Social ecosystem & gangs overhaul** — 🔄 **in review**: Social micro-stack #58�#72. Spec: [[Social Ecosystem & Gangs]].
 2. **Prison career ladder** — 📐 **specced**: [[Prison Career Ladder]] (+ [[World Saves & Start Screen]] · [[Facility Transfer & Graduation]]). County → State ×3 → Federal ×5; escape = caught & transferred; named world saves, prison-select hub with locked silhouettes, global carry vs local reset, County sentence clock. Build M1–M5 (`feat/career-world-saves` → `feat/county-sentence-clock`); facility scenes are M6+ content epics.
 
 ## Next

@@ -16,6 +16,7 @@ namespace Prison.Visuals
 
         private Transform _labelRoot;
         private TextMeshPro _text;
+        private Camera _cam;
 
         public string DisplayName => displayName;
 
@@ -25,6 +26,13 @@ namespace Prison.Visuals
                 return;
 
             displayName = name.Trim();
+            RefreshText();
+        }
+
+        /// <summary>Standing-band tint (Social Ecosystem v3): red enemy → green confidant.</summary>
+        public void SetTint(Color color)
+        {
+            textColor = color;
             RefreshText();
         }
 
@@ -46,11 +54,12 @@ namespace Prison.Visuals
             if (_labelRoot == null)
                 return;
 
-            Camera cam = Camera.main;
-            if (cam == null)
+            if (_cam == null)
+                _cam = Camera.main;
+            if (_cam == null)
                 return;
 
-            Vector3 toCamera = _labelRoot.position - cam.transform.position;
+            Vector3 toCamera = _labelRoot.position - _cam.transform.position;
             if (toCamera.sqrMagnitude < 0.0001f)
                 return;
 

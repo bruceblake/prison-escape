@@ -34,10 +34,9 @@ public class StolenNotebookUI : MonoBehaviour
     [Tooltip("Optional: static sketch image or minimap you paint in the editor")]
     public Image mapImage;
 
-    [Header("Social stack")]
+    [Header("Social dossier")]
+    [Tooltip("Legacy anchor (unused since the v3 dossier builds itself on the social panel).")]
     public Transform socialListParent;
-    [Tooltip("Each row: add PrisonSocialRowUI, or a TMP text named for auto-fill.")]
-    public GameObject socialRowPrefab;
 
     [Header("Workbench (craft)")]
     public CraftingRecipe[] recipes;
@@ -49,10 +48,8 @@ public class StolenNotebookUI : MonoBehaviour
 
     public bool IsOpen { get; private set; }
     private int _tab;
-    private readonly List<GameObject> _socialRows = new List<GameObject>();
     private readonly List<GameObject> _recipeLines = new List<GameObject>();
     private CraftingRecipe _activeCraft;
-    private bool _socialBuilt;
     private CanvasGroup _rootCg;
 
     private int MaxTabIndex => scheduleDetailPanel != null ? 3 : 2;
@@ -102,7 +99,6 @@ public class StolenNotebookUI : MonoBehaviour
     public void SetInventory(PlayerInventory inv)
     {
         inventory = inv;
-        _socialBuilt = false;
     }
 
     public void Open()
@@ -151,56 +147,11 @@ public class StolenNotebookUI : MonoBehaviour
         if (_tab == 3) RefreshScheduleDetail();
     }
 
+    /// <summary>Social tab hosts the v3 dossier (Relationships | Gangs) — see [[Social Dossier]] spec.</summary>
     private void RefreshSocial()
     {
-        if (Prison.SocialManager.Instance == null) return;
-        if (socialListParent == null) return;
-
-        if (!_socialBuilt)
-        {
-            foreach (var g in _socialRows) { if (g != null) Destroy(g); }
-            _socialRows.Clear();
-            var dict = Prison.SocialManager.Instance.PrisonerAffinity;
-            foreach (var kvp in dict)
-            {
-                int cell = kvp.Key;
-                float aff = kvp.Value;
-                var p = Prison.SocialManager.Instance.GetPersonality(cell);
-                string name = p != null && !string.IsNullOrEmpty(p.personalityName) ? p.personalityName : $"Cell {cell}";
-
-                if (socialRowPrefab == null) continue;
-                var row = Instantiate(socialRowPrefab, socialListParent);
-                var rowUI = row.GetComponent<PrisonSocialRowUI>();
-                if (rowUI != null) rowUI.SetRow(name, aff, p);
-                else
-                {
-                    var t = row.GetComponentInChildren<TMP_Text>();
-                    if (t != null) t.text = $"{name} — {aff:F0}";
-                }
-                _socialRows.Add(row);
-            }
-            _socialBuilt = true;
-        }
-        else
-        {
-            int i = 0;
-            foreach (var kvp in Prison.SocialManager.Instance.PrisonerAffinity)
-            {
-                if (i < _socialRows.Count && _socialRows[i] != null)
-                {
-                    var p = Prison.SocialManager.Instance.GetPersonality(kvp.Key);
-                    string name = p != null && !string.IsNullOrEmpty(p.personalityName) ? p.personalityName : $"Cell {kvp.Key}";
-                    var rowUI = _socialRows[i].GetComponent<PrisonSocialRowUI>();
-                    if (rowUI != null) rowUI.SetRow(name, kvp.Value, p);
-                    else
-                    {
-                        var t = _socialRows[i].GetComponentInChildren<TMP_Text>();
-                        if (t != null) t.text = $"{name} — {kvp.Value:F0}";
-                    }
-                }
-                i++;
-            }
-        }
+        if (socialPanel == null) return;
+        Prison.Social.SocialDossierUI.Attach(socialPanel).Refresh();
     }
 
     private void RefreshWorkbench()

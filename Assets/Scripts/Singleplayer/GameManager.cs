@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Prison;
 using Prison.Visuals;
@@ -11,10 +12,6 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("If true, worldSeed is replaced with a random 0..999999 before InitState. If false, use worldSeed as entered (e.g. for reproducible runs).")]
     public bool useRandomSeed = true;
-
-    [Header("Social system")]
-    [Tooltip("Narc, Broker, etc. If empty, SocialManager still registers affinities with no personality data.")]
-    public NPCPersonalityData[] availablePersonalities;
 
     [Header("Spawn Settings")]
     [Tooltip("Drag your Player Prefab here")]
@@ -69,6 +66,10 @@ public class GameManager : MonoBehaviour
         UnityEngine.Random.InitState(worldSeed.GetHashCode());
     }
 
+    private GameObject _spawnedPlayer;
+    private readonly List<(GameObject go, int cellIndex)> _spawnedInmates = new List<(GameObject, int)>();
+    private readonly List<GameObject> _spawnedGuards = new List<GameObject>();
+
     void Start()
     {
         if (locationRegistry == null)
@@ -78,6 +79,34 @@ public class GameManager : MonoBehaviour
         SpawnNpcPrisoners();
         SpawnGuards();
         PopulateWorldSpawns();
+        BuildSocialWorld();
+    }
+
+    /// <summary>
+    /// Deterministic social ecosystem boot (Social Ecosystem & Gangs v3): every spawned
+    /// prisoner and guard gets an identity, archetype, traits, and gang from worldSeed.
+    /// Career Respect seeds the arrival Standing band, never individual history.
+    /// </summary>
+    void BuildSocialWorld()
+    {
+        var social = Prison.Social.SocialWorld.EnsureInstance();
+        if (_spawnedPlayer != null)
+            social.RegisterPlayer(_spawnedPlayer);
+
+        social.BuildWorld(worldSeed.GetHashCode(), _spawnedInmates, _spawnedGuards, arrivalSeed: 0f);
+
+        // Runtime labels come from generated identities now.
+        foreach (var (go, _) in _spawnedInmates)
+        {
+            if (go == null) continue;
+            int actorId = social.GetActorId(go);
+            var identity = social.GetIdentity(actorId);
+            if (identity == null) continue;
+
+            var nameLabel = go.GetComponent<Prison.Visuals.CharacterNameLabel>();
+            if (nameLabel != null)
+                nameLabel.SetDisplayName(identity.DisplayName);
+        }
     }
 
     /// <summary>
@@ -144,6 +173,7 @@ public class GameManager : MonoBehaviour
         }
 
         var player = Instantiate(playerPrefab, pos, rot);
+        _spawnedPlayer = player;
         var prisonerCtrl = player.GetComponent<PrisonerController>();
         if (prisonerCtrl != null)
             prisonerCtrl.cellIndex = playerCellIndex;
@@ -181,7 +211,7 @@ public class GameManager : MonoBehaviour
                 if (ai != null)
                 {
                     ai.cellIndex = cellIdx;
-                    RegisterPrisonerSocial(prisoner, cellId, cellIdx, ai);
+                    _spawnedInmates.Add((prisoner, cellIdx));
                 }
             }
         }
@@ -201,45 +231,21 @@ public class GameManager : MonoBehaviour
                 if (ai != null)
                 {
                     ai.cellIndex = cellIdx;
-                    int scheduleCellId = firstScheduleCellId + cellIdx;
-                    RegisterPrisonerSocial(prisoner, scheduleCellId, cellIdx, ai);
+                    _spawnedInmates.Add((prisoner, cellIdx));
                 }
             }
         }
     }
 
-    void RegisterPrisonerSocial(GameObject prisonerInstance, int scheduleCellId, int cellIndex, PrisonerAI ai)
-    {
-        if (prisonerInstance == null || ai == null) return;
-
-        NPCPersonalityData assigned = null;
-        if (availablePersonalities != null && availablePersonalities.Length > 0)
-            assigned = availablePersonalities[Random.Range(0, availablePersonalities.Length)];
-
-        if (SocialManager.Instance == null)
-            Debug.LogWarning("[GameManager] SocialManager not in scene. Affinity UI will not update correctly.");
-        else
-            SocialManager.Instance.RegisterPrisoner(cellIndex, assigned, 0f);
-
-        var label = prisonerInstance.GetComponent<PrisonerSocialPresenter>();
-        if (label != null)
-        {
-            string title = $"Inmate {scheduleCellId}";
-            string sub = (assigned != null && !string.IsNullOrWhiteSpace(assigned.personalityName))
-                ? assigned.personalityName
-                : null;
-            label.SetRuntimeLabel(title, sub);
-        }
-
-        var nameLabel = prisonerInstance.GetComponent<CharacterNameLabel>();
-        if (nameLabel != null)
-            nameLabel.SetDisplayName($"Inmate {scheduleCellId}");
-    }
-
     void SpawnGuards()
     {
-        if (guardPrefab == null) return;
+        if (guardPrefab == null)
+        {
+            Debug.LogError("[GameManager] guardPrefab is null — no guards will spawn.");
+            return;
+        }
 
+        int spawned = 0;
         if (guardSpawnTable != null && guardSpawnTable.Length > 0)
         {
             for (int i = 0; i < guardSpawnTable.Length; i++)
@@ -252,7 +258,16 @@ public class GameManager : MonoBehaviour
                 }
 
                 var t = entry.spawnPoint;
-                var go = Instantiate(guardPrefab, t.position, t.rotation);
+                Vector3 pos = t.position;
+                Quaternion rot = t.rotation;
+                if (UnityEngine.AI.NavMesh.SamplePosition(pos, out var navHit, 6f, UnityEngine.AI.NavMesh.AllAreas))
+                    pos = navHit.position;
+                else
+                    Debug.LogWarning($"[GameManager] Guard spawn '{t.name}' at {t.position} is off NavMesh — spawning raw.", t);
+
+                var go = Instantiate(guardPrefab, pos, rot);
+                go.SetActive(true);
+                _spawnedGuards.Add(go);
                 if (!string.IsNullOrWhiteSpace(entry.displayName))
                     go.name = entry.displayName.Trim();
 
@@ -275,12 +290,26 @@ public class GameManager : MonoBehaviour
                         fsm.patrolWaypoints = entry.patrolWaypoints;
                 }
 
+                var agent = go.GetComponent<UnityEngine.AI.NavMeshAgent>();
+                if (agent != null && agent.enabled && !agent.isOnNavMesh)
+                {
+                    if (UnityEngine.AI.NavMesh.SamplePosition(pos, out var warpHit, 6f, UnityEngine.AI.NavMesh.AllAreas))
+                        agent.Warp(warpHit.position);
+                }
+
                 var shift = go.GetComponent<GuardShiftController>();
                 if (shift == null)
                     shift = go.AddComponent<GuardShiftController>();
-                shift.Initialize(entry.role, entry.onDutyDuring);
+                // Empty array from the inspector means "always on" — normalize to null.
+                var dutyWindow = entry.onDutyDuring != null && entry.onDutyDuring.Length > 0
+                    ? entry.onDutyDuring
+                    : null;
+                shift.Initialize(entry.role, dutyWindow);
+                spawned++;
+                Debug.Log($"[GameManager] Spawned guard '{go.name}' role={entry.role} at {pos}", go);
             }
 
+            Debug.Log($"[GameManager] Guard spawn complete: {spawned}/{guardSpawnTable.Length} from spawn table.");
             return;
         }
 
@@ -301,11 +330,19 @@ public class GameManager : MonoBehaviour
                     : Vector3.zero;
             }
 
+            if (UnityEngine.AI.NavMesh.SamplePosition(pos, out var navHit, 6f, UnityEngine.AI.NavMesh.AllAreas))
+                pos = navHit.position;
+
             var guard = Instantiate(guardPrefab, pos, rot);
+            guard.SetActive(true);
+            _spawnedGuards.Add(guard);
             var shift = guard.GetComponent<GuardShiftController>();
             if (shift == null)
                 shift = guard.AddComponent<GuardShiftController>();
             shift.Initialize(GuardSpawnRole.StandardPatrol, null);
+            spawned++;
         }
+
+        Debug.Log($"[GameManager] Guard spawn complete (legacy): {spawned} guards.");
     }
 }

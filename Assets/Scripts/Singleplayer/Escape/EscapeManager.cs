@@ -134,8 +134,8 @@ public class EscapeManager : MonoBehaviour
         string playTime = t.Hours > 0 ? $"{t.Hours}h {t.Minutes}m {t.Seconds}s" : $"{t.Minutes}m {t.Seconds}s";
 
         string reputation = "OUTSIDER";
-        var social = SocialManager.Instance;
-        if (social != null)
+        var social = Prison.Social.SocialWorld.Instance;
+        if (social != null && social.IsBuilt)
             reputation = social.GetReputationTier().ToString().ToUpperInvariant();
 
         return $"Days inside: {Mathf.Max(1, daysElapsed)}\n"

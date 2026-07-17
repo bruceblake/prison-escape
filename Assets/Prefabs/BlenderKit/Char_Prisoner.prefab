@@ -89,7 +89,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0042582, y: 1.0042582, z: 1.0042582}
+  m_LocalScale: {x: 0.7725063, y: 0.7725063, z: 0.7725063}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7064847955601827517}
@@ -663,13 +663,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Prison.Visuals.BlenderKitLocomotionAnimator
   walkSpeed: 1.6
   runSpeed: 4.2
-  dampTime: 0.12
-  walkCycleSpeed: 8
-  legSwing: 42
-  armSwing: 30
-  kneeBend: 28
+  dampTime: 0.18
+  walkCycleSpeed: 6.5
+  legSwing: 36
+  armSwing: 26
+  kneeBend: 24
   idleBobSpeed: 2.2
-  idleBobAmount: 0.02
+  idleBobAmount: 0.015
 --- !u!1 &8367131569330657439
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,11 +21,17 @@ public class WorldItemPickup : MonoBehaviour, IInteractable
         return itemData != null;
     }
 
+    /// <summary>Raised when the player takes a world item (position, item). The social layer uses this for theft witnessing.</summary>
+    public static event System.Action<Vector3, ItemData> OnPlayerPickedUp;
+
     public void Interact(PlayerInventory inventory)
     {
         if (inventory == null || itemData == null) return;
         // AddItem returns false if inventory is full (or unstackable rules fail) — do not destroy the world pickup in that case.
         if (inventory.AddItem(itemData, 1))
+        {
+            OnPlayerPickedUp?.Invoke(transform.position, itemData);
             Destroy(gameObject);
+        }
     }
 }

@@ -160,13 +160,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2.6
-  m_Radius: 0.65
+  m_Height: 2
+  m_Radius: 0.38
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.3, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &6667281910063029464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Prison.Visuals.CharacterNameLabel
   displayName: You
-  localOffset: {x: 0, y: 2.795, z: 0}
+  localOffset: {x: 0, y: 2.15, z: 0}
   fontSize: 5
   uniformScale: 0.06
   textColor: {r: 1, g: 1, b: 1, a: 1}
@@ -668,7 +668,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8810533346375776500}
+  - {fileID: 8051152977371416678}
   m_Father: {fileID: 2536131724486714532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7030005809857848857
@@ -727,7 +727,7 @@ Transform:
   m_GameObject: {fileID: 8489707849882144799}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.158, z: 0.65}
+  m_LocalPosition: {x: 0, y: 1.66, z: 0.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -876,7 +876,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6682873521422376454, guid: 839afb6d2f8d66a4d9ef4342563fda6a, type: 3}
   m_PrefabInstance: {fileID: 4797117274382100162}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &4920132671064720255
+--- !u!1001 &5889000791215191021
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -932,10 +932,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7983901569294840123, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: f538bc9b3989ec942a48aaf7e6466a62, type: 2}
     - target: {fileID: 8293924704586458490, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
       propertyPath: m_Name
       value: KitVisual
@@ -945,8 +941,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
---- !u!4 &8810533346375776500 stripped
+--- !u!4 &8051152977371416678 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4468309690671790987, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
-  m_PrefabInstance: {fileID: 4920132671064720255}
+  m_PrefabInstance: {fileID: 5889000791215191021}
   m_PrefabAsset: {fileID: 0}

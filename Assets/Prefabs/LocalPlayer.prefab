@@ -60,13 +60,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2.6
-  m_Radius: 0.65
+  m_Height: 2
+  m_Radius: 0.38
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.3, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1465311826518240159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Prison.Visuals.CharacterNameLabel
   displayName: You
-  localOffset: {x: 0, y: 2.795, z: 0}
+  localOffset: {x: 0, y: 2.15, z: 0}
   fontSize: 5
   uniformScale: 0.06
   textColor: {r: 1, g: 1, b: 1, a: 1}
@@ -611,7 +611,7 @@ Transform:
   m_GameObject: {fileID: 4663242725615341640}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.158, z: 0.65}
+  m_LocalPosition: {x: 0, y: 1.66, z: 0.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -649,7 +649,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.05
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -1040,7 +1040,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 17542852806203643}
+  - {fileID: 1685383722179610276}
   m_Father: {fileID: 2536131724486714532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8379204029156475753
@@ -1177,7 +1177,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1001 &4484684578097800048
+--- !u!1001 &2981717675225431343
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1233,10 +1233,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7983901569294840123, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: f538bc9b3989ec942a48aaf7e6466a62, type: 2}
     - target: {fileID: 8293924704586458490, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
       propertyPath: m_Name
       value: KitVisual
@@ -1246,10 +1242,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
---- !u!4 &17542852806203643 stripped
+--- !u!4 &1685383722179610276 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4468309690671790987, guid: 8a0db407bda3d96489c54d187e290a1c, type: 3}
-  m_PrefabInstance: {fileID: 4484684578097800048}
+  m_PrefabInstance: {fileID: 2981717675225431343}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4920424423211833592
 PrefabInstance:

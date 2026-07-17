@@ -32,8 +32,8 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: Idle
-      takeName: Idle
-      internalID: -3100369314251171874
+      takeName: SM_Char_Guard|Idle
+      internalID: -8643581211639776782
       firstFrame: 0
       lastFrame: 48
       wrapMode: 0
@@ -60,9 +60,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walk
-      takeName: Walk
-      internalID: 2667949614841947897
+      name: Jump
+      takeName: SM_Char_Guard|Jump
+      internalID: -1159161179417831241
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -71,8 +71,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -90,8 +90,8 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Run
-      takeName: Run
-      internalID: 5522812681064789136
+      takeName: SM_Char_Guard|Run
+      internalID: 5991909506448509472
       firstFrame: 0
       lastFrame: 16
       wrapMode: 0
@@ -118,9 +118,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Jump
-      takeName: Jump
-      internalID: 5539831331247536789
+      name: Walk
+      takeName: SM_Char_Guard|Walk
+      internalID: -2255239895881763128
       firstFrame: 0
       lastFrame: 24
       wrapMode: 0
@@ -129,8 +129,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0

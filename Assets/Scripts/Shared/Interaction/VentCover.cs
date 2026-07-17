@@ -42,6 +42,11 @@ public class VentCover : MonoBehaviour
         screwsRemaining--;
         Debug.Log($"[VentCover] Screw removed. {screwsRemaining} remaining.");
 
+        // Vent tampering is a witnessable crime (Social Ecosystem v3 §4).
+        var social = Prison.Social.SocialWorld.Instance;
+        if (social != null && social.IsBuilt)
+            social.PublishPlayerCrime(transform.position);
+
         if (screwsRemaining <= 0)
             OpenVent();
     }

@@ -84,14 +84,33 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
         UpdateCompliance();
     }
 
+    /// <summary>Raised when the local player enters (true) or exits (false) a location zone. Used by the social layer (gang territory warn-offs, job tracking).</summary>
+    public static event System.Action<PrisonLocationZone, bool> OnPlayerZoneChanged;
+
     public void EnterZone(PrisonLocationZone zone)
     {
-        if (zone != null) _zonesIn.Add(zone);
+        if (zone != null)
+        {
+            _zonesIn.Add(zone);
+            OnPlayerZoneChanged?.Invoke(zone, true);
+        }
     }
 
     public void ExitZone(PrisonLocationZone zone)
     {
-        if (zone != null) _zonesIn.Remove(zone);
+        if (zone != null)
+        {
+            _zonesIn.Remove(zone);
+            OnPlayerZoneChanged?.Invoke(zone, false);
+        }
+    }
+
+    /// <summary>True while the player overlaps any zone of this type.</summary>
+    public bool IsInZoneType(Prison.ZoneType type)
+    {
+        foreach (var z in _zonesIn)
+            if (z != null && z.zoneType == type) return true;
+        return false;
     }
 
     /// <summary>Short label for the compliance HUD, e.g. "LOC: CELL BLOCK B" from overlapping zones. Fill <see cref="PrisonLocationZone.hudDisplayName"/> in the scene for best results.</summary>

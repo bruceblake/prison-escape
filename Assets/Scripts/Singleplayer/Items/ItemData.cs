@@ -33,6 +33,11 @@ public class ItemData : ScriptableObject
     // 2. The category variable must exist here so PartData and ToolData can use it!
     public ItemCategory category;
 
+    [Header("Economy")]
+    [Tooltip("Base cash value for trading. 0 = derive from rarity (Common 8, Uncommon 15, Rare 30, Legendary 60).")]
+    [Min(0f)]
+    public float baseValue;
+
     [Header("Loot & Spawning")]
     public ItemRarity rarity = ItemRarity.Common;
     [Tooltip("Multiplies the loot table’s rarity base weight in weighted random selection.")]

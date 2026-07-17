@@ -12,6 +12,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpHeight;
 
+    [Header("Crouch")]
+    [Tooltip("Hold to crouch. C toggles as an alternative.")]
+    [SerializeField] private KeyCode crouchHoldKey = KeyCode.LeftControl;
+    [SerializeField] private KeyCode crouchToggleKey = KeyCode.C;
+    [SerializeField] private float crouchSpeedMultiplier = 0.45f;
+    [Tooltip("CharacterController height while crouched (standing height is captured at startup).")]
+    [SerializeField] private float crouchedHeight = 1.2f;
+    [Tooltip("How far the camera/eye drops while crouched, in meters.")]
+    [SerializeField] private float crouchEyeDrop = 0.55f;
+    [SerializeField] private float crouchLerpSpeed = 9f;
+
+    /// <summary>True while the player is crouched (movement, camera, animation, and guard detection all key off this).</summary>
+    public bool IsCrouched { get; private set; }
+
+    private bool _crouchToggled;
+    private float _standingHeight = 2f;
+    private Vector3 _standingCenter;
+    private Vector3 _standingCamLocalPos;
+    private float _crouchBlend; // 0 = standing, 1 = crouched
+    private Prison.Visuals.BlenderKitLocomotionAnimator _visualAnimator;
+
     [SerializeField] private GameObject serverPositionPrefab;
     private Transform serverPositionVisualizer;
 
@@ -45,6 +66,15 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         Initialize();
+
+        if (controller != null)
+        {
+            _standingHeight = controller.height;
+            _standingCenter = controller.center;
+        }
+        if (camProxy != null)
+            _standingCamLocalPos = camProxy.localPosition;
+        _visualAnimator = GetComponentInChildren<Prison.Visuals.BlenderKitLocomotionAnimator>(true);
         // if (serverPositionPrefab != null)
         // {
         //     serverPositionVisualizer = Instantiate(serverPositionPrefab, transform.position, Quaternion.identity).transform;
@@ -94,7 +124,11 @@ public class PlayerController : MonoBehaviour
         inputs[5] = Input.GetKey(KeyCode.LeftShift);
         inputs[6] = !PlayerInteractor.IsHoldInteracting && Input.GetMouseButtonDown(0);
         inputs[7] = !PlayerInteractor.IsHoldInteracting && Input.GetMouseButton(0);
-        inputs[8] = false;
+        if (Input.GetKeyDown(crouchToggleKey))
+            _crouchToggled = !_crouchToggled;
+        if (Input.GetKey(crouchHoldKey))
+            _crouchToggled = false; // hold key takes over; releasing it stands up
+        inputs[8] = Input.GetKey(crouchHoldKey) || _crouchToggled;
         inputs[9] = false;
 
          if (inputs[6] && player.WeaponController?.currentGun != null && player.WeaponController.currentGun.fireMode == Gun.FireMode.Single)
@@ -123,11 +157,23 @@ public class PlayerController : MonoBehaviour
         bool jump = inputs[4];
         bool sprint = inputs[5];
 
+        bool wantCrouch = inputs[8];
+        if (!wantCrouch && IsCrouched && !HasHeadroomToStand())
+            wantCrouch = true; // stay down until there's ceiling clearance (vents, under beds)
+        IsCrouched = wantCrouch;
+
         Vector3 moveDirection = Vector3.Normalize(camProxy.right * inputDirection.x + Vector3.Normalize(FlattenVector3(camProxy.forward)) * inputDirection.y);
         moveDirection *= moveSpeed;
 
-        if (sprint)
+        if (IsCrouched)
+        {
+            moveDirection *= crouchSpeedMultiplier;
+            jump = false; // no crouch-jumping
+        }
+        else if (sprint)
+        {
             moveDirection *= Prison.PlayerStats.SprintMultiplierSafe;
+        }
 
         if (controller.isGrounded)
         {
@@ -139,8 +185,40 @@ public class PlayerController : MonoBehaviour
 
         moveDirection.y = yVelocity;
         controller.Move(moveDirection);
+    }
 
-       
+    private bool HasHeadroomToStand()
+    {
+        if (controller == null) return true;
+        float radius = Mathf.Max(0.05f, controller.radius - 0.02f);
+        Vector3 bottom = transform.position + controller.center - Vector3.up * (controller.height * 0.5f - radius);
+        float castUp = (_standingHeight - controller.height) + 0.05f;
+        if (castUp <= 0f) return true;
+        return !Physics.SphereCast(bottom, radius, Vector3.up,
+            out _, controller.height - radius * 2f + castUp, ~0, QueryTriggerInteraction.Ignore);
+    }
+
+    /// <summary>Smoothly applies crouch to the capsule, camera, and character visual.</summary>
+    private void LateUpdate()
+    {
+        float target = IsCrouched ? 1f : 0f;
+        _crouchBlend = Mathf.MoveTowards(_crouchBlend, target, crouchLerpSpeed * Time.deltaTime);
+
+        if (controller != null)
+        {
+            float height = Mathf.Lerp(_standingHeight, crouchedHeight, _crouchBlend);
+            controller.height = height;
+            controller.center = new Vector3(_standingCenter.x,
+                _standingCenter.y - (_standingHeight - height) * 0.5f, _standingCenter.z);
+        }
+
+        if (camProxy != null)
+            camProxy.localPosition = _standingCamLocalPos + Vector3.down * (crouchEyeDrop * _crouchBlend);
+
+        if (_visualAnimator == null)
+            _visualAnimator = GetComponentInChildren<Prison.Visuals.BlenderKitLocomotionAnimator>(true);
+        if (_visualAnimator != null)
+            _visualAnimator.SetCrouched(_crouchBlend);
     }
 
     private Vector3 FlattenVector3(Vector3 vector)

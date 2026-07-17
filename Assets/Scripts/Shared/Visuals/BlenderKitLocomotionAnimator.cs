@@ -13,13 +13,20 @@ namespace Prison.Visuals
 
         [SerializeField] private float walkSpeed = 1.6f;
         [SerializeField] private float runSpeed = 4.2f;
-        [SerializeField] private float dampTime = 0.12f;
-        [SerializeField] private float walkCycleSpeed = 8f;
-        [SerializeField] private float legSwing = 42f;
-        [SerializeField] private float armSwing = 30f;
-        [SerializeField] private float kneeBend = 28f;
+        [SerializeField] private float dampTime = 0.18f;
+        [SerializeField] private float walkCycleSpeed = 6.5f;
+        [SerializeField] private float legSwing = 36f;
+        [SerializeField] private float armSwing = 26f;
+        [SerializeField] private float kneeBend = 24f;
         [SerializeField] private float idleBobSpeed = 2.2f;
-        [SerializeField] private float idleBobAmount = 0.02f;
+        [SerializeField] private float idleBobAmount = 0.015f;
+
+        [Header("Crouch pose")]
+        [Tooltip("How far the hips drop at full crouch, in meters.")]
+        [SerializeField] private float crouchHipDrop = 0.32f;
+        [SerializeField] private float crouchThighAngle = 32f;
+        [SerializeField] private float crouchKneeAngle = 48f;
+        [SerializeField] private float crouchChestLean = 14f;
 
         private Animator _animator;
         private NavMeshAgent _agent;
@@ -31,7 +38,9 @@ namespace Prison.Visuals
         private bool _useProcedural;
         private bool _hasJumpParam;
         private bool _wasGrounded = true;
-        private Vector3 _legSwingAxis = Vector3.forward;
+        private float _crouchBlend; // 0 = standing, 1 = crouched (driven by PlayerController)
+        // Local X = sagittal swing (forward/back). Local Z was abducting legs sideways.
+        private Vector3 _legSwingAxis = Vector3.right;
 
         private Transform _hips;
         private Transform _chest;
@@ -49,6 +58,7 @@ namespace Prison.Visuals
         private Quaternion _lowerLegRRest;
         private Quaternion _upperArmLRest;
         private Quaternion _upperArmRRest;
+        private Vector3 _hipsRestPos;
 
         private void Awake()
         {
@@ -58,20 +68,33 @@ namespace Prison.Visuals
             _trackedTransform = transform.root;
             _lastPosition = _trackedTransform.position;
 
+            bool hasController = _animator != null && _animator.runtimeAnimatorController != null;
             bool hasValidAvatar = _animator != null && _animator.avatar != null && _animator.avatar.isValid;
-            if (_animator != null)
-                _animator.enabled = hasValidAvatar;
 
-            if (hasValidAvatar)
+            // Procedural first: BlenderKit Generic avatars often leave Mecanim stuck on the
+            // mesh bind pose (mid-stride) even when clips exist. Bone walk always works.
+            _useProcedural = BindBones();
+            if (_useProcedural)
             {
-                foreach (var p in _animator.parameters)
-                    if (p.nameHash == JumpHash && p.type == AnimatorControllerParameterType.Trigger)
-                        _hasJumpParam = true;
+                TryCaptureStandingRestFromAnimator();
+                if (_animator != null)
+                    _animator.enabled = false;
+                ApplyIdle(0f);
             }
-
-            _useProcedural = !hasValidAvatar;
-            if (_useProcedural && !BindBones())
-                Debug.LogWarning($"[BlenderKitLocomotion] Procedural bones not found on {name}", this);
+            else
+            {
+                bool useMecanim = hasValidAvatar && hasController;
+                if (_animator != null)
+                    _animator.enabled = useMecanim;
+                if (useMecanim)
+                {
+                    foreach (var p in _animator.parameters)
+                        if (p.nameHash == JumpHash && p.type == AnimatorControllerParameterType.Trigger)
+                            _hasJumpParam = true;
+                }
+                else
+                    Debug.LogWarning($"[BlenderKitLocomotion] No procedural bones and no Mecanim on {name}", this);
+            }
         }
 
         private bool BindBones()
@@ -89,7 +112,53 @@ namespace Prison.Visuals
             if (_hips == null || _upperLegL == null || _upperLegR == null)
                 return false;
 
+            CaptureCurrentAsRest();
+            _legSwingAxis = ChooseSagittalSwingAxis();
+            return true;
+        }
+
+        /// <summary>
+        /// Pick the local axis that swings the foot most along character forward (walk),
+        /// not sideways (the old Vector3.forward bug).
+        /// </summary>
+        private Vector3 ChooseSagittalSwingAxis()
+        {
+            Vector3 charForward = _trackedTransform != null ? _trackedTransform.forward : transform.forward;
+            charForward.y = 0f;
+            if (charForward.sqrMagnitude < 0.01f)
+                charForward = Vector3.forward;
+            charForward.Normalize();
+
+            Vector3[] candidates = { Vector3.right, Vector3.up, Vector3.forward };
+            Vector3 best = Vector3.right;
+            float bestScore = -1f;
+            Quaternion rest = _upperLegL.localRotation;
+            Vector3 footHint = _upperLegL.TransformPoint(Vector3.down);
+
+            foreach (var axis in candidates)
+            {
+                _upperLegL.localRotation = rest * Quaternion.AngleAxis(25f, axis);
+                Vector3 moved = _upperLegL.TransformPoint(Vector3.down);
+                Vector3 delta = moved - footHint;
+                delta.y = 0f;
+                float along = Mathf.Abs(Vector3.Dot(delta, charForward));
+                float sideways = (delta - charForward * Vector3.Dot(delta, charForward)).magnitude;
+                float score = along - sideways * 0.75f;
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    best = axis;
+                }
+            }
+
+            _upperLegL.localRotation = rest;
+            return best;
+        }
+
+        private void CaptureCurrentAsRest()
+        {
             _hipsRest = _hips.localRotation;
+            _hipsRestPos = _hips.localPosition;
             _chestRest = _chest != null ? _chest.localRotation : Quaternion.identity;
             _upperLegLRest = _upperLegL.localRotation;
             _upperLegRRest = _upperLegR.localRotation;
@@ -97,10 +166,51 @@ namespace Prison.Visuals
             _lowerLegRRest = _lowerLegR != null ? _lowerLegR.localRotation : Quaternion.identity;
             _upperArmLRest = _upperArmL != null ? _upperArmL.localRotation : Quaternion.identity;
             _upperArmRRest = _upperArmR != null ? _upperArmR.localRotation : Quaternion.identity;
+        }
 
-            // BlenderKit export: leg swing reads best on local Z for these rigs.
-            _legSwingAxis = Vector3.forward;
-            return true;
+        private void TryCaptureStandingRestFromAnimator()
+        {
+            if (_animator == null || _animator.runtimeAnimatorController == null)
+            {
+                ApproximateStandingRestFromBindPose();
+                return;
+            }
+
+            bool wasEnabled = _animator.enabled;
+            _animator.enabled = true;
+            _animator.Rebind();
+            _animator.Update(0f);
+            _animator.SetFloat(SpeedHash, 0f);
+            for (int i = 0; i < 3; i++)
+                _animator.Update(0.05f);
+
+            CaptureCurrentAsRest();
+            _animator.enabled = wasEnabled;
+
+            float strideSplit = Quaternion.Angle(_upperLegLRest, _upperLegRRest);
+            if (strideSplit > 18f)
+                ApproximateStandingRestFromBindPose();
+        }
+
+        private void ApproximateStandingRestFromBindPose()
+        {
+            Quaternion upper = Quaternion.Slerp(_upperLegLRest, _upperLegRRest, 0.5f);
+            _upperLegLRest = upper;
+            _upperLegRRest = upper;
+
+            if (_lowerLegL != null && _lowerLegR != null)
+            {
+                Quaternion lower = Quaternion.Slerp(_lowerLegLRest, _lowerLegRRest, 0.5f);
+                _lowerLegLRest = lower;
+                _lowerLegRRest = lower;
+            }
+
+            if (_upperArmL != null && _upperArmR != null)
+            {
+                Quaternion arms = Quaternion.Slerp(_upperArmLRest, _upperArmRRest, 0.5f);
+                _upperArmLRest = arms;
+                _upperArmRRest = arms;
+            }
         }
 
         private static Transform FindBone(Transform root, string name)
@@ -116,19 +226,18 @@ namespace Prison.Visuals
 
         private void Update()
         {
+            float raw = MeasureSpeed();
+            float target = raw <= 0.12f ? 0f : Mathf.Min(raw, runSpeed * 1.25f);
+            float lerp = dampTime > 0f ? Time.deltaTime / dampTime : 1f;
+            _smoothedAnimSpeed = Mathf.Lerp(_smoothedAnimSpeed, target, Mathf.Clamp01(lerp));
+
             if (_useProcedural)
                 return;
 
             if (_animator == null || !_animator.isActiveAndEnabled)
                 return;
 
-            // Feed the continuous measured speed so the blend tree eases through
-            // idle <-> walk <-> run instead of snapping between fixed thresholds.
-            float speed = Mathf.Min(MeasureSpeed(), runSpeed * 1.25f);
-            if (speed <= 0.12f) speed = 0f;
-            _smoothedAnimSpeed = Mathf.Lerp(_smoothedAnimSpeed, speed, dampTime > 0f ? Time.deltaTime / dampTime : 1f);
             _animator.SetFloat(SpeedHash, _smoothedAnimSpeed);
-
             UpdateJumpTrigger();
         }
 
@@ -143,15 +252,25 @@ namespace Prison.Visuals
             _wasGrounded = grounded;
         }
 
+        /// <summary>
+        /// Crouch amount, 0–1, from the player controller. In procedural mode the crouch pose
+        /// overlays the walk/idle cycle; Mecanim-only rigs still get collider/camera crouch
+        /// from <see cref="PlayerController"/> even though the clip pose is unchanged.
+        /// </summary>
+        public void SetCrouched(float blend01)
+        {
+            _crouchBlend = Mathf.Clamp01(blend01);
+        }
+
         private void LateUpdate()
         {
             if (!_useProcedural || _upperLegL == null || _upperLegR == null)
                 return;
 
-            float speed = MeasureSpeed();
-            if (speed > 0.12f)
+            if (_smoothedAnimSpeed > 0.15f)
             {
-                _phase += Time.deltaTime * walkCycleSpeed * Mathf.Lerp(0.7f, 1.2f, Mathf.InverseLerp(0.12f, runSpeed, speed));
+                float cycle = Mathf.Lerp(0.75f, 1.15f, Mathf.InverseLerp(0.15f, runSpeed, _smoothedAnimSpeed));
+                _phase += Time.deltaTime * walkCycleSpeed * cycle;
                 ApplyWalk(_phase);
             }
             else
@@ -159,6 +278,35 @@ namespace Prison.Visuals
                 _phase += Time.deltaTime * idleBobSpeed;
                 ApplyIdle(_phase);
             }
+
+            ApplyCrouchOverlay();
+        }
+
+        /// <summary>
+        /// Sneak pose layered on top of walk/idle: hips sink, thighs and knees fold (slight
+        /// stagger like a creep), chest leans in. Blend-weighted so entering/leaving crouch eases.
+        /// </summary>
+        private void ApplyCrouchOverlay()
+        {
+            // Rotations above already reset to rest each frame, so restore the rest position
+            // first and re-apply the world-space drop — never accumulate.
+            _hips.localPosition = _hipsRestPos;
+            if (_crouchBlend <= 0.001f)
+                return;
+
+            float b = _crouchBlend;
+            _hips.position += Vector3.down * (crouchHipDrop * b);
+            _hips.localRotation = _hips.localRotation * Quaternion.AngleAxis(crouchChestLean * 0.4f * b, _legSwingAxis);
+            if (_chest != null)
+                _chest.localRotation = _chest.localRotation * Quaternion.AngleAxis(crouchChestLean * b, _legSwingAxis);
+
+            // Same sign convention as the walk cycle (L +, R −) → a slight stagger-stance creep.
+            _upperLegL.localRotation = _upperLegL.localRotation * Quaternion.AngleAxis(crouchThighAngle * b, _legSwingAxis);
+            _upperLegR.localRotation = _upperLegR.localRotation * Quaternion.AngleAxis(-crouchThighAngle * 0.7f * b, _legSwingAxis);
+            if (_lowerLegL != null)
+                _lowerLegL.localRotation = _lowerLegL.localRotation * Quaternion.AngleAxis(crouchKneeAngle * b, _legSwingAxis);
+            if (_lowerLegR != null)
+                _lowerLegR.localRotation = _lowerLegR.localRotation * Quaternion.AngleAxis(-crouchKneeAngle * 0.8f * b, _legSwingAxis);
         }
 
         private void ApplyWalk(float phase)
@@ -173,7 +321,7 @@ namespace Prison.Visuals
             if (_lowerLegL != null)
                 _lowerLegL.localRotation = _lowerLegLRest * Quaternion.AngleAxis(knee, _legSwingAxis);
             if (_lowerLegR != null)
-                _lowerLegR.localRotation = _lowerLegRRest * Quaternion.AngleAxis(knee, _legSwingAxis);
+                _lowerLegR.localRotation = _lowerLegRRest * Quaternion.AngleAxis(-knee, _legSwingAxis);
 
             if (_upperArmL != null)
                 _upperArmL.localRotation = _upperArmLRest * Quaternion.AngleAxis(-arm, _legSwingAxis);
@@ -182,8 +330,8 @@ namespace Prison.Visuals
 
             if (_hips != null)
             {
-                float bob = Mathf.Sin(phase * 2f) * 0.02f;
-                _hips.localRotation = _hipsRest * Quaternion.Euler(bob * 20f, 0f, 0f);
+                float bob = Mathf.Sin(phase * 2f) * 0.015f;
+                _hips.localRotation = _hipsRest * Quaternion.AngleAxis(bob * 12f, _legSwingAxis);
             }
         }
 
@@ -191,9 +339,9 @@ namespace Prison.Visuals
         {
             float bob = Mathf.Sin(phase) * idleBobAmount;
             if (_hips != null)
-                _hips.localRotation = _hipsRest * Quaternion.Euler(bob * 30f, 0f, 0f);
+                _hips.localRotation = _hipsRest * Quaternion.AngleAxis(bob * 20f, _legSwingAxis);
             if (_chest != null)
-                _chest.localRotation = _chestRest * Quaternion.Euler(-bob * 15f, 0f, 0f);
+                _chest.localRotation = _chestRest * Quaternion.AngleAxis(-bob * 12f, _legSwingAxis);
 
             _upperLegL.localRotation = _upperLegLRest;
             _upperLegR.localRotation = _upperLegRRest;
@@ -205,16 +353,14 @@ namespace Prison.Visuals
 
         private float MeasureSpeed()
         {
-            // Always measure actual body movement so NPCs animate even when the agent's
-            // reported velocity lags or the agent is momentarily off the NavMesh.
             float transformSpeed = TransformDeltaSpeed();
 
             float agentSpeed = 0f;
             if (_agent != null && _agent.enabled && _agent.isOnNavMesh)
                 agentSpeed = _agent.velocity.magnitude;
 
-            float speed = Mathf.Max(agentSpeed, transformSpeed);
-            // Clamp so a teleport (spawn / SendToCell) can't spike into a run flash.
+            // Prefer agent velocity when moving on mesh — transform deltas jitter on slopes/rebases.
+            float speed = agentSpeed > 0.05f ? agentSpeed : Mathf.Max(agentSpeed, transformSpeed);
             return Mathf.Min(speed, runSpeed * 2f);
         }
 

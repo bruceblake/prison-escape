@@ -1,91 +1,97 @@
 using Prison;
+using Prison.Social;
 using UnityEditor;
 using UnityEngine;
 
-public class SocialBalanceSimulatorWindow : EditorWindow
+namespace Prison.EditorTools
 {
-    private float currentAffinity = 0f;
-    private float affinityGainMultiplier = 1f;
-    private float giftBaseAmount = 5f;
-    private bool isFavoredGift;
-    private SocialActionType actionType = SocialActionType.Greeting;
-
-    private float otherPrisonersAverage = 0f;
-    private int totalPrisoners = 8;
-
-    private float tier1Threshold = 25f;
-    private float tier2Threshold = 50f;
-    private float tier3Threshold = 75f;
-
-    [MenuItem("Tools/Prison/Social Balance Simulator")]
-    public static void OpenWindow()
+    /// <summary>
+    /// Balance simulator for the v3 social math (rebuilt per the Social Ecosystem &amp; Gangs
+    /// teardown table): preview the relationship delta pipeline (personality → gang factor
+    /// → soft cap), Standing bands, trade prices, intimidation odds, and reputation tiers.
+    /// Window: Tools → Prison → Social → Balance Simulator.
+    /// </summary>
+    public class SocialBalanceSimulatorWindow : EditorWindow
     {
-        GetWindow<SocialBalanceSimulatorWindow>("Social Simulator");
-    }
+        private float _currentTrust;
+        private float _currentRespect;
+        private SocialEventType _eventType = SocialEventType.Chat;
+        private int _sociability = 50;
+        private int _loyalty = 50;
+        private float _gangFactor = 1f;
 
-    private void OnGUI()
-    {
-        EditorGUILayout.LabelField("NPC Affinity Simulation", EditorStyles.boldLabel);
-        currentAffinity = EditorGUILayout.Slider("Current Affinity", currentAffinity, -100f, 100f);
-        affinityGainMultiplier = EditorGUILayout.FloatField("Gain Multiplier", affinityGainMultiplier);
-        actionType = (SocialActionType)EditorGUILayout.EnumPopup("Action", actionType);
+        private float _tradeBaseValue = 10f;
+        private int _greed = 50;
+        private float _tradeTrust;
+        private bool _member;
+        private bool _contraband;
 
-        if (actionType == SocialActionType.Gift)
+        private float _intRespect;
+        private float _strength = 100f;
+        private int _nerve = 50;
+
+        private float _avgStanding;
+        private GangRank _rank = GangRank.Outsider;
+
+        [MenuItem("Tools/Prison/Social/Balance Simulator")]
+        public static void ShowWindow() =>
+            GetWindow<SocialBalanceSimulatorWindow>("Social Balance");
+
+        private void OnGUI()
         {
-            giftBaseAmount = EditorGUILayout.FloatField("Gift Base Amount", giftBaseAmount);
-            isFavoredGift = EditorGUILayout.Toggle("Favored Item", isFavoredGift);
+            EditorGUILayout.LabelField("Relationship delta pipeline", EditorStyles.boldLabel);
+            _currentTrust = EditorGUILayout.Slider("Current trust", _currentTrust, -100f, 100f);
+            _currentRespect = EditorGUILayout.Slider("Current respect", _currentRespect, -100f, 100f);
+            _eventType = (SocialEventType)EditorGUILayout.EnumPopup("Event", _eventType);
+            _sociability = EditorGUILayout.IntSlider("Sociability", _sociability, 0, 100);
+            _loyalty = EditorGUILayout.IntSlider("Loyalty", _loyalty, 0, 100);
+            _gangFactor = EditorGUILayout.Slider("Gang factor", _gangFactor, 0f, 1f);
+
+            SocialActs.GetBaseDeltas(_eventType, out float baseTrust, out float baseRespect);
+            var traits = new PersonalityTraits(50, _loyalty, 50, _sociability, 50);
+            bool betrayal = SocialActs.IsBetrayalClass(_eventType);
+
+            float trustDelta = RelationshipMath.ComputeEffectiveDelta(_currentTrust, baseTrust, true, traits, betrayal, _gangFactor);
+            float respectDelta = RelationshipMath.ComputeEffectiveDelta(_currentRespect, baseRespect, false, traits, betrayal, _gangFactor);
+            float newTrust = RelationshipMath.Apply(_currentTrust, trustDelta);
+            float newRespect = RelationshipMath.Apply(_currentRespect, respectDelta);
+            float standing = RelationshipMath.Standing(newTrust, newRespect);
+
+            EditorGUILayout.HelpBox(
+                $"Base Δ: trust {baseTrust:+0.#;-0.#;0}, respect {baseRespect:+0.#;-0.#;0}\n" +
+                $"Effective Δ: trust {trustDelta:+0.##;-0.##;0}, respect {respectDelta:+0.##;-0.##;0}\n" +
+                $"Result: trust {newTrust:0.#}, respect {newRespect:0.#} → standing {standing:0.#} " +
+                $"({RelationshipMath.GetBand(standing)})",
+                MessageType.Info);
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Trade price (spec §8)", EditorStyles.boldLabel);
+            _tradeBaseValue = EditorGUILayout.FloatField("Base value", _tradeBaseValue);
+            _greed = EditorGUILayout.IntSlider("Seller greed", _greed, 0, 100);
+            _tradeTrust = EditorGUILayout.Slider("Their trust in you", _tradeTrust, -100f, 100f);
+            _member = EditorGUILayout.Toggle("You are gang member", _member);
+            _contraband = EditorGUILayout.Toggle("Contraband", _contraband);
+            float buy = TradeMath.BuyPrice(_tradeBaseValue, _greed, _tradeTrust, _member, _contraband);
+            float sell = TradeMath.SellPrice(_tradeBaseValue, _greed, _contraband);
+            EditorGUILayout.HelpBox($"Buy: ${buy:0}   ·   They pay you: ${sell:0}", MessageType.Info);
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Intimidation", EditorStyles.boldLabel);
+            _intRespect = EditorGUILayout.Slider("Their respect for you", _intRespect, -100f, 100f);
+            _strength = EditorGUILayout.Slider("Your strength", _strength, 0f, 200f);
+            _nerve = EditorGUILayout.IntSlider("Their nerve", _nerve, 0, 100);
+            EditorGUILayout.HelpBox(
+                $"Success chance: {RelationshipMath.IntimidationChance(_intRespect, _strength, _nerve) * 100f:0}%",
+                MessageType.Info);
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Reputation tier", EditorStyles.boldLabel);
+            _avgStanding = EditorGUILayout.Slider("Avg standing (known inmates)", _avgStanding, -100f, 100f);
+            _rank = (GangRank)EditorGUILayout.EnumPopup("Gang rank", _rank);
+            EditorGUILayout.HelpBox(
+                $"Tier: {RelationshipMath.ComputeTier(_avgStanding, _rank)} " +
+                $"(bonus +{RelationshipMath.TierBonus(_rank):0})",
+                MessageType.Info);
         }
-
-        float actionBase = GetActionBaseForPreview(actionType);
-        float effectiveDelta = SocialMath.ComputeEffectiveDelta(currentAffinity, actionBase, affinityGainMultiplier);
-        float nextAffinity = Mathf.Clamp(currentAffinity + effectiveDelta, SocialMath.MinAffinity, SocialMath.MaxAffinity);
-
-        EditorGUILayout.Space(8f);
-        EditorGUILayout.LabelField("Action Outcome", EditorStyles.boldLabel);
-        EditorGUILayout.FloatField("Base Delta", actionBase);
-        EditorGUILayout.FloatField("Effective Delta", effectiveDelta);
-        EditorGUILayout.FloatField("Next Affinity", nextAffinity);
-
-        EditorGUILayout.Space(8f);
-        EditorGUILayout.LabelField("Reputation Preview", EditorStyles.boldLabel);
-        totalPrisoners = EditorGUILayout.IntSlider("Total Prisoners", totalPrisoners, 1, 32);
-        otherPrisonersAverage = EditorGUILayout.Slider("Other Prisoners Avg", otherPrisonersAverage, -100f, 100f);
-
-        tier1Threshold = EditorGUILayout.FloatField("Associate Threshold", tier1Threshold);
-        tier2Threshold = EditorGUILayout.FloatField("Respected Threshold", tier2Threshold);
-        tier3Threshold = EditorGUILayout.FloatField("Kingpin Threshold", tier3Threshold);
-
-        float combinedAverage = GetCombinedAverage(nextAffinity, otherPrisonersAverage, totalPrisoners);
-        ReputationTier tier = SocialMath.GetReputationTier(combinedAverage, tier1Threshold, tier2Threshold, tier3Threshold);
-
-        EditorGUILayout.FloatField("Projected Global Average", combinedAverage);
-        EditorGUILayout.LabelField("Projected Tier", tier.ToString());
-
-        EditorGUILayout.Space(8f);
-        if (GUILayout.Button("Apply Next Affinity As Current"))
-        {
-            currentAffinity = nextAffinity;
-        }
-    }
-
-    private float GetActionBaseForPreview(SocialActionType type)
-    {
-        if (type == SocialActionType.Gift)
-        {
-            return isFavoredGift ? giftBaseAmount * SocialMath.FavoredGiftMultiplier : giftBaseAmount;
-        }
-
-        return SocialMath.GetBaseAffinityDelta(type, null, null, giftBaseAmount);
-    }
-
-    private static float GetCombinedAverage(float focusedNpcAffinity, float othersAverage, int totalNpcCount)
-    {
-        if (totalNpcCount <= 1)
-        {
-            return focusedNpcAffinity;
-        }
-
-        float total = focusedNpcAffinity + (othersAverage * (totalNpcCount - 1));
-        return total / totalNpcCount;
     }
 }

@@ -42,6 +42,13 @@ namespace Prison.Social
             return Mathf.Max(1f, Mathf.Round(price));
         }
 
+        /// <summary>
+        /// Career facility scaling on prices the player pays (Prison Career Ladder economy
+        /// table): trade stock, gang store, sourcing, bribes. Rounds and floors at $1.
+        /// </summary>
+        public static float ApplyFacilityPriceMult(float price, float mult) =>
+            Mathf.Max(1f, Mathf.Round(price * Mathf.Max(0.01f, mult)));
+
         /// <summary>Item value fallback by rarity when the asset has no explicit base value.</summary>
         public static float EffectiveBaseValue(ItemData item)
         {

@@ -198,5 +198,27 @@ namespace Prison.Tests
         [Test]
         public void BuyPrice_NeverBelowOneDollar()
             => Assert.GreaterOrEqual(TradeMath.BuyPrice(0.5f, 0, 100f, true, false), 1f);
+
+        // ------------------------------------------------------------------ career facility scaling
+
+        [Test]
+        public void FacilityPriceMult_ScalesRoundsAndFloors()
+        {
+            Assert.AreEqual(10f, TradeMath.ApplyFacilityPriceMult(10f, 1f), Tol);       // sandbox: untouched
+            Assert.AreEqual(9f, TradeMath.ApplyFacilityPriceMult(10f, 0.9f), Tol);      // County discount
+            Assert.AreEqual(26f, TradeMath.ApplyFacilityPriceMult(10f, 2.6f), Tol);     // Fed ADX markup
+            Assert.AreEqual(12f, TradeMath.ApplyFacilityPriceMult(11.5f, 1f), Tol);     // rounds
+            Assert.AreEqual(1f, TradeMath.ApplyFacilityPriceMult(0.4f, 0.9f), Tol);     // floors at $1
+        }
+
+        [Test]
+        public void FacilityPriceMult_DefaultsToOneOutsideCareerRun()
+        {
+            // No facility entered in EditMode → all CareerSession multipliers must read 1
+            // so sandbox/legacy pricing is untouched.
+            Assert.AreEqual(1f, Prison.Career.CareerSession.TradePriceMult, Tol);
+            Assert.AreEqual(1f, Prison.Career.CareerSession.BribeCostMult, Tol);
+            Assert.AreEqual(1f, Prison.Career.CareerSession.CashIncomeMult, Tol);
+        }
     }
 }

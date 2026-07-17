@@ -64,7 +64,8 @@ namespace Prison.Social
             float fraction = Mathf.Clamp01(_secondsWorked / _phaseSeconds);
             if (fraction < minimumFraction) return;
 
-            float pay = Mathf.Round(fullStipend * fraction);
+            // Career ladder: harder prisons pay better (cashIncomeMult — work wages).
+            float pay = Mathf.Round(fullStipend * fraction * Prison.Career.CareerSession.CashIncomeMult);
             if (pay <= 0f || Prison.PlayerWallet.Instance == null) return;
             Prison.PlayerWallet.Instance.Add(pay);
             SocialToastUI.Show($"Work stipend: ${pay:0}.");

@@ -2,6 +2,12 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/16/2026 (night — small PR split execution)
+
+- **Split & push** — uncommitted Social+Career WIP cut into stacked PRs: #42 docs policy · #43 Career store · #44 Career hub · #45 CountyJail · #46 Social library · #47 Social wire/teardown. Backup: `backup/pre-split-20260716`.
+- **Policy live** — [[Small PRs & Feature Slices]] · [[Social & Career PR Slice Plan]].
+- **Still open after merge:** Career↔Social difficulty/gang-tag bridge; Social Resources assets; vault Implemented flip post-playtest; scene polish chores.
+
 ## 7/16/2026 (evening — small PR policy + slice plan)
 - **Recurring process** — new vault note [[Small PRs & Feature Slices]]: one concern / one milestone per PR into `dev`; no epic mega-PRs; mega-diff recovery via backup ref + named-file slices; do not rewrite merged history without explicit order. Wired into [[Development Workflow]], [[Git & Branching]], Home, and Cursor rules (`git-branching.mdc`, `development-workflow.mdc`).
 - **Social + Career slice plan** — [[Social & Career PR Slice Plan]]: Phase 0 docs → Career foundation → Career hub/transfer → Social M1 → Talk/Dossier → Economy/consequences → Guard polish → vault sync; unrelated polish as separate `chore/` PRs. Remaining implementation gaps listed (Social assets install, guard trust modifiers, Career M6+ scenes).

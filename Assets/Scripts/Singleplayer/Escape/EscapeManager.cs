@@ -1,10 +1,13 @@
 using System;
 using Prison;
+using Prison.Career;
 using UnityEngine;
 
 /// <summary>
-/// The win/lose keystone: crossing the escape boundary wins the run; getting spotted inside an
-/// active <see cref="RestrictedZone"/> sends the player to solitary confinement (stat penalty,
+/// The win/lose keystone. Crossing the escape boundary completes the run — in a career world that
+/// means CAUGHT AND TRANSFERRED up the ladder (never freedom until the top; see
+/// docs/PrisonEscape/01 Game Design/Prison Career Ladder.md). Getting spotted inside an active
+/// <see cref="RestrictedZone"/> sends the player to solitary confinement (stat penalty,
 /// inventory confiscated, suspicion raised, day skipped to the next Morning Roll Call).
 /// Spec: docs/PrisonEscape/02 Features/Escape Completion System.md
 /// </summary>
@@ -113,36 +116,44 @@ public class EscapeManager : MonoBehaviour
     // WIN
     // ------------------------------------------------------------------
 
-    /// <summary>Called by <see cref="EscapeBoundary"/> when the player crosses outside the walls.</summary>
+    /// <summary>
+    /// Called by <see cref="EscapeBoundary"/> when the player crosses outside the walls.
+    /// Succeeding never means freedom below the top of the ladder — the career flow decides
+    /// between transfer ceremony, career win, and the sandbox's plain escape screen.
+    /// </summary>
     public void OnPlayerEscaped(PrisonerController player)
     {
         if (state == EscapeState.Escaped) return;
         state = EscapeState.Escaped;
 
-        Debug.Log("[EscapeManager] PLAYER ESCAPED — run complete.");
+        Debug.Log("[EscapeManager] Player crossed the boundary — completing the run.");
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        EscapeEndScreenUI.Show(BuildEndStats());
+        CareerTransferFlow.OnBoundaryCrossed(BuildRunStats());
     }
 
-    private string BuildEndStats()
+    /// <summary>Run stats snapshot for the ceremony screen (kept from the v1 end screen).</summary>
+    public EscapeRunStats BuildRunStats()
     {
         float realSeconds = Time.realtimeSinceStartup - _runStartRealtime;
         var t = TimeSpan.FromSeconds(realSeconds);
         string playTime = t.Hours > 0 ? $"{t.Hours}h {t.Minutes}m {t.Seconds}s" : $"{t.Minutes}m {t.Seconds}s";
 
         string reputation = "OUTSIDER";
-        var social = SocialManager.Instance;
-        if (social != null)
+        var social = Prison.Social.SocialWorld.Instance;
+        if (social != null && social.IsBuilt)
             reputation = social.GetReputationTier().ToString().ToUpperInvariant();
 
-        return $"Days inside: {Mathf.Max(1, daysElapsed)}\n"
-             + $"Play time: {playTime}\n"
-             + $"Times thrown in solitary: {timesCaught}\n"
-             + $"Items crafted: {itemsCrafted}\n"
-             + $"Reputation: {reputation}";
+        return new EscapeRunStats
+        {
+            daysInside = Mathf.Max(1, daysElapsed),
+            playTime = playTime,
+            timesInSolitary = timesCaught,
+            itemsCrafted = itemsCrafted,
+            reputation = reputation,
+        };
     }
 
     // ------------------------------------------------------------------
@@ -162,6 +173,7 @@ public class EscapeManager : MonoBehaviour
 
         Debug.Log($"[EscapeManager] Player caught escaping by {guardName} — solitary confinement (stay #{timesCaught}).");
         PrisonSecurityAlerts.RaiseSuspicion($"Escape attempt stopped by {guardName}.");
+        CareerSession.ApplyCaughtEscapingPenalty();
 
         var stats = PlayerStats.EnsureInstance();
         float mhBefore = stats.MentalHealth;

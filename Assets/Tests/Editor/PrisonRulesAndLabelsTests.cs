@@ -10,7 +10,7 @@ namespace Prison.Tests
     /// EditMode unit tests for the pure rule/label/data helpers:
     /// <see cref="PrisonEventRules"/>, <see cref="PrisonEventExtensions"/>,
     /// <see cref="PrisonRoutineLabels"/>, <see cref="PrisonLocationZone.GetHudLabel"/>,
-    /// <see cref="CellData.InteriorRadius"/>, <see cref="FavorOfferDefinition.IsValidFor"/> and enum contracts.
+    /// <see cref="CellData.InteriorRadius"/> and enum contracts.
     /// </summary>
     public class PrisonRulesAndLabelsTests
     {
@@ -222,52 +222,6 @@ namespace Prison.Tests
         {
             var cell = new CellData { interiorCheckRadius = input };
             Assert.AreEqual(expected, cell.InteriorRadius, 1e-4f);
-        }
-
-        // ============ FavorOfferDefinition.IsValidFor ============
-        private FavorOfferDefinition NewFavor()
-        {
-            var f = ScriptableObject.CreateInstance<FavorOfferDefinition>();
-            f.activeDuringPhases = new List<PrisonEventType>();
-            f.onlyForPersonalities = new List<NPCPersonalityData>();
-            _created.Add(f);
-            return f;
-        }
-
-        private NPCPersonalityData NewPersonality()
-        {
-            var p = ScriptableObject.CreateInstance<NPCPersonalityData>();
-            _created.Add(p);
-            return p;
-        }
-
-        [Test]
-        public void IsValidFor_NoConstraints_AlwaysValid()
-        {
-            var f = NewFavor();
-            Assert.IsTrue(f.IsValidFor(PrisonEventType.Breakfast, null));
-            Assert.IsTrue(f.IsValidFor(PrisonEventType.LightsOut, NewPersonality()));
-        }
-
-        [Test]
-        public void IsValidFor_PhaseConstraint_Filters()
-        {
-            var f = NewFavor();
-            f.activeDuringPhases.Add(PrisonEventType.Breakfast);
-            Assert.IsTrue(f.IsValidFor(PrisonEventType.Breakfast, null));
-            Assert.IsFalse(f.IsValidFor(PrisonEventType.Lunch, null));
-        }
-
-        [Test]
-        public void IsValidFor_PersonalityConstraint_Filters()
-        {
-            var f = NewFavor();
-            var allowed = NewPersonality();
-            var other = NewPersonality();
-            f.onlyForPersonalities.Add(allowed);
-            Assert.IsTrue(f.IsValidFor(PrisonEventType.Breakfast, allowed));
-            Assert.IsFalse(f.IsValidFor(PrisonEventType.Breakfast, other));
-            Assert.IsFalse(f.IsValidFor(PrisonEventType.Breakfast, null));
         }
 
         // ============ Enum contracts (guard against accidental reorder) ============

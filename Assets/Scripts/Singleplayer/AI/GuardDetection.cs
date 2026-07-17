@@ -32,6 +32,11 @@ public class GuardDetection : MonoBehaviour
 
     public IPrisoner FindNonCompliantPrisoner()
     {
+        // Blind-eye bribe (Social Ecosystem v3 §8): this guard's detection is off for the phase.
+        var socialProfile = GetComponent<Prison.Social.GuardSocialProfile>();
+        if (socialProfile != null && socialProfile.BlindEyeActive)
+            return null;
+
         var playerPrisoners = FindObjectsByType<PrisonerController>(FindObjectsSortMode.None);
         var npcPrisoners = FindObjectsByType<PrisonerAI>(FindObjectsSortMode.None);
         Vector3 eyePos = eyeTransform.position;
@@ -55,13 +60,17 @@ public class GuardDetection : MonoBehaviour
                 continue;
             }
 
+            // Crouching shrinks the guard's effective spotting ranges (stealth).
+            var crouchController = p.GetComponent<PlayerController>();
+            float crouchMult = crouchController != null && crouchController.IsCrouched ? 0.6f : 1f;
+
             float dist = Vector3.Distance(eyePos, p.transform.position);
-            bool inCone = IsInSight(p.transform.position, eyePos, forward, suspicionMult);
-            bool inProximity = proximitySpotDistance > 0.01f && dist <= proximitySpotDistance * suspicionMult;
+            bool inCone = IsInSight(p.transform.position, eyePos, forward, suspicionMult * crouchMult);
+            bool inProximity = proximitySpotDistance > 0.01f && dist <= proximitySpotDistance * suspicionMult * crouchMult;
             bool spotted = inCone || inProximity;
 
             if (logScan)
-                Debug.Log($"[GuardDetection] Player {p.name}: compliant={p.IsCompliant} dist={dist:F2} cone={inCone} proximity={inProximity} eyeFwd={forward}", this);
+                Debug.Log($"[GuardDetection] Player {p.name}: compliant={p.IsCompliant} dist={dist:F2} cone={inCone} proximity={inProximity} crouched={crouchMult < 1f} eyeFwd={forward}", this);
 
             if (!p.IsCompliant && spotted)
             {
@@ -167,7 +176,10 @@ public class GuardDetection : MonoBehaviour
     {
         Vector3 toTarget = targetPos - eyePos;
         float dist = toTarget.magnitude;
-        if (dist > detectionRange * rangeMultiplier) return false;
+        // Career difficulty scales the base sight cone (ADX guards see farther); suspicion
+        // multiplier stacks on top (Prison Career Ladder § Difficulty & pacing curves).
+        float facilityMult = Prison.Career.CareerSession.DetectionRangeMult;
+        if (dist > detectionRange * facilityMult * rangeMultiplier) return false;
 
         float angle = Vector3.Angle(forward, toTarget.normalized);
         return angle <= coneAngle * 0.5f;

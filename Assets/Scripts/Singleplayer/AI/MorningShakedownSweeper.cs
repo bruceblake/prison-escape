@@ -234,7 +234,29 @@ public class MorningShakedownSweeper : MonoBehaviour
                         continue;
                 }
 
-                ConfiscatePickupsInCell(cell);
+                // Social layer (Social Ecosystem v3 §8/§9): a bribe can buy this cell out of
+                // the search; a snitch tip forces it regardless of facility strictness.
+                var socialWorld = Prison.Social.SocialWorld.Instance;
+                bool bribedSkip = socialWorld != null && socialWorld.IsBuilt && socialWorld.ConsumeShakedownSkip(i);
+                bool tipTargeted = socialWorld != null && socialWorld.IsBuilt && socialWorld.ConsumeTargetedShakedown(i);
+
+                // Career difficulty: lax facilities (strictness < 1) sometimes skip a cell's
+                // contraband search entirely — County's 0.75 leaves a 25% blind spot per cell.
+                float strictness = Prison.Career.CareerSession.ShakedownStrictness;
+                if (bribedSkip)
+                {
+                    if (debugLogs)
+                        Debug.Log($"[MorningShakedownSweeper] {name}: cell {i} search bought off (bribe).", this);
+                }
+                else if (tipTargeted || strictness >= 1f || Random.value <= strictness)
+                {
+                    ConfiscatePickupsInCell(cell);
+                    if (tipTargeted && debugLogs)
+                        Debug.Log($"[MorningShakedownSweeper] {name}: cell {i} searched on a snitch tip.", this);
+                }
+                else if (debugLogs)
+                    Debug.Log($"[MorningShakedownSweeper] {name}: cell {i} search skipped (strictness {strictness:0.00}).", this);
+
                 if (!ShouldMarkCellClearedAfterVisit(i, cell, GetRollCallStandPosition(cell)))
                 {
                     if (debugLogs)

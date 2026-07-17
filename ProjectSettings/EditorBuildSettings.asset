@@ -29,10 +29,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/PrisonLevel01.unity
     guid: 7fb6b0dd322a53a4e907d1282e9f9403
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/PrisonLevel1.unity
     guid: 084a819f06a2e764cbde10c656d09cd5
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Recovery/SinglePlayerScene.unity
     guid: 3cd866e3700ded1418818f62cdedb7a5
   m_configObjects:

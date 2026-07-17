@@ -156,7 +156,9 @@ namespace Prison.Social
                 kind = kind,
                 npcActorId = identity.actorId,
                 deadlineDay = currentDay + 1,
-                cashReward = Mathf.Round(8f + identity.traits.greed * 0.12f + (float)_rng.NextDouble() * 6f),
+                // Career ladder: favor payouts scale with cashIncomeMult (1 outside a career run).
+                cashReward = Mathf.Round((8f + identity.traits.greed * 0.12f + (float)_rng.NextDouble() * 6f)
+                    * Prison.Career.CareerSession.CashIncomeMult),
                 isGangFavor = identity.gangId != SocialTuning.IndependentGangId
                               && identity.archetype == PrisonerArchetype.ShotCaller,
                 gangId = identity.gangId,

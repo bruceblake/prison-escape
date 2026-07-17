@@ -35,27 +35,27 @@ namespace Prison.Tests
         }
 
         // ---------------------------------------------------------------
-        // IsOpenPhase — open phases
+        // IsOpenPhase — open phases (movement blocks only)
         // ---------------------------------------------------------------
-        [TestCase(PrisonEventType.RollCall)]
         [TestCase(PrisonEventType.Breakfast)]
         [TestCase(PrisonEventType.Lunch)]
         [TestCase(PrisonEventType.Dinner)]
         [TestCase(PrisonEventType.FreeTime)]
-        [TestCase(PrisonEventType.MorningRollCall)]
         [TestCase(PrisonEventType.WorkProgram)]
-        [TestCase(PrisonEventType.MiddayCount)]
-        [TestCase(PrisonEventType.EveningCount)]
         public void IsOpenPhase_OpenPhases_ReturnTrue(PrisonEventType evt)
         {
             Assert.IsTrue(CellDoorController.IsOpenPhase(evt), $"{evt} should be an OPEN phase");
         }
 
         // ---------------------------------------------------------------
-        // IsOpenPhase — closed phases
+        // IsOpenPhase — closed phases (night + cell counts)
         // ---------------------------------------------------------------
         [TestCase(PrisonEventType.LightsOut)]
         [TestCase(PrisonEventType.NightRollCall)]
+        [TestCase(PrisonEventType.MorningRollCall)]
+        [TestCase(PrisonEventType.RollCall)]
+        [TestCase(PrisonEventType.MiddayCount)]
+        [TestCase(PrisonEventType.EveningCount)]
         public void IsOpenPhase_ClosedPhases_ReturnFalse(PrisonEventType evt)
         {
             Assert.IsFalse(CellDoorController.IsOpenPhase(evt), $"{evt} should be a CLOSED phase");
@@ -66,10 +66,12 @@ namespace Prison.Tests
         {
             foreach (PrisonEventType evt in Enum.GetValues(typeof(PrisonEventType)))
             {
-                // Doors are open for every day phase; only the night lock-in keeps them closed.
                 bool expectedOpen =
-                    evt != PrisonEventType.LightsOut &&
-                    evt != PrisonEventType.NightRollCall;
+                    evt == PrisonEventType.Breakfast ||
+                    evt == PrisonEventType.Lunch ||
+                    evt == PrisonEventType.Dinner ||
+                    evt == PrisonEventType.FreeTime ||
+                    evt == PrisonEventType.WorkProgram;
 
                 Assert.AreEqual(expectedOpen, CellDoorController.IsOpenPhase(evt),
                     $"IsOpenPhase mismatch for {evt}");
@@ -83,6 +85,13 @@ namespace Prison.Tests
             Assert.IsFalse(CellDoorController.IsOpenPhase(PrisonEventType.NightRollCall));
         }
 
+        [Test]
+        public void IsOpenPhase_MorningRollCall_StaysClosedUntilBreakfast()
+        {
+            Assert.IsFalse(CellDoorController.IsOpenPhase(PrisonEventType.MorningRollCall));
+            Assert.IsTrue(CellDoorController.IsOpenPhase(PrisonEventType.Breakfast));
+        }
+
         // ---------------------------------------------------------------
         // Open / closed position math
         // ---------------------------------------------------------------
@@ -90,15 +99,15 @@ namespace Prison.Tests
         public void OpenLocalPosition_EqualsClosedPlusOffset()
         {
             _door.closedLocalPosition = new Vector3(16.9f, 0f, 2.04f);
-            _door.openOffset = new Vector3(0f, 0f, 6.0f);
-            AssertVec(new Vector3(16.9f, 0f, 8.04f), _door.OpenLocalPosition);
+            _door.openOffset = new Vector3(0f, 0f, 1.35f);
+            AssertVec(new Vector3(16.9f, 0f, 3.39f), _door.OpenLocalPosition);
         }
 
         [Test]
         public void GetTargetLocalPosition_OpenPhase_ReturnsOpenPosition()
         {
             _door.closedLocalPosition = new Vector3(1f, 2f, 3f);
-            _door.openOffset = new Vector3(0f, 0f, 6f);
+            _door.openOffset = new Vector3(0f, 0f, 1.35f);
             AssertVec(_door.OpenLocalPosition, _door.GetTargetLocalPosition(PrisonEventType.Lunch));
         }
 
@@ -106,7 +115,7 @@ namespace Prison.Tests
         public void GetTargetLocalPosition_ClosedPhase_ReturnsClosedPosition()
         {
             _door.closedLocalPosition = new Vector3(1f, 2f, 3f);
-            _door.openOffset = new Vector3(0f, 0f, 6f);
+            _door.openOffset = new Vector3(0f, 0f, 1.35f);
             AssertVec(_door.closedLocalPosition, _door.GetTargetLocalPosition(PrisonEventType.LightsOut));
         }
 
@@ -114,7 +123,7 @@ namespace Prison.Tests
         public void GetTargetLocalPosition_AllPhases_MatchIsOpenPhase()
         {
             _door.closedLocalPosition = new Vector3(5f, 0f, 1f);
-            _door.openOffset = new Vector3(0f, 0f, 6f);
+            _door.openOffset = new Vector3(0f, 0f, 1.35f);
             foreach (PrisonEventType evt in Enum.GetValues(typeof(PrisonEventType)))
             {
                 Vector3 expected = CellDoorController.IsOpenPhase(evt)
@@ -157,6 +166,24 @@ namespace Prison.Tests
             _door.InitializeClosedPosition();
             Assert.IsTrue(_door.IsInitialized);
             AssertVec(new Vector3(16.9f, 0f, 2.04f), _door.closedLocalPosition);
+        }
+
+        [Test]
+        public void InitializeClosedPosition_MarksAuthoredClosed_SoLaterPoseDoesNotReplaceIt()
+        {
+            _go.transform.localPosition = new Vector3(10f, 0f, 20f);
+            _door.InitializeClosedPosition();
+            AssertVec(new Vector3(10f, 0f, 20f), _door.closedLocalPosition);
+
+            // Simulate a door left slid open in the scene (the bug that blocked cell exits).
+            _go.transform.localPosition = new Vector3(10f, 0f, 21.35f);
+            // Start path: when authored closed exists, closed must stay at the captured pose.
+            var so = new UnityEditor.SerializedObject(_door);
+            var authored = so.FindProperty("hasAuthoredClosedPosition");
+            Assert.IsNotNull(authored);
+            Assert.IsTrue(authored.boolValue);
+            AssertVec(new Vector3(10f, 0f, 20f), _door.closedLocalPosition);
+            AssertVec(new Vector3(10f, 0f, 20f) + _door.openOffset, _door.OpenLocalPosition);
         }
 
         // ---------------------------------------------------------------
@@ -207,18 +234,21 @@ namespace Prison.Tests
         }
 
         // ---------------------------------------------------------------
-        // Design contract: default open slide must clear a standard doorway
-        // (the custom barred door is 5.6 units wide).
+        // Design contract: default open slide must clear a standard doorway (~2 m)
+        // without sliding into the neighboring cell (~4 m cell pitch).
         // ---------------------------------------------------------------
         [Test]
         public void DefaultOpenOffset_ClearsStandardDoorwayWidth()
         {
-            const float doorwayWidth = 5.6f;
+            const float minClearance = 1.2f;
+            const float maxClearance = 1.7f;
             var fresh = new GameObject("freshDoor").AddComponent<CellDoorController>();
             try
             {
-                Assert.GreaterOrEqual(fresh.openOffset.magnitude, doorwayWidth,
-                    "Default open offset must be at least the doorway width so the open door fully clears the opening.");
+                Assert.GreaterOrEqual(fresh.openOffset.magnitude, minClearance,
+                    "Default open offset must clear the doorway opening.");
+                Assert.LessOrEqual(fresh.openOffset.magnitude, maxClearance,
+                    "Default open offset must not slide into the neighboring cell doorway.");
             }
             finally
             {
@@ -251,7 +281,8 @@ namespace Prison.Tests
             Vector3 offset = PrisonFacilityInstaller.ComputeDoorOpenOffsetLocal(doorGo.transform, bedGo.transform);
 
             Assert.AreEqual(0f, offset.y, 1e-4f, "Door slide offset must stay horizontal in local space.");
-            Assert.GreaterOrEqual(offset.magnitude, 5.5f, "Door must slide far enough to clear the doorway.");
+            Assert.GreaterOrEqual(offset.magnitude, 1.2f, "Door must slide far enough to clear the doorway.");
+            Assert.LessOrEqual(offset.magnitude, 1.7f, "Door must not slide into the neighboring cell.");
             float dominant = Mathf.Max(Mathf.Abs(offset.x), Mathf.Abs(offset.z));
             Assert.AreEqual(offset.magnitude, dominant, 1e-4f, "Slide must be along a single local horizontal axis.");
         }

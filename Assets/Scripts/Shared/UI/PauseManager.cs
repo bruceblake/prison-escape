@@ -79,7 +79,7 @@ public class PauseManager : MonoBehaviour
     {
         isPaused = true;
         UIMenuFocus.RegisterOpen();
-        
+
         // ONLY IN SINGLEPLAYER the world needs to be paused
         if (IsSinglePlayer())
         {
@@ -88,6 +88,8 @@ public class PauseManager : MonoBehaviour
 
         if (pauseMenu != null)
             pauseMenu.SetActive(true);
+
+        EnsureCareerQuitButton();
             
         // Enable cursor and unlock it
         Cursor.visible = true;
@@ -142,6 +144,30 @@ public class PauseManager : MonoBehaviour
         {
             return true;
         }
+    }
+
+    private bool _careerQuitButtonBuilt;
+
+    /// <summary>
+    /// Career runs add "QUIT TO PRISON SELECT" to the pause menu: globals save, the local run is
+    /// abandoned (spec: World Saves & Start Screen § Prison Select hub). Runtime-built so the
+    /// scene-authored pause menu needs no rewiring.
+    /// </summary>
+    private void EnsureCareerQuitButton()
+    {
+        if (_careerQuitButtonBuilt || pauseMenu == null) return;
+        if (!Prison.Career.CareerSession.HasActiveRun) return;
+        _careerQuitButtonBuilt = true;
+
+        EscapeEndScreenUI.CreateButton(pauseMenu.transform, "QUIT TO PRISON SELECT",
+            new Vector2(0.5f, 0.16f), () =>
+            {
+                Prison.Career.CareerQuitConfirmUI.Show(() =>
+                {
+                    Resume();
+                    Prison.Career.CareerSession.QuitToPrisonSelect();
+                });
+            });
     }
 
     public void QuitGame()

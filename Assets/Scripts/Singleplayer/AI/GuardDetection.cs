@@ -176,8 +176,9 @@ public class GuardDetection : MonoBehaviour
     {
         Vector3 toTarget = targetPos - eyePos;
         float dist = toTarget.magnitude;
-        // Facility difficulty multiplier lands with Career ladder; Social-only builds use 1.
-        float facilityMult = 1f;
+        // Career difficulty scales the base sight cone (ADX guards see farther); suspicion
+        // multiplier stacks on top (Prison Career Ladder § Difficulty & pacing curves).
+        float facilityMult = Prison.Career.CareerSession.DetectionRangeMult;
         if (dist > detectionRange * facilityMult * rangeMultiplier) return false;
 
         float angle = Vector3.Angle(forward, toTarget.normalized);

@@ -93,7 +93,15 @@ public class GameManager : MonoBehaviour
         if (_spawnedPlayer != null)
             social.RegisterPlayer(_spawnedPlayer);
 
-        social.BuildWorld(worldSeed.GetHashCode(), _spawnedInmates, _spawnedGuards, arrivalSeed: 0f);
+        float arrivalSeed = 0f;
+        var careerWorld = Prison.Career.CareerSession.ActiveWorld;
+        if (careerWorld != null && Prison.Career.CareerSession.HasActiveRun)
+            arrivalSeed = Prison.Career.CareerRespectMath.ArrivalAffinitySeed(careerWorld.global.respect);
+
+        social.BuildWorld(worldSeed.GetHashCode(), _spawnedInmates, _spawnedGuards, arrivalSeed);
+
+        if (careerWorld != null && Prison.Career.CareerSession.HasActiveRun)
+            social.ApplyCareerGangTag(careerWorld.global.gangId);
 
         // Runtime labels come from generated identities now.
         foreach (var (go, _) in _spawnedInmates)
@@ -114,12 +122,15 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void PopulateWorldSpawns()
     {
+        // Career difficulty: County is littered with parts, ADX is bare (lootAbundance curve).
+        float lootAbundance = Prison.Career.CareerSession.LootAbundance;
+
         ItemSpawnNode[] nodes = Object.FindObjectsOfType<ItemSpawnNode>(true);
         for (int i = 0; i < nodes.Length; i++)
         {
             ItemSpawnNode node = nodes[i];
             if (node == null) continue;
-            if (UnityEngine.Random.value > node.spawnChance) continue;
+            if (UnityEngine.Random.value > node.spawnChance * lootAbundance) continue;
             if (node.lootTable == null) continue;
 
             ItemData pick = node.lootTable.GetRandomItem();

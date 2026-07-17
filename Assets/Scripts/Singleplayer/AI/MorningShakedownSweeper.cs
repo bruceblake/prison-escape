@@ -240,8 +240,9 @@ public class MorningShakedownSweeper : MonoBehaviour
                 bool bribedSkip = socialWorld != null && socialWorld.IsBuilt && socialWorld.ConsumeShakedownSkip(i);
                 bool tipTargeted = socialWorld != null && socialWorld.IsBuilt && socialWorld.ConsumeTargetedShakedown(i);
 
-                // Facility shakedown strictness lands with Career ladder; Social-only builds use 1.
-                float strictness = 1f;
+                // Career difficulty: lax facilities (strictness < 1) sometimes skip a cell's
+                // contraband search entirely — County's 0.75 leaves a 25% blind spot per cell.
+                float strictness = Prison.Career.CareerSession.ShakedownStrictness;
                 if (bribedSkip)
                 {
                     if (debugLogs)

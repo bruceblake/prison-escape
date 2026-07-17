@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3632aa6e37151eb41b33e022b548755c, type: 3}
+  m_Name: Facility_county
+  m_EditorClassIdentifier: Assembly-CSharp::Prison.Career.FacilityDefinition
+  id: county
+  system: County
+  securityLabel: 
+  title: County Detention Center
+  description: "Overcrowded intake block. Contraband everywhere, guards who barely
+    look \u2014 and a sentence you can simply serve out."
+  icon: {fileID: 0}
+  silhouette: {fileID: 0}
+  sceneName: CountyJail
+  ladderIndex: 0
+  lootAbundance: 1.3
+  cashIncomeMult: 1
+  tradePriceMult: 0.9
+  bribeCostMult: 1
+  escapeRouteCostMult: 1
+  detectionRangeMult: 0.9
+  shakedownStrictness: 0.75
+  recommendedStayDaysMin: 3
+  recommendedStayDaysMax: 7
+  sentenceDays: 7
+  gateMode: 0
+  gateCash: 0
+  gateRespect: 0

@@ -65,6 +65,12 @@ public class GuardDetection : MonoBehaviour
                 continue;
             }
 
+            if (p.HasPostEscortImmunity)
+            {
+                if (logScan) Debug.Log($"[GuardDetection] Player {p.name}: skip (post-escort immunity)", this);
+                continue;
+            }
+
             // Crouching shrinks the guard's effective spotting ranges (stealth).
             var crouchController = p.GetComponent<PlayerController>();
             float crouchMult = crouchController != null && crouchController.IsCrouched ? 0.6f : 1f;
@@ -100,6 +106,12 @@ public class GuardDetection : MonoBehaviour
             if (p.MovementBlocked)
             {
                 if (logScan) Debug.Log($"[GuardDetection] NPC {p.name}: skip (MovementBlocked)", this);
+                continue;
+            }
+
+            if (p.HasPostEscortImmunity)
+            {
+                if (logScan) Debug.Log($"[GuardDetection] NPC {p.name}: skip (post-escort immunity)", this);
                 continue;
             }
 

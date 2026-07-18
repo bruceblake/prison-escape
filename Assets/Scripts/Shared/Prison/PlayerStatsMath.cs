@@ -17,8 +17,8 @@ namespace Prison
         public const float DailyRegenAmount = 5f;
 
         public const float LowStrengthThreshold = 50f;
-        public const float NormalSprintMultiplier = 2f;
-        public const float WeakSprintMultiplier = 1.5f;
+        public const float NormalSprintMultiplier = 1.55f;
+        public const float WeakSprintMultiplier = 1.25f;
 
         public static float Clamp(float value) => Mathf.Clamp(value, MinStat, MaxStat);
 

@@ -31,7 +31,9 @@ namespace Prison
 
             bool open = true; // no schedule (menu/test scenes) → never trap agents
             var tm = PrisonTimeManager.Instance;
-            if (tm != null)
+            if (door != null)
+                open = door.ShouldBeOpen(tm != null ? tm.CurrentEvent : PrisonEventType.Breakfast);
+            else if (tm != null)
                 open = CellDoorController.IsOpenPhase(tm.CurrentEvent);
 
             if (_link.enabled != open)

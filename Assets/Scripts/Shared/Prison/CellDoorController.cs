@@ -26,6 +26,10 @@ namespace Prison
         private bool hasAuthoredClosedPosition;
 
         private bool isInitialized;
+        private bool forcedOpen;
+
+        /// <summary>When true, this door stays open regardless of schedule (e.g. after morning shakedown).</summary>
+        public bool IsForcedOpen => forcedOpen;
 
         /// <summary>True once the closed position has been captured.</summary>
         public bool IsInitialized => isInitialized;
@@ -59,11 +63,22 @@ namespace Prison
             isInitialized = true;
         }
 
+        /// <summary>Override schedule and hold the door open until cleared.</summary>
+        public void SetForcedOpen(bool open)
+        {
+            forcedOpen = open;
+        }
+
+        /// <summary>Whether this door should be open for the given phase (schedule or forced override).</summary>
+        public bool ShouldBeOpen(PrisonEventType evt) => forcedOpen || IsOpenPhase(evt);
+
         /// <summary>Moves the door to the open or closed pose for the current schedule phase.</summary>
         public void SnapToScheduleTarget(bool immediate)
         {
-            if (PrisonTimeManager.Instance == null) return;
-            Vector3 target = GetTargetLocalPosition(PrisonTimeManager.Instance.CurrentEvent);
+            PrisonEventType evt = PrisonTimeManager.Instance != null
+                ? PrisonTimeManager.Instance.CurrentEvent
+                : PrisonEventType.Breakfast;
+            Vector3 target = GetTargetLocalPosition(evt);
             if (immediate)
                 transform.localPosition = target;
             else
@@ -72,17 +87,30 @@ namespace Prison
 
         private void Update()
         {
-            if (!isInitialized || PrisonTimeManager.Instance == null) return;
+            if (!isInitialized) return;
 
-            Vector3 targetPos = GetTargetLocalPosition(PrisonTimeManager.Instance.CurrentEvent);
+            PrisonEventType evt = PrisonTimeManager.Instance != null
+                ? PrisonTimeManager.Instance.CurrentEvent
+                : PrisonEventType.Breakfast;
+            Vector3 targetPos = GetTargetLocalPosition(evt);
             transform.localPosition = StepToward(transform.localPosition, targetPos, slideSpeed, Time.deltaTime);
         }
 
         /// <summary>
+        /// Clears forced-open overrides on every door in the scene (e.g. when morning count ends).
+        /// </summary>
+        public static void ClearAllForcedOpens()
+        {
+            var doors = Object.FindObjectsByType<CellDoorController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            for (int i = 0; i < doors.Length; i++)
+                doors[i].SetForcedOpen(false);
+        }
+
+        /// <summary>
         /// Returns true when the door should be OPEN for the given schedule phase.
-        /// Open for movement blocks (meals, work, free time). Closed for night lock-in
-        /// and cell counts (morning / midday / evening) so inmates stay locked for roll call.
-        /// Doors open after morning count when Breakfast begins.
+        /// Open for movement blocks (meals, work, free time) and for midday/evening
+        /// presence counts (inmates must walk into their cells). Closed for night lock-in
+        /// and morning roll call / shakedown only.
         /// </summary>
         public static bool IsOpenPhase(PrisonEventType evt)
         {
@@ -93,9 +121,11 @@ namespace Prison
                 case PrisonEventType.Dinner:
                 case PrisonEventType.FreeTime:
                 case PrisonEventType.WorkProgram:
+                case PrisonEventType.MiddayCount:
+                case PrisonEventType.EveningCount:
                     return true;
                 default:
-                    // LightsOut, NightRollCall, MorningRollCall, MiddayCount, EveningCount, RollCall
+                    // LightsOut, NightRollCall, MorningRollCall, RollCall
                     return false;
             }
         }
@@ -103,7 +133,7 @@ namespace Prison
         /// <summary>Target local position for the given phase (open position or closed position).</summary>
         public Vector3 GetTargetLocalPosition(PrisonEventType evt)
         {
-            return IsOpenPhase(evt) ? OpenLocalPosition : closedLocalPosition;
+            return ShouldBeOpen(evt) ? OpenLocalPosition : closedLocalPosition;
         }
 
         /// <summary>

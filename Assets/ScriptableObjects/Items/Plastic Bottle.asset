@@ -18,5 +18,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: eea24bc22804da348bb79f4a3d21d40c, type: 3}
   category: 0
   rarity: 0
-  weightMultiplier: 1.2
+  weightMultiplier: 1
   worldPrefab: {fileID: 526054872895499548, guid: 386bc3bb2f576a94fa557e32060d60ec, type: 3}

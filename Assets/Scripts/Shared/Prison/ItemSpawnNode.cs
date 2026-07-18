@@ -12,5 +12,9 @@ namespace Prison
         [Range(0f, 1f)]
         [Tooltip("Probability that this node spawns one item when PopulateWorldSpawns runs.")]
         public float spawnChance = 0.5f;
+
+        [Min(1)]
+        [Tooltip("Independent loot rolls per node (each roll uses spawnChance).")]
+        public int spawnRolls = 2;
     }
 }

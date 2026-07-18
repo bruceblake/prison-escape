@@ -64,6 +64,17 @@ public static class PrisonLootSetupRunner
         Debug.Log("[PrisonLootSetup] Phase A+B complete. Save the scene and enter Play Mode to test spawns.");
     }
 
+    /// <summary>Batchmode entry — opens PrisonLevel1, runs full loot setup, saves scene.</summary>
+    public static void RunBatchMode()
+    {
+        const string scenePath = "Assets/Scenes/PrisonLevel1.unity";
+        if (EditorSceneManager.GetActiveScene().path != scenePath)
+            EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+        Run();
+        EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+        Debug.Log("[PrisonLootSetup] Batch mode complete — scene saved.");
+    }
+
     private static void FixCellSpawnPoints()
     {
         PrisonLayoutRebuildRunner.FixAllCellSpawns();
@@ -251,6 +262,7 @@ public static class PrisonLootSetupRunner
         var node = go.AddComponent<ItemSpawnNode>();
         node.lootTable = table;
         node.spawnChance = chance;
+        node.spawnRolls = 2;
     }
 
     private static Vector3 AnchorPosition(string objectName, Vector3 fallback)

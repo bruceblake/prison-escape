@@ -1,8 +1,18 @@
 # Item Catalog
 
-Every item asset in `Assets/ScriptableObjects/`. Rarity drives loot weight (Common 60 / Uncommon 25 / Rare 10 / Legendary 5 — see [[Loot & Economy]]).
+Every item asset under `Assets/ScriptableObjects/` (mostly `Items/`). Rarity drives loot weight (Common 60 / Uncommon 25 / Rare 10 / Legendary 5 — see [[Loot & Economy]]).
 
-> All items below have 3D pickup models: `Assets/Models/BlenderKit/Items/SM_Item_<Name>.fbx` — see [[Blender Asset Kit]]. Wiring them into pickup prefabs is an open task.
+## How many can spawn?
+
+| Pool | Count | Notes |
+|---|---|---|
+| **ItemData assets** | **~27** | 25 in `Items/` + Metal Rod + Flat Metal at ScriptableObjects root (plus duplicates MetalScrap/WoodScrap) |
+| **In world loot tables** | **16 unique** | Paperclip, Soap, Plastic Bottle, Rag, Wood Scrap, Metal Scrap, Metal Rod, Flat Metal, Coin, Charcoal, Duct Tape, Wire, Glass Bottle, Alcohol, Mirror, File |
+| **Not in world loot tables** | rest | Tools/crafted (Screwdriver, Shovel, Wire Cutters, Ladder, Grappling Hook, Molotov, Fake Bed Dummy, Pillow, Bed Sheet, …) — craft or find later |
+
+Runtime: `WorldLootBootstrap` builds ~185 `ItemSpawnNode`s; `GameManager.PopulateWorldSpawns` typically creates **~500** floor pickups (check Console for `World loot: spawned N`).
+
+> Pickup models: `Assets/Prefabs/BlenderKit/Items/SM_Item_*.prefab`. Spawns are **normalized to ~0.4 m** longest axis via `SpawnPlacementUtility.FitWorldPickupOnFloor` (replaces flat 6× boost).
 
 ## Crafting parts
 
@@ -49,6 +59,6 @@ Every item asset in `Assets/ScriptableObjects/`. Rarity drives loot weight (Comm
 
 - Duplicate assets: `Metal Scrap`/`MetalScrap`, `Wood Scrap`/`WoodScrap` — consolidate
 - `networkId` collisions (several 0s; Metal Rod=1 vs AK-47=1)
-- Items with no recipe or spawn source yet: Paperclip, Soap, Plastic Bottle, Charcoal, Mirror, Coin — give them purposes or loot-table slots
+- Items with no recipe yet still spawn from world loot tables (Paperclip, Soap, Plastic Bottle, Charcoal, Mirror, Coin) — see [[Loot & Economy]] room pools.
 
 Related: [[Inventory & Items]] · [[Crafting]] · [[Loot & Economy]]

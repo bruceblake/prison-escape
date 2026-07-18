@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Prison;
@@ -78,8 +79,17 @@ public class GameManager : MonoBehaviour
         SpawnPlayer();
         SpawnNpcPrisoners();
         SpawnGuards();
-        PopulateWorldSpawns();
+        WorldLootBootstrap.EnsureSpawnNodes();
+        StartCoroutine(PopulateWorldSpawnsDeferred());
         BuildSocialWorld();
+    }
+
+    private IEnumerator PopulateWorldSpawnsDeferred()
+    {
+        // Let floors / NavMesh / physics finish so pickup snaps land on walkable surfaces.
+        yield return null;
+        yield return null;
+        PopulateWorldSpawns();
     }
 
     /// <summary>
@@ -126,29 +136,44 @@ public class GameManager : MonoBehaviour
         float lootAbundance = Prison.Career.CareerSession.LootAbundance;
 
         ItemSpawnNode[] nodes = Object.FindObjectsOfType<ItemSpawnNode>(true);
+        int spawned = 0;
         for (int i = 0; i < nodes.Length; i++)
         {
             ItemSpawnNode node = nodes[i];
             if (node == null) continue;
-            if (UnityEngine.Random.value > node.spawnChance * lootAbundance) continue;
             if (node.lootTable == null) continue;
 
-            ItemData pick = node.lootTable.GetRandomItem();
-            if (pick == null) continue;
-            if (pick.worldPrefab == null)
+            int rolls = Mathf.Max(1, node.spawnRolls);
+            for (int r = 0; r < rolls; r++)
             {
-                Debug.LogWarning($"[GameManager] Item '{pick.itemName}' has no worldPrefab; skip spawn at {node.gameObject.name}.", node);
-                continue;
+                if (UnityEngine.Random.value > node.spawnChance * lootAbundance) continue;
+
+                ItemData pick = node.lootTable.GetRandomItem();
+                if (pick == null) continue;
+                if (pick.worldPrefab == null)
+                {
+                    Debug.LogWarning($"[GameManager] Item '{pick.itemName}' has no worldPrefab; skip spawn at {node.gameObject.name}.", node);
+                    continue;
+                }
+
+                Transform t = node.transform;
+                Vector3 spawnPos = SpawnPlacementUtility.SnapPickupPosition(t.position);
+                Vector3 offset = new Vector3(
+                    UnityEngine.Random.Range(-0.45f, 0.45f),
+                    0f,
+                    UnityEngine.Random.Range(-0.45f, 0.45f));
+                GameObject instance = Object.Instantiate(pick.worldPrefab, spawnPos + offset, t.rotation);
+                SpawnPlacementUtility.FitWorldPickupOnFloor(instance, spawnPos.y);
+
+                WorldItemPickup pickup = instance.GetComponent<WorldItemPickup>();
+                if (pickup == null)
+                    pickup = instance.AddComponent<WorldItemPickup>();
+                pickup.itemData = pick;
+                spawned++;
             }
-
-            Transform t = node.transform;
-            GameObject instance = Object.Instantiate(pick.worldPrefab, t.position, t.rotation);
-
-            WorldItemPickup pickup = instance.GetComponent<WorldItemPickup>();
-            if (pickup == null)
-                pickup = instance.AddComponent<WorldItemPickup>();
-            pickup.itemData = pick;
         }
+
+        Debug.Log($"[GameManager] World loot: spawned {spawned} pickups from {nodes.Length} nodes (abundance {lootAbundance:0.00}).");
     }
 
     void SpawnPlayer()

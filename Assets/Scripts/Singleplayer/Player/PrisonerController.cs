@@ -11,12 +11,16 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
     [Header("Compliance")]
     [Tooltip("Distance to stand point to count as compliant (meters)")]
     public float compliantDistance = 3f;
+    [Tooltip("After a guard escorts you to your cell, ignore schedule non-compliance for this many real seconds so they do not re-arrest you in a loop.")]
+    [Min(5f)]
+    public float postEscortImmunitySeconds = 40f;
 
     private HashSet<PrisonLocationZone> _zonesIn = new HashSet<PrisonLocationZone>();
     private PlayerController _playerController;
     private CharacterController _characterController;
     private bool _movementBlocked;
     private bool _isLocalPlayer;
+    private float _postEscortImmunityUntil = float.NegativeInfinity;
 
     public bool IsCompliant { get; private set; }
     public bool IsAtRequiredLocation { get; private set; }
@@ -25,6 +29,7 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
     public bool IsRollCallShakedownComplete =>
         MorningRollCallTracker.Instance != null && MorningRollCallTracker.Instance.IsInmateShakedownComplete(this);
     public bool MovementBlocked => _movementBlocked;
+    public bool HasPostEscortImmunity => Time.unscaledTime < _postEscortImmunityUntil;
     public int CellIndex => cellIndex;
 
     /// <summary>Time.time when compliance was last lost; -1 while compliant.</summary>
@@ -132,6 +137,7 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
     private void UpdateCompliance()
     {
         UpdateComplianceCore();
+        MorningRollCallTracker.TryOpenDoorWhenInmateAtStand(this);
         if (IsCompliant) NonCompliantSince = -1f;
         else if (NonCompliantSince < 0f) NonCompliantSince = Time.time;
     }
@@ -157,6 +163,16 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
 
         var tm = PrisonTimeManager.Instance;
         var evt = tm.CurrentEvent;
+
+        // Post-escort: still report where you are for HUD, but count as compliant so
+        // the same guard does not walk away and immediately re-arrest you in your cell.
+        if (HasPostEscortImmunity)
+        {
+            IsAtRequiredLocation = IsPhysicallyAtRequiredLocation(evt);
+            IsCompliant = true;
+            return;
+        }
+
         if (MorningRollCallTracker.IsInmateReleasedFromRollCallStand(this))
         {
             tm.GetNextEventInfo(out PrisonEventType nextEvt, out _);
@@ -259,7 +275,27 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
             transform.rotation = cell.SpawnRotation;
         }
 
-        Invoke(nameof(ReleaseMovement), 1f);
+        GrantPostEscortImmunity(postEscortImmunitySeconds);
+        Invoke(nameof(ReleaseMovement), 1.25f);
+    }
+
+    /// <summary>Starts the post-escort window; also usable after other soft punishments.</summary>
+    public void GrantPostEscortImmunity(float seconds)
+    {
+        float duration = Mathf.Max(5f, seconds);
+        _postEscortImmunityUntil = Time.unscaledTime + duration;
+        NonCompliantSince = -1f;
+        IsCompliant = true;
+
+        if (_isLocalPlayer)
+        {
+            string tip = PrisonRoutineLabels.GetGoToLabel(
+                PrisonTimeManager.Instance != null ? PrisonTimeManager.Instance.CurrentEvent : PrisonEventType.FreeTime,
+                cellIndex);
+            if (string.IsNullOrEmpty(tip))
+                tip = "your next destination";
+            Prison.Social.SocialToastUI.Show($"Back in your cell. Get to {tip} — guards will give you a minute.");
+        }
     }
 
     public void SetMovementBlocked(bool blocked)

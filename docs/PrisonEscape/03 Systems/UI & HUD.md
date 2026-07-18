@@ -8,7 +8,7 @@ Hub note for the player-facing surface of the prison sim. Each surface has its o
 | [[Status & World UI]] | Heat eye, vitals panel, location, waypoint, reticle, name labels (+ band-tinted social nameplates) |
 | [[Inventory & Hotbar UI]] | 6-slot bag, hotbar, slot prefab, tooltips |
 | [[Notebook & Crafting UI]] | Stolen notebook pages, crafting spread, pause |
-| [[Talk Menu & NPC Profile]] | ✅ Real-time tabbed Talk overlay (`SocialInteractionMenu`) |
+| [[Talk Menu & NPC Profile]] | ✅ Real-time tabbed Talk overlay (`SocialInteractionMenu`) — **1320×640** panel; close via **X**, backdrop, Escape, interact-again |
 | [[Social Dossier — Relationships & Gangs]] | ✅ Notebook Relationships + Gangs (`SocialDossierUI`) |
 | [[Screens & Menus]] | Escape / transfer ceremony, solitary, MainMenu career hub |
 | [[UI Theme & Style Guide]] | Palette, backdrop rules, menu-focus rule, typography |

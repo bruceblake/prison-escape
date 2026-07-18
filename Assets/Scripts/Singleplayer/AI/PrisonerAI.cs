@@ -1,18 +1,30 @@
 using UnityEngine;
 using UnityEngine.AI;
 using Prison;
+using Prison.Social;
 
 public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
 {
+    private enum LoiterState
+    {
+        Traveling,
+        Idle,
+        Walking
+    }
+
     [Header("Prisoner")]
     public int cellIndex;
 
     [Header("Movement")]
     public NavMeshAgent agent;
-    [Tooltip("Distance to stand point / NavMesh destination to count as compliant (meters)")]
+    [Tooltip("Distance to stand point / NavMesh destination to count as arrived (meters)")]
     public float arriveDistance = 0.85f;
-    [Tooltip("When true, stop the NavMeshAgent on arrival so idle NPCs do not circle.")]
+    [Tooltip("When true, stop the NavMeshAgent while idling so NPCs do not circle.")]
     public bool stopAgentWhenIdle = true;
+
+    [Header("Personality loiter")]
+    [Tooltip("Enable idle/wander after reaching the phase stand. Driven by archetype + traits when SocialWorld is available.")]
+    public bool enablePersonalityLoiter = true;
 
     [Header("Debug")]
     [Tooltip("Verbose logs for schedule, pathfinding, and compliance.")]
@@ -34,6 +46,23 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
     private float _nextDebugLogTime;
     private bool _lastMovementBlockedLogged;
     private bool _releasedFromRollCallToNextPhase;
+    private float _postEscortImmunityUntil = float.NegativeInfinity;
+
+    private LoiterState _loiterState = LoiterState.Traveling;
+    private float _loiterUntil;
+    private bool _personalityCached;
+    private float _idleBias = 0.4f;
+    private float _wanderRadius = 5f;
+    private float _minIdleSeconds = 2.5f;
+    private float _maxIdleSeconds = 8f;
+
+    private bool _talkEngaged;
+    private Transform _talkFaceTarget;
+    private bool _agentUpdateRotationBeforeTalk = true;
+
+    [Tooltip("After escort dump-to-cell, NPCs count as compliant this long so guards do not re-arrest them in a loop.")]
+    [Min(5f)]
+    public float postEscortImmunitySeconds = 40f;
 
     public bool IsCompliant => _isCompliant;
     public bool IsAtRequiredLocation => _isAtRequiredLocation;
@@ -41,7 +70,15 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
         MorningRollCallTracker.Instance != null && MorningRollCallTracker.Instance.IsInmateShakedownComplete(this);
     public int CellIndex => cellIndex;
     public bool MovementBlocked => _movementBlocked;
+    public bool HasPostEscortImmunity => Time.unscaledTime < _postEscortImmunityUntil;
     public float RollCallReleaseAllowedAfter { get; private set; }
+
+    /// <summary>On mandatory travel to a required stand — Talk is refused with a bark.</summary>
+    public bool IsBusyForTalk =>
+        !_movementBlocked &&
+        PrisonTimeManager.Instance != null &&
+        PrisonEventRules.IsMandatory(_currentEvent) &&
+        !_isAtRequiredLocation;
 
     private string DbgPrefix => $"[PrisonerAI][{gameObject.name}][cell {cellIndex}]";
 
@@ -118,6 +155,8 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
         _releasedFromRollCallToNextPhase = false;
         RollCallReleaseAllowedAfter = 0f;
         _currentEvent = evt;
+        SetTalkEngaged(false, null);
+        ResetLoiter("schedule-change");
         GoToExpectedLocation("HandleScheduleChange");
     }
 
@@ -129,8 +168,15 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
             Dbg($"MovementBlocked changed => {_movementBlocked}");
         }
 
+        if (_movementBlocked)
+            return;
+
+        if (_talkEngaged)
+            return;
+
         UpdateCompliance();
         TryHeadToNextPhaseAfterRollCallCleared();
+        UpdatePersonalityLoiter();
         ThrottledMovementDebug();
     }
 
@@ -152,6 +198,7 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
 
         _releasedFromRollCallToNextPhase = true;
         Dbg($"Roll call cleared — heading to next phase destination: {nextEvt}");
+        ResetLoiter("roll-call-cleared");
         GoToExpectedLocationForEvent(nextEvt, "RollCallCleared");
     }
 
@@ -276,6 +323,7 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
 
         _isCompliant = false;
         _holdingAtStand = false;
+        _loiterState = LoiterState.Traveling;
         _currentDestination = standPoint;
         _resolvedDestination = destination;
         _hasResolvedDestination = true;
@@ -305,15 +353,17 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
         if (_movementBlocked)
             return;
 
-        if (MorningRollCallTracker.IsInmateReleasedFromRollCallStand(this))
+        if (HasPostEscortImmunity)
+        {
+            _isCompliant = true;
+            return;
+        }
+
+        // Cleared for roll call but not yet redirected — stay compliant at stand without hard-freezing forever.
+        if (MorningRollCallTracker.IsInmateReleasedFromRollCallStand(this) && !_releasedFromRollCallToNextPhase)
         {
             _isAtRequiredLocation = true;
             _isCompliant = true;
-            if (!_holdingAtStand)
-            {
-                _holdingAtStand = true;
-                StopAgentAtStand("roll-call-released");
-            }
             return;
         }
 
@@ -327,19 +377,20 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
             return;
         }
 
+        float presenceRadius = GetPresenceRadius();
         float navDist = agent.remainingDistance;
         bool navArrived = !agent.pathPending && navDist != float.PositiveInfinity && navDist <= arriveDistance;
         Vector3 targetPos = _hasResolvedDestination ? _resolvedDestination : _currentDestination.position;
         float posDist = Vector3.Distance(transform.position, targetPos);
         bool posArrived = posDist <= arriveDistance;
-        // Near-zero speed near destination also counts — agents often never reach exact point in crowds.
         bool idleNear = agent.velocity.magnitude < 0.08f && posDist <= arriveDistance * 1.6f && !agent.pathPending;
-        _isAtRequiredLocation = navArrived || posArrived || idleNear;
+        bool inPresence = posDist <= presenceRadius;
+        _isAtRequiredLocation = navArrived || posArrived || idleNear || inPresence;
 
-        if (_isAtRequiredLocation && !_holdingAtStand)
+        if (_isAtRequiredLocation && _loiterState == LoiterState.Traveling)
         {
-            _holdingAtStand = true;
-            StopAgentAtStand("arrived");
+            // Arrived at phase stand — begin personality idle/wander instead of permanent freeze.
+            BeginIdleBurst("arrived");
         }
         else if (!_isAtRequiredLocation && _holdingAtStand)
         {
@@ -356,10 +407,201 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
             return;
         }
 
-        _isCompliant = _isAtRequiredLocation;
+        // Free time is never mandatory; during other phases stay within presence of the stand.
+        if (!PrisonEventRules.IsMandatory(_currentEvent))
+            _isCompliant = true;
+        else
+            _isCompliant = _isAtRequiredLocation;
 
-        string detail2 = $"navRem={navDist} posDist={posDist:F3} pathPending={agent.pathPending} navArrived={navArrived} posArrived={posArrived} idleNear={idleNear} holding={_holdingAtStand}";
+        MorningRollCallTracker.TryOpenDoorWhenInmateAtStand(this);
+
+        string detail2 = $"navRem={navDist} posDist={posDist:F3} presence≤{presenceRadius:F1} pathPending={agent.pathPending} " +
+                         $"navArrived={navArrived} posArrived={posArrived} idleNear={idleNear} loiter={_loiterState}";
         LogComplianceTransition(prev, detail2);
+    }
+
+    private void ResetLoiter(string reason)
+    {
+        _loiterState = LoiterState.Traveling;
+        _loiterUntil = 0f;
+        _holdingAtStand = false;
+        Dbg($"ResetLoiter({reason})");
+    }
+
+    private void EnsurePersonalityCached()
+    {
+        if (_personalityCached)
+            return;
+        _personalityCached = true;
+
+        _idleBias = 0.4f;
+        _wanderRadius = 5f;
+        _minIdleSeconds = 2.5f;
+        _maxIdleSeconds = 8f;
+
+        var world = SocialWorld.Instance;
+        if (world == null)
+            return;
+
+        int actorId = world.GetActorId(gameObject);
+        var identity = world.GetIdentity(actorId);
+        if (identity == null || identity.isGuard)
+            return;
+
+        float sociability = identity.traits.sociability / 100f;
+        float aggression = identity.traits.aggression / 100f;
+        float nerve = identity.traits.nerve / 100f;
+
+        // High sociability → more walking; loners / old-timers idle more.
+        _idleBias = Mathf.Clamp01(0.75f - sociability * 0.55f);
+        _wanderRadius = Mathf.Lerp(3.5f, 9f, Mathf.Clamp01(0.35f + sociability * 0.4f + aggression * 0.35f));
+        _minIdleSeconds = Mathf.Lerp(1.2f, 4f, _idleBias);
+        _maxIdleSeconds = Mathf.Lerp(4f, 14f, _idleBias);
+
+        switch (identity.archetype)
+        {
+            case PrisonerArchetype.Loner:
+                _idleBias = Mathf.Clamp01(_idleBias + 0.28f);
+                _wanderRadius *= 0.55f;
+                _minIdleSeconds += 1.5f;
+                _maxIdleSeconds += 4f;
+                break;
+            case PrisonerArchetype.OldTimer:
+                _idleBias = Mathf.Clamp01(_idleBias + 0.22f);
+                _wanderRadius *= 0.7f;
+                _maxIdleSeconds += 3f;
+                break;
+            case PrisonerArchetype.Hustler:
+                _idleBias = Mathf.Clamp01(_idleBias - 0.2f);
+                _wanderRadius *= 1.15f;
+                _minIdleSeconds = Mathf.Max(0.8f, _minIdleSeconds - 0.8f);
+                break;
+            case PrisonerArchetype.Bruiser:
+                _idleBias = Mathf.Clamp01(_idleBias - 0.08f);
+                _wanderRadius *= 1.35f;
+                break;
+            case PrisonerArchetype.Soldier:
+                _wanderRadius *= 1.1f;
+                break;
+            case PrisonerArchetype.Snitch:
+                // Nervous short pacing — rarely stands still long, but stays close.
+                _idleBias = Mathf.Clamp01(_idleBias - 0.15f);
+                _wanderRadius = Mathf.Min(_wanderRadius, 3.2f);
+                _minIdleSeconds = 0.8f;
+                _maxIdleSeconds = 3.5f;
+                break;
+            case PrisonerArchetype.ShotCaller:
+                _idleBias = Mathf.Clamp01(_idleBias + 0.12f);
+                _wanderRadius *= 0.9f;
+                break;
+        }
+
+        // Low nerve → slightly more idle (keeps head down).
+        _idleBias = Mathf.Clamp01(_idleBias + (1f - nerve) * 0.08f);
+
+        Dbg($"Personality loiter: archetype={identity.archetype} idleBias={_idleBias:F2} wanderR={_wanderRadius:F1} idle={_minIdleSeconds:F1}-{_maxIdleSeconds:F1}s");
+    }
+
+    private float GetPresenceRadius()
+    {
+        EnsurePersonalityCached();
+        if (PrisonEventExtensions.IsFormalCount(_currentEvent) || _currentEvent == PrisonEventType.LightsOut)
+            return Mathf.Max(arriveDistance * 2.5f, 2.8f);
+        if (_currentEvent == PrisonEventType.FreeTime)
+            return Mathf.Max(_wanderRadius + 4f, 10f);
+        // Meals / work — loiter near the hall/workshop stand.
+        return Mathf.Max(_wanderRadius + 1.5f, 6f);
+    }
+
+    private float GetWanderRadiusForPhase()
+    {
+        EnsurePersonalityCached();
+        if (PrisonEventExtensions.IsFormalCount(_currentEvent) || _currentEvent == PrisonEventType.LightsOut)
+            return Mathf.Clamp(_wanderRadius * 0.25f, 0.8f, 2.2f);
+        if (_currentEvent == PrisonEventType.FreeTime)
+            return _wanderRadius;
+        return _wanderRadius * 0.7f;
+    }
+
+    private void BeginIdleBurst(string reason)
+    {
+        EnsurePersonalityCached();
+        _loiterState = LoiterState.Idle;
+        _holdingAtStand = true;
+        float duration = Random.Range(_minIdleSeconds, _maxIdleSeconds);
+        // Formal counts: stand longer.
+        if (PrisonEventExtensions.IsFormalCount(_currentEvent))
+            duration *= 1.6f;
+        _loiterUntil = Time.unscaledTime + duration;
+        StopAgentAtStand(reason);
+        Dbg($"BeginIdleBurst({reason}): {duration:F1}s idleBias={_idleBias:F2}");
+    }
+
+    private void UpdatePersonalityLoiter()
+    {
+        if (!enablePersonalityLoiter || _movementBlocked || _talkEngaged)
+            return;
+        if (agent == null || !agent.enabled || !_hasResolvedDestination)
+            return;
+
+        EnsurePersonalityCached();
+
+        if (_loiterState == LoiterState.Traveling)
+            return;
+
+        if (_loiterState == LoiterState.Walking)
+        {
+            float rem = agent.remainingDistance;
+            bool arrived = (!agent.pathPending && rem != float.PositiveInfinity && rem <= arriveDistance)
+                           || Vector3.Distance(transform.position, agent.destination) <= arriveDistance * 1.4f;
+            if (arrived || (!agent.pathPending && !agent.hasPath && agent.velocity.magnitude < 0.05f))
+                BeginIdleBurst("wander-arrived");
+            return;
+        }
+
+        // Idle — when timer elapses, either wander or idle again (personality-weighted).
+        if (Time.unscaledTime < _loiterUntil)
+            return;
+
+        float wanderChance = 1f - _idleBias;
+        if (_currentEvent == PrisonEventType.FreeTime)
+            wanderChance = Mathf.Max(wanderChance, 0.55f);
+        else if (PrisonEventExtensions.IsFormalCount(_currentEvent) || _currentEvent == PrisonEventType.LightsOut)
+            wanderChance *= 0.35f; // mostly stand during counts, occasional shift
+        else
+            wanderChance = Mathf.Lerp(0.25f, wanderChance, 0.85f);
+
+        if (Random.value <= wanderChance && TryStartWander())
+            return;
+
+        BeginIdleBurst("idle-again");
+    }
+
+    private bool TryStartWander()
+    {
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh)
+            return false;
+
+        float radius = GetWanderRadiusForPhase();
+        Vector3 home = _resolvedDestination;
+        Vector2 disk = Random.insideUnitCircle * radius;
+        Vector3 candidate = home + new Vector3(disk.x, 0f, disk.y);
+
+        if (!NavMesh.SamplePosition(candidate, out NavMeshHit hit, Mathf.Max(2f, radius * 0.5f), NavMesh.AllAreas))
+            return false;
+
+        // Stay inside presence so mandatory phases remain compliant.
+        if (Vector3.Distance(hit.position, home) > GetPresenceRadius() * 0.95f)
+            return false;
+
+        _loiterState = LoiterState.Walking;
+        _holdingAtStand = false;
+        agent.isStopped = false;
+        agent.SetDestination(hit.position);
+        // Cap walk time so a bad path doesn't stall forever.
+        _loiterUntil = Time.unscaledTime + 12f;
+        Dbg($"Wander to {hit.position} (r={radius:F1})");
+        return true;
     }
 
     private void LogComplianceTransition(bool previousCompliant, string detail)
@@ -380,9 +622,76 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
     public void SetMovementBlocked(bool blocked)
     {
         Dbg($"SetMovementBlocked({blocked})");
+        if (blocked)
+            SetTalkEngaged(false, null);
         _movementBlocked = blocked;
         if (agent != null)
             agent.enabled = !blocked;
+    }
+
+    /// <summary>
+    /// Soft-pause for Talk: stop and face the player unless mandatory travel to a required stand is in progress.
+    /// Does not use SetMovementBlocked (arrest semantics).
+    /// </summary>
+    public void SetTalkEngaged(bool engaged, Transform faceTarget)
+    {
+        if (engaged)
+        {
+            if (PrisonEventRules.IsMandatory(_currentEvent) && !_isAtRequiredLocation)
+            {
+                Dbg("SetTalkEngaged skipped — mandatory travel to required stand");
+                return;
+            }
+
+            _talkEngaged = true;
+            _talkFaceTarget = faceTarget;
+            ResetLoiter("talk-open");
+            if (agent != null && agent.enabled && agent.isOnNavMesh)
+            {
+                _agentUpdateRotationBeforeTalk = agent.updateRotation;
+                agent.updateRotation = false;
+                agent.isStopped = true;
+                agent.ResetPath();
+                agent.velocity = Vector3.zero;
+            }
+
+            Dbg("SetTalkEngaged(true)");
+            return;
+        }
+
+        if (!_talkEngaged)
+            return;
+
+        _talkEngaged = false;
+        _talkFaceTarget = null;
+        if (agent != null && agent.enabled)
+        {
+            agent.updateRotation = _agentUpdateRotationBeforeTalk;
+            agent.isStopped = false;
+        }
+
+        _holdingAtStand = false;
+        Dbg("SetTalkEngaged(false)");
+    }
+
+    private void UpdateTalkFacing()
+    {
+        if (_talkFaceTarget == null)
+            return;
+
+        Vector3 to = _talkFaceTarget.position - transform.position;
+        to.y = 0f;
+        if (to.sqrMagnitude < 0.001f)
+            return;
+
+        Quaternion target = Quaternion.LookRotation(to.normalized, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.unscaledDeltaTime * 8f);
+    }
+
+    private void LateUpdate()
+    {
+        if (_talkEngaged)
+            UpdateTalkFacing();
     }
 
     public void SendToCell(int targetCellIndex = -1)
@@ -396,23 +705,30 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
             return;
         }
 
-        Dbg($"SendToCell: teleporting to cell spawn {cell.SpawnPosition}");
+        Vector3 dest = cell.SpawnPosition;
+        if (PrisonLocationRegistry.Instance != null &&
+            PrisonLocationRegistry.Instance.TryGetCellFloorStand(cell, out var floorStand))
+            dest = floorStand;
+
+        Dbg($"SendToCell: teleporting to cell floor stand {dest}");
         SetMovementBlocked(true);
 
         if (agent != null)
         {
             agent.enabled = false;
-            transform.position = cell.SpawnPosition;
+            transform.position = dest;
             transform.rotation = cell.SpawnRotation;
             agent.enabled = true;
         }
         else
         {
-            transform.position = cell.SpawnPosition;
+            transform.position = dest;
             transform.rotation = cell.SpawnRotation;
         }
 
-        Invoke(nameof(ReleaseMovement), 1f);
+        Invoke(nameof(ReleaseMovement), 1.25f);
+        _postEscortImmunityUntil = Time.unscaledTime + Mathf.Max(5f, postEscortImmunitySeconds);
+        _isCompliant = true;
     }
 
     private void ReleaseMovement()

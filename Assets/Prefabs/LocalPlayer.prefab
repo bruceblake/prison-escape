@@ -83,8 +83,8 @@ MonoBehaviour:
   controller: {fileID: 1468575198990667097}
   camProxy: {fileID: 6221457368755662370}
   gravity: -9.81
-  movementSpeed: 5
-  jumpHeight: 2
+  movementSpeed: 3.2
+  jumpHeight: 0.45
   serverPositionPrefab: {fileID: 2754182298542870298, guid: 2e4ed5b1b12f3034e975ac14cfc1d7fa, type: 3}
   hitmarker: {fileID: 2625079553280895051, guid: c14645d4c8c2bef4983972a9564eb417, type: 3}
 --- !u!114 &6896891464462466355

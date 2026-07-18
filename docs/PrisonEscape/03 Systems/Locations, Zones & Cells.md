@@ -17,7 +17,7 @@ The **Workshop** zone is wired into the registry for the `WorkProgram` blocks ([
 | Phase | Stand point |
 |---|---|
 | Morning Count (`MorningRollCall` / legacy `RollCall`) | Cell roll-call stand point (fallback: spawn, then random roll-call area) |
-| Night Count (`NightRollCall`) / Lights Out | Cell spawn point |
+| Night Count (`NightRollCall`) / Lights Out | Cell **floor stand beside bed** (runtime offset from bed toward door; not mattress center) |
 | Breakfast / Lunch / Dinner | Random cafeteria stand point |
 | Free Time (movement + yard & recreation) | Random yard stand point (fallback: cafeteria) |
 | Work / Education / Programs (`WorkProgram`) | Random Workshop stand point (fallback: cafeteria, then yard) |
@@ -29,8 +29,8 @@ Per-cell serializable transforms + radius:
 
 | Field | Default | Use |
 |---|---|---|
-| `spawnPoint` | — | Spawn / night destination |
-| `rollCallStandPoint` | — | Morning line-up position |
+| `spawnPoint` | — | Spawn / night destination (installer: foot of bed toward door; runtime offset if still on mattress) |
+| `rollCallStandPoint` | — | Morning line-up position (~1 m inside cell from door) |
 | `nightCheckApproachPoint` | falls back to roll-call → spawn | Guard door approach at night |
 | `bedPresenceCenter` | falls back to spawn | Night bed-check overlap center |
 | `shakedownSweepCenter` | falls back to bed → spawn | Morning sweep center |
@@ -40,8 +40,9 @@ Per-cell serializable transforms + radius:
 
 Barred doors slide with the schedule:
 
-- **Open during** movement blocks: Breakfast, Lunch, Dinner, Free Time, `WorkProgram`
-- **Closed during** night lock-in **and cell counts**: `LightsOut`, `NightRollCall`, `MorningRollCall` / legacy `RollCall`, `MiddayCount`, `EveningCount` — doors unlock when Breakfast begins after morning count
+- **Open during** movement blocks: Breakfast, Lunch, Dinner, Free Time, `WorkProgram`, **`MiddayCount`**, **`EveningCount`** (presence counts — inmates must walk into their cells; doors stay open through the count and into the next phase)
+- **Closed during** night lock-in **and morning roll call / shakedown**: `LightsOut`, `NightRollCall`, `MorningRollCall` / legacy `RollCall`
+- **Morning count** — each cell's door **opens as soon as that cell's shakedown is marked complete** (`CellDoorRegistry` forces open on `CellDoorController`); remaining schedule-closed cells stay locked until checked. When Breakfast begins, forced overrides clear and all doors follow the normal open phase.
 - **Pose** — BlenderKit facility doors keep their **authored FBX local TRS** (`RestoreAuthoredDoorPose`). Shell-center `AlignDoorToCellWall` is legacy/tests only — it drifted doors one bay and flipped yaw.
 - **Closed pose** is baked by the installer/fixer and marked authored so Play Mode `Start` does **not** re-capture a left-open door as closed (that bug blocked cell exits).
 - **Prison → Fix Cell Doors & Waypoints** restores authored poses, wires controllers (~1.35 m slide, capped ~1.6 m), creates missing stand points, snaps patrol waypoints, re-wires the registry, and saves.

@@ -35,27 +35,27 @@ namespace Prison.Tests
         }
 
         // ---------------------------------------------------------------
-        // IsOpenPhase — open phases (movement blocks only)
+        // IsOpenPhase — open phases (movement + presence counts)
         // ---------------------------------------------------------------
         [TestCase(PrisonEventType.Breakfast)]
         [TestCase(PrisonEventType.Lunch)]
         [TestCase(PrisonEventType.Dinner)]
         [TestCase(PrisonEventType.FreeTime)]
         [TestCase(PrisonEventType.WorkProgram)]
+        [TestCase(PrisonEventType.MiddayCount)]
+        [TestCase(PrisonEventType.EveningCount)]
         public void IsOpenPhase_OpenPhases_ReturnTrue(PrisonEventType evt)
         {
             Assert.IsTrue(CellDoorController.IsOpenPhase(evt), $"{evt} should be an OPEN phase");
         }
 
         // ---------------------------------------------------------------
-        // IsOpenPhase — closed phases (night + cell counts)
+        // IsOpenPhase — closed phases (night + morning roll call)
         // ---------------------------------------------------------------
         [TestCase(PrisonEventType.LightsOut)]
         [TestCase(PrisonEventType.NightRollCall)]
         [TestCase(PrisonEventType.MorningRollCall)]
         [TestCase(PrisonEventType.RollCall)]
-        [TestCase(PrisonEventType.MiddayCount)]
-        [TestCase(PrisonEventType.EveningCount)]
         public void IsOpenPhase_ClosedPhases_ReturnFalse(PrisonEventType evt)
         {
             Assert.IsFalse(CellDoorController.IsOpenPhase(evt), $"{evt} should be a CLOSED phase");
@@ -71,7 +71,9 @@ namespace Prison.Tests
                     evt == PrisonEventType.Lunch ||
                     evt == PrisonEventType.Dinner ||
                     evt == PrisonEventType.FreeTime ||
-                    evt == PrisonEventType.WorkProgram;
+                    evt == PrisonEventType.WorkProgram ||
+                    evt == PrisonEventType.MiddayCount ||
+                    evt == PrisonEventType.EveningCount;
 
                 Assert.AreEqual(expectedOpen, CellDoorController.IsOpenPhase(evt),
                     $"IsOpenPhase mismatch for {evt}");
@@ -83,6 +85,13 @@ namespace Prison.Tests
         {
             Assert.IsFalse(CellDoorController.IsOpenPhase(PrisonEventType.LightsOut));
             Assert.IsFalse(CellDoorController.IsOpenPhase(PrisonEventType.NightRollCall));
+        }
+
+        [Test]
+        public void IsOpenPhase_MiddayEveningCounts_StayOpenForCellEntry()
+        {
+            Assert.IsTrue(CellDoorController.IsOpenPhase(PrisonEventType.MiddayCount));
+            Assert.IsTrue(CellDoorController.IsOpenPhase(PrisonEventType.EveningCount));
         }
 
         [Test]
@@ -120,16 +129,38 @@ namespace Prison.Tests
         }
 
         [Test]
-        public void GetTargetLocalPosition_AllPhases_MatchIsOpenPhase()
+        public void GetTargetLocalPosition_ForcedOpen_OverridesClosedPhase()
         {
-            _door.closedLocalPosition = new Vector3(5f, 0f, 1f);
+            _door.closedLocalPosition = new Vector3(1f, 2f, 3f);
             _door.openOffset = new Vector3(0f, 0f, 1.35f);
-            foreach (PrisonEventType evt in Enum.GetValues(typeof(PrisonEventType)))
+            _door.SetForcedOpen(true);
+            AssertVec(_door.OpenLocalPosition, _door.GetTargetLocalPosition(PrisonEventType.MorningRollCall));
+        }
+
+        [Test]
+        public void ShouldBeOpen_ForcedOpen_WinsOverMorningRollCall()
+        {
+            _door.SetForcedOpen(true);
+            Assert.IsTrue(_door.ShouldBeOpen(PrisonEventType.MorningRollCall));
+            _door.SetForcedOpen(false);
+            Assert.IsFalse(_door.ShouldBeOpen(PrisonEventType.MorningRollCall));
+        }
+
+        [Test]
+        public void ClearAllForcedOpens_ResetsEveryDoor()
+        {
+            var second = new GameObject("SecondDoor").AddComponent<CellDoorController>();
+            try
             {
-                Vector3 expected = CellDoorController.IsOpenPhase(evt)
-                    ? _door.OpenLocalPosition
-                    : _door.closedLocalPosition;
-                AssertVec(expected, _door.GetTargetLocalPosition(evt));
+                _door.SetForcedOpen(true);
+                second.SetForcedOpen(true);
+                CellDoorController.ClearAllForcedOpens();
+                Assert.IsFalse(_door.IsForcedOpen);
+                Assert.IsFalse(second.IsForcedOpen);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(second.gameObject);
             }
         }
 

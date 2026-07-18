@@ -10,6 +10,11 @@ namespace Prison
         bool IsRollCallShakedownComplete { get; }
         /// <summary>True while this inmate's movement input is frozen (e.g. held at a stand point by guard/schedule logic).</summary>
         bool MovementBlocked { get; }
+        /// <summary>
+        /// After an escort dump-to-cell, true until the immunity window expires so guards
+        /// do not immediately re-arrest for still being off-schedule.
+        /// </summary>
+        bool HasPostEscortImmunity { get; }
         /// <summary>Index of the cell this inmate is assigned to; used to key roll-call shakedown completion per cell.</summary>
         int CellIndex { get; }
         /// <summary>Freezes or releases this inmate's movement input.</summary>

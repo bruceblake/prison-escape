@@ -41,16 +41,16 @@ Map of every implemented system. One note per system in this folder — keep it 
 | Note | One-liner | Test status |
 |---|---|---|
 | [[Time & Schedule]] | The daily phase clock everything reacts to — **realistic 13-phase count-driven day (implemented 7/15)** | 🟡 rules tested |
-| [[Locations, Zones & Cells]] | Where inmates must be; cells and doors | 🟡 doors ✅ |
-| [[Roll Call & Shakedown]] | Morning sweep, confiscation, early release | 🟡 confiscation ✅ |
-| [[Guard AI]] | Patrol / detection / escort / night checks — facility difficulty + career detection mult wired | ⚪ polish |
-| [[Prisoner AI & NPCs]] | NPC routines, player compliance; social identities via [[Social & Reputation]] | ⚪ polish |
+| [[Locations, Zones & Cells]] | Where inmates must be; cells, doors, floor stands | 🟡 doors ✅ · midday/evening open |
+| [[Roll Call & Shakedown]] | Morning sweep (`RollCallOfficer` director), confiscation, per-cell door release | 🟡 confiscation ✅ · officer WIP playtest |
+| [[Guard AI]] | Patrol / detection / escort / night checks — post-escort immunity grace | ⚪ polish |
+| [[Prisoner AI & NPCs]] | NPC personality loiter; Talk soft-stop; mandatory-travel refusal barks | ⚪ polish |
 | [[Social & Reputation]] | **v3 on `dev`**: Respect/Trust, Standing bands, gangs, Talk, dossier, trade/bribes/favors/snitch — design: [[Social Ecosystem & Gangs]] | ✅ core EditMode |
 | [[Security, Heat & Alerts]] | Attention eye + lockdown/suspicion hooks; snitch tips feed shakedowns | ✅ alerts |
 | [[Player & Interaction]] | FPS controls + raycast interactions | ⚪ planned |
 | [[Inventory & Items]] | 6-slot inventory + item taxonomy | ✅ core |
 | [[Crafting]] | 7 recipes → escape tools | ✅ |
-| [[Loot & Economy]] | Weighted loot + **live wallet** (trade / bribes / jobs / favors) | 🟡 weights ✅ |
+| [[Loot & Economy]] | Weighted loot + runtime bootstrap + normalized world pickups + **live wallet** | 🟡 weights ✅ · visibility pass |
 | [[Escape Routes & Mechanics]] | Vents, fake bed, stash + boundary — career path = caught-transfer ([[Prison Career Ladder]]); sandbox = YOU ESCAPED | 🟡 routes partial, win ✅ |
 | [[Multiplayer & Networking]] | Riptide FPS layer, lobby, weapons | ⚪ |
 | [[UI & HUD]] | Routine bar, heat eye, vitals, location, waypoint, notebook, inventory, sentence clock | 🟢 core HUD done |

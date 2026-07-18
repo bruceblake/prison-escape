@@ -2,6 +2,72 @@
 
 Newest first. Log milestones here after each work session (see [[Development Workflow]]).
 
+## 7/17/2026 (night — loot scale + variety)
+
+- **Pickup size** — replaced flat **6×** with bounds-normalized ~**0.4 m** footprint (`FitWorldPickupOnFloor`); bottles no longer tower, small parts stay visible.
+- **Variety** — equalized Plastic Bottle / Rag loot weights; cell-connector cluster mixes yard / kitchen / workshop tables.
+
+## 7/17/2026 (night — Talk refusal barks)
+
+- **Talk gate** — inmates on mandatory travel (`IsBusyForTalk`) and guards when the **player** is schedule-non-compliant refuse Talk: toast bark instead of HUD (`SocialTalkGate`, `DialogueLibrary`). Menu entry points: `PrisonerSocialPresenter` + `SocialInteractionMenu.Open` safety check. See [[Talk Menu & NPC Profile]].
+
+## 7/17/2026 (night — morning roll call officer + cell doors)
+
+- **RollCallOfficer** — immediate kickoff from `BeginPhase`, spawn at player cell connector with NavMesh retries, `GuardShiftController` disabled on spawned officer, slower sweep speed, name label. Fail-soft opens all cell doors after 35s with zero shakedown progress.
+- **Cell doors** — open when inmate reaches roll-call stand (`TryOpenDoorWhenInmateAtStand`); still open per-cell when guard clears shakedown.
+
+## 7/17/2026 (night — midday cell doors)
+
+- **Midday / evening count doors** — cell doors stay **open** during `MiddayCount` and `EveningCount` so inmates can walk into their cells for presence checks (were incorrectly closed until Lunch/Dinner). Morning roll call + night remain closed. See [[Locations, Zones & Cells]] · `PrisonEventExtensions.IsCellCountPhase`.
+
+## 7/17/2026 (night — beds, roll-call officer, Talk pause, loot 6×)
+
+- **Inmates off beds** — night/lights-out + count stands resolve to floor beside bed (`TryGetCellFloorStand`); installer offsets spawn/roll-call away from mattress. Re-run facility rewire to bake anchors permanently.
+- **Morning roll call** — director spawns dedicated `RollCallOfficer` only (no StandardPatrol adoption) with NavMesh fallback chain + warp retries.
+- **Talk** — inmates soft-stop and face player while menu open unless mandatory travel to required stand (`SetTalkEngaged` on `PrisonerAI`).
+- **Loot** — world pickup scale **6×** (was 2.5×). See [[Item Catalog]] · [[Talk Menu & NPC Profile]] · [[Prisoner AI & NPCs]].
+
+## 7/17/2026 (night — loot visibility)
+
+- Loot was already spawning (~500 pickups / 185 nodes) but hard to see: floor snap preferred lowest collider (buried) + tiny BlenderKit props. Fixed `SnapPickupPosition` to prefer NavMesh/near-anchor Y, force FloorY on bootstrap nodes, **2.5×** pickup scale, guaranteed cluster at cell connector. Catalog: **~27** ItemData, **16** in world loot tables. See [[Item Catalog]].
+
+## 7/17/2026 (night — inmate personality loiter)
+
+- **Inmates walk around** — removed morning hard-freeze. After reaching a phase stand, `PrisonerAI` runs a personality loiter loop (idle ↔ wander) from archetype/traits: Loners/Old-Timers idle more; Hustlers/Bruisers roam more; Snitches pace nearby; FreeTime wanders most, formal counts mostly stand with rare shifts. See [[Prisoner AI & NPCs]].
+
+## 7/17/2026 (night — roll-call stop + NPC freeze)
+
+- **Guard walked past cells** — director was warping/`ForceStart` every 1.5s, cancelling every door stop. Now starts once and only restarts if no sweeper is active. Removed 12s fail-soft that opened **only the player door**.
+- Sweeper arrive radius / visit hold increased; occupant clearance optional so visits complete.
+- *(Superseded)* earlier morning NPC freeze — replaced by personality loiter above.
+
+## 7/17/2026 (night — roll-call takeover + player move tune)
+
+- **Morning roll call** — yard patrol no longer claims the sweeper lock; director immediately spawns/warps a `RollCallOfficer` at the cell connector and `ForceStartSweep` takes over. Logs previously showed officer skipped with "another guard is already sweeping."
+- **Player feel** — walk `5 → 3.2`, jump `2 → 0.45` m, sprint mult `2.0 → 1.55` (`LocalPlayer` + `PlayerStatsMath`).
+
+## 7/17/2026 (playtest pass 2 — guard duty, loot density, UI rebuild)
+
+- **Morning guard invisible** — guards had `onDutyDuring` windows that excluded `MorningRollCall` (agent disabled all morning). `GuardShiftController` now forces patrol/shakedown guards on duty during line-up; director spawns a dedicated `RollCallOfficer` at the cell connector if still no progress.
+- **Patrol speed** — `patrolMoveSpeed` **8 → 3.5** (escort stays 4.5).
+- **Talk menu** — **1500×760**, gold top accent + border; layout version auto-rebuilds stale DontDestroyOnLoad instances.
+- **Loot** — bootstrap always rebuilds ~120 nodes, 3 rolls each, ~95–99% chance; deferred spawn after physics init with floor snap.
+
+## 7/17/2026 (playtest fixes — roll call, loot density, escort pace)
+
+- **Morning sweeper** — guard prefab used `InsideCellInterior` clearance while inmates stand at the door; fixed to `AtRollCallStand`. Player cell visited first; director repositions stuck guard to cell connector; fail-soft at 12s.
+- **Talk menu** — panel **1320×640** (taller/wider).
+- **World loot** — dense grid spawns (~90+ nodes), 2 rolls/node, higher spawn chances; bootstrap replaces sparse partial setups.
+- **Guard escort** — `escortMoveSpeed` **24 → 4.5** (walk pace, not sprint).
+
+## 7/17/2026 (compile + Talk UI + morning doors + world loot)
+
+- **Compile fix** — `GuardTrustMath.cs` re-encoded UTF-8 (was UTF-16; Unity ignored → CS0234 in `GuardDetection`).
+- **Talk menu chrome** — panel **1120×520**; dimmed backdrop click, header **X**, Escape, and interact-again all close; Threat/Intimidate tab more readable.
+- **Morning roll call** — guard sweeper kickoff + fail-soft director; **per-cell door opens** when shakedown marks complete (`CellDoorRegistry` + `CellDoorController.SetForcedOpen`); forced overrides clear when count ends.
+- **World loot** — six `LootTable` assets in `Resources/LootTables/`; `WorldLootBootstrap` places ~40 `ItemSpawnNode`s from layout anchors when scene has none; `GameManager` calls bootstrap before `PopulateWorldSpawns`. Run **Prison → Setup Items & World Loot** in Unity (scene closed) to bake nodes into PrisonLevel1.
+- **Playtest:** Talk close paths; morning count guard walk + your door opening early; floor pickups in corridor/yard/workshop.
+
 ## 7/17/2026 (gap audit — economy mults + guard trust live)
 
 - **Career economy multipliers consumed** — `tradePriceMult` / `bribeCostMult` / `cashIncomeMult` now hit gameplay via `TradeMath.ApplyFacilityPriceMult`, favor payouts, and workshop stipends (PR #93 + #92 menu wiring). See [[Loot & Economy]] · [[Prison Career Ladder]].

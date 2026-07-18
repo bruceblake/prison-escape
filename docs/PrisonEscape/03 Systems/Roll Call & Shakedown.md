@@ -24,7 +24,8 @@ Everything stops for a headcount. The prison day is anchored by **4 formal count
    - sweeps the cell interior sphere and **destroys illegal world pickups**
    - marks the cell shakedown-complete
 4. When **all inmates' cells are cleared** → schedule advances early (`AdvanceMorningRollCallWhenComplete`); safety cap **600 s** real time
-5. Cleared inmates are **released early** — they stay compliant while walking to the next phase destination
+5. Each cleared cell's **door opens immediately** (`CellDoorRegistry` + forced open on `CellDoorController`) so inmates can leave without waiting for Breakfast
+6. Cleared inmates are **released early** — they stay compliant while walking to the next phase destination
 
 ## Confiscation rules
 
@@ -66,6 +67,8 @@ Night count / lights out uses **bed presence verification** by night-verifier gu
 | File | Role |
 |---|---|
 | `Assets/Scripts/Shared/Prison/MorningRollCallTracker.cs` | Per-cell completion set + phase gate |
+| `Assets/Scripts/Shared/Prison/CellDoorRegistry.cs` | Maps cell index → door; opens on shakedown complete |
+| `Assets/Scripts/Shared/Prison/MorningRollCallSweeperDirector.cs` | Kickoff + fail-soft if guard never arrives |
 | `Assets/Scripts/Singleplayer/AI/MorningShakedownSweeper.cs` | The sweep coroutine |
 | `Assets/Scripts/Shared/Prison/PrisonerPresence.cs` / `IPrisoner.cs` | Presence contract |
 | `Assets/Scripts/Shared/Prison/FormalCountMonitor.cs` | Midday/evening count → lockdown on mismatch |

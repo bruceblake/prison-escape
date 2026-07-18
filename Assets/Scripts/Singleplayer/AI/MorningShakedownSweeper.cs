@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Prison;
@@ -27,13 +28,13 @@ public class MorningShakedownSweeper : MonoBehaviour
     [Tooltip("NavMeshAgent speed while sweeping cells (0 = leave prefab unchanged).")]
     public float sweeperMoveSpeed = 7f;
     [Tooltip("Wait after roll call starts so inmates can reach their stand points.")]
-    [Min(0f)] public float delayBeforeFirstCellSeconds = 2f;
+    [Min(0f)] public float delayBeforeFirstCellSeconds = 0.75f;
 
     [Header("Visit each inmate")]
     [Tooltip("Stop at door first, then path to interior sweep center. Turn off for direct interior sweep only.")]
     public bool visitRollCallStandFirst = true;
     [Tooltip("If set, the cell is not marked cleared unless a registered occupant satisfies Occupant clearance mode.")]
-    public bool requireOccupantAtStandForClearance = true;
+    public bool requireOccupantAtStandForClearance = false;
 
     [Tooltip("Where the inmate must be when the guard finishes the visit (if requirement enabled).")]
     public OccupantRollCallClearanceMode occupantClearanceMode = OccupantRollCallClearanceMode.AtRollCallStand;
@@ -49,14 +50,14 @@ public class MorningShakedownSweeper : MonoBehaviour
     public bool pathIntoCellAfterDoorStop = false;
 
     [Tooltip("Seconds the guard holds position at the door (and scales interior dwell slightly when Path Into Cell is on).")]
-    [Min(0f)] public float visitStandPointSeconds = 1.75f;
+    [Min(0f)] public float visitStandPointSeconds = 2.25f;
 
-    public float arriveDistance = 1.25f;
+    public float arriveDistance = 2.25f;
     [Min(0f)] public float pauseBetweenCells = 0.5f;
     [Tooltip("After a full pass, wait before retrying uncleared cells (when occupant clearance is enforced).")]
     [Min(0f)] public float pauseBetweenSweepLapsSeconds = 2f;
     [Tooltip("Max seconds to wait for pathing to each stop.")]
-    public float maxTravelWaitSeconds = 14f;
+    public float maxTravelWaitSeconds = 22f;
     [Tooltip("NavMesh sample radius when resolving stand / sweep points.")]
     public float navMeshSampleRadius = 4f;
 
@@ -68,6 +69,8 @@ public class MorningShakedownSweeper : MonoBehaviour
     public bool debugLogs;
 
     private Coroutine _sweepRoutine;
+
+    public bool IsSweeping => _sweepRoutine != null;
 
     private void Awake()
     {
@@ -103,6 +106,31 @@ public class MorningShakedownSweeper : MonoBehaviour
             StopSweep();
     }
 
+    /// <summary>Stops this guard's sweep coroutine and clears the global active lock if we hold it.</summary>
+    public void ForceStopSweep()
+    {
+        StopSweep();
+    }
+
+    /// <summary>
+    /// Starts the morning sweep, taking over from any other active sweeper.
+    /// If this guard is already sweeping, does nothing (avoids cancelling mid-cell stops).
+    /// </summary>
+    public void ForceStartSweepForCurrentPhase()
+    {
+        if (_sweepRoutine != null)
+            return;
+
+        if (_activeSweeper != null && _activeSweeper != this)
+        {
+            Debug.Log($"[MorningShakedownSweeper] {name}: taking over sweep from {_activeSweeper.name}.", this);
+            _activeSweeper.ForceStopSweep();
+        }
+
+        _activeSweeper = null;
+        TryStartSweepForCurrentPhase();
+    }
+
     /// <summary>Call when this component is enabled mid-phase (e.g. patrol guard switches to sweep duty).</summary>
     public void TryStartSweepForCurrentPhase()
     {
@@ -113,9 +141,30 @@ public class MorningShakedownSweeper : MonoBehaviour
         if (_sweepRoutine != null) return;
         if (_activeSweeper != null && _activeSweeper != this)
         {
-            if (debugLogs)
-                Debug.Log($"[MorningShakedownSweeper] {name}: another guard is already sweeping — skipped.", this);
-            return;
+            if (!_activeSweeper.IsSweeping)
+                _activeSweeper = null;
+            else
+            {
+                if (debugLogs)
+                    Debug.Log($"[MorningShakedownSweeper] {name}: another guard is already sweeping — skipped.", this);
+                return;
+            }
+        }
+
+        if (agent == null) agent = GetComponent<NavMeshAgent>();
+        ApplySweeperSpeed();
+
+        if (!EnsureAgentOnNavMesh())
+        {
+            if (debugLogs) Debug.LogWarning($"[MorningShakedownSweeper] {name}: not on NavMesh at sweep start — warping to cell connector.", this);
+            Vector3 anchor = PrisonLayoutAnchors.CellSouthConnectorCenter;
+            if (NavMesh.SamplePosition(anchor, out NavMeshHit hit, 12f, NavMesh.AllAreas))
+            {
+                if (agent != null && agent.enabled)
+                    agent.Warp(hit.position);
+                else
+                    transform.position = hit.position;
+            }
         }
 
         _activeSweeper = this;
@@ -151,12 +200,27 @@ public class MorningShakedownSweeper : MonoBehaviour
 
         if (!EnsureAgentOnNavMesh())
         {
-            if (debugLogs) Debug.LogWarning($"[MorningShakedownSweeper] {name}: not on NavMesh — cannot sweep.", this);
-            FinishSweep();
-            yield break;
+            if (debugLogs) Debug.LogWarning($"[MorningShakedownSweeper] {name}: not on NavMesh at sweep start — retrying placement.", this);
+            Vector3 anchor = PrisonLayoutAnchors.CellSouthConnectorCenter;
+            if (NavMesh.SamplePosition(anchor, out NavMeshHit hit, 20f, NavMesh.AllAreas))
+            {
+                if (agent != null && agent.enabled)
+                    agent.Warp(hit.position);
+                else
+                    transform.position = hit.position;
+            }
+
+            if (!EnsureAgentOnNavMesh())
+            {
+                if (debugLogs) Debug.LogWarning($"[MorningShakedownSweeper] {name}: still off NavMesh — cannot sweep.", this);
+                FinishSweep();
+                yield break;
+            }
         }
 
         agent.isStopped = false;
+
+        int[] visitOrder = BuildCellVisitOrder(reg);
 
         while (true)
         {
@@ -169,8 +233,9 @@ public class MorningShakedownSweeper : MonoBehaviour
             if (rollTracker != null && rollTracker.AreAllInmatesShakedownComplete())
                 break;
 
-            for (int i = 0; i < reg.CellCount; i++)
+            for (int order = 0; order < visitOrder.Length; order++)
             {
+                int i = visitOrder[order];
                 var tm = PrisonTimeManager.Instance;
                 if (tm == null || !PrisonEventExtensions.IsMorningLineUp(tm.CurrentEvent))
                     break;
@@ -352,16 +417,41 @@ public class MorningShakedownSweeper : MonoBehaviour
             agent.isStopped = false;
     }
 
+    private static int[] BuildCellVisitOrder(PrisonLocationRegistry reg)
+    {
+        int count = reg.CellCount;
+        if (count <= 0) return System.Array.Empty<int>();
+
+        int playerCell = 0;
+        var player = Object.FindAnyObjectByType<PrisonerController>();
+        if (player != null)
+            playerCell = Mathf.Clamp(player.CellIndex, 0, count - 1);
+
+        var order = new List<int>(count) { playerCell };
+        for (int i = 0; i < count; i++)
+        {
+            if (i != playerCell)
+                order.Add(i);
+        }
+
+        return order.ToArray();
+    }
+
     private IEnumerator TravelTo(Vector3 worldDestination, System.Action<bool> onComplete)
     {
         bool success = false;
-        onComplete?.Invoke(false);
 
         if (agent == null)
+        {
+            onComplete?.Invoke(false);
             yield break;
+        }
 
         if (!EnsureAgentOnNavMesh())
+        {
+            onComplete?.Invoke(false);
             yield break;
+        }
 
         if (!TryResolveNavMeshDestination(worldDestination, out Vector3 dest))
             dest = worldDestination;
@@ -412,10 +502,15 @@ public class MorningShakedownSweeper : MonoBehaviour
         if (agent.isOnNavMesh)
             return true;
 
-        if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, navMeshSampleRadius, NavMesh.AllAreas))
+        float[] radii = { navMeshSampleRadius, navMeshSampleRadius * 2f, 12f, 20f };
+        for (int i = 0; i < radii.Length; i++)
         {
-            agent.Warp(hit.position);
-            return agent.isOnNavMesh;
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, radii[i], NavMesh.AllAreas))
+            {
+                agent.Warp(hit.position);
+                if (agent.isOnNavMesh)
+                    return true;
+            }
         }
 
         return false;

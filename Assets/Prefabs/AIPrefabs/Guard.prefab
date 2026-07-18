@@ -81,13 +81,13 @@ MonoBehaviour:
   patrolWaypoints:
   - {fileID: 0}
   waypointArriveDistance: 1.5
-  patrolMoveSpeed: 8
-  escortMoveSpeed: 24
-  escortSpeedMultiplier: 2.75
+  patrolMoveSpeed: 3.5
+  escortMoveSpeed: 4.5
+  escortSpeedMultiplier: 1.25
   turnSpeed: 720
-  escortTurnSpeed: 960
+  escortTurnSpeed: 360
   acceleration: 45
-  escortAcceleration: 120
+  escortAcceleration: 24
   arrestDistance: 2
   cellArriveDistance: 2
   prisonerCellArriveDistance: 4
@@ -152,24 +152,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MorningShakedownSweeper
   agent: {fileID: 0}
   sweeperMoveSpeed: 7
-  delayBeforeFirstCellSeconds: 2
+  delayBeforeFirstCellSeconds: 0.75
   visitRollCallStandFirst: 1
-  requireOccupantAtStandForClearance: 1
-  occupantClearanceMode: 1
+  requireOccupantAtStandForClearance: 0
+  occupantClearanceMode: 0
   clearCellsWithNoRegisteredOccupant: 1
   occupantStandClearanceDistance: 4
   interiorClearanceRadiusMultiplier: 1
   pathIntoCellAfterDoorStop: 0
-  visitStandPointSeconds: 1.75
-  arriveDistance: 1.25
-  pauseBetweenCells: 0.4
+  visitStandPointSeconds: 2.25
+  arriveDistance: 2.25
+  pauseBetweenCells: 0.75
   pauseBetweenSweepLapsSeconds: 2
-  maxTravelWaitSeconds: 14
-  navMeshSampleRadius: 4
+  maxTravelWaitSeconds: 22
+  navMeshSampleRadius: 6
   sweepLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  debugLogs: 0
+  debugLogs: 1
 --- !u!114 &3237987355194730777
 MonoBehaviour:
   m_ObjectHideFlags: 0

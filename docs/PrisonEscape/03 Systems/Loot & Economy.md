@@ -17,13 +17,13 @@ Weighted random: final weight = rarity base × item `weightMultiplier` (min 0.01
 
 | System | Behavior | Status |
 |---|---|---|
-| `ItemSpawnNode` | `GameManager.PopulateWorldSpawns` rolls per node (`spawnChance` default 0.5) → instantiate `worldPrefab` as pickup | Working; **nodes need placing in the level** |
+| `ItemSpawnNode` | `GameManager.PopulateWorldSpawns` rolls per node (`spawnChance` × career abundance) → instantiate `worldPrefab`, normalized via `SpawnPlacementUtility.FitWorldPickupOnFloor` (~0.4 m footprint) | ✅ Live — runtime `WorldLootBootstrap` + scene `WorldSpawns` nodes (**Prison → Setup Items & World Loot** to bake scene markers) |
 | `WorldContainer` | Rolls 1–3 items into a browse list | ⚠️ Search shows names but **doesn't transfer to inventory** yet |
 | `ContrabandSpawner` (legacy) | 6 items at random points via `ItemType` enum → prefab map | Legacy path |
 
 World seed: `GameManager.worldSeed` (or career visit seed) seeds `Random` before spawns — same seed = same loot layout. Facility loot-abundance multiplier applies on career runs.
 
-> ⚠️ **No `LootTable` ScriptableObject assets exist yet** — the type is ready; tables are authored on scene nodes. Creating proper table assets per room type is content work tied to escape-route pacing.
+**Loot tables** — six room pools: `Assets/Resources/LootTables/` (runtime load for `WorldLootBootstrap`) and mirrored under `Assets/ScriptableObjects/LootTables/` (editor setup runner). Pools: Common, Yard, Kitchen, Workshop, Laundry, RareHidden — weights 60/25/10/5 via `LootTable.GetRarityBaseWeight` × per-item `weightMultiplier`.
 
 ## Economy (`PlayerWallet`) — live on `dev`
 
@@ -50,7 +50,7 @@ Design detail (prices, stock refresh, bribe tiers): [[Social Ecosystem & Gangs]]
 
 | File | Role |
 |---|---|
-| `Assets/Scripts/Shared/Prison/LootTable.cs` / `ItemSpawnNode.cs` / `WorldContainer.cs` | Loot |
+| `Assets/Scripts/Shared/Prison/LootTable.cs` / `ItemSpawnNode.cs` / `WorldLootBootstrap.cs` / `SpawnPlacementUtility.cs` | Loot spawn + floor snap + pickup scale |
 | `Assets/Scripts/Singleplayer/Items/ContrabandSpawner.cs` | Legacy spawner |
 | `Assets/Scripts/Shared/Prison/PlayerWallet.cs` | Cash balance |
 | `Assets/Scripts/Shared/Social/TradingService.cs` / `TradeMath.cs` | Trade stock + pricing |

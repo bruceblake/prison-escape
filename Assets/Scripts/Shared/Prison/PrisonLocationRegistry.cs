@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Prison
 {
     public class PrisonLocationRegistry : MonoBehaviour
     {
+        private const float BedStandOffsetMeters = 1.1f;
+        private const float BedCenterMatchEpsilon = 0.55f;
+
         private static PrisonLocationRegistry _instance;
         public static PrisonLocationRegistry Instance
         {
@@ -157,8 +161,11 @@ namespace Prison
                     break;
                 case PrisonEventType.NightRollCall:
                 case PrisonEventType.LightsOut:
+                {
                     cell = GetCell(cellIndex);
-                    return cell?.spawnPoint;
+                    if (cell == null) return null;
+                    return cell.spawnPoint;
+                }
                 case PrisonEventType.Breakfast:
                 case PrisonEventType.Lunch:
                 case PrisonEventType.Dinner:
@@ -200,11 +207,8 @@ namespace Prison
                 case PrisonEventType.EveningCount:
                 {
                     var cell = GetCell(cellIndex);
-                    if (cell != null && (cell.rollCallStandPoint != null || cell.spawnPoint != null))
-                    {
-                        worldPos = cell.RollCallPosition;
+                    if (cell != null && TryGetCountStandPosition(cell, out worldPos))
                         return true;
-                    }
                     zone = rollCallArea;
                     break;
                 }
@@ -213,14 +217,69 @@ namespace Prison
                 {
                     var cell = GetCell(cellIndex);
                     if (cell == null) return false;
-                    worldPos = cell.SpawnPosition;
-                    return true;
+                    return TryGetCellFloorStand(cell, out worldPos);
                 }
             }
 
             if (zone == null) return false;
             worldPos = zone.GetSpreadStandPosition(cellIndex);
             return true;
+        }
+
+        /// <summary>Floor stand beside the bed (toward the door), not on the mattress. Used for night + spawn teleports.</summary>
+        public bool TryGetCellFloorStand(CellData cell, out Vector3 worldPos)
+        {
+            worldPos = Vector3.zero;
+            if (cell == null) return false;
+
+            Vector3 bed = cell.BedPresenceWorldCenter;
+            Vector3 door = cell.NightCheckApproachTransform != null
+                ? cell.NightCheckApproachTransform.position
+                : bed;
+
+            Vector3 toBed = bed - door;
+            toBed.y = 0f;
+            if (toBed.sqrMagnitude < 0.04f)
+                toBed = Vector3.forward;
+            else
+                toBed.Normalize();
+
+            Vector3 stand = bed - toBed * BedStandOffsetMeters;
+            stand.y = Mathf.Max(PrisonLayoutAnchors.FloorY, bed.y);
+
+            if (NavMesh.SamplePosition(stand, out NavMeshHit hit, 2.5f, NavMesh.AllAreas))
+                worldPos = hit.position;
+            else
+                worldPos = stand;
+            return true;
+        }
+
+        private bool TryGetCountStandPosition(CellData cell, out Vector3 worldPos)
+        {
+            worldPos = cell.RollCallPosition;
+            if (cell.rollCallStandPoint == null || IsOnBedCenter(cell, worldPos))
+            {
+                if (TryGetCellFloorStand(cell, out var floor))
+                {
+                    worldPos = floor;
+                    return true;
+                }
+            }
+
+            if (cell.rollCallStandPoint != null || cell.spawnPoint != null)
+                return true;
+
+            return false;
+        }
+
+        private static bool IsOnBedCenter(CellData cell, Vector3 pos)
+        {
+            if (cell == null) return false;
+            Vector3 bed = cell.BedPresenceWorldCenter;
+            float horizontal = Vector3.Distance(
+                new Vector3(pos.x, 0f, pos.z),
+                new Vector3(bed.x, 0f, bed.z));
+            return horizontal <= BedCenterMatchEpsilon;
         }
 
         private void OnDestroy()

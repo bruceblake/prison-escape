@@ -210,8 +210,11 @@ public static class PrisonFacilityInstaller
             intoCell = fbxCell.forward;
         intoCell.Normalize();
 
-        spawnPos = interior;
-        rollCallPos = interior + intoCell * 0.6f;
+        // Spawn / night stand: foot of bed toward the door — not on the mattress.
+        spawnPos = interior - intoCell * 1.1f;
+        spawnPos.y = floorY;
+        // Roll call: ~1 m inside the cell from the door.
+        rollCallPos = doorPos + intoCell * 1.0f;
         rollCallPos.y = floorY;
         nightApproachPos = doorPos - intoCell * 1.2f;
         nightApproachPos.y = floorY;

@@ -15,6 +15,7 @@ namespace Prison.Social
     public class SocialInteractionMenu : MonoBehaviour
     {
         private const int SortOrder = 140;
+        private const int LayoutVersion = 4;
 
         private static SocialInteractionMenu _instance;
 
@@ -24,11 +25,13 @@ namespace Prison.Social
         public static bool IsAnyOpen => _instance != null && _instance._open;
 
         private bool _open;
+        private int _layoutVersion;
         private int _actorId = SocialTuning.NoActor;
         private string _tab = "Talk";
         private string _lastChatLine;
 
         private GameObject _root;
+        private GameObject _backdrop;
         private RectTransform _panel;
         private TMP_Text _headerName;
         private TMP_Text _headerBadge;
@@ -39,11 +42,17 @@ namespace Prison.Social
         private RectTransform _body;
 
         private PrisonerController _playerController;
+        private PrisonerAI _talkingInmate;
 
         // ------------------------------------------------------------------ lifecycle
 
         public static SocialInteractionMenu EnsureInstance()
         {
+            if (_instance != null && _instance._layoutVersion != LayoutVersion)
+            {
+                Destroy(_instance.gameObject);
+                _instance = null;
+            }
             if (_instance != null) return _instance;
             var existing = FindAnyObjectByType<SocialInteractionMenu>();
             if (existing != null) { _instance = existing; return _instance; }
@@ -58,6 +67,18 @@ namespace Prison.Social
         {
             var menu = EnsureInstance();
             if (menu._open && menu._actorId == actorId) { menu.Close(); return; }
+
+            var world = SocialWorld.Instance;
+            if (world != null)
+            {
+                var go = world.GetActorObject(actorId);
+                if (go != null && SocialTalkGate.TryGetRefusal(go, out string refusal))
+                {
+                    SocialToastUI.Show(refusal);
+                    return;
+                }
+            }
+
             menu.OpenInternal(actorId);
         }
 
@@ -98,6 +119,7 @@ namespace Prison.Social
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             LockPlayerMovement(true);
+            SetInmateTalkEngagement(actorId, true);
 
             CheckDeliveryCompletion(world, identity);
 
@@ -117,6 +139,38 @@ namespace Prison.Social
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             LockPlayerMovement(false);
+            SetInmateTalkEngagement(SocialTuning.NoActor, false);
+        }
+
+        private void SetInmateTalkEngagement(int actorId, bool engaged)
+        {
+            if (_talkingInmate != null)
+            {
+                _talkingInmate.SetTalkEngaged(false, null);
+                _talkingInmate = null;
+            }
+
+            if (!engaged || actorId == SocialTuning.NoActor)
+                return;
+
+            var world = SocialWorld.Instance;
+            if (world == null)
+                return;
+
+            var go = world.GetActorObject(actorId);
+            if (go == null)
+                return;
+
+            var inmate = go.GetComponent<PrisonerAI>();
+            if (inmate == null)
+                return;
+
+            if (_playerController == null)
+                _playerController = FindAnyObjectByType<PrisonerController>();
+
+            Transform face = _playerController != null ? _playerController.transform : null;
+            inmate.SetTalkEngaged(true, face);
+            _talkingInmate = inmate;
         }
 
         private void LockPlayerMovement(bool locked)
@@ -147,6 +201,8 @@ namespace Prison.Social
 
         private void Build()
         {
+            _layoutVersion = LayoutVersion;
+
             var canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = SortOrder;
@@ -163,23 +219,58 @@ namespace Prison.Social
             rootRt.offsetMin = Vector2.zero;
             rootRt.offsetMax = Vector2.zero;
 
+            var backdropGo = new GameObject("Backdrop", typeof(RectTransform), typeof(Image), typeof(Button));
+            backdropGo.transform.SetParent(_root.transform, false);
+            var backdropRt = (RectTransform)backdropGo.transform;
+            backdropRt.anchorMin = Vector2.zero;
+            backdropRt.anchorMax = Vector2.one;
+            backdropRt.offsetMin = Vector2.zero;
+            backdropRt.offsetMax = Vector2.zero;
+            var backdropImage = backdropGo.GetComponent<Image>();
+            backdropImage.color = new Color(0f, 0f, 0f, 0.42f);
+            backdropGo.GetComponent<Button>().onClick.AddListener(Close);
+            _backdrop = backdropGo;
+
             var panelGo = new GameObject("Panel", typeof(RectTransform), typeof(Image));
             panelGo.transform.SetParent(_root.transform, false);
             _panel = (RectTransform)panelGo.transform;
             _panel.anchorMin = new Vector2(0.5f, 0f);
             _panel.anchorMax = new Vector2(0.5f, 0f);
             _panel.pivot = new Vector2(0.5f, 0f);
-            _panel.anchoredPosition = new Vector2(0f, 96f);
-            _panel.sizeDelta = new Vector2(860f, 360f);
-            panelGo.GetComponent<Image>().color = new Color(0.05f, 0.06f, 0.08f, 0.94f);
+            _panel.anchoredPosition = new Vector2(0f, 108f);
+            _panel.sizeDelta = new Vector2(1500f, 760f);
+            var panelImage = panelGo.GetComponent<Image>();
+            panelImage.color = new Color(0.07f, 0.09f, 0.12f, 0.97f);
 
-            _headerName = MakeText(_panel, "HeaderName", new Vector2(16f, -12f), new Vector2(560f, 30f), 24f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
-            _headerBadge = MakeText(_panel, "HeaderBadge", new Vector2(-16f, -12f), new Vector2(260f, 30f), 18f, FontStyles.Normal, TextAlignmentOptions.MidlineRight, anchorRight: true);
+            var accentGo = new GameObject("TopAccent", typeof(RectTransform), typeof(Image));
+            accentGo.transform.SetParent(_panel, false);
+            var accentRt = (RectTransform)accentGo.transform;
+            accentRt.anchorMin = new Vector2(0f, 1f);
+            accentRt.anchorMax = new Vector2(1f, 1f);
+            accentRt.pivot = new Vector2(0.5f, 1f);
+            accentRt.anchoredPosition = Vector2.zero;
+            accentRt.sizeDelta = new Vector2(0f, 4f);
+            accentGo.GetComponent<Image>().color = Prison.PrisonUITheme.CautionYellow;
+
+            var borderGo = new GameObject("Border", typeof(RectTransform), typeof(Image));
+            borderGo.transform.SetParent(_panel, false);
+            var borderRt = (RectTransform)borderGo.transform;
+            borderRt.anchorMin = Vector2.zero;
+            borderRt.anchorMax = Vector2.one;
+            borderRt.offsetMin = new Vector2(-2f, -2f);
+            borderRt.offsetMax = new Vector2(2f, 2f);
+            borderGo.GetComponent<Image>().color = new Color(0.22f, 0.26f, 0.30f, 0.85f);
+            borderGo.transform.SetAsFirstSibling();
+
+            _headerName = MakeText(_panel, "HeaderName", new Vector2(28f, -18f), new Vector2(820f, 40f), 32f, FontStyles.Bold, TextAlignmentOptions.MidlineLeft);
+            _headerBadge = MakeText(_panel, "HeaderBadge", new Vector2(-64f, -18f), new Vector2(360f, 40f), 22f, FontStyles.Normal, TextAlignmentOptions.MidlineRight, anchorRight: true);
             _headerBadge.color = Prison.PrisonUITheme.ConcreteGrey;
 
-            _trustBar = MakeText(_panel, "TrustBar", new Vector2(16f, -46f), new Vector2(400f, 24f), 17f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            _respectBar = MakeText(_panel, "RespectBar", new Vector2(430f, -46f), new Vector2(300f, 24f), 17f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
-            _bandChip = MakeText(_panel, "BandChip", new Vector2(-16f, -46f), new Vector2(120f, 24f), 17f, FontStyles.Bold, TextAlignmentOptions.MidlineRight, anchorRight: true);
+            MakeCloseButton(_panel);
+
+            _trustBar = MakeText(_panel, "TrustBar", new Vector2(28f, -64f), new Vector2(520f, 32f), 22f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            _respectBar = MakeText(_panel, "RespectBar", new Vector2(560f, -64f), new Vector2(420f, 32f), 22f, FontStyles.Normal, TextAlignmentOptions.MidlineLeft);
+            _bandChip = MakeText(_panel, "BandChip", new Vector2(-28f, -64f), new Vector2(160f, 32f), 22f, FontStyles.Bold, TextAlignmentOptions.MidlineRight, anchorRight: true);
 
             var stripGo = new GameObject("TabStrip", typeof(RectTransform));
             stripGo.transform.SetParent(_panel, false);
@@ -187,10 +278,10 @@ namespace Prison.Social
             _tabStrip.anchorMin = new Vector2(0f, 1f);
             _tabStrip.anchorMax = new Vector2(1f, 1f);
             _tabStrip.pivot = new Vector2(0.5f, 1f);
-            _tabStrip.anchoredPosition = new Vector2(0f, -76f);
-            _tabStrip.sizeDelta = new Vector2(-24f, 34f);
+            _tabStrip.anchoredPosition = new Vector2(0f, -108f);
+            _tabStrip.sizeDelta = new Vector2(-40f, 48f);
             var strip = stripGo.AddComponent<HorizontalLayoutGroup>();
-            strip.spacing = 6f;
+            strip.spacing = 10f;
             strip.childForceExpandWidth = false;
             strip.childForceExpandHeight = true;
             strip.padding = new RectOffset(12, 12, 0, 0);
@@ -200,15 +291,42 @@ namespace Prison.Social
             _body = (RectTransform)bodyGo.transform;
             _body.anchorMin = new Vector2(0f, 0f);
             _body.anchorMax = new Vector2(1f, 1f);
-            _body.offsetMin = new Vector2(16f, 12f);
-            _body.offsetMax = new Vector2(-16f, -116f);
+            _body.offsetMin = new Vector2(28f, 24f);
+            _body.offsetMax = new Vector2(-28f, -168f);
             var layout = bodyGo.AddComponent<VerticalLayoutGroup>();
-            layout.spacing = 4f;
+            layout.spacing = 8f;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
             layout.childAlignment = TextAnchor.UpperLeft;
 
             _root.SetActive(false);
+        }
+
+        private void MakeCloseButton(RectTransform parent)
+        {
+            var go = new GameObject("CloseButton", typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            var rt = (RectTransform)go.transform;
+            rt.anchorMin = rt.anchorMax = new Vector2(1f, 1f);
+            rt.pivot = new Vector2(1f, 1f);
+            rt.anchoredPosition = new Vector2(-20f, -16f);
+            rt.sizeDelta = new Vector2(40f, 40f);
+            go.GetComponent<Image>().color = new Color(0.22f, 0.24f, 0.28f, 0.95f);
+            go.GetComponent<Button>().onClick.AddListener(Close);
+
+            var labelGo = new GameObject("Label", typeof(RectTransform));
+            labelGo.transform.SetParent(go.transform, false);
+            var labelRt = (RectTransform)labelGo.transform;
+            labelRt.anchorMin = Vector2.zero;
+            labelRt.anchorMax = Vector2.one;
+            labelRt.offsetMin = Vector2.zero;
+            labelRt.offsetMax = Vector2.zero;
+            var label = labelGo.AddComponent<TextMeshProUGUI>();
+            label.text = "X";
+            label.fontSize = 24f;
+            label.fontStyle = FontStyles.Bold;
+            label.alignment = TextAlignmentOptions.Center;
+            label.color = Color.white;
         }
 
         private TMP_Text MakeText(RectTransform parent, string name, Vector2 pos, Vector2 size,
@@ -343,7 +461,7 @@ namespace Prison.Social
             {
                 string captured = tab;
                 MakeButton(_tabStrip, tab, () => { _tab = captured; RebuildTabs(); RebuildBody(); },
-                    width: 108f, highlighted: _tab == tab);
+                    width: 140f, highlighted: _tab == tab);
             }
         }
 
@@ -792,11 +910,11 @@ namespace Prison.Social
             go.transform.SetParent(_body, false);
             var label = go.AddComponent<TextMeshProUGUI>();
             label.text = text;
-            label.fontSize = 17f;
+            label.fontSize = 22f;
             label.color = color;
             label.alignment = TextAlignmentOptions.MidlineLeft;
             var layoutElement = go.AddComponent<LayoutElement>();
-            layoutElement.preferredHeight = 24f;
+            layoutElement.preferredHeight = 32f;
         }
 
         private void AddButton(string text, System.Action onClick)
@@ -815,7 +933,7 @@ namespace Prison.Social
                 : new Color(0.16f, 0.2f, 0.24f, 0.9f);
 
             var layoutElement = go.AddComponent<LayoutElement>();
-            layoutElement.preferredHeight = 30f;
+            layoutElement.preferredHeight = 46f;
             if (width > 0f) layoutElement.preferredWidth = width;
 
             var textGo = new GameObject("Label", typeof(RectTransform));
@@ -827,7 +945,7 @@ namespace Prison.Social
             rt.offsetMax = new Vector2(-8f, -2f);
             var label = textGo.AddComponent<TextMeshProUGUI>();
             label.text = text;
-            label.fontSize = 16f;
+            label.fontSize = 20f;
             label.alignment = TextAlignmentOptions.Midline;
             label.color = highlighted ? Color.black : Color.white;
 

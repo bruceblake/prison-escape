@@ -6,13 +6,19 @@ Real-time interaction overlay for inmates and guards. Design of record for the T
 **Opens from:** raycast interact on an NPC (`PrisonerSocialPresenter` rework → Talk entry point).
 **Pause:** **none** — world keeps running (Escapists-style). Player movement locked while menu is open; look still works enough to cancel with Escape / interact-again.
 
+**Inmate behavior while open:** `PrisonerAI.SetTalkEngaged` soft-stops the NavMesh agent and faces the player. Skipped when the inmate is on mandatory travel to a required stand (`IsBusyForTalk`) — pressing Talk shows a bark instead (e.g. *"Not right now — we gotta go."*) via `SocialTalkGate` + toast; menu does not open.
+
+**Guards while player is non-compliant:** during a mandatory phase (outside travel grace), guards refuse Talk with a bark (e.g. *"Get where you're supposed to be."*) — same `SocialTalkGate` path.
+
 ## Why it exists
 
 v1 greets were a single prompt line. Players need a readable **profile** (who is this?), **actions** (chat / gift / trade / favors / threat), and immediate feedback on Trust/Respect — without opening the notebook mid-conversation.
 
 ## Layout
 
-Centered bottom-third panel (does not cover vitals or routine strip). Paper/ink styling per theme.
+Centered bottom-third panel (does not cover vitals or routine strip). Paper/ink styling per theme. Panel size **1500×760** px at 1920×1080 reference resolution (rebuilds automatically when layout version changes).
+
+**Close:** **X** button (header), click the dimmed backdrop, **Escape**, or interact again on the same NPC.
 
 ```
 ┌─ Eddie "Wires" Malone ──────────── Vipers · Soldier ─┐

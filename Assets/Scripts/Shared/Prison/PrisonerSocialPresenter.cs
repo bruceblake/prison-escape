@@ -183,6 +183,13 @@ namespace Prison
         {
             int actorId = ActorId;
             if (actorId == SocialTuning.NoActor) return;
+
+            if (SocialTalkGate.TryGetRefusal(gameObject, out string refusal))
+            {
+                SocialToastUI.Show(refusal);
+                return;
+            }
+
             SocialInteractionMenu.Open(actorId);
         }
     }

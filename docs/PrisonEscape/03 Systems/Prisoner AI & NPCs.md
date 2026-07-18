@@ -6,11 +6,31 @@ NPC inmates follow the daily routine via NavMesh; the player follows the same co
 
 1. Register as cell occupant; subscribe to schedule changes
 2. On each phase change → resolve a **deterministic, spread** stand position from the registry (`GetStandPointForIndex` + lateral offset by `cellIndex`) → `SetDestination`
-3. Compliant when within **0.85 m** (`arriveDistance`) of the resolved stand, or when travel grace / post-shakedown release applies. Near-zero velocity close to the stand also counts (crowd NavMesh never hits the exact point).
-4. **On arrival:** `NavMeshAgent.isStopped = true` + `ResetPath` so idle NPCs stand still instead of circling a shared stand
+3. Compliant when within a **phase presence radius** of the resolved stand (tight on formal counts / lights out; wider on meals/work; widest on FreeTime), or when travel grace / post-shakedown release applies
+4. **On arrival:** personality **loiter loop** — idle for a trait-weighted duration, then often wander to a nearby NavMesh point inside the presence radius, then idle again. Not a permanent freeze
 5. After morning shakedown clears their cell → path toward the **next** phase destination early
 6. During `WorkProgram` phases the registry routes everyone to the Workshop zone (per-inmate kitchen/laundry/classroom assignments: follow-up — [[Locations, Zones & Cells]])
-7. When arrested: agent disabled; `SendToCell` teleports to cell spawn, releases after **1 s**
+7. When arrested: agent disabled; `SendToCell` teleports to **floor stand beside bed**, releases after **1 s**, then **~40 s** post-escort immunity so guards do not re-arrest in a loop
+
+### Talk engagement
+
+While [[Talk Menu & NPC Profile]] is open, `SetTalkEngaged` soft-stops and faces the player unless mandatory travel to a required stand is in progress (`IsBusyForTalk`). In that case Talk is refused with a short bark (toast) — menu does not open. Resumes on close when Talk was allowed.
+
+### Personality loiter (inmate-dependent)
+
+Uses `SocialWorld` identity when available (`archetype` + traits):
+
+| Driver | Effect |
+|---|---|
+| High **sociability** | Lower idle bias → walks more often, larger wander radius |
+| **Loner** / **Old-Timer** | Idle more, smaller roam |
+| **Hustler** / **Bruiser** | Walk more / farther |
+| **Snitch** | Short nervous pacing, rarely long stands, stays close |
+| **Shot-Caller** | Slightly more standing / watching |
+| Formal counts / Lights Out | Mostly stand; occasional small shifts only |
+| FreeTime | Stronger wander chance |
+
+Toggle: `enablePersonalityLoiter` on `PrisonerAI`.
 
 ## Player compliance (`PrisonerController`)
 
@@ -34,7 +54,7 @@ Ambient social: territory warn-offs, chats/arguments (`SocialSimulationTicker`).
 
 | File | Role |
 |---|---|
-| `Assets/Scripts/Singleplayer/AI/PrisonerAI.cs` | NPC routine |
+| `Assets/Scripts/Singleplayer/AI/PrisonerAI.cs` | NPC routine + personality loiter |
 | `Assets/Scripts/Singleplayer/Player/PrisonerController.cs` | Player compliance |
 | `Assets/Scripts/Shared/Prison/IPrisoner.cs` | Shared contract |
 | `Assets/Scripts/Shared/Social/SocialRosterBuilder.cs` / `SocialTypes.cs` | Identities + roster |

@@ -116,6 +116,22 @@ namespace Prison.Social
             "Fence by the far yard corner sags. Cameras hate the morning fog too.",
         };
 
+        private static readonly string[] InmateMandatoryTravelRefusal =
+        {
+            "Not right now — we gotta go.",
+            "Can't stop. Schedule's on our ass.",
+            "Talk later. I'm late already.",
+            "Move — count don't wait.",
+        };
+
+        private static readonly string[] GuardNonComplianceRefusal =
+        {
+            "Not a good time. Get where you're supposed to be.",
+            "You're out of line. Move along.",
+            "I'm not chatting. You ain't compliant.",
+            "Handle your business first, then we'll talk.",
+        };
+
         // ------------------------------------------------------------- API
 
         public static string Greeting(NPCIdentity identity, StandingBand band, int variantHash)
@@ -167,6 +183,27 @@ namespace Prison.Social
                 $"Wrong side of the yard, friend. {gangName} only.",
             };
             return Pick(pool, variantHash);
+        }
+
+        public static string InmateRefuseMandatoryTravel(NPCIdentity identity, int variantHash)
+        {
+            string line = Pick(InmateMandatoryTravelRefusal, variantHash);
+            return FormatSpeakerLine(identity, line);
+        }
+
+        public static string GuardRefusePlayerNonCompliance(NPCIdentity identity, int variantHash)
+        {
+            string line = Pick(GuardNonComplianceRefusal, variantHash);
+            return FormatSpeakerLine(identity, line);
+        }
+
+        private static string FormatSpeakerLine(NPCIdentity identity, string line)
+        {
+            if (identity == null || string.IsNullOrEmpty(line))
+                return line ?? "";
+            if (identity.isGuard)
+                return $"Ofc. {identity.lastName}: {line}";
+            return $"{identity.ShortName}: {line}";
         }
 
         private static string Pick(string[] pool, int hash)

@@ -22,19 +22,19 @@ public class GuardFSM : MonoBehaviour
 
     [Header("Movement (NavMeshAgent)")]
     [Tooltip("Walk/run speed while patrolling and verifying cells.")]
-    public float patrolMoveSpeed = 8f;
-    [Tooltip("Speed while chasing or leading to cell (chase + escort). This is applied directly — raise to 24–32 if it still feels slow.")]
-    public float escortMoveSpeed = 24f;
+    public float patrolMoveSpeed = 3.5f;
+    [Tooltip("Speed while chasing or leading to cell (chase + escort). Walk pace, not a sprint.")]
+    public float escortMoveSpeed = 4.5f;
     [Tooltip("Only used if Escort Move Speed is 0: escort speed = patrol × this.")]
-    public float escortSpeedMultiplier = 2.75f;
+    public float escortSpeedMultiplier = 1.25f;
     [Tooltip("Turn rate while patrolling / night verify.")]
     public float turnSpeed = 720f;
     [Tooltip("Turn rate while escorting (usually higher than patrol).")]
-    public float escortTurnSpeed = 960f;
+    public float escortTurnSpeed = 360f;
     [Tooltip("Acceleration while patrolling.")]
     public float acceleration = 45f;
     [Tooltip("Acceleration while escorting (higher = snappier sprint).")]
-    public float escortAcceleration = 120f;
+    public float escortAcceleration = 24f;
 
     [Header("Escort")]
     [Tooltip("Distance to prisoner to arrest")]

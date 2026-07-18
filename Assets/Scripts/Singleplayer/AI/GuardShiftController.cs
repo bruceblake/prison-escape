@@ -85,6 +85,11 @@ public class GuardShiftController : MonoBehaviour
 
     private bool IsOnDutyFor(PrisonEventType current)
     {
+        // Scene spawn tables often omit MorningRollCall from duty windows — guards must still sweep.
+        if (PrisonEventExtensions.IsMorningLineUp(current)
+            && (_role == GuardSpawnRole.StandardPatrol || _role == GuardSpawnRole.MorningShakedown))
+            return true;
+
         if (_onDutyDuring == null || _onDutyDuring.Length == 0)
             return true;
         for (int i = 0; i < _onDutyDuring.Length; i++)
@@ -117,10 +122,20 @@ public class GuardShiftController : MonoBehaviour
                 SetEnabled(_agent, true);
                 SetEnabled(_sweeper, _sweeper != null);
                 if (PrisonEventExtensions.IsMorningLineUp(currentEvent))
-                    _sweeper?.TryStartSweepForCurrentPhase();
+                    _sweeper?.ForceStartSweepForCurrentPhase();
                 break;
             case GuardSpawnRole.NightCellVerifier:
             case GuardSpawnRole.StandardPatrol:
+                // Morning sweep is owned by MorningRollCallSweeperDirector (near-cell officer).
+                // Do not let a distant yard patrol claim the global sweeper lock.
+                if (PrisonEventExtensions.IsMorningLineUp(currentEvent))
+                {
+                    SetEnabled(_sweeper, false);
+                    SetEnabled(_fsm, false);
+                    SetEnabled(_detection, false);
+                    SetEnabled(_agent, true);
+                    return;
+                }
                 ApplyStandardPatrolShift(currentEvent);
                 break;
         }

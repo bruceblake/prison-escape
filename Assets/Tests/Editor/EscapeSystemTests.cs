@@ -58,6 +58,7 @@ namespace Prison.Tests
         {
             Assert.AreEqual(PlayerStatsMath.NormalSprintMultiplier, PlayerStatsMath.SprintMultiplierFor(100f));
             Assert.AreEqual(PlayerStatsMath.NormalSprintMultiplier, PlayerStatsMath.SprintMultiplierFor(50f));
+            Assert.AreEqual(1.55f, PlayerStatsMath.NormalSprintMultiplier, 0.001f);
         }
 
         [Test]
@@ -65,6 +66,7 @@ namespace Prison.Tests
         {
             Assert.AreEqual(PlayerStatsMath.WeakSprintMultiplier, PlayerStatsMath.SprintMultiplierFor(49.9f));
             Assert.AreEqual(PlayerStatsMath.WeakSprintMultiplier, PlayerStatsMath.SprintMultiplierFor(0f));
+            Assert.AreEqual(1.25f, PlayerStatsMath.WeakSprintMultiplier, 0.001f);
         }
 
         [Test]

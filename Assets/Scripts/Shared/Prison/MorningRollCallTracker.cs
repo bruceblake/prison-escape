@@ -15,6 +15,7 @@ namespace Prison
         [SerializeField] private bool debugLog;
 
         private readonly HashSet<int> _cellsShakedownComplete = new();
+        private readonly HashSet<int> _doorsOpenedForStand = new();
         private bool _phaseActive;
 
         public event Action<int> OnCellShakedownComplete;
@@ -60,7 +61,12 @@ namespace Prison
         public void BeginPhase()
         {
             _cellsShakedownComplete.Clear();
+            _doorsOpenedForStand.Clear();
             _phaseActive = true;
+            CellDoorRegistry.EnsureInstance();
+            CellDoorRegistry.Instance?.Rebuild();
+            MorningRollCallSweeperDirector.EnsureInstance();
+            MorningRollCallSweeperDirector.Instance?.KickoffRollCallSweep();
             if (debugLog)
                 Debug.Log("[MorningRollCallTracker] Roll call / shakedown phase started.", this);
         }
@@ -69,6 +75,30 @@ namespace Prison
         {
             _phaseActive = false;
             _cellsShakedownComplete.Clear();
+            _doorsOpenedForStand.Clear();
+            CellDoorController.ClearAllForcedOpens();
+        }
+
+        /// <summary>Opens a cell door when the inmate reaches their roll-call stand (before guard visit).</summary>
+        public static void TryOpenDoorWhenInmateAtStand(IPrisoner prisoner)
+        {
+            if (prisoner == null || Instance == null || !Instance._phaseActive)
+                return;
+
+            var tm = PrisonTimeManager.Instance;
+            if (tm == null || !PrisonEventExtensions.IsMorningLineUp(tm.CurrentEvent))
+                return;
+            if (!prisoner.IsAtRequiredLocation)
+                return;
+
+            int cell = prisoner.CellIndex;
+            if (Instance._doorsOpenedForStand.Contains(cell))
+                return;
+            if (Instance._cellsShakedownComplete.Contains(cell))
+                return;
+
+            Instance._doorsOpenedForStand.Add(cell);
+            CellDoorRegistry.OpenCellDoor(cell);
         }
 
         /// <summary>Called by <see cref="MorningShakedownSweeper"/> after each cell is swept.</summary>
@@ -89,6 +119,7 @@ namespace Prison
             if (debugLog)
                 Debug.Log($"[MorningRollCallTracker] Cell {cellIndex} shakedown complete ({_cellsShakedownComplete.Count} cells).", this);
 
+            CellDoorRegistry.OpenCellDoor(cellIndex);
             OnCellShakedownComplete?.Invoke(cellIndex);
 
             if (AreAllInmatesShakedownComplete())

@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Editor/SocialBalanceSimulatorWindow.cs": {
-    "mtime": 1782939208.1123662,
-    "ast_hash": "9114eaeb94ef356581558c8066fb7a8e",
+    "mtime": 1784249466.427933,
+    "ast_hash": "7e6782b7594480caf302a0b31d14b041",
     "semantic_hash": ""
   },
   "Assets/Scripts/GameLogic.cs": {
@@ -65,13 +65,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Multiplayer/Player/PlayerController.cs": {
-    "mtime": 1784073889.0615988,
-    "ast_hash": "c43d316dc7ce3bc639a6afeff865f317",
+    "mtime": 1784249480.3078606,
+    "ast_hash": "52062f60e578abff5e7e722f29a45e38",
     "semantic_hash": ""
   },
   "Assets/Scripts/Multiplayer/Player/PlayerInventory.cs": {
-    "mtime": 1784073762.3865855,
-    "ast_hash": "6bd63292343c7c641aaf63c96c17d27d",
+    "mtime": 1784320095.9783878,
+    "ast_hash": "97cd3250288e540fbc124bf1495ee61c",
     "semantic_hash": ""
   },
   "Assets/Scripts/Multiplayer/Player/Weapons/Gun.cs": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Crafting/CraftingSystem.cs": {
-    "mtime": 1784073759.6766903,
-    "ast_hash": "3f41bf132dfea5e9362d6240a3d8c918",
+    "mtime": 1784320095.9783878,
+    "ast_hash": "127cd036eb21e0a777c119654da2461c",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Interaction/IInteractable.cs": {
@@ -135,13 +135,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Interaction/VentCover.cs": {
-    "mtime": 1782939208.2708948,
-    "ast_hash": "92a08bfc34ee036d724d4534df1ab976",
+    "mtime": 1784249480.3078606,
+    "ast_hash": "ad4b264271cd754da2f54205de26a93a",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Interaction/WorldItemPickup.cs": {
-    "mtime": 1782939208.2718956,
-    "ast_hash": "4f23c95c7736cb6bbd1a8f66e9b47aa4",
+    "mtime": 1784249480.308863,
+    "ast_hash": "aec0d7ac6ef195af18bc1a34bce4a7da",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/CashUIController.cs": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/CellDoorController.cs": {
-    "mtime": 1784070998.7390468,
-    "ast_hash": "04ac624fa5c38c104c9a2845bd396ea4",
+    "mtime": 1784341754.7528658,
+    "ast_hash": "c63e200a585758ba7cc2dbc7d8e91db3",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/ComplianceStatusHUD.cs": {
@@ -165,23 +165,18 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/DailyRoutineBarUI.cs": {
-    "mtime": 1782939208.2754028,
-    "ast_hash": "aed599be288e5959ceeb4a9f1d77794b",
-    "semantic_hash": ""
-  },
-  "Assets/Scripts/Shared/Prison/FavorOfferDefinition.cs": {
-    "mtime": 1782939208.276403,
-    "ast_hash": "cf47d5a0f82c0bb968b280ce708968fd",
+    "mtime": 1784153607.4434292,
+    "ast_hash": "fa91095173bd6cf39efcc5712955bb6b",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/IPrisoner.cs": {
-    "mtime": 1782939208.2789078,
-    "ast_hash": "67d81f3aecab00ecd44b0fe645de57b5",
+    "mtime": 1784341754.75488,
+    "ast_hash": "e47e9a555ca85b51b4cac46bfb525d75",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/ItemSpawnNode.cs": {
-    "mtime": 1782939208.2799125,
-    "ast_hash": "1746821fd51b073bd677f7ecde565461",
+    "mtime": 1784341754.7558823,
+    "ast_hash": "335a66f1d94c6cae5a5e37e537d2aace",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/LootTable.cs": {
@@ -190,18 +185,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/MinimalSchedulePhaseTextHUD.cs": {
-    "mtime": 1782939208.2819118,
-    "ast_hash": "f52688255ade5e46e4937c18600ec3b4",
+    "mtime": 1784153610.9109786,
+    "ast_hash": "60078c7194ac41c965f23137d694771a",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/MorningRollCallTracker.cs": {
-    "mtime": 1782939208.2819118,
-    "ast_hash": "bb71adf55934d54cdcf787134581d9e0",
-    "semantic_hash": ""
-  },
-  "Assets/Scripts/Shared/Prison/NPCPersonalityData.cs": {
-    "mtime": 1782939208.2834153,
-    "ast_hash": "d27cf8346a65fbc43c2d5b7f91c5c70c",
+    "mtime": 1784341754.756883,
+    "ast_hash": "793138aa6359a8e984b44613e28ca8e5",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PlayerWallet.cs": {
@@ -210,8 +200,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonEventExtensions.cs": {
-    "mtime": 1782939208.2854197,
-    "ast_hash": "356a91b70b36aaa790ead4e7414cfa2e",
+    "mtime": 1784153391.8069446,
+    "ast_hash": "e9cb6f0f42c490e2d5561304f3f6d974",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonEventRules.cs": {
@@ -220,43 +210,43 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonEventType.cs": {
-    "mtime": 1782939208.2874193,
-    "ast_hash": "f063f269062bf7401045ec05aeccc55d",
+    "mtime": 1784153388.0315616,
+    "ast_hash": "8979ceec0c0dbaac5f85f7f98c8b6e20",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonHeatUI.cs": {
-    "mtime": 1784074974.0761175,
-    "ast_hash": "f3d6dafb3a7ca0403a408c114eb6dc5a",
+    "mtime": 1784676964.0198562,
+    "ast_hash": "96f4280e4c5b2d05936bf90ac2db5060",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonLocationRegistry.cs": {
-    "mtime": 1782939208.288923,
-    "ast_hash": "f59d4e7032f86906047df15bc5a568a8",
+    "mtime": 1784341754.7578838,
+    "ast_hash": "aea6c0f54406d18ed76ca85e392a7b2d",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonLocationZone.cs": {
-    "mtime": 1782939208.2899268,
-    "ast_hash": "4849425e64e30098178627e7cbfd884a",
+    "mtime": 1784249478.9325,
+    "ast_hash": "e1fae62d6f9b8d2279218a4970fe7f74",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonNavMeshValidator.cs": {
-    "mtime": 1782939208.2909272,
-    "ast_hash": "3bb85507b3d1ec7920c835a67bc75ea2",
+    "mtime": 1784675975.0024214,
+    "ast_hash": "a89fe6bad300e52664827576bece62cb",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonRoutineLabels.cs": {
-    "mtime": 1782939208.291927,
-    "ast_hash": "20123157d1febc255034a9a03c1325b5",
+    "mtime": 1784249478.9334974,
+    "ast_hash": "87bd58944bab762afe4f077cd1cf9665",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonSchedule.cs": {
-    "mtime": 1782939208.291927,
-    "ast_hash": "ff03dda9c6ec93421deceb28e99439dd",
+    "mtime": 1784153403.8432834,
+    "ast_hash": "8876339e899888feb0353cf3d321acc8",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonScheduleUI.cs": {
-    "mtime": 1782939208.2934296,
-    "ast_hash": "a415a4776f0adbd23d26adaf6edfac2d",
+    "mtime": 1784153617.4806502,
+    "ast_hash": "5718780404aa0c3ae07b7a9538bcf9a7",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonTimeManager.cs": {
@@ -270,13 +260,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonerPresence.cs": {
-    "mtime": 1782939208.2954335,
-    "ast_hash": "3a34b9771124182721d34f6ce9e86bd1",
+    "mtime": 1784676110.6389322,
+    "ast_hash": "e817c2968daa45ca026d5dedff2829cf",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonerSocialPresenter.cs": {
-    "mtime": 1784071516.8100579,
-    "ast_hash": "9250ce871e2373c74a53deb3ec3669df",
+    "mtime": 1784341754.7578838,
+    "ast_hash": "5988ad261fd56c8d4d28b22bd2fd547a",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/ReputationTier.cs": {
@@ -295,23 +285,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/RoutineNowNextBarUI.cs": {
-    "mtime": 1782939208.301939,
-    "ast_hash": "722f3d51b617feef39abcf0001ed006a",
-    "semantic_hash": ""
-  },
-  "Assets/Scripts/Shared/Prison/SocialActionType.cs": {
-    "mtime": 1782939208.301939,
-    "ast_hash": "480fcc3572a43245671156c9d85b8781",
-    "semantic_hash": ""
-  },
-  "Assets/Scripts/Shared/Prison/SocialManager.cs": {
-    "mtime": 1782939208.3044453,
-    "ast_hash": "0a957e81ba82cf4cb0bf340235b1bc70",
-    "semantic_hash": ""
-  },
-  "Assets/Scripts/Shared/Prison/SocialMath.cs": {
-    "mtime": 1782939208.3054469,
-    "ast_hash": "a2a335f3ec9fb6a6fcff27e54714131f",
+    "mtime": 1784249478.9334974,
+    "ast_hash": "467965905154c1bb21e4d9aed48706db",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/TextRoutineComplianceHUD.cs": {
@@ -325,13 +300,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/AffinityFloatPopup.cs": {
-    "mtime": 1782939208.308949,
-    "ast_hash": "dbd02e22fc9e026ac6714bd5b474e0d6",
+    "mtime": 1784249466.479501,
+    "ast_hash": "9143a62eb9abee9d02d83d0b3767b3b0",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/CameraBillboard.cs": {
-    "mtime": 1782939208.3099525,
-    "ast_hash": "b4e483b5b83d6f02ab64bcfe201add0a",
+    "mtime": 1784676039.429921,
+    "ast_hash": "70eec8035125e720f84ba01c6ca99b80",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/CanvasGroupFader.cs": {
@@ -355,13 +330,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/InventorySlotUI.cs": {
-    "mtime": 1784074943.8765526,
-    "ast_hash": "1ab99c998f6e767bf298a5df96a5cf5f",
+    "mtime": 1784320095.9851036,
+    "ast_hash": "c9b021e6e431ee86a106177988dd6c75",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/InventoryUI.cs": {
-    "mtime": 1784074960.258124,
-    "ast_hash": "d2af1713970348e2517c11925c6f6252",
+    "mtime": 1784320095.9851036,
+    "ast_hash": "2f873e57d05132bef90d649a15831ddd",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/ItemTooltipUI.cs": {
@@ -375,18 +350,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/PauseManager.cs": {
-    "mtime": 1784074935.5417755,
-    "ast_hash": "4b5a5cf9f0ae86eab62e320f15557524",
+    "mtime": 1784249466.4810133,
+    "ast_hash": "21ddc6bce54d6ec39728a79a2f64c975",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/PillowStashProximityUI.cs": {
     "mtime": 1782939208.3189614,
     "ast_hash": "508f45e23f01a96d4e4377b667d84f55",
-    "semantic_hash": ""
-  },
-  "Assets/Scripts/Shared/UI/PrisonSocialRowUI.cs": {
-    "mtime": 1782939208.319965,
-    "ast_hash": "0facf6f19a2830f58fd6fec9b4189694",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/RecipeRequirementSlotUI.cs": {
@@ -395,38 +365,38 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/StolenNotebookUI.cs": {
-    "mtime": 1784074935.0193202,
-    "ast_hash": "65203b65104fa8dbb0b83d0c46052c21",
+    "mtime": 1784249466.4820192,
+    "ast_hash": "364462ee600f42dd1c68703ed239cd4d",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/AI/GuardDetection.cs": {
-    "mtime": 1784073874.7496474,
-    "ast_hash": "83efa8e398c26c21c5be87b73d881b45",
+    "mtime": 1784676952.1505995,
+    "ast_hash": "f829ed0f9eb459a7e99a64b4e3ee2acc",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/AI/GuardFSM.cs": {
-    "mtime": 1784073888.130526,
-    "ast_hash": "b9d2b068cc25062829b5ab3e4e3f63b1",
+    "mtime": 1784676107.4744248,
+    "ast_hash": "687adf9f40808e95760756179a5ba86f",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/AI/GuardShiftController.cs": {
-    "mtime": 1782939208.326471,
-    "ast_hash": "6a77fc58939e3d81e994a84f5718a835",
+    "mtime": 1784341754.7639015,
+    "ast_hash": "7f8a76431e0dcad31528b81951144e54",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/AI/MorningShakedownSweeper.cs": {
-    "mtime": 1782939208.327471,
-    "ast_hash": "3fe985761c8522dd445374bb7d24d32d",
+    "mtime": 1784341754.7639015,
+    "ast_hash": "825fd2a49641fc60c6e0bb73c01724f4",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/AI/PrisonerAI.cs": {
-    "mtime": 1782939208.328974,
-    "ast_hash": "8cfe8cb8db80372931ae3da13e537be9",
+    "mtime": 1784676060.1488638,
+    "ast_hash": "9c2a7ace4d42c0073ad48b776cf775ad",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/GameManager.cs": {
-    "mtime": 1784071516.8200417,
-    "ast_hash": "302be435447c97774c4304e5add79de4",
+    "mtime": 1784676028.7895138,
+    "ast_hash": "f27374d5b4f0d40beca1241d78c25c6e",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/Interaction/CellBed.cs": {
@@ -450,8 +420,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/Items/ItemData.cs": {
-    "mtime": 1782939208.335486,
-    "ast_hash": "ad65d444a11f015465cc4632d745bf02",
+    "mtime": 1784249480.308863,
+    "ast_hash": "57063bb9a56d548dbde28bba56816eb4",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/Items/ItemDatabase.cs": {
@@ -490,8 +460,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/Player/PrisonerController.cs": {
-    "mtime": 1784073866.229851,
-    "ast_hash": "23426ddbf75c36e7aad48bd06a9da7cf",
+    "mtime": 1784676058.519518,
+    "ast_hash": "8df8b6da4ea57964f12d8ce3c5852989",
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/Security/PrisonSecurityAlerts.cs": {
@@ -545,23 +515,18 @@
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/CellDoorControllerTests.cs": {
-    "mtime": 1784070998.7390468,
-    "ast_hash": "aa911657cea232b869f6be399ed0f051",
+    "mtime": 1784341754.7659612,
+    "ast_hash": "5a8a15c2a09ada861dfa8065d09e9146",
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/CraftingInventoryLootTests.cs": {
-    "mtime": 1784070998.7390468,
-    "ast_hash": "68b597573f8aa2371300d30308ce3d29",
+    "mtime": 1784320095.9871047,
+    "ast_hash": "6d98c80c282c9aed7f75bff00dd45f9a",
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/PrisonRulesAndLabelsTests.cs": {
-    "mtime": 1784070998.7390468,
-    "ast_hash": "5ea7734d7ba11baf02068e471dc2b826",
-    "semantic_hash": ""
-  },
-  "Assets/Tests/Editor/SocialMathTests.cs": {
-    "mtime": 1784070998.7390468,
-    "ast_hash": "7c0a7b5690bc5bd69698cbf343811513",
+    "mtime": 1784319588.9799662,
+    "ast_hash": "dd121056f2944fd9a563c810bbe9a80e",
     "semantic_hash": ""
   },
   "Assets/TextMesh Pro/Sprites/EmojiOne.json": {
@@ -1105,7 +1070,7 @@
     "semantic_hash": ""
   },
   "Packages/manifest.json": {
-    "mtime": 1784071529.167512,
+    "mtime": 1784319591.9395761,
     "ast_hash": "1b8c83b19dee419dbfce6eb7173dab5c",
     "semantic_hash": ""
   },
@@ -1130,7 +1095,7 @@
     "semantic_hash": ""
   },
   "Assets/Docs/Game_Features_And_Test_Coverage.md": {
-    "mtime": 1784070998.7390468,
+    "mtime": 1784319588.9799662,
     "ast_hash": "b1f940ff6cc90679f186e356b46d9dcc",
     "semantic_hash": ""
   },
@@ -1175,8 +1140,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1782948596.6813662,
-    "ast_hash": "f0de27dd727d0eee05a545e00d9c02d9",
+    "mtime": 1784159210.2341127,
+    "ast_hash": "44008b9e9cad86510daa088da2151424",
     "semantic_hash": ""
   },
   "steam_appid.txt": {
@@ -2305,18 +2270,18 @@
     "semantic_hash": ""
   },
   "Assets/Editor/CharacterVisualSetupRunner.cs": {
-    "mtime": 1784071529.130637,
-    "ast_hash": "34ce7c01976b87d3bf888e71516f3ac2",
+    "mtime": 1784154067.1947083,
+    "ast_hash": "e1d50972e96a318c7fb0f1453268c814",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/CharacterNameLabel.cs": {
-    "mtime": 1784071516.8120563,
-    "ast_hash": "cee37533b15a6e657135e60f43a82669",
+    "mtime": 1784249466.4830184,
+    "ast_hash": "1d419bdc8e553185cde61226ed1b57be",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/CharacterVisualConstants.cs": {
-    "mtime": 1784071529.1649973,
-    "ast_hash": "2163666e656c1f83d49fc63f2deeb52c",
+    "mtime": 1784249479.3728712,
+    "ast_hash": "efd961e8469927309f35de36aa6e31b3",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/CharacterVisualRole.cs": {
@@ -2330,7 +2295,7 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Visuals/LowPolyCharacterRigBuilder.cs": {
-    "mtime": 1784071529.1665082,
+    "mtime": 1784319591.935513,
     "ast_hash": "14c50576f7ace3bf09aa0275d6615d05",
     "semantic_hash": ""
   },
@@ -2345,27 +2310,27 @@
     "semantic_hash": ""
   },
   "ci/test-suite-audit.sh": {
-    "mtime": 1782939224.0490813,
-    "ast_hash": "2c363bed68ec20bee5698c8c4142eac8",
+    "mtime": 1784320095.9881032,
+    "ast_hash": "18187559b8f8fbe09241811d1bc07bf3",
     "semantic_hash": ""
   },
   "Assets/Editor/PrisonLevelLayoutRunner.cs": {
-    "mtime": 1784080407.6199746,
-    "ast_hash": "bd654a35aaa5d53146617d43ee98863f",
+    "mtime": 1784319591.935513,
+    "ast_hash": "e28de49ecc96b5d2c251f8d66c0644c1",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/.obsidian/app.json": {
-    "mtime": 1784071737.7980297,
+    "mtime": 1784675953.492097,
     "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/.obsidian/appearance.json": {
-    "mtime": 1784071737.799534,
+    "mtime": 1784675953.493101,
     "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/.obsidian/core-plugins.json": {
-    "mtime": 1784071737.3442311,
+    "mtime": 1784675953.0383365,
     "ast_hash": "7c877bea49eaeabb100563bd157b9051",
     "semantic_hash": ""
   },
@@ -2375,17 +2340,17 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/.obsidian/workspace.json": {
-    "mtime": 1784075542.815985,
-    "ast_hash": "a937ace716b6d1e7c63d092f18602e7a",
+    "mtime": 1784675980.2744782,
+    "ast_hash": "401f0b63a9f1fa44375c5513fca8247e",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape Devlog Dashboard.md": {
-    "mtime": 1784085176.659554,
-    "ast_hash": "4e44d69cc151cfe0a3d83f30b1e045c7",
+    "mtime": 1784341754.7709754,
+    "ast_hash": "a002f64002a60738e1171a305e25043f",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Prison Escape.md": {
-    "mtime": 1784073450.237471,
+    "mtime": 1784319591.935513,
     "ast_hash": "b06331898d95536e522a2c73c60e0b25",
     "semantic_hash": ""
   },
@@ -2400,23 +2365,23 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/Game Vision & Core Loop.md": {
-    "mtime": 1784072836.855966,
-    "ast_hash": "d3456ab507d84371d22897268289c51b",
+    "mtime": 1784320095.989731,
+    "ast_hash": "f7468a22fb66f041dfa7719c3fa0d4fc",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/Prison Layout \u2014 Minimum Security.md": {
-    "mtime": 1784085154.0117016,
-    "ast_hash": "7fc404d6d66130ff36dc360106e06e86",
+    "mtime": 1784319591.935513,
+    "ast_hash": "d15f4730b2c676f3cc886391f1ae9c8d",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/Roadmap & Priorities.md": {
-    "mtime": 1784073519.1236272,
-    "ast_hash": "1f5f429c77b251f7d139cb29be786585",
+    "mtime": 1784320095.989731,
+    "ast_hash": "e9260a3f1e89a122a0c92d6da5d830e1",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/01 Game Design/World Rules.md": {
-    "mtime": 1784074147.9305677,
-    "ast_hash": "589e09fb5cfda0ca2f81fdff74869081",
+    "mtime": 1784320095.9907346,
+    "ast_hash": "a8e1f77d1d99a41e95ee14ff723f8f57",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Crafting.md": {
@@ -2425,33 +2390,33 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Escape Routes & Mechanics.md": {
-    "mtime": 1784074376.6522593,
-    "ast_hash": "af0f83c91438ef31c2f2792cfa3589d0",
+    "mtime": 1784320095.9927585,
+    "ast_hash": "4ee1f3dffcfd4ae13a770e1c314176a7",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Guard AI.md": {
-    "mtime": 1784072836.860793,
-    "ast_hash": "75c5c7a499ca7f2204fdd7800db198c3",
+    "mtime": 1784320102.0620065,
+    "ast_hash": "b6a2b24bd391adbd0553144723a20851",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Inventory & Items.md": {
-    "mtime": 1784072836.860793,
-    "ast_hash": "d79ebb7caac30c96967ec6f282237c94",
+    "mtime": 1784320095.9947636,
+    "ast_hash": "dc7bafe5fa44cb0f04c708a0dba3d946",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Locations, Zones & Cells.md": {
-    "mtime": 1784072836.8623047,
-    "ast_hash": "8b9c7673a63fbac79f6a1fd02fbd690e",
+    "mtime": 1784341754.766961,
+    "ast_hash": "3edfb03f63af95e9c991d021f655d8f1",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Loot & Economy.md": {
-    "mtime": 1784072836.8623047,
-    "ast_hash": "5bb12ca47020860bd0c443afb136feb4",
+    "mtime": 1784341754.7679613,
+    "ast_hash": "c5c43f767c4c493b3ba1ec929c7b0780",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Multiplayer & Networking.md": {
-    "mtime": 1784072836.8633094,
-    "ast_hash": "6cbe6323fa05b0f2faeccb35d555066d",
+    "mtime": 1784218304.2014883,
+    "ast_hash": "e888f5773c0620fccda95a794f3dd44a",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Player & Interaction.md": {
@@ -2460,73 +2425,73 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Prisoner AI & NPCs.md": {
-    "mtime": 1784072836.8643086,
-    "ast_hash": "d37b5baa10f63133957107c2523667fc",
+    "mtime": 1784341754.7679613,
+    "ast_hash": "b8ec2a2c62daf0fa007f3f80f5a86d0f",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Roll Call & Shakedown.md": {
-    "mtime": 1784072836.8658116,
-    "ast_hash": "f0768e191d8c818daa22dbef90de778d",
+    "mtime": 1784341754.768962,
+    "ast_hash": "822d14275308e1a52624b1b4147a3b85",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Security, Heat & Alerts.md": {
-    "mtime": 1784072836.8668163,
-    "ast_hash": "c8b93fd9d8cd4af77165a2e106f464b6",
+    "mtime": 1784320095.9967635,
+    "ast_hash": "5b8d3f6f2e451e1f88a1cca04783a223",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Social & Reputation.md": {
-    "mtime": 1784072836.8668163,
-    "ast_hash": "c53f4df5ee981e821beaa8a0a1a73daa",
+    "mtime": 1784320095.9977632,
+    "ast_hash": "8a9ddce961b392520c28e06f79fbc287",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Systems Overview.md": {
-    "mtime": 1784075509.2705748,
-    "ast_hash": "7f8a21ec96b601df077dff6a0e8c026c",
+    "mtime": 1784341754.7694647,
+    "ast_hash": "25ba5b4df4d92d1eacad770994da5d39",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/Time & Schedule.md": {
-    "mtime": 1784072836.8683207,
-    "ast_hash": "ddeb34cc46198ac5137b377755fa9a34",
+    "mtime": 1784154213.4145699,
+    "ast_hash": "8beddd057c8b0dc90b228a2ffc323f18",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI & HUD.md": {
-    "mtime": 1784075613.1108432,
-    "ast_hash": "72fbf090c81752d4011b371ce10d7f02",
+    "mtime": 1784341754.7699726,
+    "ast_hash": "e982126c305e60a6f9b0185a573a19e6",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Character Visuals.md": {
-    "mtime": 1784073566.5557606,
-    "ast_hash": "13933d4dc06cd45a5fcd7e36671355a9",
+    "mtime": 1784217249.6109464,
+    "ast_hash": "d3a2fabf5bf137fba255269490559b60",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Content Inventory.md": {
-    "mtime": 1784085146.785019,
-    "ast_hash": "7dabf6e06541575d7fac00388fa82626",
+    "mtime": 1784320096.0027819,
+    "ast_hash": "c4ca96cc05200ac5849fdb7f4666e912",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Item Catalog.md": {
-    "mtime": 1784085186.47071,
-    "ast_hash": "b6867a4d418caa11541e759c6ce9c7e8",
+    "mtime": 1784341754.7709754,
+    "ast_hash": "955f644e9953aac0e96518b594232e01",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Codebase Map.md": {
-    "mtime": 1784075616.018153,
-    "ast_hash": "f0bf8bc83645c9acb12114acecd5b039",
+    "mtime": 1784320096.0027819,
+    "ast_hash": "c405b4dc42519126a757d3d18db94897",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Editor Tooling.md": {
-    "mtime": 1784075609.6135037,
-    "ast_hash": "f48c12c87e300ef4e23013bcc2e95e7a",
+    "mtime": 1784320096.0038586,
+    "ast_hash": "8b17e2c92de6ddb695555d71e82f4298",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/05 Engineering/Testing & QA.md": {
-    "mtime": 1784072836.8743427,
-    "ast_hash": "417915509593ee0ee2d08dd595827c58",
+    "mtime": 1784320096.0038586,
+    "ast_hash": "533f70f7c2fe7e2f72e934bda3d045b5",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Development Workflow.md": {
-    "mtime": 1784076478.8623571,
-    "ast_hash": "2c6d8528e4de96ab8ed71c0c12ed2ae4",
+    "mtime": 1784249104.7707639,
+    "ast_hash": "95757d18fa7d6b562931a8f0dac7d66c",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Feature Spec Template.md": {
@@ -2535,28 +2500,28 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/06 Process/Git & Branching.md": {
-    "mtime": 1784076478.2599804,
-    "ast_hash": "3c53d0faf8198473c443c10222b18a26",
+    "mtime": 1784249104.7717638,
+    "ast_hash": "91cd84e43ba9fb4f3b3123724e2de282",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/Home.md": {
-    "mtime": 1784085135.9165463,
-    "ast_hash": "2b81753f914a595613e12ed7ca762ed6",
+    "mtime": 1784320096.005858,
+    "ast_hash": "6252cf46d75d0a48fa98241572c2e674",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/02 Features/Escape Completion System.md": {
-    "mtime": 1784075541.7805762,
-    "ast_hash": "1ca8774b0010a2159ebd84ef6532a7c5",
+    "mtime": 1784675960.1341448,
+    "ast_hash": "675a420522acb80236f8847ef7345eff",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PlayerStats.cs": {
-    "mtime": 1784074926.3954341,
-    "ast_hash": "f42f34d199139741fbfbdd54a9a9aa9e",
+    "mtime": 1784249478.931494,
+    "ast_hash": "214ce5689cdc1f2a069e3ebf4e85af7a",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PlayerStatsMath.cs": {
-    "mtime": 1784074902.8033564,
-    "ast_hash": "04dd9c724fc27b0be7751c846367c43a",
+    "mtime": 1784341754.7578838,
+    "ast_hash": "95763f2811aa4b6af30cfb1e4c2cf10d",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonSuspicion.cs": {
@@ -2580,8 +2545,8 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/EscapeEndScreenUI.cs": {
-    "mtime": 1784073842.2719452,
-    "ast_hash": "f50bce4dc5e5b506a25e8ff69f386e59",
+    "mtime": 1784249466.479501,
+    "ast_hash": "7b58f3795961ebb8dff3d1badbdd1c78",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/SolitaryScreenUI.cs": {
@@ -2595,13 +2560,13 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Singleplayer/Escape/EscapeManager.cs": {
-    "mtime": 1784074935.9703574,
-    "ast_hash": "a76fe2f6b30d42f0e0141ed15c5df917",
+    "mtime": 1784249466.486636,
+    "ast_hash": "4318642a1df3d33b257e7e071d73c71b",
     "semantic_hash": ""
   },
   "Assets/Tests/Editor/EscapeSystemTests.cs": {
-    "mtime": 1784074946.0328867,
-    "ast_hash": "f90fb26017289e2aeeeacbf5f3c72208",
+    "mtime": 1784341754.766961,
+    "ast_hash": "56d72b1672be672dbf3fb3985bb05bab",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/HUD in-game 2026-07-14.png": {
@@ -2625,23 +2590,23 @@
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Notebook & Crafting UI.md": {
-    "mtime": 1784075524.0086553,
-    "ast_hash": "54fc72d696b747467a743712cbf3aaf4",
+    "mtime": 1784320095.9992697,
+    "ast_hash": "841483b67d015a475100bd6a556a3017",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Routine & Schedule HUD.md": {
-    "mtime": 1784075623.8054357,
-    "ast_hash": "908b283c2004cc564a3b5f955a04a8ae",
+    "mtime": 1784154328.8654425,
+    "ast_hash": "ed4af7c01a86e6aff0c06cbedb8d3b4b",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Screens & Menus.md": {
-    "mtime": 1784075526.1970463,
-    "ast_hash": "61ae527cc9fa50ad7a106859a0c77912",
+    "mtime": 1784320096.0002742,
+    "ast_hash": "1b4f705cbb17329ea8924035fe1daa38",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/Status & World UI.md": {
-    "mtime": 1784075613.959592,
-    "ast_hash": "c915b17e7e3da7093b1ae7fc01620341",
+    "mtime": 1784320096.0002742,
+    "ast_hash": "3d765bbc8adeed4143ceb2f3e42b6bd5",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/03 Systems/UI/UI Theme & Style Guide.md": {
@@ -2650,23 +2615,23 @@
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/Prison/PrisonRoutineDestination.cs": {
-    "mtime": 1784074961.3717844,
-    "ast_hash": "5ba565b7ba2caa961d796b213da0281c",
+    "mtime": 1784157671.27421,
+    "ast_hash": "b371807ceeef8170f739a5dc2d9e7c75",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/CurrentLocationHUD.cs": {
-    "mtime": 1784074962.026692,
-    "ast_hash": "bd978fa3d754a3c0780dd6789e6846bd",
+    "mtime": 1784249478.9350023,
+    "ast_hash": "f882df51d4da68db7359e5eb36c3a04c",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/HudBootstrap.cs": {
-    "mtime": 1784074898.262295,
-    "ast_hash": "4b26e8cdb01ef5ec3d8c4bc4c65d1b9d",
+    "mtime": 1784249466.4810133,
+    "ast_hash": "f2ba48017013f91b2f59cee151fcfdca",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/ObjectiveWaypointUI.cs": {
-    "mtime": 1784075463.3359966,
-    "ast_hash": "4c38e0d84fb7dd277a7044dded52036c",
+    "mtime": 1784675371.8996236,
+    "ast_hash": "8c19cbb5696b96f76267a124f7c2bd54",
     "semantic_hash": ""
   },
   "Assets/Scripts/Shared/UI/PlayerVitalsHUD.cs": {
@@ -2715,13 +2680,13 @@
     "semantic_hash": ""
   },
   "docs/.claude/settings.local.json": {
-    "mtime": 1784080752.595738,
-    "ast_hash": "9b59f93e01cc1a0eecc75604ce438216",
+    "mtime": 1784319440.4875727,
+    "ast_hash": "b9f6855d81ae258a8c25037bd44ced8a",
     "semantic_hash": ""
   },
   "docs/PrisonEscape/04 Content & Assets/Blender Asset Kit.md": {
-    "mtime": 1784085125.842762,
-    "ast_hash": "25e959c63ad0a33ad059287679f836d3",
+    "mtime": 1784217249.6219475,
+    "ast_hash": "71e8401dbe51cac4d514778738a23bf3",
     "semantic_hash": ""
   },
   "ArtSource/review/final_courtyard.png": {
@@ -2827,6 +2792,521 @@
   "Assets/Models/BlenderKit/Textures/T_Wood.png": {
     "mtime": 1784082882.7481482,
     "ast_hash": "0203a3a0dd911244e8c5796a96799b16",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/BlenderKitAssetSetup.cs": {
+    "mtime": 1784151021.7946918,
+    "ast_hash": "da4c2bea68df81c56efa568b0e948e3b",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/BlenderKitCatalog.cs": {
+    "mtime": 1784151021.7946918,
+    "ast_hash": "c2af8a5edfe552e0d8d56a60243033f7",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/BlenderKitCharacterSetup.cs": {
+    "mtime": 1784249481.6104965,
+    "ast_hash": "a087dc62a0e6ffda1f3a94b21d83a61a",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/BlenderKitLayout.cs": {
+    "mtime": 1784249481.6114943,
+    "ast_hash": "53ddcb253c81885e4c57691e9c657804",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/CareerTestRunner.cs": {
+    "mtime": 1784249466.4133,
+    "ast_hash": "35ae9bfca8ffa4b1bd6afa914fbfdb56",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/FacilityDefinitionInstaller.cs": {
+    "mtime": 1784249466.4133,
+    "ast_hash": "5160cba0c9c74845c4e9e4a897018525",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonBatchRunner.cs": {
+    "mtime": 1784156062.2836113,
+    "ast_hash": "00e0c306009889c7c035a3f6bad57d1f",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonCollisionAndCameraFixer.cs": {
+    "mtime": 1784249480.7531402,
+    "ast_hash": "ca834567f0828237fc9d7246a26bc112",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonDoorAndWaypointFixer.cs": {
+    "mtime": 1784249481.6114943,
+    "ast_hash": "6639b8098752e9c51171e55277cb066f",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonFacilityInstaller.cs": {
+    "mtime": 1784341754.7448492,
+    "ast_hash": "d544bfb660fa7535ee9517d74a55ddb1",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonLayoutRebuildRunner.cs": {
+    "mtime": 1784159210.2311137,
+    "ast_hash": "7525a9374bf34ce3053e6382fca02c93",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonLootSetupRunner.cs": {
+    "mtime": 1784341754.7453513,
+    "ast_hash": "f2f2a7882735a533a71a3a2cdd755cd5",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonPolishPass.cs": {
+    "mtime": 1784249481.1917658,
+    "ast_hash": "e8218d012a54ed80444b3431c9103909",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/PrisonProBuilderRebuildRunner.cs": {
+    "mtime": 1784319591.9395761,
+    "ast_hash": "67bb25ef2be969888d4fc2cb864bda28",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/SocialAssetInstaller.cs": {
+    "mtime": 1784249466.415773,
+    "ast_hash": "72a966fb926a7b4cbbaba77ba502913a",
+    "semantic_hash": ""
+  },
+  "Assets/Editor/SocialTestRunner.cs": {
+    "mtime": 1784249466.415773,
+    "ast_hash": "9b3841b642d0793922d1889adadd21a3",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerMainMenuUI.cs": {
+    "mtime": 1784249466.4299371,
+    "ast_hash": "175b2677ea43c03ccb9442753b1f0c58",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerQuitConfirmUI.cs": {
+    "mtime": 1784249466.4309437,
+    "ast_hash": "904b6afaca92bebd574c864eba607f0c",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerRespectMath.cs": {
+    "mtime": 1784249466.431947,
+    "ast_hash": "84e1c19614629c508e1652fceaa4f15d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerRunBootstrap.cs": {
+    "mtime": 1784249466.4329495,
+    "ast_hash": "393c857b5d01cd3f14afa05919645c78",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerSeed.cs": {
+    "mtime": 1784249466.4329495,
+    "ast_hash": "4caf642b0e9753915491b69929e97ec4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerSession.cs": {
+    "mtime": 1784249466.4340236,
+    "ast_hash": "b90e28f35f20c67630698bb8ba7d8401",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerTransfer.cs": {
+    "mtime": 1784249466.435027,
+    "ast_hash": "661c5cec67a642546aea533e03f6037f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerTransferFlow.cs": {
+    "mtime": 1784249466.4360237,
+    "ast_hash": "8fd4db5d0b9de5764006f24e466c262a",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerWorld.cs": {
+    "mtime": 1784249466.4360237,
+    "ast_hash": "ac89505b4df66e10845c2ae9ae2bfa1d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/CareerWorldStore.cs": {
+    "mtime": 1784249466.4378445,
+    "ast_hash": "d966e58ff13e7fea5c9861eb6e045bb3",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/FacilityCatalog.cs": {
+    "mtime": 1784249466.4388478,
+    "ast_hash": "0f344391fc7a968ff59e1dc5bd83b9dd",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/FacilityDefinition.cs": {
+    "mtime": 1784249466.4398477,
+    "ast_hash": "86cb513c58bd2d8045e2da952f2e0fb2",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/FacilityDirectory.cs": {
+    "mtime": 1784249466.4410734,
+    "ast_hash": "3ee440ed77a1f7cb8af5306f39e7767d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/FacilityIds.cs": {
+    "mtime": 1784249466.4425871,
+    "ast_hash": "e610f4e035fb421b75b081922659b05e",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/FacilityRunState.cs": {
+    "mtime": 1784249466.443592,
+    "ast_hash": "1389ae008b72b0d67012501bcb949674",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/SceneTransitionScreen.cs": {
+    "mtime": 1784249466.444592,
+    "ast_hash": "2b1e4eaae42bc533b5ae3fa8ab6ada92",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/SentenceClockHUD.cs": {
+    "mtime": 1784249466.4466429,
+    "ast_hash": "96973f660e669a8015dd38e7e7c9281f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Career/SentenceClockMath.cs": {
+    "mtime": 1784249466.4471467,
+    "ast_hash": "38f02c088f45340830dbc267935ddf69",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/CellDoorNavMeshLink.cs": {
+    "mtime": 1784341754.7528658,
+    "ast_hash": "3c891444dfd957cb78c12e6cc86a98c4",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/CellDoorRegistry.cs": {
+    "mtime": 1784341754.7543688,
+    "ast_hash": "fa0e6799ac8da382f3ac30af6914b913",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/FormalCountMonitor.cs": {
+    "mtime": 1784153525.677025,
+    "ast_hash": "d36e00ba1b15bf857583bd9287029cbb",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/MorningRollCallSweeperDirector.cs": {
+    "mtime": 1784341754.7558823,
+    "ast_hash": "a688d933dd4e59e598c6f02025408b2c",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonLayoutAnchors.cs": {
+    "mtime": 1784159239.993186,
+    "ast_hash": "37b2262d5151d6bcfffcf05382267b8e",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonLayoutSpec.cs": {
+    "mtime": 1784159210.2321122,
+    "ast_hash": "9acffa9448c2a628fb3c168b0d320186",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonLayoutValidator.cs": {
+    "mtime": 1784159210.2321122,
+    "ast_hash": "1dae85a3e3a15a9dda995ad252392b62",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonScheduleGuidance.cs": {
+    "mtime": 1784153559.4698164,
+    "ast_hash": "0efe7313931ce8920646786e54c3c697",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/PrisonerRegistry.cs": {
+    "mtime": 1784676673.602,
+    "ast_hash": "2481d334f9b3c4490098cc392d01c78f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/SpawnPlacementUtility.cs": {
+    "mtime": 1784341754.7593868,
+    "ast_hash": "3bfb5a26c0562376cecb6b27bf4b7807",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/WorldLootBootstrap.cs": {
+    "mtime": 1784341754.759898,
+    "ast_hash": "f7fd049bfeafb5a5ee419098e0f1001b",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/ArchetypeDefinition.cs": {
+    "mtime": 1784249466.44915,
+    "ast_hash": "628de536b5299008f4406542f06e3aac",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/CrimeSignals.cs": {
+    "mtime": 1784249466.4506583,
+    "ast_hash": "fd05995541e5188a4b358c9b3c55f6ce",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/DialogueLibrary.cs": {
+    "mtime": 1784341754.759898,
+    "ast_hash": "e00594b4a99fcec9a1ec8161d2ed50e2",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/FavorService.cs": {
+    "mtime": 1784320095.9800446,
+    "ast_hash": "bd72dfaa42f75e52be68be563e471f6f",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/GangDefinition.cs": {
+    "mtime": 1784249466.453197,
+    "ast_hash": "65f55f20edbb6985783c0d86cf55b5d7",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/GangManager.cs": {
+    "mtime": 1784249466.4551983,
+    "ast_hash": "7110f62decda1a153ea9bc4f15da841a",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/GangTerritoryMonitor.cs": {
+    "mtime": 1784249466.4551983,
+    "ast_hash": "caf9957fb066c70919dcd6372e52bd6e",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/GossipSystem.cs": {
+    "mtime": 1784249466.4567704,
+    "ast_hash": "803418053c39a0f04d3d489c7985d8c0",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/GuardSocialProfile.cs": {
+    "mtime": 1784320095.9800446,
+    "ast_hash": "00b9b19f7d6a4c106a4ffc6c722a70fc",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/GuardTrustMath.cs": {
+    "mtime": 1784342206.1785204,
+    "ast_hash": "20d30d85305924a27454a1f1d8de74c9",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/PrisonJobPaymaster.cs": {
+    "mtime": 1784320095.9810488,
+    "ast_hash": "16b9c1df24c65196eb12faa5a55c2e47",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/RelationshipMath.cs": {
+    "mtime": 1784249466.4592807,
+    "ast_hash": "24276f24b2687b28f2899cd89f7360f2",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/RelationshipStore.cs": {
+    "mtime": 1784249466.4602845,
+    "ast_hash": "c14726b030a8f404ce745dde2845bffa",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SnitchSystem.cs": {
+    "mtime": 1784249466.4602845,
+    "ast_hash": "94275dd022e22f23b48e28a279a8b9dd",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialActs.cs": {
+    "mtime": 1784249466.4622736,
+    "ast_hash": "3362bcc44da5f1ae3ad212306ce3fa5d",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialDossierUI.cs": {
+    "mtime": 1784249466.4632778,
+    "ast_hash": "396851227efd13f51afbdb192a4e4204",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialFavorRuntime.cs": {
+    "mtime": 1784249466.4652936,
+    "ast_hash": "c7d44576d7b1cd569b58a74d32840749",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialInteractionMenu.cs": {
+    "mtime": 1784341754.7609005,
+    "ast_hash": "d0515603b3ee9119f780dafe6af02843",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialMemory.cs": {
+    "mtime": 1784249466.4668033,
+    "ast_hash": "0ae07b17b305df0fa5f409d1001c6102",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialNameGenerator.cs": {
+    "mtime": 1784249466.4688072,
+    "ast_hash": "6547b8b3fd82fd3ad7c334b7c1f516d9",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialRosterBuilder.cs": {
+    "mtime": 1784249466.4698136,
+    "ast_hash": "dc45d04b75305b958e7721cee52371f7",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialSimulationTicker.cs": {
+    "mtime": 1784249466.4708195,
+    "ast_hash": "0796e30888fab7d699457ee5b33cd450",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialTalkGate.cs": {
+    "mtime": 1784342234.557306,
+    "ast_hash": "f1b86dd7dd7983da02c67acbc984ba39",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialToastUI.cs": {
+    "mtime": 1784249466.4718173,
+    "ast_hash": "39f46122e7320367b2dc437bccda06c5",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialTypes.cs": {
+    "mtime": 1784320095.9831007,
+    "ast_hash": "195170fe8623bacba38b0d4c9e019498",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/SocialWorld.cs": {
+    "mtime": 1784320095.9841042,
+    "ast_hash": "6d69c6b7180df096f40b78a3d37ab94a",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/StandingBandUI.cs": {
+    "mtime": 1784249466.4753995,
+    "ast_hash": "591a7d605cf95a690f28278f10de6985",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/TradeMath.cs": {
+    "mtime": 1784320095.9841042,
+    "ast_hash": "dd7d8269d41abbc19e923eb9c99ad3ad",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Social/TradingService.cs": {
+    "mtime": 1784249466.4774857,
+    "ast_hash": "2a6687137c6353f3db9539e6c4c33d5a",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Visuals/BlenderKitLocomotionAnimator.cs": {
+    "mtime": 1784249479.3728712,
+    "ast_hash": "7b6ce50ac2b38fa00ffabf156af28e5f",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/CareerTransferTests.cs": {
+    "mtime": 1784249466.4876351,
+    "ast_hash": "c90bb79cdadbf0439e9e18caed465e66",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/CareerWorldStoreTests.cs": {
+    "mtime": 1784249466.4891381,
+    "ast_hash": "abbc29994798bbbd8755937e8a04b55b",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/PrisonLayoutValidationTests.cs": {
+    "mtime": 1784159210.233114,
+    "ast_hash": "b2908c6be4cfa59f1ef3fe08367cd560",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/SocialGangTradeTests.cs": {
+    "mtime": 1784320095.9881032,
+    "ast_hash": "08b7279a70ab765bba37c9f6125250ed",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/SocialMemoryGossipTests.cs": {
+    "mtime": 1784249466.4916515,
+    "ast_hash": "3e19285ec1d022e17aaf2623631da9ae",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/SocialRelationshipTests.cs": {
+    "mtime": 1784249466.4926515,
+    "ast_hash": "2f4c0a6369953f63df579bfe12b859b2",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/SocialRosterSnitchTests.cs": {
+    "mtime": 1784320095.9881032,
+    "ast_hash": "980148f594d04e892a81844fd8a250c6",
+    "semantic_hash": ""
+  },
+  "Assets/Docs/Prison_Rebuild_Master_Plan.md": {
+    "mtime": 1784159210.2301097,
+    "ast_hash": "918d0a303615f9159e0af640194586ef",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/01 Game Design/Prison Career Ladder.md": {
+    "mtime": 1784320102.0615025,
+    "ast_hash": "51a4f6d0d7d236edda36b696f4ec3a12",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/02 Features/Facility Transfer & Graduation.md": {
+    "mtime": 1784174417.406043,
+    "ast_hash": "a844bacdf8e5b6b9c2579d0a3c3ec365",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/02 Features/Social Ecosystem & Gangs.md": {
+    "mtime": 1784675974.571308,
+    "ast_hash": "a4201e28ce09a8949d496a25ebd1384a",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/02 Features/World Saves & Start Screen.md": {
+    "mtime": 1784174410.559161,
+    "ast_hash": "ab382b62a1614f54dad5226853f53240",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/03 Systems/UI/Social Dossier \u2014 Relationships & Gangs.md": {
+    "mtime": 1784320096.0002742,
+    "ast_hash": "ea9f0242e62d7b86904e74780c897464",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/03 Systems/UI/Talk Menu & NPC Profile.md": {
+    "mtime": 1784341754.7699726,
+    "ast_hash": "dc0d55ef63d8952f6143db6bfa33d308",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/06 Process/Small PRs & Feature Slices.md": {
+    "mtime": 1784249104.7717638,
+    "ast_hash": "42c4562da9dd91fc84ca697b03e2ca7f",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/06 Process/Social & Career PR Slice Plan.md": {
+    "mtime": 1784320102.0630097,
+    "ast_hash": "92ae5ba2e9d55bcc2fab8021f4f929b9",
+    "semantic_hash": ""
+  },
+  "docs/PrisonEscape/2026-07-16.md": {
+    "mtime": 1784241106.4237592,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/WORKFLOW.md": {
+    "mtime": 1784159210.2341127,
+    "ast_hash": "983c098d797405fd8c6ce7dc6c2bcaed",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_anim_check.png": {
+    "mtime": 1784086276.1784143,
+    "ast_hash": "e5a918f866f1964dbf87c207e9d6af95",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_anim_check2.png": {
+    "mtime": 1784086408.378355,
+    "ast_hash": "d4d0c26163a9577190d66547c50f9246",
+    "semantic_hash": ""
+  },
+  "ArtSource/review/rev_characters.png": {
+    "mtime": 1784086158.1808932,
+    "ast_hash": "cbd8ad803cac5c811c588823f1be6145",
+    "semantic_hash": ""
+  },
+  "Assets/Textures/Prison/T_BrushedMetal.png": {
+    "mtime": 1784156756.124395,
+    "ast_hash": "02bd96c64517b56f9671e7a62d3575c5",
+    "semantic_hash": ""
+  },
+  "Assets/Textures/Prison/T_CinderBlockWall.png": {
+    "mtime": 1784159251.2790623,
+    "ast_hash": "2627a6a1e821d3202abb29c9451d7487",
+    "semantic_hash": ""
+  },
+  "Assets/Textures/Prison/T_ConcreteGrain.png": {
+    "mtime": 1784159251.280066,
+    "ast_hash": "c6e01d1d93f665137714ba1c447c2471",
+    "semantic_hash": ""
+  },
+  "Assets/Textures/Prison/T_ConcreteNoise.png": {
+    "mtime": 1784156756.1259162,
+    "ast_hash": "cc9a2785966a1f65d616b71a73173bf5",
+    "semantic_hash": ""
+  },
+  "Assets/Textures/Prison/T_FloorTile.png": {
+    "mtime": 1784156756.127552,
+    "ast_hash": "e87f7b13ad7b3cb1ee0f24416d8ca27b",
+    "semantic_hash": ""
+  },
+  "Assets/Scripts/Shared/Prison/GuardRegistry.cs": {
+    "mtime": 1784676947.4101782,
+    "ast_hash": "2a25de8af0110b6f006900eda9710499",
+    "semantic_hash": ""
+  },
+  "Assets/Tests/Editor/GuardDetectionPerfTests.cs": {
+    "mtime": 1784676673.62,
+    "ast_hash": "d0079048661f59ec6e5e7b7262eb056d",
     "semantic_hash": ""
   }
 }

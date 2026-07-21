@@ -96,3 +96,11 @@ CodebaseExport/
 # ==============================
 .DS_Store
 Thumbs.db
+
+# ==============================
+# Nested Claude Code worktrees
+# ==============================
+# Agent worktrees check out a full second copy of the project (Assets/, Packages/,
+# ProjectSettings/) inside this tree. Unity ignores them (outside Assets/), but git
+# must too, or the parent repo sees a whole duplicate project as untracked.
+**/.claude/worktrees/

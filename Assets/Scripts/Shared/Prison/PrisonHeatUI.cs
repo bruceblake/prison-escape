@@ -17,9 +17,16 @@ namespace Prison
         [Header("Optional CanvasGroup for whole control")]
         public CanvasGroup rootGroup;
 
+        [Header("Performance")]
+        [Tooltip("Seconds between guard-attention checks. This is a HUD indicator, so ~10Hz is plenty; the last result is reused in between.")]
+        [Min(0f)] public float attentionCheckIntervalSeconds = 0.1f;
+
         private PrisonerController _prisoner;
         private int _state; // 0 hidden 1 half 2 open
         private float _smoothedState;
+
+        private float _nextAttentionCheckTime;
+        private bool _cachedAttention;
 
         private void Start()
         {
@@ -81,12 +88,26 @@ namespace Prison
             }
         }
 
+        /// <summary>
+        /// Reads the live <see cref="GuardRegistry"/> rather than scanning the scene, and rechecks
+        /// at most every <see cref="attentionCheckIntervalSeconds"/> — the eye is a coarse
+        /// three-state indicator, so a frame or two of latency is invisible.
+        /// </summary>
         private bool IsAnyGuardAttentive()
         {
-            var tr = _prisoner.transform;
-            var guards = FindObjectsByType<GuardDetection>(FindObjectsSortMode.None);
-            Vector3 p = tr.position;
-            for (int i = 0; i < guards.Length; i++)
+            if (attentionCheckIntervalSeconds > 0.001f && Time.unscaledTime < _nextAttentionCheckTime)
+                return _cachedAttention;
+
+            _nextAttentionCheckTime = Time.unscaledTime + attentionCheckIntervalSeconds;
+            _cachedAttention = ScanGuardAttention();
+            return _cachedAttention;
+        }
+
+        private bool ScanGuardAttention()
+        {
+            var guards = GuardRegistry.Guards;
+            Vector3 p = _prisoner.transform.position;
+            for (int i = 0; i < guards.Count; i++)
             {
                 if (guards[i] != null && guards[i].IsPositionInAttentionZone(p))
                     return true;

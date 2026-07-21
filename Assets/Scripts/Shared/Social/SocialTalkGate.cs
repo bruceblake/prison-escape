@@ -23,7 +23,7 @@ namespace Prison.Social
             if (identity == null)
                 return false;
 
-            int hash = actorId * 31 + (PrisonTimeManager.Instance?.CurrentEntryIndex ?? 0);
+            int hash = actorId * 31 + (Prison.PrisonTimeManager.Instance?.CurrentEntryIndex ?? 0);
 
             if (identity.isGuard)
             {
@@ -48,11 +48,11 @@ namespace Prison.Social
             if (player == null || player.MovementBlocked)
                 return true;
 
-            var tm = PrisonTimeManager.Instance;
+            var tm = Prison.PrisonTimeManager.Instance;
             if (tm == null)
                 return false;
 
-            if (!PrisonEventRules.IsMandatory(tm.CurrentEvent))
+            if (!Prison.PrisonEventRules.IsMandatory(tm.CurrentEvent))
                 return false;
 
             if (tm.IsMandatoryTravelGraceActive)

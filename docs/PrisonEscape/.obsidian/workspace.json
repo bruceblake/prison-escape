@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2026-07-16.md",
+                "file": "02 Features/Social Ecosystem & Gangs.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-07-16"
+              "title": "Social Ecosystem & Gangs"
             }
           }
         ]
@@ -185,18 +185,18 @@
   },
   "active": "8b2e86b1f0745f9b",
   "lastOpenFiles": [
-    "03 Systems/UI/Talk Menu & NPC Profile.md",
+    "02 Features/World Saves & Start Screen.md",
+    "02 Features/Social Ecosystem & Gangs.md",
+    "02 Features/Facility Transfer & Graduation.md",
+    "02 Features/Escape Completion System.md",
     "2026-07-16.md",
+    "03 Systems/UI/Talk Menu & NPC Profile.md",
     "03 Systems/UI/Status & World UI.md",
     "03 Systems/UI/UI Theme & Style Guide.md",
-    "02 Features/Social Ecosystem & Gangs.md",
     "03 Systems/UI/Screens & Menus.md",
     "03 Systems/UI/Social Dossier — Relationships & Gangs.md",
     "03 Systems/Multiplayer & Networking.md",
     "03 Systems/Prisoner AI & NPCs.md",
-    "02 Features/World Saves & Start Screen.md",
-    "02 Features/Escape Completion System.md",
-    "02 Features/Facility Transfer & Graduation.md",
     "01 Game Design/World Rules.md",
     "03 Systems/Social & Reputation.md",
     "03 Systems/Security, Heat & Alerts.md",

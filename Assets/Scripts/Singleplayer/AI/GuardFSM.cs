@@ -209,6 +209,7 @@ public class GuardFSM : MonoBehaviour
                 Debug.Log($"[GuardFSM][{gameObject.name}] Night verify -> Escort (non-compliant in sight)", this);
             _escortTarget = intruder;
             _state = GuardState.Escort;
+            detection.InvalidateScanCache();
             return;
         }
 
@@ -286,6 +287,7 @@ public class GuardFSM : MonoBehaviour
                 Debug.Log($"[GuardFSM][{gameObject.name}] Patrol -> Escort: target={(mb != null ? mb.name : "null")} cell={target.CellIndex} compliant={target.IsCompliant}", this);
             _escortTarget = target;
             _state = GuardState.Escort;
+            detection.InvalidateScanCache();
             if (agent != null)
                 agent.isStopped = false;
             return;

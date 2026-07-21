@@ -9,10 +9,19 @@ namespace Prison
         public static void GetAllPrisoners(List<IPrisoner> buffer)
         {
             buffer.Clear();
-            foreach (var pc in Object.FindObjectsByType<PrisonerController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
-                buffer.Add(pc);
-            foreach (var ai in Object.FindObjectsByType<PrisonerAI>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
-                buffer.Add(ai);
+            var players = PrisonerRegistry.Players;
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i] != null)
+                    buffer.Add(players[i]);
+            }
+
+            var npcs = PrisonerRegistry.Npcs;
+            for (int i = 0; i < npcs.Count; i++)
+            {
+                if (npcs[i] != null)
+                    buffer.Add(npcs[i]);
+            }
         }
 
         public static int CountAccountedFor(out int total)

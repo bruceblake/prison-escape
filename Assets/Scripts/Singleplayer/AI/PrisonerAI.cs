@@ -92,6 +92,16 @@ public class PrisonerAI : MonoBehaviour, Prison.IPrisoner
         if (debugLogs) Debug.LogWarning($"{DbgPrefix} {msg}", this);
     }
 
+    private void OnEnable()
+    {
+        PrisonerRegistry.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        PrisonerRegistry.Unregister(this);
+    }
+
     private void Start()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();

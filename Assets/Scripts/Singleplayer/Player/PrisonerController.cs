@@ -40,10 +40,27 @@ public class PrisonerController : MonoBehaviour, Prison.IPrisoner
     /// <summary>Roll-call early release (shakedown) ignored until this time — avoids pre-sweep before spawn.</summary>
     public float RollCallReleaseAllowedAfter { get; private set; }
 
-    private void Start()
+    /// <summary>Crouch state, cached so guard detection does not GetComponent per scan.</summary>
+    public bool IsCrouched => _playerController != null && _playerController.IsCrouched;
+
+    private void Awake()
     {
         _playerController = GetComponent<PlayerController>();
         _characterController = GetComponent<CharacterController>();
+    }
+
+    private void OnEnable()
+    {
+        PrisonerRegistry.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        PrisonerRegistry.Unregister(this);
+    }
+
+    private void Start()
+    {
         _isLocalPlayer = GetComponent<Player>()?.IsLocal ?? true;
 
         if (PrisonTimeManager.Instance != null)

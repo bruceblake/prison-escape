@@ -14,6 +14,10 @@ public class GuardDetection : MonoBehaviour
     [Header("References")]
     public Transform eyeTransform;
 
+    [Header("Performance")]
+    [Tooltip("Seconds between full detection scans. The last result is reused in between, so this is the worst-case spotting latency. 0 = scan every frame.")]
+    public float scanIntervalSeconds = 0.2f;
+
     [Header("Debug")]
     [Tooltip("Log detection scans (throttled) and every acquisition of a non-compliant prisoner.")]
     public bool debugLogs;
@@ -23,22 +27,88 @@ public class GuardDetection : MonoBehaviour
     private Transform _transform;
     private float _nextScanLogTime;
     private float _nextNearMissLogTime;
+    private Prison.Social.GuardSocialProfile _socialProfile;
+
+    private float _nextScanTime;
+    private IPrisoner _cachedTarget;
 
     private void Awake()
     {
         _transform = transform;
         if (eyeTransform == null) eyeTransform = _transform;
+        _socialProfile = GetComponent<Prison.Social.GuardSocialProfile>();
+
+        // Stagger the first scan so a barracks full of guards do not all scan on the same frame.
+        _nextScanTime = Time.time + Random.Range(0f, Mathf.Max(0f, scanIntervalSeconds));
     }
 
+    private void OnEnable()
+    {
+        Prison.GuardRegistry.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        Prison.GuardRegistry.Unregister(this);
+    }
+
+    /// <summary>
+    /// Nearest non-compliant prisoner this guard can see, rescanned at most every
+    /// <see cref="scanIntervalSeconds"/>. Between scans the previous target is reused after a
+    /// cheap re-validation, so a prisoner who complies (or gets escorted) is dropped immediately.
+    /// </summary>
     public IPrisoner FindNonCompliantPrisoner()
     {
+        if (scanIntervalSeconds > 0.001f && Time.time < _nextScanTime)
+            return IsStillValidTarget(_cachedTarget) ? _cachedTarget : null;
+
+        _nextScanTime = Time.time + scanIntervalSeconds;
+        _cachedTarget = ScanForNonCompliantPrisoner();
+        return _cachedTarget;
+    }
+
+    /// <summary>
+    /// Forces the next <see cref="FindNonCompliantPrisoner"/> call to run a real scan. Call after
+    /// consuming a target (e.g. entering Escort) so a stale hit cannot be re-acquired.
+    /// </summary>
+    public void InvalidateScanCache()
+    {
+        _cachedTarget = null;
+        _nextScanTime = 0f;
+    }
+
+    /// <summary>
+    /// The profile is attached lazily by <c>SocialWorld</c> at runtime, so it may not exist yet at
+    /// Awake. Resolved once per scan (5Hz) until it appears, then cached.
+    /// </summary>
+    private Prison.Social.GuardSocialProfile ResolveSocialProfile()
+    {
+        if (_socialProfile == null)
+            _socialProfile = GetComponent<Prison.Social.GuardSocialProfile>();
+        return _socialProfile;
+    }
+
+    /// <summary>
+    /// Re-checks only the cheap per-prisoner conditions — position/cone is left to the next scan.
+    /// Uses the already-cached profile rather than resolving; a blind-eye bribe taking effect is
+    /// picked up on the next scan, which is well inside the bribe's phase-long window.
+    /// </summary>
+    private bool IsStillValidTarget(IPrisoner target)
+    {
+        if (target as MonoBehaviour == null) return false;
+        if (target.IsCompliant || target.MovementBlocked || target.HasPostEscortImmunity) return false;
+        return _socialProfile == null || !_socialProfile.BlindEyeActive;
+    }
+
+    private IPrisoner ScanForNonCompliantPrisoner()
+    {
         // Blind-eye bribe (Social Ecosystem v3 §8): this guard's detection is off for the phase.
-        var socialProfile = GetComponent<Prison.Social.GuardSocialProfile>();
+        var socialProfile = ResolveSocialProfile();
         if (socialProfile != null && socialProfile.BlindEyeActive)
             return null;
 
-        var playerPrisoners = FindObjectsByType<PrisonerController>(FindObjectsSortMode.None);
-        var npcPrisoners = FindObjectsByType<PrisonerAI>(FindObjectsSortMode.None);
+        var playerPrisoners = Prison.PrisonerRegistry.Players;
+        var npcPrisoners = Prison.PrisonerRegistry.Npcs;
         Vector3 eyePos = eyeTransform.position;
         Vector3 forward = eyeTransform.forward;
 
@@ -47,7 +117,7 @@ public class GuardDetection : MonoBehaviour
             _nextScanLogTime = Time.unscaledTime + debugScanIntervalSeconds;
 
         if (logScan)
-            Debug.Log($"[GuardDetection][{gameObject.name}] Scan: eye={eyePos} fwd={forward} range={detectionRange} cone={coneAngle}° | players={playerPrisoners.Length} npcs={npcPrisoners.Length}", this);
+            Debug.Log($"[GuardDetection][{gameObject.name}] Scan: eye={eyePos} fwd={forward} range={detectionRange} cone={coneAngle}° | players={playerPrisoners.Count} npcs={npcPrisoners.Count}", this);
 
         // Suspicion after a caught escape widens detection against the player for a few days.
         float suspicionMult = PrisonSuspicion.GlobalDetectionRangeMultiplier;
@@ -57,8 +127,11 @@ public class GuardDetection : MonoBehaviour
         float guardTrust = socialProfile != null ? socialProfile.TrustTowardPlayer : 0f;
         float trustMult = Prison.Social.GuardTrustMath.DetectionRangeMultiplier(guardTrust);
 
-        foreach (var p in playerPrisoners)
+        for (int i = 0; i < playerPrisoners.Count; i++)
         {
+            var p = playerPrisoners[i];
+            if (p == null) continue;
+
             if (p.MovementBlocked)
             {
                 if (logScan) Debug.Log($"[GuardDetection] Player {p.name}: skip (MovementBlocked)", this);
@@ -72,8 +145,7 @@ public class GuardDetection : MonoBehaviour
             }
 
             // Crouching shrinks the guard's effective spotting ranges (stealth).
-            var crouchController = p.GetComponent<PlayerController>();
-            float crouchMult = crouchController != null && crouchController.IsCrouched ? 0.6f : 1f;
+            float crouchMult = p.IsCrouched ? 0.6f : 1f;
 
             float dist = Vector3.Distance(eyePos, p.transform.position);
             bool inCone = IsInSight(p.transform.position, eyePos, forward, suspicionMult * crouchMult * trustMult);
@@ -101,8 +173,11 @@ public class GuardDetection : MonoBehaviour
             LogNearMissNonCompliant(p.IsCompliant, dist, inCone, inProximity, p.name, p.transform.position, "Player");
         }
 
-        foreach (var p in npcPrisoners)
+        for (int i = 0; i < npcPrisoners.Count; i++)
         {
+            var p = npcPrisoners[i];
+            if (p == null) continue;
+
             if (p.MovementBlocked)
             {
                 if (logScan) Debug.Log($"[GuardDetection] NPC {p.name}: skip (MovementBlocked)", this);

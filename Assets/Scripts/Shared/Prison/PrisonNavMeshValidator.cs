@@ -27,9 +27,27 @@ namespace Prison
 
         public void Start()
         {
-            if (validateOnStart)
-                ValidateNow();
+            if (!validateOnStart) return;
+
+            // Diagnostic only: never costs anything in a player build, and even in the Editor it
+            // waits for scene spawning to settle so its Find/SamplePosition sweeps stay off the
+            // scene-entry critical path.
+#if UNITY_EDITOR
+            StartCoroutine(ValidateDeferred());
+#endif
         }
+
+#if UNITY_EDITOR
+        private System.Collections.IEnumerator ValidateDeferred()
+        {
+            // GameManager spawns the world across the first few frames; validating before that
+            // finishes reports phantom failures as well as stalling startup.
+            yield return null;
+            yield return null;
+            yield return null;
+            ValidateNow();
+        }
+#endif
 
         [ContextMenu("Validate Prison NavMesh Now")]
         public void ValidateNow()

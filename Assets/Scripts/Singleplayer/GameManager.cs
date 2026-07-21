@@ -57,6 +57,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Fallback: single spawn point for player if no registry")]
     public Transform cellSpawnPoint;
 
+    [Header("Startup pacing")]
+    [Tooltip("Max world pickups instantiated per frame during startup. Lower = smoother scene entry, more frames until all loot exists. 0 = spawn everything in one frame (legacy).")]
+    public int pickupSpawnsPerFrame = 25;
+
     void Awake()
     {
         if (useRandomSeed)
@@ -89,7 +93,7 @@ public class GameManager : MonoBehaviour
         // Let floors / NavMesh / physics finish so pickup snaps land on walkable surfaces.
         yield return null;
         yield return null;
-        PopulateWorldSpawns();
+        yield return PopulateWorldSpawnsRoutine(Mathf.Max(0, pickupSpawnsPerFrame));
     }
 
     /// <summary>
@@ -129,14 +133,27 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Spawns world pickups at each <see cref="ItemSpawnNode"/> that passes <see cref="ItemSpawnNode.spawnChance"/>.
+    /// Runs to completion in a single frame; startup uses the time-sliced coroutine instead.
     /// </summary>
     public void PopulateWorldSpawns()
+    {
+        var routine = PopulateWorldSpawnsRoutine(0);
+        while (routine.MoveNext()) { }
+    }
+
+    /// <summary>
+    /// Time-sliced world pickup spawning. Yields every <paramref name="spawnsPerFrame"/>
+    /// instantiations so a few hundred pickups no longer land as one scene-entry hitch.
+    /// Pass 0 to spawn everything without yielding.
+    /// </summary>
+    private IEnumerator PopulateWorldSpawnsRoutine(int spawnsPerFrame)
     {
         // Career difficulty: County is littered with parts, ADX is bare (lootAbundance curve).
         float lootAbundance = Prison.Career.CareerSession.LootAbundance;
 
         ItemSpawnNode[] nodes = Object.FindObjectsOfType<ItemSpawnNode>(true);
         int spawned = 0;
+        int sinceYield = 0;
         for (int i = 0; i < nodes.Length; i++)
         {
             ItemSpawnNode node = nodes[i];
@@ -170,6 +187,12 @@ public class GameManager : MonoBehaviour
                     pickup = instance.AddComponent<WorldItemPickup>();
                 pickup.itemData = pick;
                 spawned++;
+
+                if (spawnsPerFrame > 0 && ++sinceYield >= spawnsPerFrame)
+                {
+                    sinceYield = 0;
+                    yield return null;
+                }
             }
         }
 

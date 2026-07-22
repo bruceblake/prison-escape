@@ -8,7 +8,7 @@ All automated tests are **EditMode NUnit** tests in `Assets/Tests/Editor/`, name
 - **Tools → Prison → Career → Run Career EditMode Tests** (`CareerTestRunner`)
 - **Tools → Prison → Social → Run All EditMode Tests** (`SocialTestRunner` — full EditMode suite)
 
-**Inventory on tip:** **11** suites · **195** `[Test]` methods · plus `[TestCase]` expansions ≈ **256** runnable cases. Re-run Test Runner for the current pass/fail count (do not treat an old “146 passed” line as live).
+**Inventory on tip:** **12** suites · **216** `[Test]` methods · **61** `[TestCase]` expansions ≈ **277** runnable cases. Re-run Test Runner for the current pass/fail count (do not treat an old “146 passed” line as live).
 
 ## Test suites
 
@@ -25,6 +25,7 @@ All automated tests are **EditMode NUnit** tests in `Assets/Tests/Editor/`, name
 | `SocialGangTradeTests.cs` | Gang membership/propagation, trade price math |
 | `CareerWorldStoreTests.cs` | World JSON IO, migration, New/Load/Delete |
 | `CareerTransferTests.cs` | Transfer / gates / sentence / ceremony math |
+| `GuardDetectionPerfTests.cs` | `PrisonerRegistry` membership, guard scan throttle / cache invalidation (registers by hand — `OnEnable` wiring is uncovered) |
 
 > **Deleted:** `SocialMathTests.cs` (v1 affinity). Do not resurrect.
 

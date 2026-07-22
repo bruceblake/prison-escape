@@ -11,7 +11,9 @@ namespace Prison.Tests
     /// <see cref="GuardDetection"/>.
     ///
     /// Note: MonoBehaviour OnEnable does not fire in EditMode, so these tests register with the
-    /// registry explicitly. The OnEnable/OnDisable wiring itself is exercised in Play Mode.
+    /// registry explicitly. The OnEnable/OnDisable wiring itself is therefore NOT covered here,
+    /// and has no automated coverage — PlayMode tests are blocked on the asmdef migration
+    /// (see the vault's Testing &amp; QA note). Verify that wiring by playtest until then.
     /// </summary>
     public class GuardDetectionPerfTests
     {
